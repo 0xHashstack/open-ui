@@ -1,0 +1,49 @@
+export const defaultChainId = 1666700000;
+
+export const rpcUrls = {
+  56: 'https://bsc-dataseed.binance.org/',
+  1666700000: 'https://api.s0.b.hmny.io'
+}
+
+export const networkNames = {
+  56: 'BSC Mainnet',
+  1666700000: 'Harmony Testnet'
+}
+
+export const symbols = [
+  // "0x574f4e4500000000000000000000000000000000000000000000000000000000", // WONE
+  "0x555344542e740000000000000000000000000000000000000000000000000000", // USDT.t
+  "0x555344432e740000000000000000000000000000000000000000000000000000", // USDC.t
+  "0x4254432e74000000000000000000000000000000000000000000000000000000", // BTC.t
+]
+
+export const diamondAddress = "0xD4b918B016f64bCCe32d42550BB06a202919Af43";
+export const addresses = {
+  // wone: {
+  //   1666700000: '0xD77B20D7301E6F16291221f50EB37589fdAB3720'
+  // }
+}
+
+// export const markets = ["WONE", "USDT.t", "USDC.t", "BTC.t"];
+export const markets = ["USDT.t", "USDC.t", "BTC.t"];
+export const marketAddresses = [
+  // '0xD77B20D7301E6F16291221f50EB37589fdAB3720', // WONE
+  '0x920C02a5e5Ba8ca0CAAeA0c6590B97Afa76b8e63', // USDT.t
+  '0x2B3407ab2E0b7AAB928a2b53DE6922FEEa206471', // USDC.t
+  '0xcD908337d2c6bc0cB064bbd434A78f450d947e64'  // BTC.t
+]
+export const latestPrice = [
+  // '0.2886',
+  '1',
+  '1',
+  '64931.45'
+]
+
+// export const decimals = [18,18,18,8];
+export const decimals = [18,18,8];
+
+export const comit_NONE = "0x636f6d69745f4e4f4e4500000000000000000000000000000000000000000000";
+export const comit_TWOWEEKS = "0x636f6d69745f54574f5745454b53000000000000000000000000000000000000";
+export const comit_ONEMONTH = "0x636f6d69745f4f4e454d4f4e5448000000000000000000000000000000000000";
+export const comit_THREEMONTHS = "0x636f6d69745f54485245454d4f4e544853000000000000000000000000000000";
+
