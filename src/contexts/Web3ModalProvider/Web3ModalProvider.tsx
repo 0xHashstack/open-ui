@@ -1,9 +1,9 @@
 import { createContext, useCallback, useEffect, useState } from 'react';
 import Web3Modal from "web3modal";
-import WalletConnectProvider from "@walletconnect/web3-provider";
+// import WalletConnectProvider from "@walletconnect/web3-provider";
 import Web3 from 'web3';
 import { createWeb3 } from 'blockchain/utils';
-import { rpcUrls } from 'blockchain/constants';
+// import { rpcUrls } from 'blockchain/constants';
 import WalletLink from 'walletlink'
 interface IWeb3ModalContext {
   web3: Web3 | null;
