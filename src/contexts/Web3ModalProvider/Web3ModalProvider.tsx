@@ -4,7 +4,7 @@ import WalletConnectProvider from "@walletconnect/web3-provider";
 import Web3 from 'web3';
 import { createWeb3 } from 'blockchain/utils';
 import { rpcUrls } from 'blockchain/constants';
-
+import WalletLink from 'walletlink'
 interface IWeb3ModalContext {
   web3: Web3 | null;
   connect: () => void;
@@ -37,17 +37,40 @@ const Web3ModalProvider = ({ children }) => {
   useEffect(() => {
     const providerOptions = {
 
-      walletconnect: {
-        package: WalletConnectProvider,
+      // walletconnect: {
+      //   package: WalletConnectProvider,
+      //   options: {
+      //     rpc: {
+      //       56: rpcUrls[56],
+      //       97: rpcUrls[97]
+      //     },
+      //     network: 'binance',
+      //   }
+      // },
+      'custom-coinbase': {
+        display: {
+          logo: 'https://images.ctfassets.net/q5ulk4bp65r7/1rFQCqoq8hipvVJSKdU3fQ/21ab733af7a8ab404e29b873ffb28348/coinbase-icon2.svg', 
+          name: 'Coinbase',
+          description: 'Scan with WalletLink to connect',
+        },
         options: {
-          rpc: {
-            56: rpcUrls[56],
-            97: rpcUrls[97]
-          },
-          network: 'binance',
-        }
+          appName: 'app', // Your app name
+          // networkUrl: `https://mainnet.infura.io/v3/${INFURA_ID}`,
+          // chainId: CHAIN_ID,
+        },
+        package: WalletLink,
+        connector: async (_, options) => {
+          const { appName, networkUrl, chainId } = options
+          const walletLink = new WalletLink({
+            appName
+          });
+          const provider = walletLink.makeWeb3Provider(networkUrl, chainId);
+          await provider.enable();
+          return provider;
+        },
       }
     };
+
   
     const _web3Modal = new Web3Modal({
       cacheProvider: true, // optional
