@@ -8,7 +8,7 @@ import { NumToBN } from './utils';
 
 export default class Web3Wrapper {
   web3: Web3;
-  chainId: number;
+  chainId: string;
   account: string;
   wrapperOptions: any;
 
@@ -122,5 +122,15 @@ export default class Web3Wrapper {
     }
   }
 
-  
+  async swapLoan(market: string, commitment: string, swapMarket: string) {
+    try {
+      const tx = await this.loanContract.send("swapLoan", {}, market, commitment, swapMarket);
+      console.log("swapLoan", tx);
+      return tx;
+    } catch(e) {
+      console.log(e);
+      return false;
+    }
+  }
+
 }
