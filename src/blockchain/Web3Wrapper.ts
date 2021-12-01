@@ -81,6 +81,7 @@ export default class Web3Wrapper {
 		_collateralAmount: number,
     _collateralDecimal: number
   ) {
+    console.log("loanRequest");
     try{
       // console.log("_market", _market);
       console.log("loanrequest ", _market, " ", _commitment);

@@ -1,11 +1,13 @@
-export const defaultChainId = 1666700000;
+export const defaultChainId = 42;
 
 export const rpcUrls = {
   56: 'https://bsc-dataseed.binance.org/',
-  1666700000: 'https://api.s0.b.hmny.io'
+  1666700000: 'https://api.s0.b.hmny.io',
+  42: "https://kovan.infura.io/v3/99b8947af7e14278ae235bb21eb81f53"
 }
 
 export const networkNames = {
+  42: "Kovan Testnet",
   56: 'BSC Mainnet',
   1666700000: 'Harmony Testnet'
 }
@@ -17,7 +19,7 @@ export const symbols = [
   "0x4254432e74000000000000000000000000000000000000000000000000000000", // BTC.t
 ]
 
-export const diamondAddress = "0xD4b918B016f64bCCe32d42550BB06a202919Af43";
+export const diamondAddress = "0xC63D5215B393743Cf255E0FF2260a4c17b23dD01";
 export const addresses = {
   // wone: {
   //   1666700000: '0xD77B20D7301E6F16291221f50EB37589fdAB3720'
@@ -28,9 +30,9 @@ export const addresses = {
 export const markets = ["USDT.t", "USDC.t", "BTC.t"];
 export const marketAddresses = [
   // '0xD77B20D7301E6F16291221f50EB37589fdAB3720', // WONE
-  '0x920C02a5e5Ba8ca0CAAeA0c6590B97Afa76b8e63', // USDT.t
-  '0x2B3407ab2E0b7AAB928a2b53DE6922FEEa206471', // USDC.t
-  '0xcD908337d2c6bc0cB064bbd434A78f450d947e64'  // BTC.t
+  '0xe3367b181D051f756135c91c27DA23D958FE2708', // USDT.t
+  '0x80a73792dB00175a889f5A6E03ED8E925b2cF06b', // USDC.t
+  '0x2f92c5A5FCcb195a924f09aDCF430419450c3C34'  // BTC.t
 ]
 export const latestPrice = [
   // '0.2886',
