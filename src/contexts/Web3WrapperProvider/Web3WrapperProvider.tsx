@@ -1,8 +1,6 @@
-import { createContext, useEffect, useState } from 'react';
+import { createContext, useEffect, useState, useContext } from 'react';
 import Web3Wrapper from 'blockchain/Web3Wrapper';
-//import { Web3ModalContext } from '../Web3ModalProvider';
-import { useMoralis, useChain } from "react-moralis";
-//import { useMoralisDapp } from "providers/MoralisDappProvider/MoralisDappProvider";
+import { Web3ModalContext } from '../Web3ModalProvider';
 
 interface IWeb3WrapperContext {
   web3Wrapper: Web3Wrapper | null;
@@ -14,8 +12,7 @@ export const Web3WrapperContext = createContext<IWeb3WrapperContext>({
 
 const Web3WrapperProvider = ({ children }) => {
 
-  const { web3 } = useMoralis();
-  const { chainId, account } = useChain();
+  const { web3, chainId, account } = useContext(Web3ModalContext);
   const [web3Wrapper, setWeb3Wrapper] = useState<Web3Wrapper | null>(null);
 
   useEffect(() => {

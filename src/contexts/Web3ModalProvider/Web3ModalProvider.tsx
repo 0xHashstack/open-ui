@@ -2,6 +2,7 @@ import { createContext, useCallback, useEffect, useState } from 'react';
 import Web3Modal from "web3modal";
 // import WalletConnectProvider from "@walletconnect/web3-provider";
 import Web3 from 'web3';
+import { useMoralis } from 'react-moralis';
 import { createWeb3 } from 'blockchain/utils';
 // import { rpcUrls } from 'blockchain/constants';
 import WalletLink from 'walletlink'
@@ -34,6 +35,7 @@ const Web3ModalProvider = ({ children }) => {
   const [networkId, setNetworkId] = useState<number | null>(null);
   const [connected, setConnected] = useState<boolean>(false);
 
+  const { authenticate } = useMoralis();
   useEffect(() => {
     const providerOptions = {
 
@@ -111,6 +113,11 @@ const Web3ModalProvider = ({ children }) => {
       setChainId(chainId);
       setNetworkId(networkId);
     });
+    _provider.on("connect", () => {
+      console.log('------')
+      authenticate()
+      
+    });
   }, [resetWeb3])
 
   const connect = useCallback(async () => {
@@ -118,11 +125,13 @@ const Web3ModalProvider = ({ children }) => {
       return;
 
     const _provider = await web3Modal.connect();
-    if (_provider === null) 
-      return;
-    
-    const _web3 = createWeb3(_provider);
-    setWeb3(_web3);
+    // authenticate()
+    // if (isAuthenticated) {
+      if (_provider === null) 
+        return;
+      
+      const _web3 = createWeb3(_provider);
+      setWeb3(_web3);
 
     await subscribeProvider(_provider, _web3);
     
@@ -131,11 +140,11 @@ const Web3ModalProvider = ({ children }) => {
     const _networkId = await _web3.eth.net.getId();
     const _chainId = await _web3.eth.getChainId();
 
-    setAccount(_account);
-    setNetworkId(_networkId);
-    setChainId(_chainId);
-    setConnected(true);
-    
+      setAccount(_account);
+      setNetworkId(_networkId);
+      setChainId(_chainId);
+      setConnected(true);
+    // }    
   }, [web3Modal, subscribeProvider]);
 
   useEffect(() => {

@@ -8,7 +8,7 @@ import { NumToBN } from './utils';
 
 export default class Web3Wrapper {
   web3: Web3;
-  chainId: string;
+  chainId: number;
   account: string;
   wrapperOptions: any;
 

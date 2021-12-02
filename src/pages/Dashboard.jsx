@@ -12,7 +12,7 @@ import { isMarketSupported, toFixed } from "blockchain/utils";
 import BorrowBalance from "../components/BorrowBalance";
 import DepositBalance from "../components/DepositBalance";
 import { useMoralisDapp } from "providers/MoralisDappProvider/MoralisDappProvider";
-import { useMoralis, useChain } from "react-moralis";
+import { useMoralis } from "react-moralis";
 import { getEllipsisTxt } from "helpers/formatters";
 
 
@@ -30,49 +30,22 @@ const borrowMarketsData = [
   { assetId: 2, assetName: markets[2], AssetFullname: "Bitcoin", APY: 18},
 ];
 
-let depositTemp = 0, borrowTemp = 0;
-
 //Dashboard component
 const Dashboard = () => {
 
   let inputVal1 = 0;
   let inputVal2 = 0;
-  const [depositAmount, setDeposit] = useState();
-  const [borrowBalance, setBorrow] = useState();
-
-  const { authenticate, isAuthenticated, logout } = useMoralis();
-  const { web3, enableWeb3, isWeb3Enabled, isWeb3EnableLoading, web3EnableError } = useMoralis()
-  const {Moralis} = useMoralis();
-
-  const { walletAddress, chainId } = useMoralisDapp();
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [isEnabled, setIsEnabled] = useState(false);
+  
   const { connect, disconnect, account } = useContext(Web3ModalContext);
-
   const { web3Wrapper: wrapper } = useContext(Web3WrapperContext);
 
-  // const handleConnectWallet = useCallback(() => {
-  //   connect();
-  // }, [connect]);
+  const handleConnectWallet = useCallback(() => {
+    connect();
+  }, [connect]);
 
-  // const handleDisconnectWallet = useCallback(() => {
-  //   disconnect();
-  // }, [disconnect]);
-
-  const handleConnectWallet = async () => {
-    if (!isWeb3Enabled) {
-      enableWeb3();
-      setIsEnabled(true);
-    } else {
-      setIsEnabled(true);
-    }
-    
-    //authenticate();
-  }
-  
-  const handleDisconnectWallet = async () => {
-    setIsEnabled(false);
-  }
+  const handleDisconnectWallet = useCallback(() => {
+    disconnect();
+  }, [disconnect]);
 
   const DepositWithdraw = (props) => {
     
@@ -97,7 +70,7 @@ const Dashboard = () => {
         trigger={<Button>Deposit</Button>}
         style={{ textAlign: "center", width: '480px' }}
       >
-        {isEnabled ?
+        {account ?
           <>
             <Modal.Header>{markets[props.assetID]}</Modal.Header>
             {method === "Deposit" ?
@@ -178,9 +151,9 @@ const Dashboard = () => {
               trigger={<Button>Borrow</Button>}
               style={{textAlign: "center", width: '570px'}}
           >
-          { isWeb3Enabled ?
+          { account ?
           <>
-          <Modal.Header>{markets[props.assetID]}</Modal.Header>          
+          <Modal.Header>{markets[props.assetID]}</Modal.Header>
           { method === "Borrow" &&
               <div>
                   <Modal.Actions>
@@ -334,9 +307,9 @@ const Dashboard = () => {
         </div>
         <div className="col-xs-6 text-center links">Dashbodard</div>
         <div className="col-xs-9 text-right actions">
-          {isEnabled ? (
+          {account ? (
             <div>
-              <button onClick={handleDisconnectWallet}>{ ellipseAddress(walletAddress) }</button>
+              <button onClick={handleDisconnectWallet}>{ ellipseAddress(account) }</button>
             </div>
           ) : (
             <div>

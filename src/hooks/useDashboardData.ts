@@ -1,15 +1,13 @@
-import { useCallback, useEffect, useState } from 'react';
-import { useMoralis } from "react-moralis";
-//import { Web3WrapperContext } from '../contexts/Web3WrapperProvider';
+import { useCallback, useEffect, useState, useContext } from 'react';
+import { Web3WrapperContext } from '../contexts/Web3WrapperProvider';
 import * as utils from '../blockchain/utils';
 
 const useDashboardData = () => {
   const [dashboardData, setDashboardData] = useState<any>(null);
-  //const { web3Wrapper: wrapper } = useContext(Web3WrapperContext);
-  const { isWeb3Enabled } = useMoralis();
+  const { web3Wrapper: wrapper } = useContext(Web3WrapperContext);
 
   const fetchDashboardData = useCallback(async () => {
-    if (isWeb3Enabled) {
+    if (wrapper) {
       try {
         const data = await utils.getDashboardData();
         setDashboardData(data);
@@ -20,7 +18,7 @@ const useDashboardData = () => {
         setDashboardData(null);
       }
     }
-  }, [isWeb3Enabled]);
+  }, [wrapper]);
 
   useEffect(() => {
     fetchDashboardData();
