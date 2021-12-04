@@ -101,8 +101,12 @@ const Dashboard = () => {
                 <Modal.Actions>
                   <Grid divided="vertically">
                     <Grid.Row>
-                      <Button className="col-sm-6" onClick={() => { setMethod("Deposit") }}>Deposit</Button>
-                      <Button className="col-sm-6">Withdraw</Button>
+                      <Grid.Column className="col-sm-6">
+                       <Button onClick={() => { setMethod("Deposit") }}>Deposit</Button>
+                      </Grid.Column>
+                      <Grid.Column className="col-sm-6">
+                        <Button>Withdraw</Button>
+                      </Grid.Column>
                     </Grid.Row>
                     <Grid.Row>
                       <Grid.Column>
