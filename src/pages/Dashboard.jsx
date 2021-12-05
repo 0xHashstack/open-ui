@@ -133,7 +133,10 @@ const Dashboard = () => {
 
       const handleBorrow = async () => {
         // const amount = toFixed(inputVal1 * latestPrice[props.assetID], 5);
-        // console.log("handleBorrow, amount is ", amount);
+        // console.log("handleBorrow, amount is ", amount);\
+        console.log("===== handleBorrow =====");
+        console.log("Market is ", symbols[props.assetID]);
+        
         const tx = await wrapper?.loanRequest(symbols[props.assetID], comit_ONEMONTH, inputVal1, decimals[props.assetID], symbols[props.assetID], inputVal2, decimals[props.assetID]);
         // const tx = await wrapper?.addLoan();
       }

@@ -3,6 +3,8 @@ import { diamondAddress } from './constants';
 import Deposit from './contracts/Deposit';
 import Loan from './contracts/Loan';
 import Loan1 from './contracts/Loan1';
+import Comptroller from './contracts/Comptroller';
+
 // import WONE from './contracts/WONE';
 import { NumToBN } from './utils';
 
@@ -16,6 +18,7 @@ export default class Web3Wrapper {
   deposit: Deposit;
   loanContract: Loan; 
   loan1: Loan1;
+  comptroller: Comptroller;
   // wone: WONE;
 
   constructor(web3, chainId, account, options = {}) {
@@ -32,6 +35,7 @@ export default class Web3Wrapper {
     this.deposit = new Deposit(this.wrapperOptions, diamondAddress);
     this.loanContract = new Loan(this.wrapperOptions, diamondAddress);
     this.loan1 = new Loan1(this.wrapperOptions, diamondAddress);
+    this.comptroller = new Comptroller(this.wrapperOptions, diamondAddress);
     // this.wone = new WONE(this.wrapperOptions, addresses.wone[this.chainId]);
     // this.loan1.on("CollCount", function(count){console.log("CollCount: ", count)}, "");
     // this.loan1.on("AddCollateral", function(_account,_id, amount,timestamp, tag){
@@ -82,12 +86,15 @@ export default class Web3Wrapper {
     _collateralDecimal: number
   ) {
     console.log("loanRequest");
+    console.log("_market", _market);
+    console.log("_commitment", _commitment);
     try{
-      // console.log("_market", _market);
-      console.log("loanrequest ", _market, " ", _commitment);
       const tx = await this.loan1.send("loanRequest", {}, _market, _commitment, NumToBN(_loanAmount, _loanDecimal), _collateralMarket, NumToBN(_collateralAmount, _collateralDecimal));
       console.log("loan request", tx);
       return tx;
+      const txC = await this.comptroller.call("getAprTimeLength", _commitment);
+      console.log("getAprTimeLength ", txC);
+      return txC;
     } catch(e) {
       console.log("loanRequest Error amount is :", _loanAmount, e);
       return false;
@@ -101,8 +108,8 @@ export default class Web3Wrapper {
     _collateralAmount: number,
     _collateralDecimal: number
   ) {
+    console.log("addcollateral ", _market, " ", _commitment, " ", _collateralMarket, " ", _collateralAmount);
     try {
-      console.log("addcollateral ", _market, " ", _commitment, " ", _collateralMarket, " ", _collateralAmount);
       const tx = await this.loan1.send("addCollateral", {}, _market, _commitment, _collateralMarket, NumToBN(_collateralAmount, _collateralDecimal));
       console.log("addcollateral ", tx);
       return tx;
