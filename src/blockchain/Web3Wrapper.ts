@@ -141,4 +141,15 @@ export default class Web3Wrapper {
     }
   }
 
+  async swapToLoan(market: string, commitment: string, swapMarket: string) {
+    try {
+      const tx = await this.loanContract.send("swapToLoan", {}, market, commitment, swapMarket);
+      console.log("swapLoan", tx);
+      return tx;
+    } catch(e) {
+      console.log(e);
+      return false;
+    }
+  }
+
 }

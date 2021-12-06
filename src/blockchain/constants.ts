@@ -21,7 +21,7 @@ export const symbols = [
   "0x4254432e74000000000000000000000000000000000000000000000000000000", // BTC.t
 ]
 
-export const diamondAddress = "0x9144668bb5Ad94E71dD9F583Ac55cA200f2BB123";
+export const diamondAddress = "0xBfa39148C1Df1bCD166e56c808C52C55a5B2f156";
 export const addresses = {
   // wone: {
   //   1666700000: '0xD77B20D7301E6F16291221f50EB37589fdAB3720'

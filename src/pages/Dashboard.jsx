@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback, useContext } from "react";
 import '../style.css';
 import 'semantic-ui-css/semantic.min.css';
-import { Button, Modal, Grid } from 'semantic-ui-react';
+import { Button, Modal, Grid, Icon, Input, Dropdown, Select, Label } from 'semantic-ui-react';
 import { Checkbox } from 'semantic-ui-react'
 import logo from '../assets/logo.png';
 import { Web3ModalContext } from '../contexts/Web3ModalProvider';
@@ -30,11 +30,45 @@ const borrowMarketsData = [
   { assetId: 2, assetName: markets[2], AssetFullname: "Bitcoin", APY: 18},
 ];
 
+
+const getOptions = (number, prefix = 'Choice ') =>
+(number, (index) => ({
+  key: index,
+  text: `${prefix}${index}`,
+  value: index,
+}));
+
+const toOptData1 = [
+  { key: 1, text: 'USDC.t', value: 1},
+  { key: 2, text: 'BTC.t', value: 2},
+];
+const toOptData2 = [
+  { key: 0, text: 'USDT.t', value: 0},
+  { key: 2, text: 'BTC.t', value: 2},
+];
+const toOptData3 = [
+  { key: 0, text: 'USDT.t', value: 0},
+  { key: 1, text: 'USDC.t', value: 1},
+];
+
+
+const modeOptData = [
+  { key: 0, text: 'Swap Mode 0', value: 0},
+  { key: 1, text: 'Swap Mode 1', value: 1},
+  { key: 2, text: 'Swap Mode 2', value: 2},
+];
+
+const currencyUnit = "$";
+
 //Dashboard component
 const Dashboard = () => {
 
   let inputVal1 = 0;
   let inputVal2 = 0;
+
+  let swapTo = 0;
+  let swapAmount = 0;
+  let swapMode = "";
   
   const { connect, disconnect, account } = useContext(Web3ModalContext);
   const { web3Wrapper: wrapper } = useContext(Web3WrapperContext);
@@ -126,6 +160,7 @@ const Dashboard = () => {
       </Modal>
     )
   }
+
   const BorrowRepay = (props) => {
 
       const [open, setOpen] = useState(false)
@@ -250,14 +285,150 @@ const Dashboard = () => {
       )
   }
 
+  const BorrowSwap = (props) => {
+
+      const [open, setOpen] = useState(false)
+      const [method, setMethod] = useState("Borrow");
+
+      const handleSwap = async() => {
+        console.log("Swap " + currencyUnit + swapAmount.toString() + " to '" + swapTo +"' by '" + swapMode + "' mode!");
+        const tx = await wrapper?.swapLoan(symbols[props.assetID], comit_ONEMONTH, symbols[swapTo]);
+      }
+
+      return (
+          <Modal
+              onClose={() => setOpen(false)}
+              onOpen={() => setOpen(true)}
+              open={open}
+              trigger={<Button>Swap</Button>}
+              style={{textAlign: "center", width: '570px'}}
+          >
+          { account ?
+            <>
+              <Modal.Header>{markets[props.assetID]}</Modal.Header>
+              <Modal.Actions>
+                  <Grid divided="vertically">
+                      <Grid.Row>
+                        <Grid.Column style={{textAlign: "center"}}>
+                          <div style={{width: '60%', marginLeft: '20%'}}>
+                            <select onChange={(event) => { swapTo = event.target.value }}>
+                              <option value="0" >USDT.t</option>
+                              <option value="1">USDC.t</option>
+                              <option value="2">BTC.t</option>
+                            </select>
+                          </div>
+                        </Grid.Column>
+                      </Grid.Row>
+                      <Grid.Row>
+                        <Grid.Column style={{textAlign: "center"}}>
+                          <div style={{width: '60%', marginLeft: '20%'}}>
+                            <Input labelPosition='right' type='number' placeholder='Amount' onChange={(event) => { swapAmount = event.target.value }}>
+                              <Label basic>{currencyUnit}</Label>
+                              <input />
+                              <Label>.00</Label>
+                            </Input>
+                          </div>
+                        </Grid.Column>
+                      </Grid.Row>
+                      <Grid.Row>
+                        <Grid.Column style={{textAlign: "center"}}>
+                          <div style={{width: '60%', marginLeft: '20%'}}>
+                            <Dropdown placeholder='Choose Swap Mode ...' fluid selection options={modeOptData} />
+                          </div>
+                        </Grid.Column>
+                      </Grid.Row>
+                      <Grid.Row>
+                        <Grid.Column style={{textAlign: "center"}}>
+                          <div style={{width: '60%', marginLeft: '20%'}}>
+                            <Button primary onClick={handleSwap} icon='shuffle' content='Swap'/>
+                          </div>
+                        </Grid.Column>
+                      </Grid.Row>
+                  </Grid>
+              </Modal.Actions>
+            </>
+          : <h2>You are not connected to your wallet.</h2>}
+          </Modal>
+      )
+  }
+
+  const BorrowSwaptoLoan = (props) => {
+
+      const [open, setOpen] = useState(false)
+      const [method, setMethod] = useState("Borrow");
+
+      const handleSwap = async() => {
+        console.log("Swap " + currencyUnit + swapAmount.toString() + " to '" + swapTo +"' by '" + swapMode + "' mode!");
+        const tx = await wrapper?.swapLoan(symbols[props.assetID], comit_ONEMONTH, symbols[swapTo]);
+      }
+
+      return (
+          <Modal
+              onClose={() => setOpen(false)}
+              onOpen={() => setOpen(true)}
+              open={open}
+              trigger={<Button>Swap to Loan</Button>}
+              style={{textAlign: "center", width: '570px'}}
+          >
+          { account ?
+            <>
+              <Modal.Header>{markets[props.assetID]}</Modal.Header>
+              <Modal.Actions>
+                  <Grid divided="vertically">
+                      <Grid.Row>
+                        <Grid.Column style={{textAlign: "center"}}>
+                          <div style={{width: '60%', marginLeft: '20%'}}>
+                            <select onChange={(event) => { swapTo = event.target.value }}>
+                              <option value="0" >USDT.t</option>
+                              <option value="1">USDC.t</option>
+                              <option value="2">BTC.t</option>
+                            </select>
+                          </div>
+                        </Grid.Column>
+                      </Grid.Row>
+                      <Grid.Row>
+                        <Grid.Column style={{textAlign: "center"}}>
+                          <div style={{width: '60%', marginLeft: '20%'}}>
+                            <Input labelPosition='right' type='number' placeholder='Amount' onChange={(event) => { swapAmount = event.target.value }}>
+                              <Label basic>{currencyUnit}</Label>
+                              <input />
+                              <Label>.00</Label>
+                            </Input>
+                          </div>
+                        </Grid.Column>
+                      </Grid.Row>
+                      <Grid.Row>
+                        <Grid.Column style={{textAlign: "center"}}>
+                          <div style={{width: '60%', marginLeft: '20%'}}>
+                            <Dropdown placeholder='Choose Swap Mode ...' fluid selection options={modeOptData} />
+                          </div>
+                        </Grid.Column>
+                      </Grid.Row>
+                      <Grid.Row>
+                        <Grid.Column style={{textAlign: "center"}}>
+                          <div style={{width: '60%', marginLeft: '20%'}}>
+                            <Button primary onClick={handleSwap} icon='shuffle' content='Swap'/>
+                          </div>
+                        </Grid.Column>
+                      </Grid.Row>
+                  </Grid>
+              </Modal.Actions>
+            </>
+          : <h2>You are not connected to your wallet.</h2>}
+          </Modal>
+      )
+  }
+
   const DepositTable = () => {
     return (
       <table>
         <thead style={{ fontSize: '18px', fontFamily: 'sans-serif' }}>
-          <th>Asset</th>
-          <th>APY</th>
-          <th>Wallet</th>
-          <th></th>
+          <tr>
+            <th>Asset</th>
+            <th>APY</th>
+            <th>Wallet</th>
+            <th></th>
+          </tr>
         </thead>
         <tbody style={{ fontSize: '14px', fontFamily: 'sans-serif' }}>
           {depositMarketsData.map(token => {
@@ -266,7 +437,7 @@ const Dashboard = () => {
                 <td style={{ padding: '30px', width: '20%' }}>{token.assetName}</td>
                 <td style={{ padding: '30px', width: '20%' }}>{token.APY}%</td>
                 <td style={{ padding: '30px', width: '20%' }}>{token.AssetFullname}</td>
-                <td style={{ padding: '30px', width: '20%' }}><DepositWithdraw assetID={token.assetId} /></td>
+                <td style={{ padding: '30px', width: '20%' }}><DepositWithdraw assetID={token.assetID} /></td>
                 {/* <td style={{ padding: '30px', width: '20%' }}>{token.Collateral}</td> */}
               </tr>
             )
@@ -281,19 +452,21 @@ const Dashboard = () => {
     return (
         <table>
             <thead style={{fontSize: '18px', fontFamily: 'sans-serif'}}>
+              <tr>
                 <th>Asset</th>
-                <th>APY</th>
-                <th>Wallet</th>
                 <th></th>
+                <th></th>
+                <th></th>
+              </tr>
             </thead>
             <tbody style={{fontSize: '14px', fontFamily: 'sans-serif'}}>
                 {borrowMarketsData.map(token => {
                     return (
                         <tr key={token.assetName} >
-                            <td style={{padding: '30px', width: '20%' }}>{token.assetName}</td>
-                            <td style={{padding: '30px', width: '20%' }}>{token.APY}%</td>
-                            <td style={{padding: '30px', width: '20%' }}>{token.AssetFullname}</td>
-                            <td style={{padding: '30px', width: '20%' }}><BorrowRepay assetID={token.assetId}/></td>
+                            <td style={{padding: '30px 50px', width: '30%' }}>{token.assetName}</td>
+                            <td style={{padding: '0px', width: '10%' }}><BorrowRepay assetID={token.assetId}/></td>
+                            <td style={{padding: '0px', width: '10%' }}><BorrowSwap assetID={token.assetId}/></td>
+                            <td style={{padding: '0px', width: '20%' }}><BorrowSwaptoLoan assetID={token.assetId}/></td>
                             {/* <td style={{padding: '30px', width: '20%' }}>${token.Liquidity>1000000 ? token.Liquidity/1000000+"M":token.Liquidity}</td> */}
                         </tr>
                     )
