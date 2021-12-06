@@ -40,6 +40,10 @@
     "web3-utils": "^1.6.0",
     "web3modal": "^1.9.4"
   },
+  "peerDependencies": {
+    "react": "16.13.1",
+    "react-dom": "16.13.1"
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "CI=false && react-scripts build",
