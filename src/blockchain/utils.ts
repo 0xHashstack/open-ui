@@ -46,7 +46,7 @@ export const BNtoNum = (value, decimal = 18) => {
 }
 
 export const NumToBN = (value, decimal = 18) => {
-  return new BigNumber(value).shiftedBy(decimal);
+  return String(new BigNumber(value).shiftedBy(decimal));
 }
 
 export const toFixed = (num, digit) => {
