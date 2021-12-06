@@ -16,9 +16,9 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
-      - name: Build React App
-        run: yarn install && yarn build
+#       - name: Build React App
+#         run: yarn install && yarn build
       - name: Deploy app build to S3 bucket
         run: aws s3 sync ./build/ ${{ secrets.AWS_STAGING_BUCKET }} --delete
-      - name: Invalidate CloudFront
-        run: aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_CF_STAGING_DISTRIBUTION_ID }} --paths /*
+#       - name: Invalidate CloudFront
+#         run: aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_CF_STAGING_DISTRIBUTION_ID }} --paths /*
