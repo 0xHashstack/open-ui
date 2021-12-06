@@ -437,7 +437,7 @@ const Dashboard = () => {
                 <td style={{ padding: '30px', width: '20%' }}>{token.assetName}</td>
                 <td style={{ padding: '30px', width: '20%' }}>{token.APY}%</td>
                 <td style={{ padding: '30px', width: '20%' }}>{token.AssetFullname}</td>
-                <td style={{ padding: '30px', width: '20%' }}><DepositWithdraw assetID={token.assetID} /></td>
+                <td style={{ padding: '30px', width: '20%' }}><DepositWithdraw assetID={token.assetId} /></td>
                 {/* <td style={{ padding: '30px', width: '20%' }}>{token.Collateral}</td> */}
               </tr>
             )
