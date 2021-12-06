@@ -1,6 +1,6 @@
 {
   "name": "hashstack",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "private": true,
   "dependencies": {
     "@burner-wallet/burner-connect-provider": "^0.1.1",
