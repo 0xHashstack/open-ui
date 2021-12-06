@@ -17,7 +17,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
       - name: Build React App
-        run: npm install && npm run build
+        run: npm install --legacy-peer-deps && npm run build
       - name: Deploy app build to S3 bucket
         run: aws s3 sync ./build/ ${{ secrets.AWS_STAGING_BUCKET }} --delete
       - name: Invalidate CloudFront
