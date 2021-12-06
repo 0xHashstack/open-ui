@@ -8,12 +8,13 @@ import { Web3ModalContext } from '../contexts/Web3ModalProvider';
 import { Web3WrapperContext } from '../contexts/Web3WrapperProvider';
 import { markets, comit_NONE, symbols, latestPrice, decimals, comit_ONEMONTH, comit_TWOWEEKS } from '../blockchain/constants';
 import { ellipseAddress } from '../util/blockchain';
-import { isMarketSupported, toFixed } from "blockchain/utils";
+// import { isMarketSupported, toFixed } from "blockchain/utils";
 import BorrowBalance from "../components/BorrowBalance";
 import DepositBalance from "../components/DepositBalance";
-import { useMoralisDapp } from "providers/MoralisDappProvider/MoralisDappProvider";
-import { useMoralis } from "react-moralis";
-import { getEllipsisTxt } from "helpers/formatters";
+// import { useMoralisDapp } from "providers/MoralisDappProvider/MoralisDappProvider";
+// import { useMoralis } from "react-moralis";
+// import { getEllipsisTxt } from "helpers/formatters";
+import { BNtoNum } from '../blockchain/utils';
 
 
 const depositMarketsData = [
@@ -86,14 +87,39 @@ const Dashboard = () => {
     const [open, setOpen] = useState(false)
     const [method, setMethod] = useState("Deposit");
 
+    useEffect(() => {
+      wrapper?.deposit.on("NewDeposit", onDeposit);
+      wrapper?.deposit.on("Withdrawal", onWithdrawal)
+    });
+
     const handleDeposit = async () => {
-      // const amount = toFixed(inputVal1 * latestPrice[props.assetID],5)
-      const tx = await wrapper?.addToDeposit(symbols[props.assetID], comit_TWOWEEKS, inputVal1, decimals[props.assetID]);
+      try {
+        const tx = await wrapper?.addToDeposit(symbols[props.assetID], comit_TWOWEEKS, inputVal1, decimals[props.assetID]);
+      } catch(err) {
+        console.error("ERROR MESSAGE: ", err.message)
+        alert(err.message)
+      }
+    }
+
+    const onDeposit = (data) => {
+      let amount = BNtoNum(Number(data.amount))
+      alert("Deposited amount: " + amount);
+      console.log(data);
     }
 
     const handleWithdraw = async () => {
-      // const amount = toFixed(inputVal1 * latestPrice[props.assetID],5)
-      const tx = await wrapper?.withdrawDeposit(symbols[props.assetID], comit_TWOWEEKS, inputVal1, 0, decimals[props.assetID]);
+      try {
+        const tx = await wrapper?.withdrawDeposit(symbols[props.assetID], comit_TWOWEEKS, inputVal1, 0, decimals[props.assetID]);
+      } catch(err) {
+        console.error("ERROR MESSAGE: ", err.message)
+        alert(err.message)
+      }
+    }
+
+    const onWithdrawal = (data) => {
+      let amount = BNtoNum(Number(data.amount));
+      alert("Withdrawal amount: " + amount);
+      console.log(data);
     }
 
     return (
@@ -166,25 +192,57 @@ const Dashboard = () => {
       const [open, setOpen] = useState(false)
       const [method, setMethod] = useState("Borrow");
 
+      useEffect(() => {
+        wrapper?.loan1.on("NewLoan", onLoanRequested);
+        wrapper?.loanContract.on("CollateralReleased", onCollateralReleased)
+        wrapper?.loan1.on("AddCollateral", onCollateralAdded)
+      });
+
       const handleBorrow = async () => {
-        // const amount = toFixed(inputVal1 * latestPrice[props.assetID], 5);
-        // console.log("handleBorrow, amount is ", amount);\
-        console.log("===== handleBorrow =====");
-        console.log("Market is ", symbols[props.assetID]);
-        
-        const tx = await wrapper?.loanRequest(symbols[props.assetID], comit_ONEMONTH, inputVal1, decimals[props.assetID], symbols[props.assetID], inputVal2, decimals[props.assetID]);
-        // const tx = await wrapper?.addLoan();
+        try {
+          const tx = await wrapper?.loanRequest(symbols[props.assetID], comit_ONEMONTH, inputVal1, decimals[props.assetID], symbols[props.assetID], inputVal2, decimals[props.assetID]);
+        } catch(err) {
+          console.error("ERROR MESSAGE: ", err.message)
+          alert(err.message)
+        }
+      }
+
+      const onLoanRequested = (data) => {
+        let amount = BNtoNum(Number(data.amount))
+        alert("Requested amount: " + amount);
+        console.log(data);      
       }
 
       const handleRepay = async () => {
-        const tx = await wrapper?.repayLoan(symbols[props.assetID], comit_ONEMONTH, inputVal1, decimals[props.assetID]);
-        return tx;
+        try {
+          const tx = await wrapper?.repayLoan(symbols[props.assetID], comit_ONEMONTH, inputVal1, decimals[props.assetID]);
+        } catch(err) {
+          console.error("ERROR MESSAGE: ", err.message)
+          alert(err.message)
+        }
+      }
+
+      const onCollateralReleased = (data) => {
+        let amount = BNtoNum(Number(data.amount))
+        alert("Collateral amount released: " + amount);
+        console.log(data);      
       }
 
       const handleCollateral = async () => {
-        const tx = await wrapper?.addCollateral(symbols[props.assetID], comit_ONEMONTH, symbols[props.assetID], inputVal1, decimals[props.assetID]);
-        
+        try {
+          const tx = await wrapper?.addCollateral(symbols[props.assetID], comit_ONEMONTH, symbols[props.assetID], inputVal1, decimals[props.assetID]);
+        } catch(err) {
+          console.error("ERROR MESSAGE: ", err.message)
+          alert(err.message)
+        }
       }
+
+      const onCollateralAdded = (data) => {
+        let amount = BNtoNum(Number(data.amount))
+        alert("Collateral amount added: " + amount);
+        console.log(data); 
+      }
+
       return (
           <Modal
               onClose={() => setOpen(false)}

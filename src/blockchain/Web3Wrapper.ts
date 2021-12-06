@@ -46,37 +46,16 @@ export default class Web3Wrapper {
     //   console.log("TestEvent ret ", ret);
     // }, "");
   }
-  
-  async addToDeposit(market: string, commitment: string, amount: number, decimal: number) {
-    try {
-      // if(market === symbols[0]){
-      //   await this.wone.send("deposit", {value: NumToBN(amount, decimal)});
-      //   await this.wone.send("transfer", {}, this.account, NumToBN(amount, decimal));
-      // }
-      const tx = await this.deposit.send("createDeposit", {}, market, commitment, NumToBN(amount, decimal));
-      // const tx = await this.loanContract.send("testFunc", {});
-      // console.log("test ret is ", tx);
-      return tx;
-      
-    } catch (e) {
-      console.log("addToDeposit Error amount is :", e);
-      return false;
-    }
-  }
-  async withdrawDeposit(market: string, commitment: string, amount: number, savingType: number, decimal: number) {
-    try {
-      const tx = await this.deposit.send("withdrawDeposit", {}, market, commitment, NumToBN(amount, decimal), savingType);
-      // if(market === symbols[0]){
-      //   await this.wone.send("withdraw", {value: NumToBN(amount, decimal)});
-      // }
-      return tx;
-    } catch (e) {
-      console.log(e);
-      return false;
-    }
+
+  addToDeposit(market: string, commitment: string, amount: number, decimal: number) {
+    return this.deposit.send("createDeposit", {}, market, commitment, NumToBN(amount, decimal));
   }
 
-  async loanRequest(
+  withdrawDeposit(market: string, commitment: string, amount: number, savingType: number, decimal: number) {
+      return this.deposit.send("withdrawDeposit", {}, market, commitment, NumToBN(amount, decimal), savingType);
+  }
+
+  loanRequest(
     _market: string,
 		_commitment: string,
 		_loanAmount: number,
@@ -85,60 +64,73 @@ export default class Web3Wrapper {
 		_collateralAmount: number,
     _collateralDecimal: number
   ) {
-    console.log("loanRequest");
-    console.log("_market", _market);
-    console.log("_commitment", _commitment);
-    try{
-      const tx = await this.loan1.send("loanRequest", {}, _market, _commitment, NumToBN(_loanAmount, _loanDecimal), _collateralMarket, NumToBN(_collateralAmount, _collateralDecimal));
-      console.log("loan request", tx);
-      return tx;
-      const txC = await this.comptroller.call("getAprTimeLength", _commitment);
-      console.log("getAprTimeLength ", txC);
-      return txC;
-    } catch(e) {
-      console.log("loanRequest Error amount is :", _loanAmount, e);
-      return false;
-    }
+    return this.loan1.send("loanRequest", {}, _market, _commitment, NumToBN(_loanAmount, _loanDecimal), _collateralMarket, NumToBN(_collateralAmount, _collateralDecimal));
+    // console.log("loanRequest");
+    // console.log("_market", _market);
+    // console.log("_commitment", _commitment);
+    // try{
+    //   const tx = await this.loan1.send("loanRequest", {}, _market, _commitment, NumToBN(_loanAmount, _loanDecimal), _collateralMarket, NumToBN(_collateralAmount, _collateralDecimal));
+    //   console.log("loan request", tx);
+    //   return tx;
+    //   const txC = await this.comptroller.call("getAprTimeLength", _commitment);
+    //   console.log("getAprTimeLength ", txC);
+    //   return txC;
+    // } catch(e) {
+    //   console.log("loanRequest Error amount is :", _loanAmount, e);
+    //   return false;
+    // }
   }
 
-  async addCollateral(
+  addCollateral(
     _market: string,
     _commitment: string,
     _collateralMarket: string,
     _collateralAmount: number,
     _collateralDecimal: number
   ) {
-    console.log("addcollateral ", _market, " ", _commitment, " ", _collateralMarket, " ", _collateralAmount);
-    try {
-      const tx = await this.loan1.send("addCollateral", {}, _market, _commitment, _collateralMarket, NumToBN(_collateralAmount, _collateralDecimal));
-      console.log("addcollateral ", tx);
-      return tx;
-    } catch(e) {
-      console.log("addcollateral Error ", e);
-      return false;
-    }
+    return this.loan1.send("addCollateral", {}, _market, _commitment, _collateralMarket, NumToBN(_collateralAmount, _collateralDecimal));
+    // try {
+    //   console.log("addcollateral ", _market, " ", _commitment, " ", _collateralMarket, " ", _collateralAmount);
+    //   const tx = await this.loan1.send("addCollateral", {}, _market, _commitment, _collateralMarket, NumToBN(_collateralAmount, _collateralDecimal));
+    //   console.log("addcollateral ", tx);
+    //   return tx;
+    // } catch(e) {
+    //   console.log("addcollateral Error ", e);
+    //   return false;
+    // }
+    // console.log("addcollateral ", _market, " ", _commitment, " ", _collateralMarket, " ", _collateralAmount);
+    // try {
+    //   const tx = await this.loan1.send("addCollateral", {}, _market, _commitment, _collateralMarket, NumToBN(_collateralAmount, _collateralDecimal));
+    //   console.log("addcollateral ", tx);
+    //   return tx;
+    // } catch(e) {
+    //   console.log("addcollateral Error ", e);
+    //   return false;
+    // }
   }
 
   async repayLoan(market: string, commitment: string, amount: number, decimal: number) {
-    try {
-      console.log("repayLoan");
-      const tx = await this.loanContract.send("repayLoan", {}, market, commitment, NumToBN(amount, decimal));
-      return tx;
-    } catch (e) {
-      console.log(e);
-      return false;
-    }
+    return this.loanContract.send("repayLoan", {}, market, commitment, NumToBN(amount, decimal));
+    // try {
+    //   console.log("repayLoan");
+    //   const tx = await this.loanContract.send("repayLoan", {}, market, commitment, NumToBN(amount, decimal));
+    //   return tx;
+    // } catch (e) {
+    //   console.log(e);
+    //   return false;
+    // }
   }
 
   async swapLoan(market: string, commitment: string, swapMarket: string) {
-    try {
-      const tx = await this.loanContract.send("swapLoan", {}, market, commitment, swapMarket);
-      console.log("swapLoan", tx);
-      return tx;
-    } catch(e) {
-      console.log(e);
-      return false;
-    }
+    return this.loanContract.send("swapLoan", {}, market, commitment, swapMarket);
+    // try {
+    //   const tx = await this.loanContract.send("swapLoan", {}, market, commitment, swapMarket);
+    //   console.log("swapLoan", tx);
+    //   return tx;
+    // } catch(e) {
+    //   console.log(e);
+    //   return false;
+    // }
   }
 
   async swapToLoan(market: string, commitment: string, swapMarket: string) {
