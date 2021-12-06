@@ -22,21 +22,21 @@ class Contract {
 
     this.events = {};
   }
-  
+
+  estimateGas = (method, options, params) => {
+    return this.contract.methods[method].apply(this, params).estimateGas(options);
+  }
+
   call(method, ...params) {
-    return new Promise((resolve, reject) => {
-      this.contract.methods[method](...params).call({from: this.account})
-        .then(resolve)
-        .catch(reject)
-    });
+    return this.contract.methods[method](...params).call()
   }
 
   send(method, options, ...params) {
-    return new Promise((resolve, reject) => {
-      this.contract.methods[method](...params).send({...options, from: this.account})
-        .then(resolve)
-        .catch(reject)
-    });
+    options = {...options, from: this.account}
+    return this.estimateGas(method, options, params).then((gasLimit) => {
+      options["gas"] = Math.round(1.3 * gasLimit);
+      return this.contract.methods[method].apply(this, params).send(options);
+    })
   }
 
   on(event, callback, onerr) {
@@ -52,14 +52,6 @@ class Contract {
     });
     this.events[event] = true;
   }
-
-  // getPastEvents(...params) {
-  //   return new Promise((resolve, reject) => {
-  //     this.contract.getPastEvents(...params)
-  //       .then(resolve)
-  //       .catch(reject)
-  //   });
-  // }
 }
 
 export default Contract;
