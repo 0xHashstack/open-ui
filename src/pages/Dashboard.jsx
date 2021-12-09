@@ -1,19 +1,14 @@
 import React, { useEffect, useState, useCallback, useContext } from "react";
 import '../style.css';
 import 'semantic-ui-css/semantic.min.css';
-import { Button, Modal, Grid, Icon, Input, Dropdown, Select, Label } from 'semantic-ui-react';
-import { Checkbox } from 'semantic-ui-react'
+import { Button, Modal, Grid, Input, Dropdown, Label } from 'semantic-ui-react';
 import logo from '../assets/logo.png';
 import { Web3ModalContext } from '../contexts/Web3ModalProvider';
 import { Web3WrapperContext } from '../contexts/Web3WrapperProvider';
-import { markets, comit_NONE, symbols, latestPrice, decimals, comit_ONEMONTH, comit_TWOWEEKS } from '../blockchain/constants';
+import { markets, symbols, decimals, comit_ONEMONTH, comit_TWOWEEKS } from '../blockchain/constants';
 import { ellipseAddress } from '../util/blockchain';
-// import { isMarketSupported, toFixed } from "blockchain/utils";
 import BorrowBalance from "../components/BorrowBalance";
 import DepositBalance from "../components/DepositBalance";
-// import { useMoralisDapp } from "providers/MoralisDappProvider/MoralisDappProvider";
-// import { useMoralis } from "react-moralis";
-// import { getEllipsisTxt } from "helpers/formatters";
 import { BNtoNum } from '../blockchain/utils';
 
 
@@ -30,28 +25,6 @@ const borrowMarketsData = [
   { assetId: 1, assetName: markets[1], AssetFullname: "USD Coin", APY: 18 },
   { assetId: 2, assetName: markets[2], AssetFullname: "Bitcoin", APY: 18},
 ];
-
-
-const getOptions = (number, prefix = 'Choice ') =>
-(number, (index) => ({
-  key: index,
-  text: `${prefix}${index}`,
-  value: index,
-}));
-
-const toOptData1 = [
-  { key: 1, text: 'USDC.t', value: 1},
-  { key: 2, text: 'BTC.t', value: 2},
-];
-const toOptData2 = [
-  { key: 0, text: 'USDT.t', value: 0},
-  { key: 2, text: 'BTC.t', value: 2},
-];
-const toOptData3 = [
-  { key: 0, text: 'USDT.t', value: 0},
-  { key: 1, text: 'USDC.t', value: 1},
-];
-
 
 const modeOptData = [
   { key: 0, text: 'Swap Mode 0', value: 0},
@@ -88,8 +61,8 @@ const Dashboard = () => {
     const [method, setMethod] = useState("Deposit");
 
     useEffect(() => {
-      wrapper?.deposit.on("NewDeposit", onDeposit);
-      wrapper?.deposit.on("Withdrawal", onWithdrawal)
+      // wrapper?.deposit.on("NewDeposit", onDeposit);
+      // wrapper?.deposit.on("Withdrawal", onWithdrawal)
     });
 
     const handleDeposit = async () => {

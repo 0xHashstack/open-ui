@@ -7,7 +7,6 @@ const useDashboardData = () => {
   const { web3Wrapper: wrapper } = useContext(Web3WrapperContext);
 
   const fetchDashboardData = useCallback(async () => {
-    if (wrapper) {
       try {
         const data = await utils.getDashboardData();
         setDashboardData(data);
@@ -17,7 +16,6 @@ const useDashboardData = () => {
         console.log(e);
         setDashboardData(null);
       }
-    }
   }, [wrapper]);
 
   useEffect(() => {

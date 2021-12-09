@@ -1,10 +1,8 @@
 import Web3 from 'web3';
 import { defaultChainId, rpcUrls, symbols, latestPrice, decimals, diamondAddress } from './constants';
 import { BigNumber } from "bignumber.js";
-// import TokenList from './contracts/TokenList';
 import Deposit from './contracts/Deposit';
 import TokenList from './contracts/TokenList';
-// import Loan from './contracts/Loan';
 import Loan1 from './contracts/Loan1';
 import Reserve from './contracts/Reserve';
 
@@ -56,9 +54,10 @@ export const toFixed = (num, digit) => {
 }
 
 export const getDashboardData = async () => {
-  const deposit = new Deposit(getDefaultContractOptions(), diamondAddress);
-  const loan1 = new Loan1(getDefaultContractOptions(), diamondAddress);
-  const reserve = new Reserve(getDefaultContractOptions(), diamondAddress);
+  let defaultContractOptions = getDefaultContractOptions();
+  const deposit = new Deposit(defaultContractOptions, diamondAddress);
+  const loan1 = new Loan1(defaultContractOptions, diamondAddress);
+  const reserve = new Reserve(defaultContractOptions, diamondAddress);
 
   let reserveDeposit = 0;
   let reserveLoan = 0;
