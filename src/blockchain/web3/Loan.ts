@@ -1,19 +1,17 @@
-import Web3Wrapper from './Web3Wrapper';
 import { diamondAddress } from '../constants';
 import Loan from '../contracts/Loan';
 import { NumToBN } from '../utils';
 import Loan1 from 'blockchain/contracts/Loan1';
 
-class LoanWeb3Wrapper extends Web3Wrapper {
+class LoanWeb3Wrapper {
     
     //Contract
     loan: Loan; 
     loan1: Loan1;
 
-    constructor(web3, chainId, account, options = {}) {
-        super(web3, chainId, account, options)
-        this.loan = new Loan(this.wrapperOptions, diamondAddress);
-        this.loan1 = new Loan1(this.wrapperOptions, diamondAddress);
+    constructor(wrapperOptions: any) {
+        this.loan = new Loan(wrapperOptions, diamondAddress);
+        this.loan1 = new Loan1(wrapperOptions, diamondAddress);
     }
 
     //send transaction methods

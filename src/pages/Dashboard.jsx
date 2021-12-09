@@ -61,13 +61,13 @@ const Dashboard = () => {
     const [method, setMethod] = useState("Deposit");
 
     useEffect(() => {
-      // wrapper?.deposit.on("NewDeposit", onDeposit);
-      // wrapper?.deposit.on("Withdrawal", onWithdrawal)
+      wrapper?.getDepositInstance().deposit.on("NewDeposit", onDeposit);
+      wrapper?.getDepositInstance().deposit.on("Withdrawal", onWithdrawal)
     });
 
     const handleDeposit = async () => {
       try {
-        const tx = await wrapper?.addToDeposit(symbols[props.assetID], comit_TWOWEEKS, inputVal1, decimals[props.assetID]);
+        const tx = await wrapper?.getDepositInstance().createDeposit(symbols[props.assetID], comit_TWOWEEKS, inputVal1, decimals[props.assetID]);
       } catch(err) {
         console.error("ERROR MESSAGE: ", err.message)
         alert(err.message)
@@ -166,14 +166,13 @@ const Dashboard = () => {
       const [method, setMethod] = useState("Borrow");
 
       useEffect(() => {
-        // wrapper?.loan1.on("NewLoan", onLoanRequested);
-        // wrapper?.loanContract.on("CollateralReleased", onCollateralReleased)
-        // wrapper?.loan1.on("AddCollateral", onCollateralAdded)
+        wrapper?.getLoanInstance().loan1.on("NewLoan", onLoanRequested);
+        wrapper?.getLoanInstance().loan1.on("AddCollateral", onCollateralAdded)
       });
 
       const handleBorrow = async () => {
         try {
-          const tx = await wrapper?.loanRequest(symbols[props.assetID], comit_ONEMONTH, inputVal1, decimals[props.assetID], symbols[props.assetID], inputVal2, decimals[props.assetID]);
+          const tx = await wrapper?.getLoanInstance().loanRequest(symbols[props.assetID], comit_ONEMONTH, inputVal1, decimals[props.assetID], symbols[props.assetID], inputVal2, decimals[props.assetID]);
         } catch(err) {
           console.error("ERROR MESSAGE: ", err.message)
           alert(err.message)
@@ -188,7 +187,7 @@ const Dashboard = () => {
 
       const handleRepay = async () => {
         try {
-          const tx = await wrapper?.repayLoan(symbols[props.assetID], comit_ONEMONTH, inputVal1, decimals[props.assetID]);
+          const tx = await wrapper?.getLoanInstance().repayLoan(symbols[props.assetID], comit_ONEMONTH, inputVal1, decimals[props.assetID]);
         } catch(err) {
           console.error("ERROR MESSAGE: ", err.message)
           alert(err.message)
@@ -203,7 +202,7 @@ const Dashboard = () => {
 
       const handleCollateral = async () => {
         try {
-          const tx = await wrapper?.addCollateral(symbols[props.assetID], comit_ONEMONTH, symbols[props.assetID], inputVal1, decimals[props.assetID]);
+          const tx = await wrapper?.getLoanInstance().addCollateral(symbols[props.assetID], comit_ONEMONTH, symbols[props.assetID], inputVal1, decimals[props.assetID]);
         } catch(err) {
           console.error("ERROR MESSAGE: ", err.message)
           alert(err.message)

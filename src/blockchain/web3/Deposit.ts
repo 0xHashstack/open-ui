@@ -1,17 +1,13 @@
-import Web3Wrapper from './Web3Wrapper';
 import { diamondAddress } from '../constants';
 import Deposit from '../contracts/Deposit';
 import { NumToBN } from '../utils';
 
-class DepositWeb3Wrapper extends Web3Wrapper {
-    wrapperOptions: any;
-  
+class DepositWeb3Wrapper {  
     // Contracts
     deposit: Deposit;
   
-    constructor(web3, chainId, account, options = {}) {
-        super(web3, chainId, account, options)
-        this.deposit = new Deposit(this.wrapperOptions, diamondAddress);
+    constructor(wrapperOptions: any) {
+        this.deposit = new Deposit(wrapperOptions, diamondAddress);
     }
 
     //send transaction methods

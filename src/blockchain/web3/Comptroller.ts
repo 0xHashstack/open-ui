@@ -1,16 +1,14 @@
-import Web3Wrapper from './Web3Wrapper';
 import { diamondAddress } from '../constants';
 import Comptroller from '../contracts/Comptroller';
 import { NumToBN } from '../utils';
 
-class ComptrollerWeb3Wrapper extends Web3Wrapper {
+class ComptrollerWeb3Wrapper {
   
-    Contract
+    // Contract
     comptroller: Comptroller;
   
-    constructor(web3, chainId, account, options = {}) {
-        super(web3, chainId, account, options)
-        this.comptroller = new Comptroller(this.wrapperOptions, diamondAddress);
+    constructor(wrapperOptions) {
+        this.comptroller = new Comptroller(wrapperOptions, diamondAddress);
     }
 
     //send transaction methods
