@@ -1,12 +1,12 @@
 import Web3 from 'web3';
 import { diamondAddress } from '../constants';
-// import Deposit from '../contracts/Deposit';
+import Deposit from '../contracts/Deposit';
 // import Loan from '../contracts/Loan';
 // import Loan1 from '../contracts/Loan1';
 import Comptroller from '../contracts/Comptroller';
 
 // import WONE from './contracts/WONE';
-// import { NumToBN } from '../utils';
+import { NumToBN } from '../utils';
 
 export default class Web3Wrapper {
   web3: Web3;
@@ -15,7 +15,7 @@ export default class Web3Wrapper {
   wrapperOptions: any;
 
   // Contracts
-  // deposit: Deposit;
+  deposit: Deposit;
   // loanContract: Loan; 
   // loan1: Loan1;
   comptroller: Comptroller;
@@ -32,22 +32,21 @@ export default class Web3Wrapper {
       ...options
     }
 
-    // this.deposit = new Deposit(this.wrapperOptions, diamondAddress);
+    this.deposit = new Deposit(this.wrapperOptions, diamondAddress);
     // this.loanContract = new Loan(this.wrapperOptions, diamondAddress);
     // this.loan1 = new Loan1(this.wrapperOptions, diamondAddress);
     this.comptroller = new Comptroller(this.wrapperOptions, diamondAddress);
   }
 
-  // addToDeposit(market: string, commitment: string, amount: number, decimal: number) {
-  //   return this.deposit.send("createDeposit", {}, market, commitment, NumToBN(amount, decimal));
-  // }
+  addToDeposit(market: string, commitment: string, amount: number, decimal: number) {
+    return this.deposit.send("createDeposit", {}, market, commitment, NumToBN(amount, decimal));
+  }
 
   // withdrawDeposit(market: string, commitment: string, amount: number, savingType: number, decimal: number) {
   //     return this.deposit.send("withdrawDeposit", {}, market, commitment, NumToBN(amount, decimal), savingType);
   // }
 
 
-  
   // loanRequest(
   //   _market: string,
 	// 	_commitment: string,

@@ -6,7 +6,7 @@ import { NumToBN } from '../utils';
 class DepositWeb3Wrapper extends Web3Wrapper {
     wrapperOptions: any;
   
-    // Contract
+    // Contracts
     deposit: Deposit;
   
     constructor(web3, chainId, account, options = {}) {
