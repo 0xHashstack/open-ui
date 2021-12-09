@@ -166,9 +166,9 @@ const Dashboard = () => {
       const [method, setMethod] = useState("Borrow");
 
       useEffect(() => {
-        wrapper?.loan1.on("NewLoan", onLoanRequested);
-        wrapper?.loanContract.on("CollateralReleased", onCollateralReleased)
-        wrapper?.loan1.on("AddCollateral", onCollateralAdded)
+        // wrapper?.loan1.on("NewLoan", onLoanRequested);
+        // wrapper?.loanContract.on("CollateralReleased", onCollateralReleased)
+        // wrapper?.loan1.on("AddCollateral", onCollateralAdded)
       });
 
       const handleBorrow = async () => {

@@ -3,10 +3,10 @@ import { diamondAddress } from '../constants';
 import Deposit from '../contracts/Deposit';
 import { NumToBN } from '../utils';
 
-export default class DepositWeb3Wrapper extends Web3Wrapper {
+class DepositWeb3Wrapper extends Web3Wrapper {
     wrapperOptions: any;
   
-    // Contracts
+    // Contract
     deposit: Deposit;
   
     constructor(web3, chainId, account, options = {}) {
@@ -54,3 +54,5 @@ export default class DepositWeb3Wrapper extends Web3Wrapper {
     }
      
 }
+
+export default DepositWeb3Wrapper;
