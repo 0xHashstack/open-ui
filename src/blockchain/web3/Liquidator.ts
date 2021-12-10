@@ -14,6 +14,19 @@ class LiquidatorWrapper {
         return this.liquidator.send("swap", {}, fromMarket, toMarket, NumToBN(fromAmount, decimal), String(mode));
     }
 
+    isPausedLiquidator() {
+        return this.liquidator.call("isPausedLiquidator");
+    }
+
+    //admin operation
+    pauseLiquidator() {
+        return this.liquidator.send("pauseLiquidator", {});
+    }
+
+    unpauseLiquidator() {
+        return this.liquidator.send("unpauseLiquidator", {});
+    }
+
 }
 
 export default LiquidatorWrapper;

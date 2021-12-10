@@ -64,9 +64,17 @@ class ComptrollerWeb3Wrapper {
         return this.comptroller.send("updateMaxWithdrawal", {}, String(factor), String(blockLimit));
     }
 
+    liquidationTrigger(loanId: number) {
+        return this.comptroller.send("liquidationTrigger", {}, String(loanId));
+    }
+
     //getter methods
     getAPR(commitment: string) {
         return this.comptroller.call("getAPR", commitment);
+    }
+
+    getAPRInd(commitment: string, index: number) {
+        return this.comptroller.call("getAPRInd", commitment, String(index));
     }
 
     getAPY(commitment: string) {
@@ -111,6 +119,35 @@ class ComptrollerWeb3Wrapper {
 
     calcAPY(commitment: string, oldLengthAccruedYield: number, oldTime: number, aggregateYield: number) {
         return this.comptroller.call("calcAPY", commitment, String(oldLengthAccruedYield), String(oldTime), String(aggregateYield));
+    }
+
+    getReserveFactor() {
+        return this.comptroller.call("getReserveFactor");
+    }
+
+    depositPreClosureFees() {
+        return this.comptroller.call("depositPreClosureFees");
+    }
+
+    depositWithdrawalFees() {
+        return this.comptroller.call("depositWithdrawalFees");
+    }
+
+    collateralReleaseFees() {
+        return this.comptroller.call("collateralReleaseFees");
+    }
+
+    isPausedComptroller() {
+        return this.comptroller.call("isPausedComptroller");
+    }
+
+    //admin operations
+    pauseComptroller() {
+        return this.comptroller.send("pauseComptroller", {});
+    }
+
+    unpauseComptroller() {
+        return this.comptroller.send("unpauseComptroller", {});
     }
 
 }
