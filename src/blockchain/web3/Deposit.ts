@@ -29,6 +29,10 @@ class DepositWrapper {
 
 
     //getter methods
+    savingsBalance(market: string, commitment: string) {
+        return this.deposit.call("savingsBalance", market, commitment)
+    }
+
     hasAccount(address: string) {
         return this.deposit.call("hasAccount", address);
     }
@@ -47,6 +51,19 @@ class DepositWrapper {
 
     hasDeposit(market: string, commitment: string) {
         return this.deposit.call("hasDeposit", market, commitment);
+    }
+
+    isPausedDeposit() {
+        return this.deposit.call("isPausedDeposit");
+    }
+
+    //admin operations
+    pauseDeposit() {
+        return this.deposit.send("pauseDeposit", {});
+    }
+
+    unpauseDeposit() {
+        return this.deposit.send("unpauseDeposit", {});
     }
      
 }

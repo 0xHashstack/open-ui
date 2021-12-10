@@ -39,6 +39,14 @@ class LoanWrapper {
         return this.loan1.send("addCollateral", {}, market, commitment, collateralMarket, NumToBN(collateralAmount, collateralDecimal));
     }
 
+    liquidation(address: string, id: number) {
+        return this.loan1.send("liquidation", {}, address, String(id));
+    }
+
+    permissibleWithdrawal(market: string, commitment: string, collateralMarket: string, amount: number, decimal: number) {
+        return this.loan1.send("permissibleWithdrawal", market, commitment, collateralMarket, NumToBN(amount, decimal));
+    }
+
     //getter methods
     hasLoanAccount(address: string) {
         return this.loan1.call("hasLoanAccount", address);
@@ -50,6 +58,31 @@ class LoanWrapper {
 
     utilisedReservesLoan(market: string) {
         return this.loan1.call("utilisedReservesLoan", market);
+    }
+
+    isPausedLoan() {
+        return this.loan.call("isPausedLoan");
+    }
+
+    isPausedLoan1() {
+        return this.loan1.call("isPausedLoan1");
+    }
+
+    //admin operations
+    pauseLoan() {
+        return this.loan.send("pauseLoan", {});
+    }
+
+    unpauseLoan() {
+        return this.loan.send("unpauseLoan", {});
+    }
+    
+    pauseLoan1() {
+        return this.loan1.send("pauseLoan1", {});
+    }
+
+    unpauseLoan1() {
+        return this.loan1.send("unpauseLoan1", {});
     }
 
 }
