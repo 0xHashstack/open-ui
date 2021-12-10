@@ -3,7 +3,7 @@ import Loan from '../contracts/Loan';
 import { NumToBN } from '../utils';
 import Loan1 from 'blockchain/contracts/Loan1';
 
-class LoanWeb3Wrapper {
+class LoanWrapper {
     
     //Contract
     loan: Loan; 
@@ -54,4 +54,4 @@ class LoanWeb3Wrapper {
 
 }
 
-export default LoanWeb3Wrapper;
+export default LoanWrapper;

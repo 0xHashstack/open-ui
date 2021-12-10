@@ -2,7 +2,7 @@ import { diamondAddress } from '../constants';
 import Deposit from '../contracts/Deposit';
 import { NumToBN } from '../utils';
 
-class DepositWeb3Wrapper {  
+class DepositWrapper {  
     // Contracts
     deposit: Deposit;
   
@@ -51,4 +51,4 @@ class DepositWeb3Wrapper {
      
 }
 
-export default DepositWeb3Wrapper;
+export default DepositWrapper;

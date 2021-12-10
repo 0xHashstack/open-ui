@@ -1,7 +1,8 @@
 import Web3 from 'web3';
 import ComptrollerWeb3Wrapper from './Comptroller';
-import DepositWeb3Wrapper from './Deposit';
-import LoanWeb3Wrapper from './Loan';
+import DepositWrapper from './Deposit';
+import LiquidatorWrapper from './Liquidator';
+import LoanWrapper from './Loan';
 
 export default class Web3Wrapper {
   web3: Web3;
@@ -22,15 +23,19 @@ export default class Web3Wrapper {
   }
 
   getDepositInstance() {
-    return new DepositWeb3Wrapper(this.wrapperOptions);
+    return new DepositWrapper(this.wrapperOptions);
   }
 
   getLoanInstance() {
-    return new LoanWeb3Wrapper(this.wrapperOptions);
+    return new LoanWrapper(this.wrapperOptions);
   }
 
   getComptrollerInstance() {
     return new ComptrollerWeb3Wrapper(this.wrapperOptions);
+  }
+
+  getLiquidatorInstance() {
+    return new LiquidatorWrapper(this.wrapperOptions)
   }
 
 }
