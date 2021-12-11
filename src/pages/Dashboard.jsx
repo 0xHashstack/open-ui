@@ -82,7 +82,7 @@ const Dashboard = () => {
 
     const handleWithdraw = async () => {
       try {
-        const tx = await wrapper?.withdrawDeposit(symbols[props.assetID], comit_TWOWEEKS, inputVal1, 0, decimals[props.assetID]);
+        const tx = await wrapper?.getDepositInstance().withdrawDeposit(symbols[props.assetID], comit_TWOWEEKS, inputVal1, 0, decimals[props.assetID]);
       } catch(err) {
         console.error("ERROR MESSAGE: ", err.message)
         alert(err.message)
@@ -166,8 +166,12 @@ const Dashboard = () => {
       const [method, setMethod] = useState("Borrow");
 
       useEffect(() => {
-        wrapper?.getLoanInstance().loan1.on("NewLoan", onLoanRequested);
-        wrapper?.getLoanInstance().loan1.on("AddCollateral", onCollateralAdded)
+        // wrapper?.getLoanInstance().loan1.on("NewLoan", onLoanRequested);
+        // wrapper?.getLoanInstance().loan1.on("AddCollateral", onCollateralAdded)
+        // wrapper?.getLoanInstance().loan.on("CollateralReleased", onCollateralReleased);
+        // wrapper?.getLoanInstance().loan.on("MarketSwapped", (data) => {
+        //   alert(data)
+        // })
       });
 
       const handleBorrow = async () => {
@@ -321,8 +325,13 @@ const Dashboard = () => {
       const [method, setMethod] = useState("Borrow");
 
       const handleSwap = async() => {
-        console.log("Swap " + currencyUnit + swapAmount.toString() + " to '" + swapTo +"' by '" + swapMode + "' mode!");
-        const tx = await wrapper?.swapLoan(symbols[props.assetID], comit_ONEMONTH, symbols[swapTo]);
+        console.log("Swap ", symbols[props.assetID], comit_ONEMONTH, symbols[swapTo]);
+        try {
+          const tx = await wrapper?.getLoanInstance().swapLoan(symbols[props.assetID], comit_ONEMONTH, symbols[swapTo]);
+        } catch(err) {
+          console.error("ERROR MESSAGE: ", err.message)
+          alert(err.message)
+        }
       }
 
       return (
@@ -388,8 +397,13 @@ const Dashboard = () => {
       const [method, setMethod] = useState("Borrow");
 
       const handleSwap = async() => {
-        console.log("Swap " + currencyUnit + swapAmount.toString() + " to '" + swapTo +"' by '" + swapMode + "' mode!");
-        const tx = await wrapper?.swapLoan(symbols[props.assetID], comit_ONEMONTH, symbols[swapTo]);
+        console.log("Swap ", symbols[props.assetID], comit_ONEMONTH, symbols[swapTo]);
+        try {
+          const tx = await wrapper?.getLoanInstance().swapToLoan(symbols[props.assetID], comit_ONEMONTH, symbols[swapTo]);
+        } catch(err) {
+          console.error("ERROR MESSAGE: ", err.message)
+          alert(err.message)
+        }
       }
 
       return (

@@ -1,5 +1,5 @@
 import { diamondAddress } from '../constants';
-import Loan from '../contracts/Loan';
+import Loan from 'blockchain/contracts/Loan';
 import { NumToBN } from '../utils';
 import Loan1 from 'blockchain/contracts/Loan1';
 
