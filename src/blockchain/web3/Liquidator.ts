@@ -14,6 +14,7 @@ class LiquidatorWrapper {
         return this.liquidator.send("swap", {}, fromMarket, toMarket, NumToBN(fromAmount, decimal), String(mode));
     }
 
+    //getter methods
     isPausedLiquidator() {
         return this.liquidator.call("isPausedLiquidator");
     }
