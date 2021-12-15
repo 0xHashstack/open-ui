@@ -1,5 +1,5 @@
 import Contract from './Contract';
-import abi from '../abis/diamond.json';
+import abi from '../abis/Reserve.json';
 
 class Reserve extends Contract {
   constructor(options, address) {

@@ -1,19 +1,14 @@
 import React, { useEffect, useState, useCallback, useContext } from "react";
 import '../style.css';
 import 'semantic-ui-css/semantic.min.css';
-import { Button, Modal, Grid, Icon, Input, Dropdown, Select, Label } from 'semantic-ui-react';
-import { Checkbox } from 'semantic-ui-react'
+import { Button, Modal, Grid, Input, Dropdown, Label } from 'semantic-ui-react';
 import logo from '../assets/logo.png';
 import { Web3ModalContext } from '../contexts/Web3ModalProvider';
 import { Web3WrapperContext } from '../contexts/Web3WrapperProvider';
-import { markets, comit_NONE, symbols, latestPrice, decimals, comit_ONEMONTH, comit_TWOWEEKS } from '../blockchain/constants';
+import { markets, symbols, decimals, comit_ONEMONTH, comit_TWOWEEKS } from '../blockchain/constants';
 import { ellipseAddress } from '../util/blockchain';
-// import { isMarketSupported, toFixed } from "blockchain/utils";
 import BorrowBalance from "../components/BorrowBalance";
 import DepositBalance from "../components/DepositBalance";
-// import { useMoralisDapp } from "providers/MoralisDappProvider/MoralisDappProvider";
-// import { useMoralis } from "react-moralis";
-// import { getEllipsisTxt } from "helpers/formatters";
 import { BNtoNum } from '../blockchain/utils';
 
 
@@ -30,28 +25,6 @@ const borrowMarketsData = [
   { assetId: 1, assetName: markets[1], AssetFullname: "USD Coin", APY: 18 },
   { assetId: 2, assetName: markets[2], AssetFullname: "Bitcoin", APY: 18},
 ];
-
-
-const getOptions = (number, prefix = 'Choice ') =>
-(number, (index) => ({
-  key: index,
-  text: `${prefix}${index}`,
-  value: index,
-}));
-
-const toOptData1 = [
-  { key: 1, text: 'USDC.t', value: 1},
-  { key: 2, text: 'BTC.t', value: 2},
-];
-const toOptData2 = [
-  { key: 0, text: 'USDT.t', value: 0},
-  { key: 2, text: 'BTC.t', value: 2},
-];
-const toOptData3 = [
-  { key: 0, text: 'USDT.t', value: 0},
-  { key: 1, text: 'USDC.t', value: 1},
-];
-
 
 const modeOptData = [
   { key: 0, text: 'Swap Mode 0', value: 0},
@@ -88,13 +61,13 @@ const Dashboard = () => {
     const [method, setMethod] = useState("Deposit");
 
     useEffect(() => {
-      wrapper?.deposit.on("NewDeposit", onDeposit);
-      wrapper?.deposit.on("Withdrawal", onWithdrawal)
+      wrapper?.getDepositInstance().deposit.on("NewDeposit", onDeposit);
+      wrapper?.getDepositInstance().deposit.on("Withdrawal", onWithdrawal)
     });
 
     const handleDeposit = async () => {
       try {
-        const tx = await wrapper?.addToDeposit(symbols[props.assetID], comit_TWOWEEKS, inputVal1, decimals[props.assetID]);
+        const tx = await wrapper?.getDepositInstance().createDeposit(symbols[props.assetID], comit_TWOWEEKS, inputVal1, decimals[props.assetID]);
       } catch(err) {
         console.error("ERROR MESSAGE: ", err.message)
         alert(err.message)
@@ -109,7 +82,7 @@ const Dashboard = () => {
 
     const handleWithdraw = async () => {
       try {
-        const tx = await wrapper?.withdrawDeposit(symbols[props.assetID], comit_TWOWEEKS, inputVal1, 0, decimals[props.assetID]);
+        const tx = await wrapper?.getDepositInstance().withdrawDeposit(symbols[props.assetID], comit_TWOWEEKS, inputVal1, 0, decimals[props.assetID]);
       } catch(err) {
         console.error("ERROR MESSAGE: ", err.message)
         alert(err.message)
@@ -193,14 +166,17 @@ const Dashboard = () => {
       const [method, setMethod] = useState("Borrow");
 
       useEffect(() => {
-        wrapper?.loan1.on("NewLoan", onLoanRequested);
-        wrapper?.loanContract.on("CollateralReleased", onCollateralReleased)
-        wrapper?.loan1.on("AddCollateral", onCollateralAdded)
+        // wrapper?.getLoanInstance().loan1.on("NewLoan", onLoanRequested);
+        // wrapper?.getLoanInstance().loan1.on("AddCollateral", onCollateralAdded)
+        // wrapper?.getLoanInstance().loan.on("CollateralReleased", onCollateralReleased);
+        // wrapper?.getLoanInstance().loan.on("MarketSwapped", (data) => {
+        //   alert(data)
+        // })
       });
 
       const handleBorrow = async () => {
         try {
-          const tx = await wrapper?.loanRequest(symbols[props.assetID], comit_ONEMONTH, inputVal1, decimals[props.assetID], symbols[props.assetID], inputVal2, decimals[props.assetID]);
+          const tx = await wrapper?.getLoanInstance().loanRequest(symbols[props.assetID], comit_ONEMONTH, inputVal1, decimals[props.assetID], symbols[props.assetID], inputVal2, decimals[props.assetID]);
         } catch(err) {
           console.error("ERROR MESSAGE: ", err.message)
           alert(err.message)
@@ -215,7 +191,7 @@ const Dashboard = () => {
 
       const handleRepay = async () => {
         try {
-          const tx = await wrapper?.repayLoan(symbols[props.assetID], comit_ONEMONTH, inputVal1, decimals[props.assetID]);
+          const tx = await wrapper?.getLoanInstance().repayLoan(symbols[props.assetID], comit_ONEMONTH, inputVal1, decimals[props.assetID]);
         } catch(err) {
           console.error("ERROR MESSAGE: ", err.message)
           alert(err.message)
@@ -230,7 +206,7 @@ const Dashboard = () => {
 
       const handleCollateral = async () => {
         try {
-          const tx = await wrapper?.addCollateral(symbols[props.assetID], comit_ONEMONTH, symbols[props.assetID], inputVal1, decimals[props.assetID]);
+          const tx = await wrapper?.getLoanInstance().addCollateral(symbols[props.assetID], comit_ONEMONTH, symbols[props.assetID], inputVal1, decimals[props.assetID]);
         } catch(err) {
           console.error("ERROR MESSAGE: ", err.message)
           alert(err.message)
@@ -349,8 +325,13 @@ const Dashboard = () => {
       const [method, setMethod] = useState("Borrow");
 
       const handleSwap = async() => {
-        console.log("Swap " + currencyUnit + swapAmount.toString() + " to '" + swapTo +"' by '" + swapMode + "' mode!");
-        const tx = await wrapper?.swapLoan(symbols[props.assetID], comit_ONEMONTH, symbols[swapTo]);
+        console.log("Swap ", symbols[props.assetID], comit_ONEMONTH, symbols[swapTo]);
+        try {
+          const tx = await wrapper?.getLoanInstance().swapLoan(symbols[props.assetID], comit_ONEMONTH, symbols[swapTo]);
+        } catch(err) {
+          console.error("ERROR MESSAGE: ", err.message)
+          alert(err.message)
+        }
       }
 
       return (
@@ -416,8 +397,13 @@ const Dashboard = () => {
       const [method, setMethod] = useState("Borrow");
 
       const handleSwap = async() => {
-        console.log("Swap " + currencyUnit + swapAmount.toString() + " to '" + swapTo +"' by '" + swapMode + "' mode!");
-        const tx = await wrapper?.swapLoan(symbols[props.assetID], comit_ONEMONTH, symbols[swapTo]);
+        console.log("Swap ", symbols[props.assetID], comit_ONEMONTH, symbols[swapTo]);
+        try {
+          const tx = await wrapper?.getLoanInstance().swapToLoan(symbols[props.assetID], comit_ONEMONTH, symbols[swapTo]);
+        } catch(err) {
+          console.error("ERROR MESSAGE: ", err.message)
+          alert(err.message)
+        }
       }
 
       return (

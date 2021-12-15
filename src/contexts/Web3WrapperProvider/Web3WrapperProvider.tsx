@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState, useContext } from 'react';
-import Web3Wrapper from 'blockchain/Web3Wrapper';
+import Web3Wrapper from 'blockchain/web3/Web3Wrapper';
 import { Web3ModalContext } from '../Web3ModalProvider';
 
 interface IWeb3WrapperContext {
