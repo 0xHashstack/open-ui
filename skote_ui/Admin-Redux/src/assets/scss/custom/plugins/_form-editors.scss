@@ -1,0 +1,121 @@
+//
+// Form editors.scss
+//
+
+// Tinymce 
+
+.tox-tinymce {
+  border: 1px solid $input-border-color !important;
+}
+
+.tox {
+  .tox-statusbar {
+    border-top: 1px solid $light !important;
+  }
+    .tox-menubar, .tox-edit-area__iframe, .tox-statusbar{
+      background-color: $card-bg !important;
+      background: none !important;
+    }
+    .tox-mbtn{
+      color: $gray-700 !important;
+        &:hover:not(:disabled):not(.tox-mbtn--active){
+            background-color: $light !important;
+        }
+    }
+    .tox-tbtn{
+        &:hover{
+            background-color: $light !important;
+        }
+    }
+
+    .tox-toolbar, .tox-toolbar__overflow, .tox-toolbar__primary{
+      background: $light !important;
+    }
+
+    .tox-toolbar__primary{
+      border-top-color: $light !important;
+    }
+
+    .tox-tbtn{
+      color: $gray-700 !important;
+      svg{
+        fill: $gray-700 !important;
+      }
+    }
+
+    .tox-edit-area__iframe{
+      background-color: $card-bg !important;
+    }
+  
+    .tox-statusbar a, .tox-statusbar__path-item, .tox-statusbar__wordcount{
+      color: $gray-700 !important;
+    }
+
+    &:not([dir=rtl]) .tox-toolbar__group:not(:last-of-type) {
+      border-right: 1px solid darken($light, 5%) !important;
+    } 
+}
+
+
+
+// x editable
+
+.editable-input{
+  .form-control{
+    display: inline-block;
+  }
+}
+
+.editable-buttons{
+  margin-left: 7px;
+  .editable-cancel{
+    margin-left: 7px;
+  }
+}
+
+
+//Ck Editor
+.ck.ck-toolbar {
+  background-color: $gray-200 !important;
+  border: 1px solid $gray-300 !important;
+}
+
+.ck.ck-editor__main>.ck-editor__editable {
+  border-color: $gray-300 !important;
+  box-shadow: none !important;
+}
+
+.ck.ck-dropdown__panel,
+.ck.ck-list {
+  background: $dropdown-bg !important;
+  border: 1px solid $dropdown-border-color !important;
+}
+
+.ck-editor__editable {
+  min-height: 245px !important;
+}
+
+.ck.ck-toolbar.ck-toolbar_grouping>.ck-toolbar__items {
+  flex-wrap: wrap !important;
+}
+
+.ck.ck-editor__main>.ck-editor__editable {
+  background-color: $card-bg !important;
+}
+
+.ck.ck-reset_all,
+.ck.ck-reset_all * {
+  color: $gray-600 !important
+}
+
+.ck.ck-toolbar .ck.ck-toolbar__separator {
+  background: transparent !important;
+}
+
+.ck.ck-button.ck-on,
+a.ck.ck-button.ck-on,
+.ck.ck-button:not(.ck-disabled):hover,
+a.ck.ck-button:not(.ck-disabled):hover {
+  background: $gray-200 !important;
+}
+
