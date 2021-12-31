@@ -83,6 +83,7 @@ import CryptoLending from "../pages/Crypto/crypto-lending"
 import CryptoOrders from "../pages/Crypto/CryptoOrders/crypto-orders"
 import CryptoKYCApplication from "../pages/Crypto/crypto-kyc-application"
 import CryptoIcoLanding from "../pages/Crypto/CryptoIcoLanding/index"
+import HashstackCrypto from "pages/Crypto/hashstack-crypto"
 
 // Charts
 import ChartApex from "../pages/Charts/Apexcharts"
@@ -181,6 +182,7 @@ const authProtectedRoutes = [
   { path: "/crypto-buy-sell", component: CryptoBuySell },
   { path: "/crypto-exchange", component: CryptoExchange },
   { path: "/crypto-lending", component: CryptoLending },
+  { path: "/hashstack-crypto", component: HashstackCrypto },
   { path: "/crypto-orders", component: CryptoOrders },
   { path: "/crypto-kyc-application", component: CryptoKYCApplication },
 
