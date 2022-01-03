@@ -21,13 +21,9 @@ import {
   TabContent,
   TabPane,
   Label,
-  InputGroup
 } from "reactstrap";
-import { Link } from "react-router-dom";
+import Select from "react-select";
 import classnames from "classnames";
-
-//Import Breadcrumb
-import Breadcrumbs from "../../components/Common/Breadcrumb";
 
 const HashstackCrypto = props => {
   const [assets] = useState([
@@ -95,8 +91,14 @@ const HashstackCrypto = props => {
 
   const [isMenu, setIsMenu] = useState(false);
   const [customActiveTab, setcustomActiveTab] = useState("1");
-  const [modal_center, setmodal_center] = useState(false);
+  const [modal_deposit, setmodal_deposit] = useState(false);
   const [modal_borrow, setmodal_borrow] = useState(false);
+  const [modal_repay_loan, setmodal_repay_loan] = useState(false);
+  const [modal_withdraw_loan, setmodal_withdraw_loan] = useState(false);
+  const [modal_swap_loan, setmodal_swap_loan] = useState(false);
+  const [modal_swap_to_loan, setmodal_swap_to_loan] = useState(false);
+  const [modal_add_collateral, setmodal_add_collateral] = useState(false);
+  const [modal_withdraw_collateral, setmodal_withdraw_collateral] = useState(false);
 
   const toggleMenu = () => {
     setIsMenu(!isMenu);
@@ -110,11 +112,35 @@ const HashstackCrypto = props => {
     document.body.classList.add("no_padding");
   }
   function tog_center() {
-    setmodal_center(!modal_center);
+    setmodal_deposit(!modal_deposit);
     removeBodyCss();
   }
   function tog_borrow() {
     setmodal_borrow(!modal_borrow);
+    removeBodyCss();
+  }
+  function tog_repay_loan() {
+    setmodal_repay_loan(!modal_repay_loan);
+    removeBodyCss();
+  }
+  function tog_withdraw_loan() {
+    setmodal_withdraw_loan(!modal_withdraw_loan);
+    removeBodyCss();
+  }
+  function tog_swap_loan() {
+    setmodal_swap_loan(!modal_swap_loan);
+    removeBodyCss();
+  }
+  function tog_swap_to_loan() {
+    setmodal_swap_to_loan(!modal_swap_to_loan);
+    removeBodyCss();
+  }
+  function tog_add_collateral() {
+    setmodal_add_collateral(!modal_add_collateral);
+    removeBodyCss();
+  }
+  function tog_withdraw_collateral() {
+    setmodal_withdraw_collateral(!modal_withdraw_collateral);
     removeBodyCss();
   }
 
@@ -122,150 +148,396 @@ const HashstackCrypto = props => {
     <React.Fragment>
       <div className="page-content">
         <MetaTags>
-          <title>Hashstack Finance | Lending</title>
+          <title>Hashstack Finance | Open Protocol</title>
         </MetaTags>
         <Container fluid>
-          {/* Render Breadcrumb */}
-          <Breadcrumbs title="Crypto" breadcrumbItem="Lending" />
+          <h5>OPEN PROTOCOL</h5>
+          <br />
 
           <Row>
             <Col xl="4">
               <Card>
                 {customActiveTab == 2 ?
+
+                  /* -------------------------------------- REPAY ----------------------------- */
+
                   <CardBody>
                     <form>
                       <div className="mb-4 me-3">
                         <h4 className="card-title mb-4">Repay</h4>
                       </div>
 
-                      <div className="mb-4">
-                        <Label>Currency :</Label>
+                      {/* ----------------------- Loan Actions ----------------------- */}
 
+                      <div className="mb-4 ">
+                        <Label>Loan actions</Label>
                         <Row>
-                          <Col sm="4">
+                          <Col sm="6">
                             <div className="mb-3">
                               <label className="card-radio-label mb-2">
-                                <input
-                                  type="radio"
-                                  name="currency"
-                                  id="buycurrencyoption1"
-                                  className="card-radio-input"
-                                  defaultChecked
-                                  readOnly
-                                />
+                                <Button
+                                  className="btn-block btn-sm"
+                                  color="light"
+                                  outline
+                                  onClick={() => {
+                                    tog_repay_loan();
+                                  }}
+                                >
+                                  Repay Loan
+                                </Button>
+                                <Modal
+                                  isOpen={modal_repay_loan}
+                                  toggle={() => {
+                                    tog_repay_loan();
+                                  }}
+                                  centered
+                                >
+                                  <div className="modal-body">
+                                    <Form>
+                                      <div className="row mb-4">
+                                        <Col sm={12}>
+                                          <select className="form-select">
+                                            <option selected disabled>Loan market</option>
+                                            <option>BTC</option>
+                                            <option>USDC</option>
+                                          </select>
+                                        </Col>
+                                      </div>
+                                      <div className="row mb-4">
+                                        <Col sm={12}>
+                                          <Input
+                                            type="text"
+                                            className="form-control"
+                                            id="horizontal-password-Input"
+                                            placeholder="Amount"
+                                          />
+                                        </Col>
+                                      </div>
 
-                                <div className="card-radio">
-                                  <div>
-                                    <i className="mdi mdi-bitcoin font-size-24 text-warning align-middle me-2" />
-                                    <span>BTC</span>
+                                      <div className="d-grid gap-2">
+                                        <Button
+                                          type="submit"
+                                          color="primary"
+                                          className="w-md"
+                                        >
+                                          Repay
+                                        </Button>
+                                      </div>
+                                    </Form>
                                   </div>
-                                </div>
+                                </Modal>
                               </label>
                             </div>
                           </Col>
 
-                          <Col sm="4">
+                          <Col sm="6">
                             <div className="mb-3">
                               <Label className="card-radio-label mb-2">
-                                <Input
-                                  type="radio"
-                                  name="currency"
-                                  id="buycurrencyoption2"
-                                  className="card-radio-input"
-                                />
+                                <Button
+                                  className="btn-block btn-sm"
+                                  color="light"
+                                  outline
+                                  onClick={() => {
+                                    tog_withdraw_loan();
+                                  }}
+                                >
+                                  Withdraw Loan
+                                </Button>
+                                <Modal
+                                  isOpen={modal_withdraw_loan}
+                                  toggle={() => {
+                                    tog_withdraw_loan();
+                                  }}
+                                  centered
+                                >
+                                  <div className="modal-body">
+                                    <Form>
+                                      <div className="row mb-4">
+                                        <Col sm={12}>
+                                          <select className="form-select">
+                                            <option selected disabled>Loan market</option>
+                                            <option>BTC</option>
+                                            <option>USDC</option>
+                                          </select>
+                                        </Col>
+                                      </div>
+                                      <div className="row mb-4">
+                                        <Col sm={12}>
+                                          <Input
+                                            type="text"
+                                            className="form-control"
+                                            id="horizontal-password-Input"
+                                            placeholder="Amount"
+                                          />
+                                        </Col>
+                                      </div>
 
-                                <div className="card-radio">
-                                  <div>
-                                    <i className="mdi mdi-ethereum font-size-24 text-primary align-middle me-2" />
-                                    <span>ETH</span>
+                                      <div className="d-grid gap-2">
+                                        <Button
+                                          type="submit"
+                                          color="primary"
+                                          className="w-md"
+                                        >
+                                          Withdraw Loan
+                                        </Button>
+                                      </div>
+                                    </Form>
                                   </div>
-                                </div>
-                              </Label>
-                            </div>
-                          </Col>
-
-                          <Col sm="4">
-                            <div className="mb-3">
-                              <Label className="card-radio-label mb-2">
-                                <Input
-                                  type="radio"
-                                  name="currency"
-                                  id="buycurrencyoption3"
-                                  className="card-radio-input"
-                                />
-
-                                <div className="card-radio">
-                                  <div>
-                                    <i className="mdi mdi-litecoin font-size-24 text-info align-middle me-2" />
-                                    <span>LTC</span>
-                                  </div>
-                                </div>
+                                </Modal>
                               </Label>
                             </div>
                           </Col>
                         </Row>
                       </div>
+
+                      {/* --------------------------- Swap -------------------------- */}
 
                       <div className="mb-4">
-                        <Label>Payment method :</Label>
+                        <Label>Swap</Label>
                         <Row>
-                          <Col sm="4">
+                          <Col sm="6">
                             <Label className="card-radio-label mb-3">
-                              <Input
-                                type="radio"
-                                name="pay-method"
-                                id="pay-methodoption1"
-                                className="card-radio-input"
-                              />
+                              <Button
+                                className="btn-block btn-sm"
+                                color="light"
+                                outline
+                                onClick={() => {
+                                  tog_swap_loan();
+                                }}
+                              >
+                                Swap Loan
+                              </Button>
+                              <Modal
+                                isOpen={modal_swap_loan}
+                                toggle={() => {
+                                  tog_swap_loan();
+                                }}
+                                centered
+                              >
+                                <div className="modal-body">
+                                  <Form>
+                                    <div className="row mb-4">
+                                      <Col sm={12}>
+                                        <select className="form-select">
+                                          <option selected disabled>Loan market</option>
+                                          <option>BTC</option>
+                                          <option>USDC</option>
+                                        </select>
+                                      </Col>
+                                    </div>
+                                    <div className="row mb-4">
+                                      <Col sm={12}>
+                                        <select className="form-select">
+                                          <option selected disabled>Swap Market</option>
+                                          <option>BTC</option>
+                                          <option>USDT</option>
+                                        </select>
+                                      </Col>
+                                    </div>
 
-                              <div className="card-radio">
-                                <i className="fab fa-cc-mastercard font-size-24 text-primary align-middle me-2" />
-
-                                <span>Credit / Debit Card</span>
-                              </div>
+                                    <div className="d-grid gap-2">
+                                      <Button
+                                        type="submit"
+                                        color="primary"
+                                        className="w-md"
+                                      >
+                                        Swap Loan
+                                      </Button>
+                                    </div>
+                                  </Form>
+                                </div>
+                              </Modal>
                             </Label>
                           </Col>
 
-                          <Col sm="4">
+                          <Col sm="6">
                             <Label className="card-radio-label mb-3">
-                              <Input
-                                type="radio"
-                                name="pay-method"
-                                id="pay-methodoption2"
-                                className="card-radio-input"
-                              />
+                              <Button
+                                className="btn-block btn-sm"
+                                color="light"
+                                outline
+                                onClick={() => {
+                                  tog_swap_to_loan();
+                                }}
+                              >
+                                Swap to Loan
+                              </Button>
+                              <Modal
+                                isOpen={modal_swap_to_loan}
+                                toggle={() => {
+                                  tog_swap_to_loan();
+                                }}
+                                centered
+                              >
+                                <div className="modal-body">
+                                  <Form>
+                                    <div className="row mb-4">
+                                      <Col sm={12}>
+                                        <select className="form-select">
+                                          <option selected disabled>Select Loan</option>
+                                          <option>BTC</option>
+                                          <option>USDC</option>
+                                        </select>
+                                      </Col>
+                                    </div>
+                                    <div className="row mb-4">
+                                      <Col sm={12}>
+                                        <select className="form-select">
+                                          <option selected disabled>Select Market to Swap</option>
+                                          <option>SXP</option>
+                                          <option>REN</option>
+                                        </select>
+                                      </Col>
+                                    </div>
 
-                              <div className="card-radio">
-                                <i className="fas fa-money-check font-size-24 text-primary align-middle me-2" />
-
-                                <span>UPI</span>
-                              </div>
+                                    <div className="d-grid gap-2">
+                                      <Button
+                                        type="submit"
+                                        color="primary"
+                                        className="w-md"
+                                      >
+                                        Swap to Loan
+                                      </Button>
+                                    </div>
+                                  </Form>
+                                </div>
+                              </Modal>
                             </Label>
                           </Col>
 
-                          <Col sm="4">
+                        </Row>
+                      </div>
+
+                      {/* ------------------- Collateral actions ------------------- */}
+
+                      <div className="mb-4">
+                        <Label>Collateral actions</Label>
+                        <Row>
+                          <Col sm="6">
                             <Label className="card-radio-label mb-3">
-                              <Input
-                                type="radio"
-                                name="pay-method"
-                                id="pay-methodoption3"
-                                className="card-radio-input"
-                                defaultChecked
-                                readOnly
-                              />
+                              <Button
+                                className="btn-block  btn-sm"
+                                color="light"
+                                outline
+                                onClick={() => {
+                                  tog_add_collateral();
+                                }}
+                              >
+                                Add Collateral
+                              </Button>
+                              <Modal
+                                isOpen={modal_add_collateral}
+                                toggle={() => {
+                                  tog_add_collateral();
+                                }}
+                                centered
+                              >
+                                <div className="modal-body">
+                                  <Form>
+                                    <div className="row mb-4">
+                                      <Col sm={12}>
+                                        <select className="form-select">
+                                          <option selected disabled>Loan market</option>
+                                          <option>BTC</option>
+                                          <option>USDC</option>
+                                        </select>
+                                      </Col>
+                                    </div>
+                                    <div className="row mb-4">
+                                      <Col sm={12}>
+                                        <select className="form-select">
+                                          <option selected disabled>Collateral market</option>
+                                          <option>BTC</option>
+                                          <option>USDT</option>
+                                        </select>
+                                      </Col>
+                                    </div>
+                                    <div className="row mb-4">
+                                      <Col sm={12}>
+                                        <Input
+                                          type="text"
+                                          className="form-control"
+                                          id="horizontal-password-Input"
+                                          placeholder="Amount"
+                                        />
+                                      </Col>
+                                    </div>
 
-                              <div className="card-radio">
-                                <i className="fab fa-cc-paypal font-size-24 text-primary align-middle me-2" />
+                                    <div className="d-grid gap-2">
+                                      <Button
+                                        type="submit"
+                                        color="primary"
+                                        className="w-md"
+                                      >
+                                        Add Collateral
+                                      </Button>
+                                    </div>
+                                  </Form>
+                                </div>
+                              </Modal>
+                            </Label>
+                          </Col>
 
-                                <span>Paypal</span>
-                              </div>
+                          <Col sm="6">
+                            <Label className="card-radio-label mb-3">
+                              <Button
+                                className="btn-block btn-sm"
+                                color="light"
+                                outline
+                                onClick={() => {
+                                  tog_withdraw_collateral();
+                                }}
+                              >
+                                Withdraw Collateral
+                              </Button>
+                              <Modal
+                                isOpen={modal_withdraw_collateral}
+                                toggle={() => {
+                                  tog_withdraw_collateral();
+                                }}
+                                centered
+                              >
+                                <div className="modal-body">
+                                  <Form>
+                                    <div className="row mb-4">
+                                      <Col sm={12}>
+                                        <select className="form-select">
+                                          <option selected disabled>Loan market</option>
+                                          <option>BTC</option>
+                                          <option>USDC</option>
+                                        </select>
+                                      </Col>
+                                    </div>
+                                    <div className="row mb-4">
+                                      <Col sm={12}>
+                                        <span>Collateral market</span>
+                                      </Col>
+                                    </div>
+
+                                    <div className="d-grid gap-2">
+                                      <Button
+                                        type="submit"
+                                        color="primary"
+                                        className="w-md"
+                                      >
+                                        Withdraw Collateral
+                                      </Button>
+                                    </div>
+                                  </Form>
+                                </div>
+                              </Modal>
                             </Label>
                           </Col>
                         </Row>
                       </div>
+
                     </form>
                   </CardBody>
+
                   :
+
+                  /* -------------------------------------- DEPOSIT ----------------------------- */
+
                   <CardBody>
                     <Dropdown
                       isOpen={isMenu}
@@ -389,37 +661,40 @@ const HashstackCrypto = props => {
                     activeTab={customActiveTab}
                     className="p-1"
                   >
+
+                    {/* ------------------------------------- DASHBOARD ----------------------------- */}
+
                     <TabPane tabId="1">
-                      <div className="table-responsive">
+                      <div className="table-responsive" style={{ paddingTop: "12px" }}>
                         <Table className="table table-nowrap align-middle mb-0">
                           <thead>
                             <tr>
-                              <th scope="col">Markets<br /><br /></th>
-                              <th scope="col">Savings interest
-                                <br />
-                                <select className="form-control form-control-sm">
+                              <th scope="col">Markets</th>
+                              <th scope="col">Savings interest</th>
+                              <th scope="col">Borrow interest</th>
+                              <th scope="col">D2D</th>
+                              <th scope="col">Deposit</th>
+                              <th scope="col" colSpan="2">Borrow</th>
+                            </tr>
+                            <tr>
+                              <th scope="col"></th>
+                              <th scope="col">
+                                <select className="form-select form-select-sm">
                                   <option>One Week</option>
                                   <option>Two weeks</option>
                                   <option>Four weeks</option>
                                   <option>Twelve weeks</option>
                                 </select>
                               </th>
-                              <th scope="col">Borrow interest
-                                <br />
-                                <select className="form-control form-control-sm">
+                              <th scope="col">
+                                <select className="form-select form-select-sm">
                                   <option>One Month</option>
                                   <option>Two Months</option>
                                 </select>
                               </th>
-                              <th scope="col">D2D<br /><br /></th>
-                              <th scope="col">
-                                Deposit
-                                <br /><br />
-                              </th>
-                              <th scope="col" colSpan="2">
-                                Borrow
-                                <br /><br />
-                              </th>
+                              <th scope="col"></th>
+                              <th scope="col"></th>
+                              <th scope="col"></th>
                             </tr>
                           </thead>
                           <tbody>
@@ -473,7 +748,7 @@ const HashstackCrypto = props => {
                                     Deposit
                                   </button>
                                   <Modal
-                                    isOpen={modal_center}
+                                    isOpen={modal_deposit}
                                     toggle={() => {
                                       tog_center();
                                     }}
@@ -512,11 +787,13 @@ const HashstackCrypto = props => {
                                           </Col>
                                         </div>
                                         <div className="row mb-4">
-                                          <Col sm={12}>
+                                          <Col sm={6}>
                                             <p>fixed APY <strong>15%</strong></p>
                                           </Col>
+                                          <Col sm={6}>
+                                            <p style={{ float: "right" }}>fixed APY <strong>15%</strong></p>
+                                          </Col>
                                         </div>
-
                                         <div className="d-grid gap-2">
                                           <Button
                                             type="submit"
@@ -550,18 +827,34 @@ const HashstackCrypto = props => {
                                     <div className="modal-body">
                                       <Form>
                                         <div className="row mb-4">
+                                          <h6>{asset.title}</h6>
+                                        </div>
+                                        <div className="row mb-4">
                                           <Col sm={12}>
-                                            <select className="form-control" placeholder="Loan market">
-                                              <option>Loan market</option>
+                                            <Input
+                                              type="text"
+                                              className="form-control"
+                                              id="horizontal-password-Input"
+                                              placeholder="Amount"
+                                            />
+                                          </Col>
+                                        </div>
+                                        <div className="row mb-4">
+                                          <Col sm={12}>
+                                            <select className="form-select" placeholder="Borrow Type">
+                                              <option>Borrow Type</option>
                                               <option>BTC</option>
                                               <option>USDC</option>
                                             </select>
                                           </Col>
                                         </div>
                                         <div className="row mb-4">
+                                          <h6>Collateral</h6>
+                                        </div>
+                                        <div className="row mb-4">
                                           <Col sm={12}>
-                                            <select className="form-control" placeholder="Loan market">
-                                              <option>Collateral market</option>
+                                            <select className="form-select">
+                                              <option selected disabled>Collateral market</option>
                                               <option>BTC</option>
                                               <option>USDT</option>
                                             </select>
@@ -577,6 +870,14 @@ const HashstackCrypto = props => {
                                             />
                                           </Col>
                                         </div>
+                                        <div className="row mb-4">
+                                          <Col sm={6}>
+                                            <p>Borrow APR <strong>15%</strong></p>
+                                          </Col>
+                                          <Col sm={6}>
+                                            <p style={{ float: "right" }}>Collateral APY <strong>0%</strong></p>
+                                          </Col>
+                                        </div>
 
                                         <div className="d-grid gap-2">
                                           <Button
@@ -584,7 +885,7 @@ const HashstackCrypto = props => {
                                             color="primary"
                                             className="w-md"
                                           >
-                                            Repay
+                                            Request Loan
                                           </Button>
                                         </div>
                                       </Form>
@@ -597,10 +898,13 @@ const HashstackCrypto = props => {
                         </Table>
                       </div>
                     </TabPane>
+
+                    {/* -------------------------------------- PASSBOOK ----------------------------- */}
+
                     <TabPane tabId="2">
-                      <div className="row justify-content-end">
+                      <div className="row justify-content-end" style={{ paddingTop: "12px" }}>
                         <Col sm={3}>
-                          <select className="form-control form-control-sm">
+                          <select className="form-select form-select-sm">
                             <option>Active loans</option>
                             <option>Active deposits</option>
                             <option>Inactive loans</option>

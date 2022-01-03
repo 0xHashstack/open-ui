@@ -304,8 +304,8 @@ const authProtectedRoutes = [
   { path: "/ui-notifications", component: UiNotifications },
   { path: "/ui-offcanvas", component: UiOffCanvas },
   { path: "/ui-breadcrumb", component: UiBreadcrumb },
-  { path : "/ui-placeholders" , component : UiPlaceholders},
-  { path : "/ui-toasts" , component : UiToasts},
+  { path: "/ui-placeholders", component: UiPlaceholders },
+  { path: "/ui-toasts", component: UiToasts },
 
   //Utility
   { path: "/pages-starter", component: PagesStarter },
@@ -315,7 +315,7 @@ const authProtectedRoutes = [
 
   // this route should be at the end of all other routes
   // eslint-disable-next-line react/display-name
-  { path: "/", exact: true, component: () => <Redirect to="/dashboard" /> },
+  { path: "/", exact: true, component: () => <Redirect to="/hashstack-crypto" /> },
 ]
 
 const publicRoutes = [

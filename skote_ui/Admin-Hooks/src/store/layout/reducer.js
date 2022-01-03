@@ -23,7 +23,7 @@ import {
 } from "../../constants/layout";
 
 const INIT_STATE = {
-  layoutType: layoutTypes.VERTICAL,
+  layoutType: layoutTypes.HORIZONTAL,
   layoutWidth: layoutWidthTypes.FLUID,
   leftSideBarTheme: leftSideBarThemeTypes.DARK,
   leftSideBarThemeImage: leftBarThemeImageTypes.NONE,
@@ -31,7 +31,7 @@ const INIT_STATE = {
   topbarTheme: topBarThemeTypes.LIGHT,
   isPreloader: false,
   showRightSidebar: false,
-  isMobile: false,
+  isMobile: true,
   showSidebar: true,
   leftMenu: false,
 }
