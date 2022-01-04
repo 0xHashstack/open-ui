@@ -6,14 +6,14 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
 // Redux Store
-// import { showRightSidebarAction, toggleLeftmenu } from "../../store/actions";
+import { showRightSidebarAction, toggleLeftmenu } from "../../store/actions";
 // reactstrap
 import { Row, Col, Dropdown, DropdownToggle, DropdownMenu } from "reactstrap";
 
-// import logo from "../../assets/images/logo.svg";
-// import logoLight from "../../assets/images/logo-light.png";
-// import logoLightSvg from "../../assets/images/logo-light.svg";
-// import logoDark from "../../assets/images/logo-dark.png";
+import logo from "../../assets/images/logo.svg";
+import logoLight from "../../assets/images/logo-light.png";
+import logoLightSvg from "../../assets/images/logo-light.svg";
+import logoDark from "../../assets/images/logo-dark.png";
 
 //i18n
 import { withTranslation } from "react-i18next";
@@ -27,14 +27,14 @@ const Header = props => {
         <div className="navbar-header">
           <div className="d-flex">
             <div className="navbar-brand-box">
-              {/* <Link to="/" className="logo logo-dark">
+              <Link to="/" className="logo logo-dark">
                 <span className="logo-sm">
                   <img src={logo} alt="" height="22" />
                 </span>
                 <span className="logo-lg">
                   <img src={logoDark} alt="" height="17" />
                 </span>
-              </Link> */}
+              </Link>
 
               <Link to="/" className="logo logo-light">
                 <span className="logo-sm">
@@ -111,7 +111,7 @@ const Header = props => {
             </div>
           </div>
 
-          {/* <div className="d-flex flex-wrap gap-2">
+          <div className="d-flex flex-wrap gap-4">
             <button
               type="button"
               className="btn btn-primary"
@@ -119,11 +119,11 @@ const Header = props => {
               <i className="fas fa-wallet font-size-16 align-middle me-2"></i>{" "}
               Connect
             </button>
-          </div> */}
 
-          <div className="form-check form-switch">
-            <input className="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked />
-            <label className="form-check-label">Dark</label>
+            <div className="form-check form-switch" style={{ margin: "0" }}>
+              <input className="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked />
+              <label className="form-check-label">Dark</label>
+            </div>
           </div>
 
         </div>
@@ -135,9 +135,9 @@ const Header = props => {
 Header.propTypes = {
   leftMenu: PropTypes.any,
   showRightSidebar: PropTypes.any,
-  // showRightSidebarAction: PropTypes.func,
+  showRightSidebarAction: PropTypes.func,
   t: PropTypes.any,
-  // toggleLeftmenu: PropTypes.func
+  toggleLeftmenu: PropTypes.func
 };
 
 const mapStatetoProps = state => {
@@ -145,4 +145,7 @@ const mapStatetoProps = state => {
   return { layoutType, showRightSidebar, leftMenu };
 };
 
-export default connect(mapStatetoProps)(withTranslation()(Header));
+export default connect(mapStatetoProps, {
+  showRightSidebarAction,
+  toggleLeftmenu,
+})(withTranslation()(Header));
