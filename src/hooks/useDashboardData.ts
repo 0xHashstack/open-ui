@@ -7,15 +7,15 @@ const useDashboardData = () => {
   const { web3Wrapper: wrapper } = useContext(Web3WrapperContext);
 
   const fetchDashboardData = useCallback(async () => {
-      try {
-        const data = await utils.getDashboardData();
-        setDashboardData(data);
-        if ((window as any).debugMode)
-          console.log("Dashboard Data:", data);
-      } catch (e) {
-        console.log(e);
-        setDashboardData(null);
-      }
+    try {
+      const data = await utils.getDashboardData();
+      setDashboardData(data);
+      if (window)
+        console.log("Dashboard Data:", data);
+    } catch (e) {
+      console.log(e);
+      setDashboardData(null);
+    }
   }, [wrapper]);
 
   useEffect(() => {

@@ -24,8 +24,8 @@ interface IWeb3ModalContext {
 
 export const Web3ModalContext = createContext<IWeb3ModalContext>({
   web3: null,
-  connect: () => {},
-  disconnect: () => {},
+  connect: () => { },
+  disconnect: () => { },
   account: null,
   chainId: null,
   networkId: null,
@@ -33,7 +33,7 @@ export const Web3ModalContext = createContext<IWeb3ModalContext>({
 });
 
 
-const Web3ModalProvider = ({ children }) => {
+const Web3ModalProvider = (props: any) => {
 
   const [web3Modal, setWeb3Modal] = useState<Web3Modal | null>(null);
   const [web3, setWeb3] = useState<Web3 | null>(null);
@@ -110,7 +110,7 @@ const Web3ModalProvider = ({ children }) => {
       providerOptions, // required
       disableInjectedProvider: false, // optional. For MetaMask / Brave / Opera.
     });
-  
+
     setWeb3Modal(_web3Modal);
   }, [])
 
@@ -147,7 +147,7 @@ const Web3ModalProvider = ({ children }) => {
     _provider.on("connect", () => {
       console.log('------')
       authenticate()
-      
+
     });
   }, [resetWeb3])
 
@@ -158,23 +158,23 @@ const Web3ModalProvider = ({ children }) => {
     const _provider = await web3Modal.connect();
     // authenticate()
     // if (isAuthenticated) {
-      if (_provider === null) 
-        return;
-      
-      const _web3 = createWeb3(_provider);
-      setWeb3(_web3);
+    if (_provider === null)
+      return;
+
+    const _web3 = createWeb3(_provider);
+    setWeb3(_web3);
 
     await subscribeProvider(_provider, _web3);
-    
+
     const accounts = await _web3.eth.getAccounts();
     const _account = accounts[0];
     const _networkId = await _web3.eth.net.getId();
     const _chainId = await _web3.eth.getChainId();
 
-      setAccount(_account);
-      setNetworkId(_networkId);
-      setChainId(_chainId);
-      setConnected(true);
+    setAccount(_account);
+    setNetworkId(_networkId);
+    setChainId(_chainId);
+    setConnected(true);
     // }    
   }, [web3Modal, subscribeProvider]);
 
@@ -197,9 +197,9 @@ const Web3ModalProvider = ({ children }) => {
   }, [web3Modal, web3, resetWeb3])
 
   return (
-    <Web3ModalContext.Provider 
-      value={{ 
-        web3, 
+    <Web3ModalContext.Provider
+      value={{
+        web3,
         connect,
         disconnect,
         account,
@@ -207,7 +207,7 @@ const Web3ModalProvider = ({ children }) => {
         chainId,
         connected
       }}>
-      {children}
+      {props.children}
     </Web3ModalContext.Provider>
   )
 }

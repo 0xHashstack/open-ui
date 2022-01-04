@@ -10,7 +10,7 @@ export const Web3WrapperContext = createContext<IWeb3WrapperContext>({
   web3Wrapper: null
 });
 
-const Web3WrapperProvider = ({ children }) => {
+const Web3WrapperProvider = (props: any) => {
 
   const { web3, chainId, account } = useContext(Web3ModalContext);
   const [web3Wrapper, setWeb3Wrapper] = useState<Web3Wrapper | null>(null);
@@ -33,7 +33,7 @@ const Web3WrapperProvider = ({ children }) => {
   return (
     <Web3WrapperContext.Provider 
       value={{web3Wrapper}}>
-      {children}
+      {props.children}
     </Web3WrapperContext.Provider>
   )
 }

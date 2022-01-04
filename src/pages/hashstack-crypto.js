@@ -148,7 +148,7 @@ const HashstackCrypto = props => {
     <React.Fragment>
       <div className="page-content">
         <MetaTags>
-          <title>Hashstack Finance | Open Protocol</title>
+          <title>Hashstack Finance</title>
         </MetaTags>
         <Container fluid>
           <h5>OPEN PROTOCOL</h5>

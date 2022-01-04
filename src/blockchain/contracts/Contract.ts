@@ -1,5 +1,5 @@
 import Web3 from "web3";
-import { AbiItem } from 'web3-utils';
+// import { AbiItem } from 'web3-utils';
 import { Contract as Web3Contract } from "web3-eth-contract";
 
 class Contract {
@@ -15,7 +15,7 @@ class Contract {
     this.chainId = options.chainId;
     this.account = options.account;
 
-    this.contract = new this.web3.eth.Contract(abi as AbiItem[], address);
+    this.contract = new this.web3.eth.Contract(abi, address);
 
     if (tag) this.tag = tag;
     else this.tag = "contract-" + Date.now();

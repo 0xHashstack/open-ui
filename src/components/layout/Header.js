@@ -1,25 +1,22 @@
 import React, { useState } from "react";
-import PropTypes from 'prop-types';
-
-import { connect } from "react-redux";
 
 import { Link } from "react-router-dom";
 
-// Redux Store
-import { showRightSidebarAction, toggleLeftmenu } from "../../store/actions";
 // reactstrap
-import { Row, Col, Dropdown, DropdownToggle, DropdownMenu } from "reactstrap";
-
-import logo from "../../assets/images/logo.svg";
-import logoLight from "../../assets/images/logo-light.png";
-import logoLightSvg from "../../assets/images/logo-light.svg";
-import logoDark from "../../assets/images/logo-dark.png";
-
-//i18n
-import { withTranslation } from "react-i18next";
+import { Row, Col, Modal, Button, Form } from "reactstrap";
 
 const Header = props => {
   const [isSearch, setSearch] = useState(false);
+  const [connect_wallet_modal, setconnect_wallet_modal] = useState(false);
+
+  function removeBodyCss() {
+    document.body.classList.add("no_padding");
+  }
+
+  function tog_connect_wallet() {
+    setconnect_wallet_modal(!connect_wallet_modal);
+    removeBodyCss();
+  }
 
   return (
     <React.Fragment>
@@ -29,26 +26,24 @@ const Header = props => {
             <div className="navbar-brand-box">
               <Link to="/" className="logo logo-dark">
                 <span className="logo-sm">
-                  <img src={logo} alt="" height="22" />
+                  <strong style={{ color: 'white', fontSize: '22px', fontWeight: '600' }}>Hashstack</strong>
                 </span>
                 <span className="logo-lg">
-                  <img src={logoDark} alt="" height="17" />
+                  <strong style={{ color: 'white', fontSize: '19px', fontWeight: '600' }}>Hashstack</strong>
                 </span>
               </Link>
 
               <Link to="/" className="logo logo-light">
                 <span className="logo-sm">
-                  {/* <img src={logoLightSvg} alt="" height="22" /> */}
                   <strong style={{ color: 'white', fontSize: '22px', fontWeight: '600' }}>Hashstack</strong>
                 </span>
                 <span className="logo-lg">
-                  {/* <img src={logoLight} alt="" height="19" /> */}
                   <strong style={{ color: 'white', fontSize: '19px', fontWeight: '600' }}>Hashstack</strong>
                 </span>
               </Link>
             </div>
 
-            <button
+            {/* <button
               type="button"
               className="btn btn-sm px-3 font-size-16 d-lg-none header-item"
               data-toggle="collapse"
@@ -58,7 +53,7 @@ const Header = props => {
               data-target="#topnav-menu-content"
             >
               <i className="fa fa-fw fa-bars" />
-            </button>
+            </button> */}
 
             <form className="app-search d-none d-lg-block">
               <div className="position-relative">
@@ -96,7 +91,7 @@ const Header = props => {
                       <input
                         type="text"
                         className="form-control"
-                        placeholder={props.t("Search") + "..."}
+                        placeholder={"Search..."}
                         aria-label="Recipient's username"
                       />
                       <div className="input-group-append">
@@ -115,10 +110,71 @@ const Header = props => {
             <button
               type="button"
               className="btn btn-primary"
+              onClick={() => {
+                tog_connect_wallet();
+              }}
             >
               <i className="fas fa-wallet font-size-16 align-middle me-2"></i>{" "}
               Connect
             </button>
+            <Modal
+              isOpen={connect_wallet_modal}
+              toggle={() => {
+                tog_connect_wallet();
+              }}
+              centered
+            >
+              <div className="modal-body">
+                <Form>
+                  <h5 style={{ textAlign: "center" }}>Connect to Wallet</h5>
+                  <hr />
+                  <div className="row mb-4">
+                    <Col sm={6}>
+                      <Button
+                        type="submit"
+                        className="btn-block btn-lg"
+                        color="light"
+                        outline
+                      >
+                        Bitcoin
+                      </Button>
+                    </Col>
+                    <Col sm={6}>
+                      <Button
+                        type="submit"
+                        className="btn-block btn-lg"
+                        color="light"
+                        outline
+                      >
+                        Binance
+                      </Button>
+                    </Col>
+                  </div>
+                  <div className="row mb-4">
+                    <Col sm={6}>
+                      <Button
+                        type="submit"
+                        color="light"
+                        className="btn-block btn-lg"
+                        outline
+                      >
+                        USDC
+                      </Button>
+                    </Col>
+                    <Col sm={6}>
+                      <Button
+                        type="submit"
+                        color="light"
+                        className="btn-block btn-lg"
+                        outline
+                      >
+                        USDT
+                      </Button>
+                    </Col>
+                  </div>
+                </Form>
+              </div>
+            </Modal>
 
             <div className="form-check form-switch" style={{ margin: "0" }}>
               <input className="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked />
@@ -132,20 +188,4 @@ const Header = props => {
   );
 };
 
-Header.propTypes = {
-  leftMenu: PropTypes.any,
-  showRightSidebar: PropTypes.any,
-  showRightSidebarAction: PropTypes.func,
-  t: PropTypes.any,
-  toggleLeftmenu: PropTypes.func
-};
-
-const mapStatetoProps = state => {
-  const { layoutType, showRightSidebar, leftMenu } = state.Layout;
-  return { layoutType, showRightSidebar, leftMenu };
-};
-
-export default connect(mapStatetoProps, {
-  showRightSidebarAction,
-  toggleLeftmenu,
-})(withTranslation()(Header));
+export default Header;
