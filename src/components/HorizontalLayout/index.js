@@ -3,12 +3,12 @@ import { withRouter } from "react-router-dom"
 import PropTypes from "prop-types"
 
 //actions
-import {
-  changeLayout,
-  changeTopbarTheme,
-  changeLayoutWidth,
-  showRightSidebarAction
-} from "../../store/actions"
+// import {
+//   changeLayout,
+//   changeTopbarTheme,
+//   changeLayoutWidth,
+//   showRightSidebarAction
+// } from "../../store/actions"
 
 //redux
 import { useSelector, useDispatch } from "react-redux"
@@ -18,6 +18,7 @@ import Navbar from "./Navbar"
 import Header from "./Header"
 import Footer from "./Footer"
 import RightSidebar from "../CommonForBoth/RightSidebar"
+import HashstackCrypto from '../../pages/hashstack-crypto';
 const Layout = (props) => {
 
   const dispatch = useDispatch()
@@ -34,41 +35,41 @@ const Layout = (props) => {
   /*
   document title
   */
-  useEffect(() => {
-    const title = props.location.pathname
-    let currentage = title.charAt(1).toUpperCase() + title.slice(2)
+  // useEffect(() => {
+  //   const title = props.location.pathname
+  //   let currentage = title.charAt(1).toUpperCase() + title.slice(2)
 
-    document.title =
-      currentage + " | Skote - React Admin & Dashboard Template"
-  }, [props.location.pathname]);
+  //   document.title =
+  //     currentage + " | Skote - React Admin & Dashboard Template"
+  // }, [props.location.pathname]);
 
   useEffect(() => {
     window.scrollTo(0, 0)
   }, []);
 
 
-    //hides right sidebar on body click
-    const hideRightbar = (event) => {
-      var rightbar = document.getElementById("right-bar");
-      //if clicked in inside right bar, then do nothing
-      if (rightbar && rightbar.contains(event.target)) {
-        return;
-      } else {
-        //if clicked in outside of rightbar then fire action for hide rightbar
-        dispatch(showRightSidebarAction(false));
-      }
-    };
+  //hides right sidebar on body click
+  // const hideRightbar = (event) => {
+  //   var rightbar = document.getElementById("right-bar");
+  //   //if clicked in inside right bar, then do nothing
+  //   if (rightbar && rightbar.contains(event.target)) {
+  //     return;
+  //   } else {
+  //     //if clicked in outside of rightbar then fire action for hide rightbar
+  //     dispatch(showRightSidebarAction(false));
+  //   }
+  // };
 
   /*
   layout settings
   */
-  useEffect(() => {
-    dispatch(changeLayout("horizontal"));
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(changeLayout("horizontal"));
+  // }, [dispatch]);
 
   useEffect(() => {
-     //init body click event fot toggle rightbar
-     document.body.addEventListener("click", hideRightbar, true);
+    //init body click event fot toggle rightbar
+    document.body.addEventListener("click", hideRightbar, true);
 
     if (isPreloader === true) {
       document.getElementById("preloader").style.display = "block"
@@ -84,17 +85,17 @@ const Layout = (props) => {
     }
   }, [isPreloader])
 
-  useEffect(() => {
-    if (topbarTheme) {
-      dispatch(changeTopbarTheme(topbarTheme));
-    }
-  }, [dispatch, topbarTheme]);
+  // useEffect(() => {
+  //   if (topbarTheme) {
+  //     dispatch(changeTopbarTheme(topbarTheme));
+  //   }
+  // }, [dispatch, topbarTheme]);
 
-  useEffect(() => {
-    if (layoutWidth) {
-      dispatch(changeLayoutWidth(layoutWidth));
-    }
-  }, [dispatch, layoutWidth]);
+  // useEffect(() => {
+  //   if (layoutWidth) {
+  //     dispatch(changeLayoutWidth(layoutWidth));
+  //   }
+  // }, [dispatch, layoutWidth]);
 
   const [isMenuOpened, setIsMenuOpened] = useState(false);
   const openMenu = () => {
@@ -122,8 +123,10 @@ const Layout = (props) => {
           isMenuOpened={isMenuOpened}
           openLeftMenuCallBack={openMenu}
         />
-        <Navbar menuOpen={isMenuOpened} />
-        <div className="main-content">{props.children}</div>
+        {/* <Navbar menuOpen={isMenuOpened} /> */}
+        <div className="main-content">
+          <HashstackCrypto />
+        </div>
         <Footer />
       </div>
 
@@ -132,16 +135,16 @@ const Layout = (props) => {
   );
 }
 
-Layout.propTypes = {
-  changeLayout: PropTypes.func,/*  */
-  changeLayoutWidth: PropTypes.func,
-  changeTopbarTheme: PropTypes.func,
-  children: PropTypes.object,
-  isPreloader: PropTypes.any,
-  layoutWidth: PropTypes.any,
-  location: PropTypes.object,
-  showRightSidebar: PropTypes.any,
-  topbarTheme: PropTypes.any
-}
+// Layout.propTypes = {
+//   changeLayout: PropTypes.func,/*  */
+//   changeLayoutWidth: PropTypes.func,
+//   changeTopbarTheme: PropTypes.func,
+//   children: PropTypes.object,
+//   isPreloader: PropTypes.any,
+//   layoutWidth: PropTypes.any,
+//   location: PropTypes.object,
+//   showRightSidebar: PropTypes.any,
+//   topbarTheme: PropTypes.any
+// }
 
-export default withRouter(Layout);
+export default Layout;
