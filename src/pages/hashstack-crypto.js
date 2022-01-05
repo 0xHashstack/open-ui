@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import MetaTags from "react-meta-tags";
 import {
   Container,
@@ -24,6 +24,7 @@ import {
 } from "reactstrap";
 import Select from "react-select";
 import classnames from "classnames";
+import { Web3WrapperContext } from '../contexts/Web3WrapperProvider';
 
 const HashstackCrypto = props => {
   const [assets] = useState([
@@ -142,6 +143,43 @@ const HashstackCrypto = props => {
   function tog_withdraw_collateral() {
     setmodal_withdraw_collateral(!modal_withdraw_collateral);
     removeBodyCss();
+  }
+
+  const { web3Wrapper: wrapper } = useContext(Web3WrapperContext);
+
+  useEffect(() => {
+    wrapper?.getDepositInstance().deposit.on("NewDeposit", onDeposit);
+    wrapper?.getDepositInstance().deposit.on("Withdrawal", onWithdrawal)
+  }, []);
+
+  const handleDeposit = async () => {
+    try {
+      const tx = await wrapper?.getDepositInstance().createDeposit(symbols[props.assetID], comit_TWOWEEKS, inputVal1, decimals[props.assetID]);
+    } catch (err) {
+      console.error("ERROR MESSAGE: ", err.message)
+      alert(err.message)
+    }
+  }
+
+  const onDeposit = (data) => {
+    let amount = BNtoNum(Number(data.amount))
+    alert("Deposited amount: " + amount);
+    console.log(data);
+  }
+
+  const handleWithdraw = async () => {
+    try {
+      const tx = await wrapper?.getDepositInstance().withdrawDeposit(symbols[props.assetID], comit_TWOWEEKS, inputVal1, 0, decimals[props.assetID]);
+    } catch (err) {
+      console.error("ERROR MESSAGE: ", err.message)
+      alert(err.message)
+    }
+  }
+
+  const onWithdrawal = (data) => {
+    let amount = BNtoNum(Number(data.amount));
+    alert("Withdrawal amount: " + amount);
+    console.log(data);
   }
 
   return (

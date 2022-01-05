@@ -25,10 +25,9 @@ const Navbar = props => {
               isOpen={false}
               className="navbar-collapse"
               id="topnav-menu-content"
-              style={{ height: "48px", alignContent: "end" }}
+              style={{ height: "48px", justifyContent: "end" }}
             >
               <div className="d-flex gap-4">
-                <h6 style={{ margin: "0" }}>Get Tokens here</h6>
                 <button
                   type="button"
                   className="btn btn-secondary"
