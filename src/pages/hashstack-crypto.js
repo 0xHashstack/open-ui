@@ -706,7 +706,7 @@ const HashstackCrypto = props => {
                       <div className="table-responsive" style={{ paddingTop: "12px" }}>
                         <Table className="table table-nowrap align-middle mb-0">
                           <thead>
-                            <tr>
+                            <tr style={{borderStyle: "hidden"}}>
                               <th scope="col">Markets</th>
                               <th scope="col">Savings interest</th>
                               <th scope="col">Borrow interest</th>
