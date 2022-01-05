@@ -1,14 +1,22 @@
-import React, { useState } from "react";
-
+import React, { useState, useContext, useCallback } from "react";
 import { Link } from "react-router-dom";
-
-// reactstrap
 import { Row, Col, Modal, Button, Form } from "reactstrap";
+import { Web3ModalContext } from "../../contexts/Web3ModalProvider";
 
 const Header = props => {
   const [isSearch, setSearch] = useState(false);
   const [connect_wallet_modal, setconnect_wallet_modal] = useState(false);
   const [get_token, setGet_token] = useState(false);
+
+  const { connect, disconnect, account } = useContext(Web3ModalContext);
+
+  const handleConnectWallet = useCallback(() => {
+    connect();
+  }, [connect]);
+
+  const handleDisconnectWallet = useCallback(() => {
+    disconnect();
+  }, [disconnect]);
 
   function removeBodyCss() {
     document.body.classList.add("no_padding");
@@ -182,75 +190,93 @@ const Header = props => {
                 </Form>
               </div>
             </Modal>
-            <Button
-              color="dark"
-              outline
-              className="btn-outline"
-              onClick={() => {
-                tog_connect_wallet();
-              }}
-            >
-              <i className="fas fa-wallet font-size-16 align-middle me-2"></i>{" "}
-              Connect
-            </Button>
-            <Modal
-              isOpen={connect_wallet_modal}
-              toggle={() => {
-                tog_connect_wallet();
-              }}
-              centered
-            >
-              <div className="modal-body">
-                <Form>
-                  <h5 style={{ textAlign: "center" }}>Connect to Wallet</h5>
-                  <hr />
-                  <div className="row mb-4">
-                    <Col sm={6}>
-                      <Button
-                        type="submit"
-                        className="btn-block btn-lg"
-                        color="light"
-                        outline
-                      >
-                        Bitcoin
-                      </Button>
-                    </Col>
-                    <Col sm={6}>
-                      <Button
-                        type="submit"
-                        className="btn-block btn-lg"
-                        color="light"
-                        outline
-                      >
-                        Binance
-                      </Button>
-                    </Col>
+            {account ?
+              <>
+                <Button
+                  color="success"
+                  outline
+                  className="btn-outline"
+                  onClick={handleDisconnectWallet}
+                >
+                  <i className="fas fa-wallet font-size-16 align-middle me-2"></i>{" "}
+                  Disconnect
+                </Button></>
+
+              :
+
+              <>
+                <Button
+                  color="dark"
+                  outline
+                  className="btn-outline"
+                  onClick={handleConnectWallet}
+                // onClick={() => {
+                //   tog_connect_wallet();
+                // }}
+                >
+                  <i className="fas fa-wallet font-size-16 align-middle me-2"></i>{" "}
+                  Connect
+                </Button>
+                {/* <Modal
+                  isOpen={connect_wallet_modal}
+                  toggle={() => {
+                    tog_connect_wallet();
+                  }}
+                  centered
+                >
+                  <div className="modal-body">
+                    <Form>
+                      <h5 style={{ textAlign: "center" }}>Connect to Wallet</h5>
+                      <hr />
+                      <div className="row mb-4">
+                        <Col sm={6}>
+                          <Button
+                            type="submit"
+                            className="btn-block btn-lg"
+                            color="light"
+                            outline
+                          >
+                            Bitcoin
+                          </Button>
+                        </Col>
+                        <Col sm={6}>
+                          <Button
+                            type="submit"
+                            className="btn-block btn-lg"
+                            color="light"
+                            outline
+                          >
+                            Binance
+                          </Button>
+                        </Col>
+                      </div>
+                      <div className="row mb-4">
+                        <Col sm={6}>
+                          <Button
+                            type="submit"
+                            color="light"
+                            className="btn-block btn-lg"
+                            outline
+                          >
+                            USDC
+                          </Button>
+                        </Col>
+                        <Col sm={6}>
+                          <Button
+                            type="submit"
+                            color="light"
+                            className="btn-block btn-lg"
+                            outline
+                          >
+                            USDT
+                          </Button>
+                        </Col>
+                      </div>
+                    </Form>
                   </div>
-                  <div className="row mb-4">
-                    <Col sm={6}>
-                      <Button
-                        type="submit"
-                        color="light"
-                        className="btn-block btn-lg"
-                        outline
-                      >
-                        USDC
-                      </Button>
-                    </Col>
-                    <Col sm={6}>
-                      <Button
-                        type="submit"
-                        color="light"
-                        className="btn-block btn-lg"
-                        outline
-                      >
-                        USDT
-                      </Button>
-                    </Col>
-                  </div>
-                </Form>
-              </div>
-            </Modal>
+                </Modal> */}
+              </>
+            }
 
             {/* <div className="form-check form-switch" style={{ margin: "0" }}>
               <input className="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked />
