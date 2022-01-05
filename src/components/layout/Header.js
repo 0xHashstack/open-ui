@@ -8,6 +8,7 @@ import { Row, Col, Modal, Button, Form } from "reactstrap";
 const Header = props => {
   const [isSearch, setSearch] = useState(false);
   const [connect_wallet_modal, setconnect_wallet_modal] = useState(false);
+  const [get_token, setGet_token] = useState(false);
 
   function removeBodyCss() {
     document.body.classList.add("no_padding");
@@ -15,6 +16,11 @@ const Header = props => {
 
   function tog_connect_wallet() {
     setconnect_wallet_modal(!connect_wallet_modal);
+    removeBodyCss();
+  }
+
+  function tog_token() {
+    setGet_token(!get_token);
     removeBodyCss();
   }
 
@@ -53,7 +59,7 @@ const Header = props => {
               data-target="#topnav-menu-content"
             >
               <i className="fa fa-fw fa-bars" />
-            </button> */}
+            </button> 
 
             <form className="app-search d-none d-lg-block">
               <div className="position-relative">
@@ -64,10 +70,10 @@ const Header = props => {
                 />
                 <span className="bx bx-search-alt" />
               </div>
-            </form>
+            </form> */}
           </div>
 
-          <div className="d-flex">
+          {/* <div className="d-flex">
             <div className="dropdown d-inline-block d-lg-none ms-2">
               <button
                 type="button"
@@ -104,19 +110,89 @@ const Header = props => {
                 </form>
               </div>
             </div>
-          </div>
+          </div> */}
 
           <div className="d-flex flex-wrap gap-4">
-            <button
-              type="button"
-              className="btn btn-primary"
+            <Button
+              color="light"
+              outline
+              className="btn-outline"
+              style={{ float: "right" }}
+              onClick={() => {
+                tog_token();
+              }}
+            >
+              Get Tokens
+            </Button>
+            <Modal
+              isOpen={get_token}
+              toggle={() => {
+                tog_token();
+              }}
+              centered
+            >
+              <div className="modal-body">
+                <Form>
+                  <h5 style={{ textAlign: "center" }}>Get Token</h5>
+                  <hr />
+                  <div className="row mb-4">
+                    <Col sm={6}>
+                      <Button
+                        type="submit"
+                        className="btn-block btn-lg"
+                        color="light"
+                        outline
+                      >
+                        Bitcoin
+                      </Button>
+                    </Col>
+                    <Col sm={6}>
+                      <Button
+                        type="submit"
+                        className="btn-block btn-lg"
+                        color="light"
+                        outline
+                      >
+                        Binance
+                      </Button>
+                    </Col>
+                  </div>
+                  <div className="row mb-4">
+                    <Col sm={6}>
+                      <Button
+                        type="submit"
+                        color="light"
+                        className="btn-block btn-lg"
+                        outline
+                      >
+                        USDC
+                      </Button>
+                    </Col>
+                    <Col sm={6}>
+                      <Button
+                        type="submit"
+                        color="light"
+                        className="btn-block btn-lg"
+                        outline
+                      >
+                        USDT
+                      </Button>
+                    </Col>
+                  </div>
+                </Form>
+              </div>
+            </Modal>
+            <Button
+              color="dark"
+              outline
+              className="btn-outline"
               onClick={() => {
                 tog_connect_wallet();
               }}
             >
               <i className="fas fa-wallet font-size-16 align-middle me-2"></i>{" "}
               Connect
-            </button>
+            </Button>
             <Modal
               isOpen={connect_wallet_modal}
               toggle={() => {
@@ -176,10 +252,10 @@ const Header = props => {
               </div>
             </Modal>
 
-            <div className="form-check form-switch" style={{ margin: "0" }}>
+            {/* <div className="form-check form-switch" style={{ margin: "0" }}>
               <input className="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked />
               <label className="form-check-label">Dark</label>
-            </div>
+            </div> */}
           </div>
 
         </div>
