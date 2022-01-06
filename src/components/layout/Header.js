@@ -204,7 +204,7 @@ const Header = props => {
 
               :
 
-              <>
+              <div>
                 <Button
                   color="dark"
                   outline
@@ -275,7 +275,7 @@ const Header = props => {
                     </Form>
                   </div>
                 </Modal> */}
-              </>
+              </div>
             }
 
             {/* <div className="form-check form-switch" style={{ margin: "0" }}>

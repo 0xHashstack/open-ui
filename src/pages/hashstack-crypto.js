@@ -24,71 +24,66 @@ import {
 } from "reactstrap";
 import Select from "react-select";
 import classnames from "classnames";
+import { Web3ModalContext } from '../contexts/Web3ModalProvider';
 import { Web3WrapperContext } from '../contexts/Web3WrapperProvider';
+import { markets, symbols, decimals, comit_ONEMONTH, comit_TWOWEEKS } from '../blockchain/constants';
+import { ellipseAddress } from '../util/blockchain';
+import BorrowBalance from "../components/BorrowBalance";
+import DepositBalance from "../components/DepositBalance";
+import { BNtoNum } from '../blockchain/utils';
+
+const assets = [
+  {
+    assetId: 0,
+    assetName: markets[0],
+    AssetFullname: "USD Tether",
+    APY: 15,
+    icon: "mdi mdi-litecoin",
+    color: "info",
+    title: "LTC",
+    investRate: "0.0682",
+    investPrice: "2936.14",
+    price: "3726.06",
+    loansRate: "0.0234",
+    loansPrice: "523.17",
+    totalRate: "0.0823",
+    totalPrice: "3254.23",
+  },
+  {
+    assetId: 1,
+    assetName: markets[1],
+    AssetFullname: "USD Coin",
+    APY: 18,
+    icon: "mdi mdi-ethereum",
+    color: "primary",
+    title: "ETH",
+    investRate: "0.0814",
+    investPrice: "3256.29",
+    price: "4235.78",
+    loansRate: "0.0253",
+    loansPrice: "675.04",
+    totalRate: "0.0921",
+    totalPrice: "4536.24",
+  },
+  {
+    assetId: 2,
+    assetName: markets[2],
+    AssetFullname: "Bitcoin",
+    APY: 18,
+    icon: "mdi mdi-bitcoin",
+    color: "warning",
+    title: "BTC",
+    investRate: "1.2601",
+    investPrice: "6225.74",
+    price: "7525.47",
+    loansRate: "0.1512",
+    loansPrice: "742.32",
+    totalRate: "4.2562",
+    totalPrice: "6425.42",
+  }
+];
 
 const HashstackCrypto = props => {
-  const [assets] = useState([
-    {
-      icon: "mdi mdi-bitcoin",
-      color: "warning",
-      title: "BTC",
-      investRate: "1.2601",
-      investPrice: "6225.74",
-      price: "7525.47",
-      loansRate: "0.1512",
-      loansPrice: "742.32",
-      totalRate: "4.2562",
-      totalPrice: "6425.42",
-    },
-    {
-      icon: "mdi mdi-ethereum",
-      color: "primary",
-      title: "ETH",
-      investRate: "0.0814",
-      investPrice: "3256.29",
-      price: "4235.78",
-      loansRate: "0.0253",
-      loansPrice: "675.04",
-      totalRate: "0.0921",
-      totalPrice: "4536.24",
-    },
-    {
-      icon: "mdi mdi-litecoin",
-      color: "info",
-      title: "LTC",
-      investRate: "0.0682",
-      investPrice: "2936.14",
-      price: "3726.06",
-      loansRate: "0.0234",
-      loansPrice: "523.17",
-      totalRate: "0.0823",
-      totalPrice: "3254.23",
-    },
-    {
-      icon: "mdi mdi-bitcoin",
-      color: "warning",
-      title: "BTC",
-      investRate: "1.2601",
-      investPrice: "6225.74",
-      price: "7525.47",
-      loansRate: "0.1512",
-      loansPrice: "742.32",
-      totalRate: "4.2562",
-      totalPrice: "6425.42",
-    },
-    {
-      icon: "mdi mdi-ethereum",
-      color: "primary",
-      title: "ETH",
-      investRate: "0.0814",
-      investPrice: "3256.29",
-      price: "4235.78",
-      loansRate: "0.0253",
-      loansPrice: "675.04",
-      totalRate: "0.0921",
-      totalPrice: "4536.24",
-    },
-  ]);
 
   const [isMenu, setIsMenu] = useState(false);
   const [customActiveTab, setcustomActiveTab] = useState("1");
@@ -103,6 +98,15 @@ const HashstackCrypto = props => {
   const [modal_withdraw_collateral, setmodal_withdraw_collateral] = useState(false);
   const [modal_add_active_deposit, setmodal_add_active_deposit] = useState(false);
   const [modal_withdraw_active_deposit, setmodal_withdraw_active_deposit] = useState(false);
+
+  let inputVal1 = 0;
+  let inputVal2 = 0;
+
+  let swapTo = 0;
+  let swapAmount = 0;
+
+  const { connect, disconnect, account } = useContext(Web3ModalContext);
+  const { web3Wrapper: wrapper } = useContext(Web3WrapperContext);
 
   const toggleMenu = () => {
     setIsMenu(!isMenu);
@@ -156,41 +160,271 @@ const HashstackCrypto = props => {
     removeBodyCss();
   }
 
-  const { web3Wrapper: wrapper } = useContext(Web3WrapperContext);
+  const DepositData = (props) => {
 
-  useEffect(() => {
-    wrapper?.getDepositInstance().deposit.on("NewDeposit", onDeposit);
-    wrapper?.getDepositInstance().deposit.on("Withdrawal", onWithdrawal)
-  }, []);
+    useEffect(() => {
+      wrapper?.getDepositInstance().deposit.on("NewDeposit", onDeposit);
+      wrapper?.getDepositInstance().deposit.on("Withdrawal", onWithdrawal)
+    });
 
-  const handleDeposit = async () => {
-    try {
-      const tx = await wrapper?.getDepositInstance().createDeposit(symbols[props.assetID], comit_TWOWEEKS, inputVal1, decimals[props.assetID]);
-    } catch (err) {
-      console.error("ERROR MESSAGE: ", err.message)
-      alert(err.message)
+    const handleDeposit = async () => {
+      try {
+        const tx = await wrapper?.getDepositInstance().createDeposit(symbols[props.assetID], comit_TWOWEEKS, inputVal1, decimals[props.assetID]);
+      } catch (err) {
+        console.error("ERROR MESSAGE: ", err.message)
+        alert(err.message)
+      }
     }
-  }
 
-  const onDeposit = (data) => {
-    let amount = BNtoNum(Number(data.amount))
-    alert("Deposited amount: " + amount);
-    console.log(data);
-  }
-
-  const handleWithdraw = async () => {
-    try {
-      const tx = await wrapper?.getDepositInstance().withdrawDeposit(symbols[props.assetID], comit_TWOWEEKS, inputVal1, 0, decimals[props.assetID]);
-    } catch (err) {
-      console.error("ERROR MESSAGE: ", err.message)
-      alert(err.message)
+    const onDeposit = (data) => {
+      let amount = BNtoNum(Number(data.amount))
+      alert("Deposited amount: " + amount);
+      console.log(data);
     }
+
+    const handleWithdraw = async () => {
+      try {
+        const tx = await wrapper?.getDepositInstance().withdrawDeposit(symbols[props.assetID], comit_TWOWEEKS, inputVal1, 0, decimals[props.assetID]);
+      } catch (err) {
+        console.error("ERROR MESSAGE: ", err.message)
+        alert(err.message)
+      }
+    }
+
+    const onWithdrawal = (data) => {
+      let amount = BNtoNum(Number(data.amount));
+      alert("Withdrawal amount: " + amount);
+      console.log(data);
+    }
+
+    return (
+      <>
+        <button
+          type="button"
+          className="btn btn-dark btn-sm w-xs"
+          onClick={() => {
+            tog_center();
+          }}
+        >
+          Deposit
+        </button>
+        <Modal
+          isOpen={modal_deposit}
+          toggle={() => {
+            tog_center();
+          }}
+          centered
+        >
+          <div className="modal-body">
+            {account ?
+              <Form>
+                <div className="row mb-4">
+                  <Col sm={12}>
+                    <Input
+                      type="text"
+                      className="form-control"
+                      id="horizontal-firstname-Input"
+                      placeholder="Market"
+                    />
+                  </Col>
+                </div>
+                <div className="row mb-4">
+                  <Col sm={12}>
+                    <Input
+                      type="number"
+                      className="form-control"
+                      id="horizontal-email-Input"
+                      placeholder="Amount"
+                      onChange={(event) => { inputVal1 = event.target.value }}
+                    />
+                  </Col>
+                </div>
+                <div className="row mb-4">
+                  <Col sm={12}>
+                    <Input
+                      type="text"
+                      className="form-control"
+                      id="horizontal-password-Input"
+                      placeholder="Commitment"
+                      defaultValue={"Two Weeks"}
+                    />
+                  </Col>
+                </div>
+                <div className="row mb-4">
+                  <Col sm={6}>
+                    <p>fixed APY <strong>15%</strong></p>
+                  </Col>
+                  <Col sm={6}>
+                    <p style={{ float: "right" }}>fixed APY <strong>15%</strong></p>
+                  </Col>
+                </div>
+                <div className="d-grid gap-2">
+                  <Button
+                    type="submit"
+                    color="primary"
+                    className="w-md"
+                    onClick={handleDeposit}
+                  >
+                    Deposit
+                  </Button>
+                </div>
+              </Form>
+              : <h2>You are not connected to your wallet.</h2>}
+          </div>
+        </Modal>
+      </>
+    )
   }
 
-  const onWithdrawal = (data) => {
-    let amount = BNtoNum(Number(data.amount));
-    alert("Withdrawal amount: " + amount);
-    console.log(data);
+  const BorrowData = (props) => {
+
+    useEffect(() => {
+      wrapper?.getLoanInstance().loan1.on("NewLoan", onLoanRequested);
+      wrapper?.getLoanInstance().loan1.on("AddCollateral", onCollateralAdded)
+      wrapper?.getLoanInstance().loan.on("CollateralReleased", onCollateralReleased);
+      wrapper?.getLoanInstance().loan.on("MarketSwapped", (data) => {
+        alert(data)
+      })
+    });
+
+    const handleBorrow = async () => {
+      try {
+        const tx = await wrapper?.getLoanInstance().loanRequest(symbols[props.assetID], comit_ONEMONTH, inputVal1, decimals[props.assetID], symbols[props.assetID], inputVal2, decimals[props.assetID]);
+      } catch (err) {
+        console.error("ERROR MESSAGE: ", err.message)
+        alert(err.message)
+      }
+    }
+
+    const onLoanRequested = (data) => {
+      let amount = BNtoNum(Number(data.amount))
+      alert("Requested amount: " + amount);
+      console.log(data);
+    }
+
+    const handleRepay = async () => {
+      try {
+        const tx = await wrapper?.getLoanInstance().repayLoan(symbols[props.assetID], comit_ONEMONTH, inputVal1, decimals[props.assetID]);
+      } catch (err) {
+        console.error("ERROR MESSAGE: ", err.message)
+        alert(err.message)
+      }
+    }
+
+    const onCollateralReleased = (data) => {
+      let amount = BNtoNum(Number(data.amount))
+      alert("Collateral amount released: " + amount);
+      console.log(data);
+    }
+
+    const handleCollateral = async () => {
+      try {
+        const tx = await wrapper?.getLoanInstance().addCollateral(symbols[props.assetID], comit_ONEMONTH, symbols[props.assetID], inputVal1, decimals[props.assetID]);
+      } catch (err) {
+        console.error("ERROR MESSAGE: ", err.message)
+        alert(err.message)
+      }
+    }
+
+    const onCollateralAdded = (data) => {
+      let amount = BNtoNum(Number(data.amount))
+      alert("Collateral amount added: " + amount);
+      console.log(data);
+    }
+
+    return (
+      <>
+        <button
+          type="button"
+          className="btn btn-secondary btn-sm w-xs"
+          onClick={(e) => {
+            borrowRowData(props.title)
+            tog_borrow();
+          }}
+        >
+          Borrow
+        </button>
+        <Modal
+          isOpen={modal_borrow}
+          toggle={() => {
+            tog_borrow();
+          }}
+          centered
+        >
+          <div className="modal-body">
+            {account ?
+              <Form>
+                <div className="row mb-4">
+                  <h6>{props.title}</h6>
+                </div>
+                <div className="row mb-4">
+                  <Col sm={12}>
+                    <Input
+                      type="text"
+                      className="form-control"
+                      id="horizontal-password-Input"
+                      placeholder="Amount"
+                      onChange={(event) => { inputVal1 = event.target.value }}
+                    />
+                  </Col>
+                </div>
+                <div className="row mb-4">
+                  <Col sm={12}>
+                    <select className="form-select" placeholder="Borrow Type">
+                      <option>Borrow Type</option>
+                      <option>BTC</option>
+                      <option>USDC</option>
+                    </select>
+                  </Col>
+                </div>
+                <div className="row mb-4">
+                  <h6>Collateral</h6>
+                </div>
+                <div className="row mb-4">
+                  <Col sm={12}>
+                    <select className="form-select">
+                      <option selected disabled>Collateral market</option>
+                      <option>BTC</option>
+                      <option>USDT</option>
+                    </select>
+                  </Col>
+                </div>
+                <div className="row mb-4">
+                  <Col sm={12}>
+                    <Input
+                      type="text"
+                      className="form-control"
+                      id="horizontal-password-Input"
+                      placeholder="Amount"
+                      onChange={(event) => { inputVal1 = event.target.value }}
+                    />
+                  </Col>
+                </div>
+                <div className="row mb-4">
+                  <Col sm={6}>
+                    <p>Borrow APR <strong>15%</strong></p>
+                  </Col>
+                  <Col sm={6}>
+                    <p style={{ float: "right" }}>Collateral APY <strong>0%</strong></p>
+                  </Col>
+                </div>
+
+                <div className="d-grid gap-2">
+                  <Button
+                    type="submit"
+                    color="primary"
+                    className="w-md"
+                    onClick={handleBorrow}
+                  >
+                    Request Loan
+                  </Button>
+                </div>
+              </Form>
+              : <h2>You are not connected to your wallet.</h2>}
+          </div>
+        </Modal>
+      </>
+    )
   }
 
   const passbookActive = (e) => {
@@ -927,159 +1161,10 @@ const HashstackCrypto = props => {
                                   </div>
                                 </td>
                                 <td style={{ width: "120px" }}>
-                                  <button
-                                    type="button"
-                                    className="btn btn-dark btn-sm w-xs"
-                                    onClick={() => {
-                                      tog_center();
-                                    }}
-                                  >
-                                    Deposit
-                                  </button>
-                                  <Modal
-                                    isOpen={modal_deposit}
-                                    toggle={() => {
-                                      tog_center();
-                                    }}
-                                    centered
-                                  >
-                                    <div className="modal-body">
-                                      <Form>
-                                        <div className="row mb-4">
-                                          <Col sm={12}>
-                                            <Input
-                                              type="text"
-                                              className="form-control"
-                                              id="horizontal-firstname-Input"
-                                              placeholder="Market"
-                                            />
-                                          </Col>
-                                        </div>
-                                        <div className="row mb-4">
-                                          <Col sm={12}>
-                                            <Input
-                                              type="number"
-                                              className="form-control"
-                                              id="horizontal-email-Input"
-                                              placeholder="Amount"
-                                            />
-                                          </Col>
-                                        </div>
-                                        <div className="row mb-4">
-                                          <Col sm={12}>
-                                            <Input
-                                              type="text"
-                                              className="form-control"
-                                              id="horizontal-password-Input"
-                                              placeholder="Commitment"
-                                            />
-                                          </Col>
-                                        </div>
-                                        <div className="row mb-4">
-                                          <Col sm={6}>
-                                            <p>fixed APY <strong>15%</strong></p>
-                                          </Col>
-                                          <Col sm={6}>
-                                            <p style={{ float: "right" }}>fixed APY <strong>15%</strong></p>
-                                          </Col>
-                                        </div>
-                                        <div className="d-grid gap-2">
-                                          <Button
-                                            type="submit"
-                                            color="primary"
-                                            className="w-md"
-                                          >
-                                            Deposit
-                                          </Button>
-                                        </div>
-                                      </Form>
-                                    </div>
-                                  </Modal>
+                                  <DepositData assetID={asset.assetId} />
                                 </td>
                                 <td style={{ width: "120px" }}>
-                                  <button
-                                    type="button"
-                                    className="btn btn-secondary btn-sm w-xs"
-                                    onClick={() => {
-                                      tog_borrow();
-                                    }}
-                                  >
-                                    Borrow
-                                  </button>
-                                  <Modal
-                                    isOpen={modal_borrow}
-                                    toggle={() => {
-                                      tog_borrow();
-                                    }}
-                                    centered
-                                  >
-                                    <div className="modal-body">
-                                      <Form>
-                                        <div className="row mb-4">
-                                          <h6>{asset.title}</h6>
-                                        </div>
-                                        <div className="row mb-4">
-                                          <Col sm={12}>
-                                            <Input
-                                              type="text"
-                                              className="form-control"
-                                              id="horizontal-password-Input"
-                                              placeholder="Amount"
-                                            />
-                                          </Col>
-                                        </div>
-                                        <div className="row mb-4">
-                                          <Col sm={12}>
-                                            <select className="form-select" placeholder="Borrow Type">
-                                              <option>Borrow Type</option>
-                                              <option>BTC</option>
-                                              <option>USDC</option>
-                                            </select>
-                                          </Col>
-                                        </div>
-                                        <div className="row mb-4">
-                                          <h6>Collateral</h6>
-                                        </div>
-                                        <div className="row mb-4">
-                                          <Col sm={12}>
-                                            <select className="form-select">
-                                              <option selected disabled>Collateral market</option>
-                                              <option>BTC</option>
-                                              <option>USDT</option>
-                                            </select>
-                                          </Col>
-                                        </div>
-                                        <div className="row mb-4">
-                                          <Col sm={12}>
-                                            <Input
-                                              type="text"
-                                              className="form-control"
-                                              id="horizontal-password-Input"
-                                              placeholder="Amount"
-                                            />
-                                          </Col>
-                                        </div>
-                                        <div className="row mb-4">
-                                          <Col sm={6}>
-                                            <p>Borrow APR <strong>15%</strong></p>
-                                          </Col>
-                                          <Col sm={6}>
-                                            <p style={{ float: "right" }}>Collateral APY <strong>0%</strong></p>
-                                          </Col>
-                                        </div>
-
-                                        <div className="d-grid gap-2">
-                                          <Button
-                                            type="submit"
-                                            color="primary"
-                                            className="w-md"
-                                          >
-                                            Request Loan
-                                          </Button>
-                                        </div>
-                                      </Form>
-                                    </div>
-                                  </Modal>
+                                  <BorrowData assetID={asset.assetId} title={asset.title} />
                                 </td>
                               </tr>
                             ))}
