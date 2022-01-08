@@ -31,64 +31,66 @@ import { ellipseAddress } from '../util/blockchain';
 import BorrowBalance from "../components/BorrowBalance";
 import DepositBalance from "../components/DepositBalance";
 import { BNtoNum } from '../blockchain/utils';
+import axios from 'axios';
 
-// const assets = [
-//   {
-//     assetId: 0,
-//     assetName: 'USDT.t',
-//     AssetFullname: "USD Tether",
-//     APY: 15,
-//     icon: "mdi mdi-litecoin",
-//     color: "info",
-//     title: "USDT",
-//     investRate: "0.0682",
-//     investPrice: "2936.14",
-//     price: "3726.06",
-//     loansRate: "0.0234",
-//     loansPrice: "523.17",
-//     totalRate: "0.0823",
-//     totalPrice: "3254.23",
-//   },
-//   {
-//     assetId: 1,
-//     assetName: 'USDC.t',
-//     AssetFullname: "USD Coin",
-//     APY: 18,
-//     icon: "mdi mdi-ethereum",
-//     color: "primary",
-//     title: "USDC",
-//     investRate: "0.0814",
-//     investPrice: "3256.29",
-//     price: "4235.78",
-//     loansRate: "0.0253",
-//     loansPrice: "675.04",
-//     totalRate: "0.0921",
-//     totalPrice: "4536.24",
-//   },
-//   {
-//     assetId: 2,
-//     assetName: 'BTC.t',
-//     AssetFullname: "Bitcoin",
-//     APY: 18,
-//     icon: "mdi mdi-bitcoin",
-//     color: "warning",
-//     title: "BTC",
-//     investRate: "1.2601",
-//     investPrice: "6225.74",
-//     price: "7525.47",
-//     loansRate: "0.1512",
-//     loansPrice: "742.32",
-//     totalRate: "4.2562",
-//     totalPrice: "6425.42",
-//   }
-// ];
+const assets = [
+  {
+    assetId: 0,
+    assetName: 'USDT.t',
+    AssetFullname: "USD Tether",
+    APY: 15,
+    icon: "mdi mdi-litecoin",
+    color: "info",
+    title: "USDT",
+    investRate: "0.0682",
+    investPrice: "2936.14",
+    price: "3726.06",
+    loansRate: "0.0234",
+    loansPrice: "523.17",
+    totalRate: "0.0823",
+    totalPrice: "3254.23",
+  },
+  {
+    assetId: 1,
+    assetName: 'USDC.t',
+    AssetFullname: "USD Coin",
+    APY: 18,
+    icon: "mdi mdi-ethereum",
+    color: "primary",
+    title: "USDC",
+    investRate: "0.0814",
+    investPrice: "3256.29",
+    price: "4235.78",
+    loansRate: "0.0253",
+    loansPrice: "675.04",
+    totalRate: "0.0921",
+    totalPrice: "4536.24",
+  },
+  {
+    assetId: 2,
+    assetName: 'BTC.t',
+    AssetFullname: "Bitcoin",
+    APY: 18,
+    icon: "mdi mdi-bitcoin",
+    color: "warning",
+    title: "BTC",
+    investRate: "1.2601",
+    investPrice: "6225.74",
+    price: "7525.47",
+    loansRate: "0.1512",
+    loansPrice: "742.32",
+    totalRate: "4.2562",
+    totalPrice: "6425.42",
+  }
+];
 
 const HashstackCrypto = props => {
 
-  useEffect(() => {
-    fetch('../blockchain/constants/data.json')
-    .then(({ results }) => setAssets(results.data));
-  });
+  // useEffect(() => {
+  //   axios.get('http://testnet.hashstack.finance/getLoansByAccount?account=0x9324924723874238423828')
+  //   .then((results) => {
+  //     console.log(results)});
+  // });
 
   const [isMenu, setIsMenu] = useState(false);
   const [assets, setAssets] = useState([]);
@@ -1300,7 +1302,7 @@ const HashstackCrypto = props => {
                                             <select className="form-select">
                                               <option selected disabled>Select Market to Swap</option>
                                               <option>SXP</option>
-                                              <option>REN</option>
+                                              <option>CAKE</option>
                                             </select>
                                           </Col>
                                         </div>

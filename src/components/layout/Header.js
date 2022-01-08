@@ -26,14 +26,32 @@ const Header = props => {
     disconnect();
   }, [disconnect]);
 
-  // const handleBTCToken = async () => {
-  //   try {
-  //     const tx = await wrapper?.getTokenDistributorInstance().get_token(symbols[props.assetID], comit_ONEMONTH, inputVal1, decimals[props.assetID], symbols[props.assetID], inputVal2, decimals[props.assetID]);
-  //   } catch (err) {
-  //     console.error("ERROR MESSAGE: ", err.message)
-  //     alert(err.message)
-  //   }
-  // }
+  const handleBTCToken = async () => {
+    try {
+      const tx = await wrapper?.getTokenDistributorInstance().requestTokens1();
+    } catch (err) {
+      console.error("ERROR MESSAGE: ", err.message)
+      alert(err.message)
+    }
+  }
+
+  const handleUSDCToken = async () => {
+    try {
+      const tx = await wrapper?.getTokenDistributorInstance().requestTokens2();
+    } catch (err) {
+      console.error("ERROR MESSAGE: ", err.message)
+      alert(err.message)
+    }
+  }
+
+  const handleUSDTToken = async () => {
+    try {
+      const tx = await wrapper?.getTokenDistributorInstance().requestTokens3();
+    } catch (err) {
+      console.error("ERROR MESSAGE: ", err.message)
+      alert(err.message)
+    }
+  }
 
   function removeBodyCss() {
     document.body.classList.add("no_padding");
@@ -163,30 +181,30 @@ const Header = props => {
                   <div className="row mb-4">
                     <Col sm={4}>
                       <Button
-                        type="submit"
                         className="btn-block btn-lg"
                         color="light"
                         outline
+                        onClick={handleBTCToken}
                       >
                         Bitcoin
                       </Button>
                     </Col>
                     <Col sm={4}>
                       <Button
-                        type="submit"
                         color="light"
                         className="btn-block btn-lg"
                         outline
+                        onClick={handleUSDCToken}
                       >
                         USDC
                       </Button>
                     </Col>
                     <Col sm={4}>
                       <Button
-                        type="submit"
                         color="light"
                         className="btn-block btn-lg"
                         outline
+                        onClick={handleUSDTToken}
                       >
                         USDT
                       </Button>
