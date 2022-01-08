@@ -183,7 +183,7 @@ const HashstackCrypto = props => {
   const DepositData1 = (props) => {
 
     useEffect(() => {
-      wrapper?.getDepositInstance().deposit.on("NewDeposit", onDeposit);
+      wrapper?.getDepositInstance().deposit.on("DepositAdded", onDeposit);
       wrapper?.getDepositInstance().deposit.on("Withdrawal", onWithdrawal)
     });
 
@@ -291,7 +291,7 @@ const HashstackCrypto = props => {
   const DepositData2 = (props) => {
 
     useEffect(() => {
-      wrapper?.getDepositInstance().deposit.on("NewDeposit", onDeposit);
+      wrapper?.getDepositInstance().deposit.on("DepositAdded", onDeposit);
       wrapper?.getDepositInstance().deposit.on("Withdrawal", onWithdrawal)
     });
 
@@ -399,7 +399,7 @@ const HashstackCrypto = props => {
   const DepositData3 = (props) => {
 
     useEffect(() => {
-      wrapper?.getDepositInstance().deposit.on("NewDeposit", onDeposit);
+      wrapper?.getDepositInstance().deposit.on("DepositAdded", onDeposit);
       wrapper?.getDepositInstance().deposit.on("Withdrawal", onWithdrawal)
     });
 
@@ -584,9 +584,9 @@ const HashstackCrypto = props => {
       wrapper?.getLoanInstance().loan1.on("NewLoan", onLoanRequested);
       wrapper?.getLoanInstance().loan1.on("AddCollateral", onCollateralAdded)
       wrapper?.getLoanInstance().loan.on("CollateralReleased", onCollateralReleased);
-      wrapper?.getLoanInstance().loan.on("MarketSwapped", (data) => {
-        alert(data)
-      })
+      // wrapper?.getLoanInstance().loan.on("MarketSwapped", (data) => {
+      //   alert(data)
+      // })
     });
 
     const handleBorrow = async () => {
@@ -735,9 +735,9 @@ const HashstackCrypto = props => {
       wrapper?.getLoanInstance().loan1.on("NewLoan", onLoanRequested);
       wrapper?.getLoanInstance().loan1.on("AddCollateral", onCollateralAdded)
       wrapper?.getLoanInstance().loan.on("CollateralReleased", onCollateralReleased);
-      wrapper?.getLoanInstance().loan.on("MarketSwapped", (data) => {
-        alert(data)
-      })
+      // wrapper?.getLoanInstance().loan.on("MarketSwapped", (data) => {
+      //   alert(data)
+      // })
     });
 
     const handleBorrow = async () => {
@@ -886,9 +886,9 @@ const HashstackCrypto = props => {
       wrapper?.getLoanInstance().loan1.on("NewLoan", onLoanRequested);
       wrapper?.getLoanInstance().loan1.on("AddCollateral", onCollateralAdded)
       wrapper?.getLoanInstance().loan.on("CollateralReleased", onCollateralReleased);
-      wrapper?.getLoanInstance().loan.on("MarketSwapped", (data) => {
-        alert(data)
-      })
+      // wrapper?.getLoanInstance().loan.on("MarketSwapped", (data) => {
+      //   alert(data)
+      // })
     });
 
     const handleBorrow = async () => {
@@ -1236,7 +1236,7 @@ const HashstackCrypto = props => {
                                           <Button
                                             color="primary"
                                             className="w-md"
-                                            onCLick={handleSwap}
+                                            onClick={handleSwap}
                                           >
                                             Swap Loan
                                           </Button>
@@ -1484,7 +1484,7 @@ const HashstackCrypto = props => {
 
                                           <div className="d-grid gap-2">
                                             <Button
-                                              type="submit"
+                                              // type="submit"
                                               color="primary"
                                               className="w-md"
                                             >
@@ -1542,7 +1542,7 @@ const HashstackCrypto = props => {
 
                                           <div className="d-grid gap-2">
                                             <Button
-                                              type="submit"
+                                              // type="submit"
                                               color="primary"
                                               className="w-md"
                                             >

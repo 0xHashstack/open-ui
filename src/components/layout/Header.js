@@ -26,6 +26,15 @@ const Header = props => {
     disconnect();
   }, [disconnect]);
 
+  // const handleBTCToken = async () => {
+  //   try {
+  //     const tx = await wrapper?.getTokenDistributorInstance().get_token(symbols[props.assetID], comit_ONEMONTH, inputVal1, decimals[props.assetID], symbols[props.assetID], inputVal2, decimals[props.assetID]);
+  //   } catch (err) {
+  //     console.error("ERROR MESSAGE: ", err.message)
+  //     alert(err.message)
+  //   }
+  // }
+
   function removeBodyCss() {
     document.body.classList.add("no_padding");
   }

@@ -348,5 +348,5 @@
       ],
       "name": "NewLoan",
       "type": "event"
-    },
+    }
   ]

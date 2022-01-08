@@ -404,5 +404,5 @@
       ],
       "name": "NewLoan",
       "type": "event"
-    },
+    }
   ]
