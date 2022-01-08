@@ -539,5 +539,5 @@
       ],
       "name": "MarketSwapped",
       "type": "event"
-    },
+    }
   ]
