@@ -32,63 +32,71 @@ import BorrowBalance from "../components/BorrowBalance";
 import DepositBalance from "../components/DepositBalance";
 import { BNtoNum } from '../blockchain/utils';
 
-// const assets = [
-//   {
-//     assetId: 0,
-//     assetName: 'USDT.t',
-//     AssetFullname: "USD Tether",
-//     APY: 15,
-//     icon: "mdi mdi-litecoin",
-//     color: "info",
-//     title: "USDT",
-//     investRate: "0.0682",
-//     investPrice: "2936.14",
-//     price: "3726.06",
-//     loansRate: "0.0234",
-//     loansPrice: "523.17",
-//     totalRate: "0.0823",
-//     totalPrice: "3254.23",
-//   },
-//   {
-//     assetId: 1,
-//     assetName: 'USDC.t',
-//     AssetFullname: "USD Coin",
-//     APY: 18,
-//     icon: "mdi mdi-ethereum",
-//     color: "primary",
-//     title: "USDC",
-//     investRate: "0.0814",
-//     investPrice: "3256.29",
-//     price: "4235.78",
-//     loansRate: "0.0253",
-//     loansPrice: "675.04",
-//     totalRate: "0.0921",
-//     totalPrice: "4536.24",
-//   },
-//   {
-//     assetId: 2,
-//     assetName: 'BTC.t',
-//     AssetFullname: "Bitcoin",
-//     APY: 18,
-//     icon: "mdi mdi-bitcoin",
-//     color: "warning",
-//     title: "BTC",
-//     investRate: "1.2601",
-//     investPrice: "6225.74",
-//     price: "7525.47",
-//     loansRate: "0.1512",
-//     loansPrice: "742.32",
-//     totalRate: "4.2562",
-//     totalPrice: "6425.42",
-//   }
-// ];
+const assets = [
+  {
+    assetId: 0,
+    assetName: 'USDT.t',
+    AssetFullname: "USD Tether",
+    APY: 15,
+    icon: "mdi mdi-litecoin",
+    color: "info",
+    title: "USDT",
+    investRate: "0.0682",
+    investPrice: "2936.14",
+    price: "3726.06",
+    loansRate: "0.0234",
+    loansPrice: "523.17",
+    totalRate: "0.0823",
+    totalPrice: "3254.23",
+  },
+  {
+    assetId: 1,
+    assetName: 'USDC.t',
+    AssetFullname: "USD Coin",
+    APY: 18,
+    icon: "mdi mdi-ethereum",
+    color: "primary",
+    title: "USDC",
+    investRate: "0.0814",
+    investPrice: "3256.29",
+    price: "4235.78",
+    loansRate: "0.0253",
+    loansPrice: "675.04",
+    totalRate: "0.0921",
+    totalPrice: "4536.24",
+  },
+  {
+    assetId: 2,
+    assetName: 'BTC.t',
+    AssetFullname: "Bitcoin",
+    APY: 18,
+    icon: "mdi mdi-bitcoin",
+    color: "warning",
+    title: "BTC",
+    investRate: "1.2601",
+    investPrice: "6225.74",
+    price: "7525.47",
+    loansRate: "0.1512",
+    loansPrice: "742.32",
+    totalRate: "4.2562",
+    totalPrice: "6425.42",
+  }
+];
 
 const HashstackCrypto = props => {
 
-  useEffect(() => {
-    fetch('../blockchain/constants/data.json')
-    .then(({ results }) => setAssets(results.data));
-  });
+  // useEffect(() => {
+  //   fetch('data.json',  { headers: {
+  //     'Accept': 'application/json'
+  //   }})
+  //   .then((results ) => {
+  //     debugger;
+  //     return results.json();})
+  //   .then(data => {
+  //     debugger;
+  //     console.log(data);
+  //   });
+  // });
 
   const [isMenu, setIsMenu] = useState(false);
   const [assets, setAssets] = useState([]);
@@ -510,9 +518,19 @@ const HashstackCrypto = props => {
     )
   }
 
+
+  const handleDeposit = async () => {
+    try {
+      const tx = await wrapper?.getDepositInstance().createDeposit(symbols[0], comit_TWOWEEKS, inputVal1, decimals[0]);
+    } catch (err) {
+      console.error("ERROR MESSAGE: ", err.message)
+      alert(err.message)
+    }
+  }
+
   const handleBorrow = async () => {
     try {
-      const tx = await wrapper?.getLoanInstance().loanRequest(symbols[props.assetID], comit_ONEMONTH, inputVal1, decimals[props.assetID], symbols[props.assetID], inputVal2, decimals[props.assetID]);
+      const tx = await wrapper?.getDepositInstance().withdrawDeposit(symbols[0], comit_TWOWEEKS, inputVal1, decimals[0]);
     } catch (err) {
       console.error("ERROR MESSAGE: ", err.message)
       alert(err.message)
@@ -1497,6 +1515,7 @@ const HashstackCrypto = props => {
                                                 className="form-control"
                                                 id="horizontal-password-Input"
                                                 placeholder="Amount"
+                                                onChange={(event) => {inputVal1 = event.target.value}}
                                               />
                                             </Col>
                                           </div>
@@ -1506,6 +1525,7 @@ const HashstackCrypto = props => {
                                               // type="submit"
                                               color="primary"
                                               className="w-md"
+                                              onClick={handleBorrow}
                                             >
                                               Deposit
                                             </Button>
@@ -1555,6 +1575,7 @@ const HashstackCrypto = props => {
                                                 className="form-control"
                                                 id="horizontal-password-Input"
                                                 placeholder="Amount"
+                                                onChange={(event) => {inputVal1 = event.target.value}}
                                               />
                                             </Col>
                                           </div>
@@ -1564,6 +1585,7 @@ const HashstackCrypto = props => {
                                               // type="submit"
                                               color="primary"
                                               className="w-md"
+                                              onClick={handleDeposit}
                                             >
                                               Withdraw
                                             </Button>
