@@ -88,8 +88,12 @@ const HashstackCrypto = props => {
   const [isMenu, setIsMenu] = useState(false);
   const [customActiveTab, setcustomActiveTab] = useState("1");
   const [passbookStatus, setPassbookStatus] = useState(false)
-  const [modal_deposit, setmodal_deposit] = useState(false);
-  const [modal_borrow, setmodal_borrow] = useState(false);
+  const [modal_deposit1, setmodal_deposit1] = useState(false);
+  const [modal_deposit2, setmodal_deposit2] = useState(false);
+  const [modal_deposit3, setmodal_deposit3] = useState(false);
+  const [modal_borrow1, setmodal_borrow1] = useState(false);
+  const [modal_borrow2, setmodal_borrow2] = useState(false);
+  const [modal_borrow3, setmodal_borrow3] = useState(false);
   const [modal_repay_loan, setmodal_repay_loan] = useState(false);
   const [modal_withdraw_loan, setmodal_withdraw_loan] = useState(false);
   const [modal_swap_loan, setmodal_swap_loan] = useState(false);
@@ -119,12 +123,28 @@ const HashstackCrypto = props => {
   function removeBodyCss() {
     document.body.classList.add("no_padding");
   }
-  function tog_center() {
-    setmodal_deposit(!modal_deposit);
+  function tog_center1() {
+    setmodal_deposit1(!modal_deposit1);
     removeBodyCss();
   }
-  function tog_borrow() {
-    setmodal_borrow(!modal_borrow);
+  function tog_center2() {
+    setmodal_deposit2(!modal_deposit2);
+    removeBodyCss();
+  }
+  function tog_center3() {
+    setmodal_deposit3(!modal_deposit3);
+    removeBodyCss();
+  }
+  function tog_borrow1() {
+    setmodal_borrow1(!modal_borrow1);
+    removeBodyCss();
+  }
+  function tog_borrow2() {
+    setmodal_borrow2(!modal_borrow2);
+    removeBodyCss();
+  }
+  function tog_borrow3() {
+    setmodal_borrow3(!modal_borrow3);
     removeBodyCss();
   }
   function tog_repay_loan() {
@@ -160,7 +180,7 @@ const HashstackCrypto = props => {
     removeBodyCss();
   }
 
-  const DepositData = (props) => {
+  const DepositData1 = (props) => {
 
     useEffect(() => {
       wrapper?.getDepositInstance().deposit.on("NewDeposit", onDeposit);
@@ -203,15 +223,15 @@ const HashstackCrypto = props => {
           type="button"
           className="btn btn-dark btn-sm w-xs"
           onClick={() => {
-            tog_center();
+            tog_center1();
           }}
         >
           Deposit
         </button>
         <Modal
-          isOpen={modal_deposit}
+          isOpen={modal_deposit1}
           toggle={() => {
-            tog_center();
+            tog_center1();
           }}
           centered
         >
@@ -219,23 +239,16 @@ const HashstackCrypto = props => {
             {account ?
               <Form>
                 <div className="row mb-4">
-                  <Col sm={12}>
-                    <Input
-                      type="text"
-                      className="form-control"
-                      id="horizontal-firstname-Input"
-                      placeholder="Market"
-                    />
-                  </Col>
+                  <h6>LTC</h6>
                 </div>
                 <div className="row mb-4">
                   <Col sm={12}>
                     <Input
                       type="number"
                       className="form-control"
-                      id="horizontal-email-Input"
+                      id="amount"
                       placeholder="Amount"
-                      onChange={(event) => { inputVal1 = event.target.value }}
+                      onChange={(event) => { inputVal1 = Number(event.target.value) }}
                     />
                   </Col>
                 </div>
@@ -244,7 +257,7 @@ const HashstackCrypto = props => {
                     <Input
                       type="text"
                       className="form-control"
-                      id="horizontal-password-Input"
+                      id="commitment"
                       placeholder="Commitment"
                       defaultValue={"Two Weeks"}
                     />
@@ -260,7 +273,6 @@ const HashstackCrypto = props => {
                 </div>
                 <div className="d-grid gap-2">
                   <Button
-                    type="submit"
                     color="primary"
                     className="w-md"
                     onClick={handleDeposit}
@@ -276,7 +288,223 @@ const HashstackCrypto = props => {
     )
   }
 
-  const BorrowData = (props) => {
+  const DepositData2 = (props) => {
+
+    useEffect(() => {
+      wrapper?.getDepositInstance().deposit.on("NewDeposit", onDeposit);
+      wrapper?.getDepositInstance().deposit.on("Withdrawal", onWithdrawal)
+    });
+
+    const handleDeposit = async () => {
+      try {
+        const tx = await wrapper?.getDepositInstance().createDeposit(symbols[props.assetID], comit_TWOWEEKS, inputVal1, decimals[props.assetID]);
+      } catch (err) {
+        console.error("ERROR MESSAGE: ", err.message)
+        alert(err.message)
+      }
+    }
+
+    const onDeposit = (data) => {
+      let amount = BNtoNum(Number(data.amount))
+      alert("Deposited amount: " + amount);
+      console.log(data);
+    }
+
+    const handleWithdraw = async () => {
+      try {
+        const tx = await wrapper?.getDepositInstance().withdrawDeposit(symbols[props.assetID], comit_TWOWEEKS, inputVal1, 0, decimals[props.assetID]);
+      } catch (err) {
+        console.error("ERROR MESSAGE: ", err.message)
+        alert(err.message)
+      }
+    }
+
+    const onWithdrawal = (data) => {
+      let amount = BNtoNum(Number(data.amount));
+      alert("Withdrawal amount: " + amount);
+      console.log(data);
+    }
+
+    return (
+      <>
+        <button
+          type="button"
+          className="btn btn-dark btn-sm w-xs"
+          onClick={() => {
+            tog_center2();
+          }}
+        >
+          Deposit
+        </button>
+        <Modal
+          isOpen={modal_deposit2}
+          toggle={() => {
+            tog_center2();
+          }}
+          centered
+        >
+          <div className="modal-body">
+            {account ?
+              <Form>
+                <div className="row mb-4">
+                  <h6>ETH</h6>
+                </div>
+                <div className="row mb-4">
+                  <Col sm={12}>
+                    <Input
+                      type="number"
+                      className="form-control"
+                      id="amount"
+                      placeholder="Amount"
+                      onChange={(event) => { inputVal1 = Number(event.target.value) }}
+                    />
+                  </Col>
+                </div>
+                <div className="row mb-4">
+                  <Col sm={12}>
+                    <Input
+                      type="text"
+                      className="form-control"
+                      id="commitment"
+                      placeholder="Commitment"
+                      defaultValue={"Two Weeks"}
+                    />
+                  </Col>
+                </div>
+                <div className="row mb-4">
+                  <Col sm={6}>
+                    <p>fixed APY <strong>15%</strong></p>
+                  </Col>
+                  <Col sm={6}>
+                    <p style={{ float: "right" }}>fixed APY <strong>15%</strong></p>
+                  </Col>
+                </div>
+                <div className="d-grid gap-2">
+                  <Button
+                    color="primary"
+                    className="w-md"
+                    onClick={handleDeposit}
+                  >
+                    Deposit
+                  </Button>
+                </div>
+              </Form>
+              : <h2>You are not connected to your wallet.</h2>}
+          </div>
+        </Modal>
+      </>
+    )
+  }
+
+  const DepositData3 = (props) => {
+
+    useEffect(() => {
+      wrapper?.getDepositInstance().deposit.on("NewDeposit", onDeposit);
+      wrapper?.getDepositInstance().deposit.on("Withdrawal", onWithdrawal)
+    });
+
+    const handleDeposit = async () => {
+      try {
+        const tx = await wrapper?.getDepositInstance().createDeposit(symbols[props.assetID], comit_TWOWEEKS, inputVal1, decimals[props.assetID]);
+      } catch (err) {
+        console.error("ERROR MESSAGE: ", err.message)
+        alert(err.message)
+      }
+    }
+
+    const onDeposit = (data) => {
+      let amount = BNtoNum(Number(data.amount))
+      alert("Deposited amount: " + amount);
+      console.log(data);
+    }
+
+    const handleWithdraw = async () => {
+      try {
+        const tx = await wrapper?.getDepositInstance().withdrawDeposit(symbols[props.assetID], comit_TWOWEEKS, inputVal1, 0, decimals[props.assetID]);
+      } catch (err) {
+        console.error("ERROR MESSAGE: ", err.message)
+        alert(err.message)
+      }
+    }
+
+    const onWithdrawal = (data) => {
+      let amount = BNtoNum(Number(data.amount));
+      alert("Withdrawal amount: " + amount);
+      console.log(data);
+    }
+
+    return (
+      <>
+        <button
+          type="button"
+          className="btn btn-dark btn-sm w-xs"
+          onClick={() => {
+            tog_center3();
+          }}
+        >
+          Deposit
+        </button>
+        <Modal
+          isOpen={modal_deposit3}
+          toggle={() => {
+            tog_center3();
+          }}
+          centered
+        >
+          <div className="modal-body">
+            {account ?
+              <Form>
+                <div className="row mb-4">
+                  <h6>BTC</h6>
+                </div>
+                <div className="row mb-4">
+                  <Col sm={12}>
+                    <Input
+                      type="number"
+                      className="form-control"
+                      id="amount"
+                      placeholder="Amount"
+                      onChange={(event) => { inputVal1 = Number(event.target.value) }}
+                    />
+                  </Col>
+                </div>
+                <div className="row mb-4">
+                  <Col sm={12}>
+                    <Input
+                      type="text"
+                      className="form-control"
+                      id="commitment"
+                      placeholder="Commitment"
+                      defaultValue={"Two Weeks"}
+                    />
+                  </Col>
+                </div>
+                <div className="row mb-4">
+                  <Col sm={6}>
+                    <p>fixed APY <strong>15%</strong></p>
+                  </Col>
+                  <Col sm={6}>
+                    <p style={{ float: "right" }}>fixed APY <strong>15%</strong></p>
+                  </Col>
+                </div>
+                <div className="d-grid gap-2">
+                  <Button
+                    color="primary"
+                    className="w-md"
+                    onClick={handleDeposit}
+                  >
+                    Deposit
+                  </Button>
+                </div>
+              </Form>
+              : <h2>You are not connected to your wallet.</h2>}
+          </div>
+        </Modal>
+      </>
+    )
+  }
+
+  const BorrowData1 = (props) => {
 
     useEffect(() => {
       wrapper?.getLoanInstance().loan1.on("NewLoan", onLoanRequested);
@@ -337,17 +565,16 @@ const HashstackCrypto = props => {
         <button
           type="button"
           className="btn btn-secondary btn-sm w-xs"
-          onClick={(e) => {
-            borrowRowData(props.title)
-            tog_borrow();
+          onClick={() => {
+            tog_borrow1();
           }}
         >
           Borrow
         </button>
         <Modal
-          isOpen={modal_borrow}
+          isOpen={modal_borrow1}
           toggle={() => {
-            tog_borrow();
+            tog_borrow1();
           }}
           centered
         >
@@ -372,8 +599,9 @@ const HashstackCrypto = props => {
                   <Col sm={12}>
                     <select className="form-select" placeholder="Borrow Type">
                       <option>Borrow Type</option>
+                      <option>LTH</option>
+                      <option>ETH</option>
                       <option>BTC</option>
-                      <option>USDC</option>
                     </select>
                   </Col>
                 </div>
@@ -384,8 +612,9 @@ const HashstackCrypto = props => {
                   <Col sm={12}>
                     <select className="form-select">
                       <option selected disabled>Collateral market</option>
+                      <option>LTH</option>
+                      <option>ETH</option>
                       <option>BTC</option>
-                      <option>USDT</option>
                     </select>
                   </Col>
                 </div>
@@ -396,7 +625,7 @@ const HashstackCrypto = props => {
                       className="form-control"
                       id="horizontal-password-Input"
                       placeholder="Amount"
-                      onChange={(event) => { inputVal1 = event.target.value }}
+                      onChange={(event) => { inputVal2 = event.target.value }}
                     />
                   </Col>
                 </div>
@@ -411,7 +640,308 @@ const HashstackCrypto = props => {
 
                 <div className="d-grid gap-2">
                   <Button
-                    type="submit"
+                    color="primary"
+                    className="w-md"
+                    onClick={handleBorrow}
+                  >
+                    Request Loan
+                  </Button>
+                </div>
+              </Form>
+              : <h2>You are not connected to your wallet.</h2>}
+          </div>
+        </Modal>
+      </>
+    )
+  }
+
+  const BorrowData2 = (props) => {
+
+    useEffect(() => {
+      wrapper?.getLoanInstance().loan1.on("NewLoan", onLoanRequested);
+      wrapper?.getLoanInstance().loan1.on("AddCollateral", onCollateralAdded)
+      wrapper?.getLoanInstance().loan.on("CollateralReleased", onCollateralReleased);
+      wrapper?.getLoanInstance().loan.on("MarketSwapped", (data) => {
+        alert(data)
+      })
+    });
+
+    const handleBorrow = async () => {
+      try {
+        const tx = await wrapper?.getLoanInstance().loanRequest(symbols[props.assetID], comit_ONEMONTH, inputVal1, decimals[props.assetID], symbols[props.assetID], inputVal2, decimals[props.assetID]);
+      } catch (err) {
+        console.error("ERROR MESSAGE: ", err.message)
+        alert(err.message)
+      }
+    }
+
+    const onLoanRequested = (data) => {
+      let amount = BNtoNum(Number(data.amount))
+      alert("Requested amount: " + amount);
+      console.log(data);
+    }
+
+    const handleRepay = async () => {
+      try {
+        const tx = await wrapper?.getLoanInstance().repayLoan(symbols[props.assetID], comit_ONEMONTH, inputVal1, decimals[props.assetID]);
+      } catch (err) {
+        console.error("ERROR MESSAGE: ", err.message)
+        alert(err.message)
+      }
+    }
+
+    const onCollateralReleased = (data) => {
+      let amount = BNtoNum(Number(data.amount))
+      alert("Collateral amount released: " + amount);
+      console.log(data);
+    }
+
+    const handleCollateral = async () => {
+      try {
+        const tx = await wrapper?.getLoanInstance().addCollateral(symbols[props.assetID], comit_ONEMONTH, symbols[props.assetID], inputVal1, decimals[props.assetID]);
+      } catch (err) {
+        console.error("ERROR MESSAGE: ", err.message)
+        alert(err.message)
+      }
+    }
+
+    const onCollateralAdded = (data) => {
+      let amount = BNtoNum(Number(data.amount))
+      alert("Collateral amount added: " + amount);
+      console.log(data);
+    }
+
+    return (
+      <>
+        <button
+          type="button"
+          className="btn btn-secondary btn-sm w-xs"
+          onClick={() => {
+            tog_borrow2();
+          }}
+        >
+          Borrow
+        </button>
+        <Modal
+          isOpen={modal_borrow2}
+          toggle={() => {
+            tog_borrow2();
+          }}
+          centered
+        >
+          <div className="modal-body">
+            {account ?
+              <Form>
+                <div className="row mb-4">
+                  <h6>{props.title}</h6>
+                </div>
+                <div className="row mb-4">
+                  <Col sm={12}>
+                    <Input
+                      type="text"
+                      className="form-control"
+                      id="horizontal-password-Input"
+                      placeholder="Amount"
+                      onChange={(event) => { inputVal1 = event.target.value }}
+                    />
+                  </Col>
+                </div>
+                <div className="row mb-4">
+                  <Col sm={12}>
+                    <select className="form-select" placeholder="Borrow Type">
+                      <option>Borrow Type</option>
+                      <option>LTH</option>
+                      <option>ETH</option>
+                      <option>BTC</option>
+                    </select>
+                  </Col>
+                </div>
+                <div className="row mb-4">
+                  <h6>Collateral</h6>
+                </div>
+                <div className="row mb-4">
+                  <Col sm={12}>
+                    <select className="form-select">
+                      <option selected disabled>Collateral market</option>
+                      <option>LTH</option>
+                      <option>ETH</option>
+                      <option>BTC</option>
+                    </select>
+                  </Col>
+                </div>
+                <div className="row mb-4">
+                  <Col sm={12}>
+                    <Input
+                      type="text"
+                      className="form-control"
+                      id="horizontal-password-Input"
+                      placeholder="Amount"
+                      onChange={(event) => { inputVal2 = event.target.value }}
+                    />
+                  </Col>
+                </div>
+                <div className="row mb-4">
+                  <Col sm={6}>
+                    <p>Borrow APR <strong>15%</strong></p>
+                  </Col>
+                  <Col sm={6}>
+                    <p style={{ float: "right" }}>Collateral APY <strong>0%</strong></p>
+                  </Col>
+                </div>
+
+                <div className="d-grid gap-2">
+                  <Button
+                    color="primary"
+                    className="w-md"
+                    onClick={handleBorrow}
+                  >
+                    Request Loan
+                  </Button>
+                </div>
+              </Form>
+              : <h2>You are not connected to your wallet.</h2>}
+          </div>
+        </Modal>
+      </>
+    )
+  }
+
+  const BorrowData3 = (props) => {
+
+    useEffect(() => {
+      wrapper?.getLoanInstance().loan1.on("NewLoan", onLoanRequested);
+      wrapper?.getLoanInstance().loan1.on("AddCollateral", onCollateralAdded)
+      wrapper?.getLoanInstance().loan.on("CollateralReleased", onCollateralReleased);
+      wrapper?.getLoanInstance().loan.on("MarketSwapped", (data) => {
+        alert(data)
+      })
+    });
+
+    const handleBorrow = async () => {
+      try {
+        const tx = await wrapper?.getLoanInstance().loanRequest(symbols[props.assetID], comit_ONEMONTH, inputVal1, decimals[props.assetID], symbols[props.assetID], inputVal2, decimals[props.assetID]);
+      } catch (err) {
+        console.error("ERROR MESSAGE: ", err.message)
+        alert(err.message)
+      }
+    }
+
+    const onLoanRequested = (data) => {
+      let amount = BNtoNum(Number(data.amount))
+      alert("Requested amount: " + amount);
+      console.log(data);
+    }
+
+    const handleRepay = async () => {
+      try {
+        const tx = await wrapper?.getLoanInstance().repayLoan(symbols[props.assetID], comit_ONEMONTH, inputVal1, decimals[props.assetID]);
+      } catch (err) {
+        console.error("ERROR MESSAGE: ", err.message)
+        alert(err.message)
+      }
+    }
+
+    const onCollateralReleased = (data) => {
+      let amount = BNtoNum(Number(data.amount))
+      alert("Collateral amount released: " + amount);
+      console.log(data);
+    }
+
+    const handleCollateral = async () => {
+      try {
+        const tx = await wrapper?.getLoanInstance().addCollateral(symbols[props.assetID], comit_ONEMONTH, symbols[props.assetID], inputVal1, decimals[props.assetID]);
+      } catch (err) {
+        console.error("ERROR MESSAGE: ", err.message)
+        alert(err.message)
+      }
+    }
+
+    const onCollateralAdded = (data) => {
+      let amount = BNtoNum(Number(data.amount))
+      alert("Collateral amount added: " + amount);
+      console.log(data);
+    }
+
+    return (
+      <>
+        <button
+          type="button"
+          className="btn btn-secondary btn-sm w-xs"
+          onClick={() => {
+            tog_borrow3();
+          }}
+        >
+          Borrow
+        </button>
+        <Modal
+          isOpen={modal_borrow3}
+          toggle={() => {
+            tog_borrow3();
+          }}
+          centered
+        >
+          <div className="modal-body">
+            {account ?
+              <Form>
+                <div className="row mb-4">
+                  <h6>{props.title}</h6>
+                </div>
+                <div className="row mb-4">
+                  <Col sm={12}>
+                    <Input
+                      type="text"
+                      className="form-control"
+                      id="horizontal-password-Input"
+                      placeholder="Amount"
+                      onChange={(event) => { inputVal1 = event.target.value }}
+                    />
+                  </Col>
+                </div>
+                <div className="row mb-4">
+                  <Col sm={12}>
+                    <select className="form-select" placeholder="Borrow Type">
+                      <option>Borrow Type</option>
+                      <option>LTH</option>
+                      <option>ETH</option>
+                      <option>BTC</option>
+                    </select>
+                  </Col>
+                </div>
+                <div className="row mb-4">
+                  <h6>Collateral</h6>
+                </div>
+                <div className="row mb-4">
+                  <Col sm={12}>
+                    <select className="form-select">
+                      <option selected disabled>Collateral market</option>
+                      <option>LTH</option>
+                      <option>ETH</option>
+                      <option>BTC</option>
+                    </select>
+                  </Col>
+                </div>
+                <div className="row mb-4">
+                  <Col sm={12}>
+                    <Input
+                      type="text"
+                      className="form-control"
+                      id="horizontal-password-Input"
+                      placeholder="Amount"
+                      onChange={(event) => { inputVal2 = event.target.value }}
+                    />
+                  </Col>
+                </div>
+                <div className="row mb-4">
+                  <Col sm={6}>
+                    <p>Borrow APR <strong>15%</strong></p>
+                  </Col>
+                  <Col sm={6}>
+                    <p style={{ float: "right" }}>Collateral APY <strong>0%</strong></p>
+                  </Col>
+                </div>
+
+                <div className="d-grid gap-2">
+                  <Button
                     color="primary"
                     className="w-md"
                     onClick={handleBorrow}
@@ -1121,53 +1651,123 @@ const HashstackCrypto = props => {
                             </tr>
                           </thead>
                           <tbody>
-                            {assets.map((asset, key) => (
-                              <tr key={key}>
-                                <th scope="row">
-                                  <div className="d-flex align-items-center">
-                                    <div className="avatar-xs me-3">
-                                      <span
-                                        className={
-                                          "avatar-title rounded-circle bg-soft bg-" +
-                                          asset.color +
-                                          " text-" +
-                                          asset.color +
-                                          " font-size-18"
-                                        }
-                                      >
-                                        <i className={asset.icon} />
-                                      </span>
-                                    </div>
-                                    <span>{asset.title}</span>
+                            <tr key={0}>
+                              <th scope="row">
+                                <div className="d-flex align-items-center">
+                                  <div className="avatar-xs me-3">
+                                    <span
+                                      className={
+                                        "avatar-title rounded-circle bg-soft bg-" +
+                                        "info" +
+                                        " text-" +
+                                        "info" +
+                                        " font-size-18"
+                                      }
+                                    >
+                                      <i className={"mdi mdi-litecoin"} />
+                                    </span>
                                   </div>
-                                </th>
-                                <td>
-                                  <div className="text-muted">$ {asset.price}</div>
-                                </td>
-                                <td>
-                                  <h5 className="font-size-14 mb-1">
-                                    {asset.investRate}
-                                  </h5>
-                                  <div className="text-muted">
-                                    ${asset.investPrice}
+                                  <span>{"LTC"}</span>
+                                </div>
+                              </th>
+                              <td>
+                                <div className="text-muted">$ {"60%"}</div>
+                              </td>
+                              <td>
+                                <div className="text-muted">
+                                  {"60%"}
+                                </div>
+                              </td>
+                              <td>
+                                <div className="text-muted">
+                                  {"0.61"}
+                                </div>
+                              </td>
+                              <td style={{ width: "120px" }}>
+                                <DepositData1 assetID={0} title={'LTC'} />
+                              </td>
+                              <td style={{ width: "120px" }}>
+                                <BorrowData1 assetID={0} title={'LTC'} />
+                              </td>
+                            </tr>
+                            <tr key={1}>
+                              <th scope="row">
+                                <div className="d-flex align-items-center">
+                                  <div className="avatar-xs me-3">
+                                    <span
+                                      className={
+                                        "avatar-title rounded-circle bg-soft bg-" +
+                                        "primary" +
+                                        " text-" +
+                                        "primary" +
+                                        " font-size-18"
+                                      }
+                                    >
+                                      <i className={"mdi mdi-ethereum"} />
+                                    </span>
                                   </div>
-                                </td>
-                                <td>
-                                  <h5 className="font-size-14 mb-1">
-                                    {asset.loansRate}
-                                  </h5>
-                                  <div className="text-muted">
-                                    ${asset.loansPrice}
+                                  <span>{"ETH"}</span>
+                                </div>
+                              </th>
+                              <td>
+                                <div className="text-muted">$ {"60%"}</div>
+                              </td>
+                              <td>
+                                <div className="text-muted">
+                                  ${"60%"}
+                                </div>
+                              </td>
+                              <td>
+                                <div className="text-muted">
+                                  ${"0.61"}
+                                </div>
+                              </td>
+                              <td style={{ width: "120px" }}>
+                                <DepositData2 assetID={1} title={'ETH'} />
+                              </td>
+                              <td style={{ width: "120px" }}>
+                                <BorrowData2 assetID={1} title={'ETH'} />
+                              </td>
+                            </tr>
+                            <tr key={2}>
+                              <th scope="row">
+                                <div className="d-flex align-items-center">
+                                  <div className="avatar-xs me-3">
+                                    <span
+                                      className={
+                                        "avatar-title rounded-circle bg-soft bg-" +
+                                        "primary" +
+                                        " text-" +
+                                        "primary" +
+                                        " font-size-18"
+                                      }
+                                    >
+                                      <i className={"mdi mdi-ethereum"} />
+                                    </span>
                                   </div>
-                                </td>
-                                <td style={{ width: "120px" }}>
-                                  <DepositData assetID={asset.assetId} />
-                                </td>
-                                <td style={{ width: "120px" }}>
-                                  <BorrowData assetID={asset.assetId} title={asset.title} />
-                                </td>
-                              </tr>
-                            ))}
+                                  <span>{"ETH"}</span>
+                                </div>
+                              </th>
+                              <td>
+                                <div className="text-muted">$ {"60%"}</div>
+                              </td>
+                              <td>
+                                <div className="text-muted">
+                                  ${"60%"}
+                                </div>
+                              </td>
+                              <td>
+                                <div className="text-muted">
+                                  ${"0.61"}
+                                </div>
+                              </td>
+                              <td style={{ width: "120px" }}>
+                                <DepositData3 assetID={2} title={'BTC'} />
+                              </td>
+                              <td style={{ width: "120px" }}>
+                                <BorrowData3 assetID={2} title={'BTC'} />
+                              </td>
+                            </tr>
                           </tbody>
                         </Table>
                       </div>
