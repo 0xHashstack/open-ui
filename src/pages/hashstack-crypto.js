@@ -40,7 +40,7 @@ const assets = [
     APY: 15,
     icon: "mdi mdi-litecoin",
     color: "info",
-    title: "LTC",
+    title: "USDT",
     investRate: "0.0682",
     investPrice: "2936.14",
     price: "3726.06",
@@ -56,7 +56,7 @@ const assets = [
     APY: 18,
     icon: "mdi mdi-ethereum",
     color: "primary",
-    title: "ETH",
+    title: "USDC",
     investRate: "0.0814",
     investPrice: "3256.29",
     price: "4235.78",
@@ -239,7 +239,7 @@ const HashstackCrypto = props => {
             {account ?
               <Form>
                 <div className="row mb-4">
-                  <h6>LTC</h6>
+                  <h6>USDT</h6>
                 </div>
                 <div className="row mb-4">
                   <Col sm={12}>
@@ -347,7 +347,7 @@ const HashstackCrypto = props => {
             {account ?
               <Form>
                 <div className="row mb-4">
-                  <h6>ETH</h6>
+                  <h6>USDC</h6>
                 </div>
                 <div className="row mb-4">
                   <Col sm={12}>
@@ -599,8 +599,8 @@ const HashstackCrypto = props => {
                   <Col sm={12}>
                     <select className="form-select" placeholder="Borrow Type">
                       <option>Borrow Type</option>
-                      <option>LTH</option>
-                      <option>ETH</option>
+                      <option>USDT</option>
+                      <option>USDC</option>
                       <option>BTC</option>
                     </select>
                   </Col>
@@ -612,8 +612,8 @@ const HashstackCrypto = props => {
                   <Col sm={12}>
                     <select className="form-select">
                       <option selected disabled>Collateral market</option>
-                      <option>LTH</option>
-                      <option>ETH</option>
+                      <option>USDT</option>
+                      <option>USDC</option>
                       <option>BTC</option>
                     </select>
                   </Col>
@@ -750,8 +750,8 @@ const HashstackCrypto = props => {
                   <Col sm={12}>
                     <select className="form-select" placeholder="Borrow Type">
                       <option>Borrow Type</option>
-                      <option>LTH</option>
-                      <option>ETH</option>
+                      <option>USDT</option>
+                      <option>USDC</option>
                       <option>BTC</option>
                     </select>
                   </Col>
@@ -763,8 +763,8 @@ const HashstackCrypto = props => {
                   <Col sm={12}>
                     <select className="form-select">
                       <option selected disabled>Collateral market</option>
-                      <option>LTH</option>
-                      <option>ETH</option>
+                      <option>USDT</option>
+                      <option>USDC</option>
                       <option>BTC</option>
                     </select>
                   </Col>
@@ -901,8 +901,8 @@ const HashstackCrypto = props => {
                   <Col sm={12}>
                     <select className="form-select" placeholder="Borrow Type">
                       <option>Borrow Type</option>
-                      <option>LTH</option>
-                      <option>ETH</option>
+                      <option>USDT</option>
+                      <option>USDC</option>
                       <option>BTC</option>
                     </select>
                   </Col>
@@ -914,8 +914,8 @@ const HashstackCrypto = props => {
                   <Col sm={12}>
                     <select className="form-select">
                       <option selected disabled>Collateral market</option>
-                      <option>LTH</option>
-                      <option>ETH</option>
+                      <option>USDT</option>
+                      <option>USDC</option>
                       <option>BTC</option>
                     </select>
                   </Col>
@@ -1608,6 +1608,19 @@ const HashstackCrypto = props => {
                         <span className="d-none d-sm-block">Passbook</span>
                       </NavLink>
                     </NavItem>
+                    <NavItem>
+                      <NavLink
+                        style={{ cursor: "pointer" }}
+                        className={classnames({
+                          active: customActiveTab === "3",
+                        })}
+                        onClick={() => {
+                          toggleCustom("3");
+                        }}
+                      >
+                        <span className="d-none d-sm-block">Liquidation</span>
+                      </NavLink>
+                    </NavItem>
                   </Nav>
 
                   <TabContent
@@ -1667,7 +1680,7 @@ const HashstackCrypto = props => {
                                       <i className={"mdi mdi-litecoin"} />
                                     </span>
                                   </div>
-                                  <span>{"LTC"}</span>
+                                  <span>{"USDT"}</span>
                                 </div>
                               </th>
                               <td>
@@ -1684,10 +1697,10 @@ const HashstackCrypto = props => {
                                 </div>
                               </td>
                               <td style={{ width: "120px" }}>
-                                <DepositData1 assetID={0} title={'LTC'} />
+                                <DepositData1 assetID={0} title={'USDT'} />
                               </td>
                               <td style={{ width: "120px" }}>
-                                <BorrowData1 assetID={0} title={'LTC'} />
+                                <BorrowData1 assetID={0} title={'USDT'} />
                               </td>
                             </tr>
                             <tr key={1}>
@@ -1706,7 +1719,7 @@ const HashstackCrypto = props => {
                                       <i className={"mdi mdi-ethereum"} />
                                     </span>
                                   </div>
-                                  <span>{"ETH"}</span>
+                                  <span>{"USDC"}</span>
                                 </div>
                               </th>
                               <td>
@@ -1723,10 +1736,10 @@ const HashstackCrypto = props => {
                                 </div>
                               </td>
                               <td style={{ width: "120px" }}>
-                                <DepositData2 assetID={1} title={'ETH'} />
+                                <DepositData2 assetID={1} title={'USDC'} />
                               </td>
                               <td style={{ width: "120px" }}>
-                                <BorrowData2 assetID={1} title={'ETH'} />
+                                <BorrowData2 assetID={1} title={'USDC'} />
                               </td>
                             </tr>
                             <tr key={2}>
@@ -1736,16 +1749,16 @@ const HashstackCrypto = props => {
                                     <span
                                       className={
                                         "avatar-title rounded-circle bg-soft bg-" +
-                                        "primary" +
+                                        "warning" +
                                         " text-" +
-                                        "primary" +
+                                        "warning" +
                                         " font-size-18"
                                       }
                                     >
                                       <i className={"mdi mdi-ethereum"} />
                                     </span>
                                   </div>
-                                  <span>{"ETH"}</span>
+                                  <span>{"BTC"}</span>
                                 </div>
                               </th>
                               <td>
@@ -1917,6 +1930,14 @@ const HashstackCrypto = props => {
                           </Table>
                         </div>
                       }
+                    </TabPane>
+
+                    {/* -------------------------------------- LIQUIDATION ----------------------------- */}
+
+                    <TabPane tabId="3">
+                      <div className="row justify-content-end" style={{ paddingTop: "12px" }}>
+                        <p>This section is under construction. Check again in a few days</p>
+                      </div>
                     </TabPane>
                   </TabContent>
                 </CardBody>
