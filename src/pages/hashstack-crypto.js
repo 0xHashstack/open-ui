@@ -504,6 +504,80 @@ const HashstackCrypto = props => {
     )
   }
 
+  const handleBorrow = async () => {
+    try {
+      const tx = await wrapper?.getLoanInstance().loanRequest(symbols[props.assetID], comit_ONEMONTH, inputVal1, decimals[props.assetID], symbols[props.assetID], inputVal2, decimals[props.assetID]);
+    } catch (err) {
+      console.error("ERROR MESSAGE: ", err.message)
+      alert(err.message)
+    }
+  }
+
+  const onLoanRequested = (data) => {
+    let amount = BNtoNum(Number(data.amount))
+    alert("Requested amount: " + amount);
+    console.log(data);
+  }
+
+  const handleRepay = async () => {
+    try {
+      const tx = await wrapper?.getLoanInstance().repayLoan(symbols[0], comit_ONEMONTH, inputVal1, decimals[0]);
+    } catch (err) {
+      console.error("ERROR MESSAGE: ", err.message)
+      alert(err.message)
+    }
+  }
+
+  const onCollateralReleased = (data) => {
+    let amount = BNtoNum(Number(data.amount))
+    alert("Collateral amount released: " + amount);
+    console.log(data);
+  }
+
+  const handleCollateral = async () => {
+    try {
+      const tx = await wrapper?.getLoanInstance().addCollateral(symbols[0], comit_ONEMONTH, symbols[0], inputVal1, decimals[0]);
+    } catch (err) {
+      console.error("ERROR MESSAGE: ", err.message)
+      alert(err.message)
+    }
+  }
+
+  const handleWithdrawCollateral = async () => {
+    try {
+      const tx = await wrapper?.getLoanInstance().withdrawCollateral(symbols[0], comit_ONEMONTH);
+    } catch (err) {
+      console.error("ERROR MESSAGE: ", err.message)
+      alert(err.message)
+    }
+  }
+
+  const onCollateralAdded = (data) => {
+    let amount = BNtoNum(Number(data.amount))
+    alert("Collateral amount added: " + amount);
+    console.log(data);
+  }
+
+  const handleSwap = async () => {
+    console.log("Swap ", symbols[0], comit_ONEMONTH, symbols[1]);
+    try {
+      const tx = await wrapper?.getLoanInstance().swapLoan(symbols[0], comit_ONEMONTH, symbols[1]);
+    } catch (err) {
+      console.error("ERROR MESSAGE: ", err.message)
+      alert(err.message)
+    }
+  }
+
+  const handleSwapToLoan = async () => {
+    console.log("Swap ", symbols[props.assetID], comit_ONEMONTH, symbols[swapTo]);
+    try {
+      const tx = await wrapper?.getLoanInstance().swapToLoan(symbols[0], comit_ONEMONTH, symbols[1]);
+    } catch (err) {
+      console.error("ERROR MESSAGE: ", err.message)
+      alert(err.message)
+    }
+  }
+
   const BorrowData1 = (props) => {
 
     useEffect(() => {
@@ -1032,15 +1106,16 @@ const HashstackCrypto = props => {
                                                 className="form-control"
                                                 id="horizontal-password-Input"
                                                 placeholder="Amount"
+                                                onChange={(event) => { inputVal1 = event.target.value }}
                                               />
                                             </Col>
                                           </div>
 
                                           <div className="d-grid gap-2">
                                             <Button
-                                              type="submit"
                                               color="primary"
                                               className="w-md"
+                                              onClick={handleRepay}
                                             >
                                               Repay
                                             </Button>
@@ -1090,13 +1165,13 @@ const HashstackCrypto = props => {
                                                 className="form-control"
                                                 id="horizontal-password-Input"
                                                 placeholder="Amount"
+                                                onChange={(event) => { inputVal1 = event.target.value }}
                                               />
                                             </Col>
                                           </div>
 
                                           <div className="d-grid gap-2">
                                             <Button
-                                              type="submit"
                                               color="primary"
                                               className="w-md"
                                             >
@@ -1159,9 +1234,9 @@ const HashstackCrypto = props => {
 
                                         <div className="d-grid gap-2">
                                           <Button
-                                            type="submit"
                                             color="primary"
                                             className="w-md"
+                                            onCLick={handleSwap}
                                           >
                                             Swap Loan
                                           </Button>
@@ -1214,7 +1289,6 @@ const HashstackCrypto = props => {
 
                                         <div className="d-grid gap-2">
                                           <Button
-                                            type="submit"
                                             color="primary"
                                             className="w-md"
                                           >
@@ -1281,15 +1355,16 @@ const HashstackCrypto = props => {
                                               className="form-control"
                                               id="horizontal-password-Input"
                                               placeholder="Amount"
+                                              onChange={(event) => { inputVal1 = event.target.value }}
                                             />
                                           </Col>
                                         </div>
 
                                         <div className="d-grid gap-2">
                                           <Button
-                                            type="submit"
                                             color="primary"
                                             className="w-md"
+                                            onClick={handleCollateral}
                                           >
                                             Add Collateral
                                           </Button>
@@ -1338,9 +1413,9 @@ const HashstackCrypto = props => {
 
                                         <div className="d-grid gap-2">
                                           <Button
-                                            type="submit"
                                             color="primary"
                                             className="w-md"
+                                            onClick={handleWithdrawCollateral}
                                           >
                                             Withdraw Collateral
                                           </Button>

@@ -21,7 +21,7 @@ export const symbols = [
   "0x4254432e74000000000000000000000000000000000000000000000000000000", // BTC.t
 ]
 
-export const diamondAddress = "0x57cC4E4A5577546b09a84eCA07556f2c89EEe40b";
+export const diamondAddress = "0xAA5381caF774a92d38ADD5eb5F4c6e26c3939C62";
 export const addresses = {
   // wone: {
   //   1666700000: '0xD77B20D7301E6F16291221f50EB37589fdAB3720'
@@ -32,9 +32,9 @@ export const addresses = {
 export const markets = ["USDT.t", "USDC.t", "BTC.t"];
 export const marketAddresses = [
   // '0xD77B20D7301E6F16291221f50EB37589fdAB3720', // WONE
-  '0x0fcb7a59c1af082ed077a972173cf49430efd0dc', // USDT.t
-  '0xe767f958a81df36e76f96b03019edfe3aafd1ccd', // USDC.t
-  '0xa48f5ab4cf6583029a981ccfaf0626ea37123a14'  // BTC.t
+  '0x3d2b1f363c79BaB4320DD0522239617aF31DaFde', // USDT.t
+  '0x07D293cFc6E76430af18Ab6Ac3f41828e202D159', // USDC.t
+  '0x664aABd659Ae578454c7A7FC5b850DFB2203a87C'  // BTC.t
 ]
 export const latestPrice = [
   // '0.2886',

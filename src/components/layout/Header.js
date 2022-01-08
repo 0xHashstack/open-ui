@@ -1,7 +1,8 @@
-import React, { useState, useContext, useCallback } from "react";
+import React, { useState, useContext, useCallback, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Row, Col, Modal, Button, Form } from "reactstrap";
 import { Web3ModalContext } from "../../contexts/Web3ModalProvider";
+import { Web3WrapperContext } from "../../contexts/Web3WrapperProvider";
 
 const Header = props => {
   const [isSearch, setSearch] = useState(false);
@@ -9,6 +10,13 @@ const Header = props => {
   const [get_token, setGet_token] = useState(false);
 
   const { connect, disconnect, account } = useContext(Web3ModalContext);
+  const { web3Wrapper: wrapper } = useContext(Web3WrapperContext);
+
+  useEffect(() => {
+    wrapper?.getTokenDistributorInstance().requestTokens1();
+    wrapper?.getTokenDistributorInstance().requestTokens2();
+    wrapper?.getTokenDistributorInstance().requestTokens3();
+  }, [])
 
   const handleConnectWallet = useCallback(() => {
     connect();
@@ -144,7 +152,7 @@ const Header = props => {
                   <h5 style={{ textAlign: "center" }}>Get Token</h5>
                   <hr />
                   <div className="row mb-4">
-                    <Col sm={6}>
+                    <Col sm={4}>
                       <Button
                         type="submit"
                         className="btn-block btn-lg"
@@ -154,19 +162,7 @@ const Header = props => {
                         Bitcoin
                       </Button>
                     </Col>
-                    <Col sm={6}>
-                      <Button
-                        type="submit"
-                        className="btn-block btn-lg"
-                        color="light"
-                        outline
-                      >
-                        Binance
-                      </Button>
-                    </Col>
-                  </div>
-                  <div className="row mb-4">
-                    <Col sm={6}>
+                    <Col sm={4}>
                       <Button
                         type="submit"
                         color="light"
@@ -176,7 +172,7 @@ const Header = props => {
                         USDC
                       </Button>
                     </Col>
-                    <Col sm={6}>
+                    <Col sm={4}>
                       <Button
                         type="submit"
                         color="light"
