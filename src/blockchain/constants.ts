@@ -44,10 +44,11 @@ export const latestPrice = [
 ]
 
 // export const decimals = [18,18,18,8];
-export const decimals = [18,18,8];
+export const decimals = [8,18,18];
 
 export const comit_NONE = "0x636f6d69745f4e4f4e4500000000000000000000000000000000000000000000";
 export const comit_TWOWEEKS = "0x636f6d69745f54574f5745454b53000000000000000000000000000000000000";
 export const comit_ONEMONTH = "0x636f6d69745f4f4e454d4f4e5448000000000000000000000000000000000000";
 export const comit_THREEMONTHS = "0x636f6d69745f54485245454d4f4e544853000000000000000000000000000000";
 
+export const tokenDistributorAddress = "0x77f14833f27ceb80ebf19311f32d715b506e370e";

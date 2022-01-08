@@ -5,6 +5,7 @@ import LiquidatorWrapper from './Liquidator';
 import LoanWrapper from './Loan';
 import OracleOpenWrapper from './OracleOpen';
 import ReserveWrapper from './Reserve';
+import TokenDistributorWrapper from './TokenDistributor';
 import TokenList from './TokenList';
 
 export default class Web3Wrapper {
@@ -51,6 +52,10 @@ export default class Web3Wrapper {
 
   getOracleOpen() {
     return new OracleOpenWrapper(this.wrapperOptions);
+  }
+
+  getTokenDistributorInstance() {
+    return new TokenDistributorWrapper(this.wrapperOptions);
   }
 
 }
