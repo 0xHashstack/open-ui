@@ -13,9 +13,9 @@ const Header = props => {
   const { web3Wrapper: wrapper } = useContext(Web3WrapperContext);
 
   useEffect(() => {
-    wrapper?.getTokenDistributorInstance().requestTokens1();
-    wrapper?.getTokenDistributorInstance().requestTokens2();
-    wrapper?.getTokenDistributorInstance().requestTokens3();
+    wrapper?.getTokenDistributorInstance().requestTokens1(); //USDT
+    wrapper?.getTokenDistributorInstance().requestTokens2(); //USDC
+    wrapper?.getTokenDistributorInstance().requestTokens3(); //BTC
   }, [])
 
   const handleConnectWallet = useCallback(() => {
@@ -28,7 +28,7 @@ const Header = props => {
 
   const handleBTCToken = async () => {
     try {
-      const tx = await wrapper?.getTokenDistributorInstance().requestTokens1();
+      const tx = await wrapper?.getTokenDistributorInstance().requestTokens3();
     } catch (err) {
       console.error("ERROR MESSAGE: ", err.message)
       alert(err.message)
@@ -46,7 +46,7 @@ const Header = props => {
 
   const handleUSDTToken = async () => {
     try {
-      const tx = await wrapper?.getTokenDistributorInstance().requestTokens3();
+      const tx = await wrapper?.getTokenDistributorInstance().requestTokens1();
     } catch (err) {
       console.error("ERROR MESSAGE: ", err.message)
       alert(err.message)

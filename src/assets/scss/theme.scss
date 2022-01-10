@@ -37,6 +37,10 @@ body {
   }
 }
 
+.web3modal-modal-lightbox {
+  z-index: 9999 !important;
+}
+
 .leaflet-pane {
   z-index: 1;
 }

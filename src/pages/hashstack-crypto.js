@@ -26,7 +26,7 @@ import Select from "react-select";
 import classnames from "classnames";
 import { Web3ModalContext } from '../contexts/Web3ModalProvider';
 import { Web3WrapperContext } from '../contexts/Web3WrapperProvider';
-import { markets, symbols, decimals, comit_ONEMONTH, comit_TWOWEEKS } from '../blockchain/constants';
+import { markets, symbols, decimals, comit_ONEMONTH, comit_TWOWEEKS, comit_THREEMONTHS, comit_NONE } from '../blockchain/constants';
 import { ellipseAddress } from '../util/blockchain';
 import BorrowBalance from "../components/BorrowBalance";
 import DepositBalance from "../components/DepositBalance";
@@ -190,14 +190,20 @@ const HashstackCrypto = props => {
 
   const DepositData1 = (props) => {
 
+    const [commitPeriod1, setCommitPeriod1] = useState();
+
     useEffect(() => {
-      wrapper?.getDepositInstance().deposit.on("DepositAdded", onDeposit);
+      wrapper?.getDepositInstance().deposit.on("NewDeposit", onDeposit);
       wrapper?.getDepositInstance().deposit.on("Withdrawal", onWithdrawal)
-    });
+    }, []);
+
+    const handleDepositChange1 = (e) => {
+      setCommitPeriod1(e.target.value)
+    }
 
     const handleDeposit = async () => {
       try {
-        const tx = await wrapper?.getDepositInstance().createDeposit(symbols[props.assetID], comit_TWOWEEKS, inputVal1, decimals[props.assetID]);
+        const tx = await wrapper?.getDepositInstance().createDeposit(symbols[props.assetID], commitPeriod1, inputVal1, decimals[props.assetID]);
       } catch (err) {
         console.error("ERROR MESSAGE: ", err.message)
         alert(err.message)
@@ -262,13 +268,13 @@ const HashstackCrypto = props => {
                 </div>
                 <div className="row mb-4">
                   <Col sm={12}>
-                    <Input
-                      type="text"
-                      className="form-control"
-                      id="commitment"
-                      placeholder="Commitment"
-                      defaultValue={"Two Weeks"}
-                    />
+                    <select className="form-select" placeholder="Borrow Type" onChange={handleDepositChange1}>
+                      <option selected disabled>Commitment</option>
+                      <option value={comit_NONE}>None</option>
+                      <option value={comit_TWOWEEKS}>Two Weeks</option>
+                      <option value={comit_ONEMONTH}>One Month</option>
+                      <option value={comit_THREEMONTHS}>Three Months</option>
+                    </select>
                   </Col>
                 </div>
                 <div className="row mb-4">
@@ -298,14 +304,20 @@ const HashstackCrypto = props => {
 
   const DepositData2 = (props) => {
 
+    const [commitPeriod2, setCommitPeriod2] = useState();
+
     useEffect(() => {
-      wrapper?.getDepositInstance().deposit.on("DepositAdded", onDeposit);
+      wrapper?.getDepositInstance().deposit.on("NewDeposit", onDeposit);
       wrapper?.getDepositInstance().deposit.on("Withdrawal", onWithdrawal)
-    });
+    }, []);
+
+    const handleDepositChange2 = (e) => {
+      setCommitPeriod2(e.target.value)
+    }
 
     const handleDeposit = async () => {
       try {
-        const tx = await wrapper?.getDepositInstance().createDeposit(symbols[props.assetID], comit_TWOWEEKS, inputVal1, decimals[props.assetID]);
+        const tx = await wrapper?.getDepositInstance().createDeposit(symbols[props.assetID], commitPeriod2, inputVal1, decimals[props.assetID]);
       } catch (err) {
         console.error("ERROR MESSAGE: ", err.message)
         alert(err.message)
@@ -370,13 +382,13 @@ const HashstackCrypto = props => {
                 </div>
                 <div className="row mb-4">
                   <Col sm={12}>
-                    <Input
-                      type="text"
-                      className="form-control"
-                      id="commitment"
-                      placeholder="Commitment"
-                      defaultValue={"Two Weeks"}
-                    />
+                    <select className="form-select" placeholder="Borrow Type" onChange={handleDepositChange2}>
+                      <option selected disabled>Commitment</option>
+                      <option value={comit_NONE}>None</option>
+                      <option value={comit_TWOWEEKS}>Two Weeks</option>
+                      <option value={comit_ONEMONTH}>One Month</option>
+                      <option value={comit_THREEMONTHS}>Three Months</option>
+                    </select>
                   </Col>
                 </div>
                 <div className="row mb-4">
@@ -406,14 +418,20 @@ const HashstackCrypto = props => {
 
   const DepositData3 = (props) => {
 
+    const [commitPeriod3, setCommitPeriod3] = useState();
+
     useEffect(() => {
-      wrapper?.getDepositInstance().deposit.on("DepositAdded", onDeposit);
+      wrapper?.getDepositInstance().deposit.on("NewDeposit", onDeposit);
       wrapper?.getDepositInstance().deposit.on("Withdrawal", onWithdrawal)
-    });
+    }, []);
+
+    const handleDepositChange3 = (e) => {
+      setCommitPeriod3(e.target.value)
+    }
 
     const handleDeposit = async () => {
       try {
-        const tx = await wrapper?.getDepositInstance().createDeposit(symbols[props.assetID], comit_TWOWEEKS, inputVal1, decimals[props.assetID]);
+        const tx = await wrapper?.getDepositInstance().createDeposit(symbols[props.assetID], commitPeriod3, inputVal1, decimals[props.assetID]);
       } catch (err) {
         console.error("ERROR MESSAGE: ", err.message)
         alert(err.message)
@@ -478,13 +496,13 @@ const HashstackCrypto = props => {
                 </div>
                 <div className="row mb-4">
                   <Col sm={12}>
-                    <Input
-                      type="text"
-                      className="form-control"
-                      id="commitment"
-                      placeholder="Commitment"
-                      defaultValue={"Two Weeks"}
-                    />
+                    <select className="form-select" placeholder="Borrow Type" onChange={handleDepositChange3}>
+                      <option selected disabled>Commitment</option>
+                      <option value={comit_NONE}>None</option>
+                      <option value={comit_TWOWEEKS}>Two Weeks</option>
+                      <option value={comit_ONEMONTH}>One Month</option>
+                      <option value={comit_THREEMONTHS}>Three Months</option>
+                    </select>
                   </Col>
                 </div>
                 <div className="row mb-4">
@@ -579,35 +597,37 @@ const HashstackCrypto = props => {
     }
   }
 
-  
-
   const onCollateralAdded = (data) => {
     let amount = BNtoNum(Number(data.amount))
     alert("Collateral amount added: " + amount);
     console.log(data);
   }
 
-  const handleSwap = async() => {
-      console.log("Swap ", symbols[0], comit_ONEMONTH, symbols[1]);
-      try {
-        const tx = await wrapper?.getLoanInstance().swapLoan(symbols[0], comit_ONEMONTH, symbols[1]);
-      } catch(err) {
-        console.error("ERROR MESSAGE: ", err.message)
-        alert(err.message)
-      }
+  const handleSwap = async () => {
+    console.log("Swap ", symbols[0], comit_ONEMONTH, symbols[1]);
+    try {
+      const tx = await wrapper?.getLoanInstance().swapLoan(symbols[0], comit_ONEMONTH, symbols[1]);
+    } catch (err) {
+      console.error("ERROR MESSAGE: ", err.message)
+      alert(err.message)
     }
+  }
 
-  const handleSwapToLoan = async() => {
-        console.log("Swap ", symbols[props.assetID], comit_ONEMONTH, symbols[swapTo]);
-        try {
-          const tx = await wrapper?.getLoanInstance().swapToLoan(symbols[0], comit_ONEMONTH, symbols[1]);
-        } catch(err) {
-          console.error("ERROR MESSAGE: ", err.message)
-          alert(err.message)
-        }
-      }
+  const handleSwapToLoan = async () => {
+    console.log("Swap ", symbols[props.assetID], comit_ONEMONTH, symbols[swapTo]);
+    try {
+      const tx = await wrapper?.getLoanInstance().swapToLoan(symbols[0], comit_ONEMONTH, symbols[1]);
+    } catch (err) {
+      console.error("ERROR MESSAGE: ", err.message)
+      alert(err.message)
+    }
+  }
+
 
   const BorrowData1 = (props) => {
+
+    const [commitBorrowPeriod1, setCommitBorrowPeriod1] = useState();
+    const [collateralMarket1, setCollateralMarket1] = useState();
 
     useEffect(() => {
       wrapper?.getLoanInstance().loan1.on("NewLoan", onLoanRequested);
@@ -618,9 +638,17 @@ const HashstackCrypto = props => {
       // })
     });
 
+    const handleBorrowChange1 = (e) => {
+      setCommitBorrowPeriod1(e.target.value)
+    }
+
+    const handleCollateralChange1 = (e) => {
+      setCollateralMarket1(e.target.value)
+    }
+
     const handleBorrow = async () => {
       try {
-        const tx = await wrapper?.getLoanInstance().loanRequest(symbols[props.assetID], comit_ONEMONTH, inputVal1, decimals[props.assetID], symbols[props.assetID], inputVal2, decimals[props.assetID]);
+        const tx = await wrapper?.getLoanInstance().loanRequest(symbols[props.assetID], commitBorrowPeriod1, inputVal1, decimals[props.assetID], collateralMarket1, inputVal2, decimals[props.assetID]);
       } catch (err) {
         console.error("ERROR MESSAGE: ", err.message)
         alert(err.message)
@@ -700,11 +728,10 @@ const HashstackCrypto = props => {
                 </div>
                 <div className="row mb-4">
                   <Col sm={12}>
-                    <select className="form-select" placeholder="Borrow Type">
-                      <option>Borrow Type</option>
-                      <option>USDT</option>
-                      <option>USDC</option>
-                      <option>BTC</option>
+                    <select className="form-select" placeholder="Borrow Type" onChange={handleBorrowChange1}>
+                      <option selected disabled>Borrow Type</option>
+                      <option value={comit_NONE}>None</option>
+                      <option value={comit_ONEMONTH}>One Month</option>
                     </select>
                   </Col>
                 </div>
@@ -713,11 +740,12 @@ const HashstackCrypto = props => {
                 </div>
                 <div className="row mb-4">
                   <Col sm={12}>
-                    <select className="form-select">
+                    <select className="form-select" onChange={handleCollateralChange1}>
                       <option selected disabled>Collateral market</option>
-                      <option>USDT</option>
-                      <option>USDC</option>
-                      <option>BTC</option>
+                      <option value={symbols[0]}>USDT</option>
+                      <option value={symbols[1]}>USDC</option>
+                      <option value={symbols[2]}>BTC</option>
+                      {/* <option value={}>BNB</option> */}
                     </select>
                   </Col>
                 </div>
@@ -760,6 +788,9 @@ const HashstackCrypto = props => {
 
   const BorrowData2 = (props) => {
 
+    const [commitBorrowPeriod2, setCommitBorrowPeriod2] = useState();
+    const [collateralMarket2, setCollateralMarket2] = useState();
+
     useEffect(() => {
       wrapper?.getLoanInstance().loan1.on("NewLoan", onLoanRequested);
       wrapper?.getLoanInstance().loan1.on("AddCollateral", onCollateralAdded)
@@ -769,9 +800,17 @@ const HashstackCrypto = props => {
       // })
     });
 
+    const handleBorrowChange2 = (e) => {
+      setCommitBorrowPeriod2(e.target.value)
+    }
+
+    const handleCollateralChange2 = (e) => {
+      setCollateralMarket2(e.target.value)
+    }
+
     const handleBorrow = async () => {
       try {
-        const tx = await wrapper?.getLoanInstance().loanRequest(symbols[props.assetID], comit_ONEMONTH, inputVal1, decimals[props.assetID], symbols[props.assetID], inputVal2, decimals[props.assetID]);
+        const tx = await wrapper?.getLoanInstance().loanRequest(symbols[props.assetID], commitBorrowPeriod2, inputVal1, decimals[props.assetID], collateralMarket2, inputVal2, decimals[props.assetID]);
       } catch (err) {
         console.error("ERROR MESSAGE: ", err.message)
         alert(err.message)
@@ -851,11 +890,10 @@ const HashstackCrypto = props => {
                 </div>
                 <div className="row mb-4">
                   <Col sm={12}>
-                    <select className="form-select" placeholder="Borrow Type">
-                      <option>Borrow Type</option>
-                      <option>USDT</option>
-                      <option>USDC</option>
-                      <option>BTC</option>
+                    <select className="form-select" placeholder="Borrow Type" onChange={handleBorrowChange2}>
+                      <option selected disabled>Borrow Type</option>
+                      <option value={comit_NONE}>None</option>
+                      <option value={comit_ONEMONTH}>One Month</option>
                     </select>
                   </Col>
                 </div>
@@ -864,11 +902,12 @@ const HashstackCrypto = props => {
                 </div>
                 <div className="row mb-4">
                   <Col sm={12}>
-                    <select className="form-select">
+                    <select className="form-select" onChange={handleCollateralChange2}>
                       <option selected disabled>Collateral market</option>
-                      <option>USDT</option>
-                      <option>USDC</option>
-                      <option>BTC</option>
+                      <option value={symbols[0]}>USDT</option>
+                      <option value={symbols[1]}>USDC</option>
+                      <option value={symbols[2]}>BTC</option>
+                      {/* <option value={}>BNB</option> */}
                     </select>
                   </Col>
                 </div>
@@ -911,6 +950,9 @@ const HashstackCrypto = props => {
 
   const BorrowData3 = (props) => {
 
+    const [commitBorrowPeriod3, setCommitBorrowPeriod3] = useState();
+    const [collateralMarket3, setCollateralMarket3] = useState();
+
     useEffect(() => {
       wrapper?.getLoanInstance().loan1.on("NewLoan", onLoanRequested);
       wrapper?.getLoanInstance().loan1.on("AddCollateral", onCollateralAdded)
@@ -920,9 +962,17 @@ const HashstackCrypto = props => {
       // })
     });
 
+    const handleBorrowChange3 = (e) => {
+      setCommitBorrowPeriod3(e.target.value)
+    }
+
+    const handleCollateralChange3 = (e) => {
+      setCollateralMarket3(e.target.value)
+    }
+
     const handleBorrow = async () => {
       try {
-        const tx = await wrapper?.getLoanInstance().loanRequest(symbols[props.assetID], comit_ONEMONTH, inputVal1, decimals[props.assetID], symbols[props.assetID], inputVal2, decimals[props.assetID]);
+        const tx = await wrapper?.getLoanInstance().loanRequest(symbols[props.assetID], commitBorrowPeriod3, inputVal1, decimals[props.assetID], collateralMarket3, inputVal2, decimals[props.assetID]);
       } catch (err) {
         console.error("ERROR MESSAGE: ", err.message)
         alert(err.message)
@@ -1002,11 +1052,10 @@ const HashstackCrypto = props => {
                 </div>
                 <div className="row mb-4">
                   <Col sm={12}>
-                    <select className="form-select" placeholder="Borrow Type">
-                      <option>Borrow Type</option>
-                      <option>USDT</option>
-                      <option>USDC</option>
-                      <option>BTC</option>
+                    <select className="form-select" placeholder="Borrow Type" onChange={handleBorrowChange3}>
+                      <option selected disabled>Borrow Type</option>
+                      <option value={comit_NONE}>None</option>
+                      <option value={comit_ONEMONTH}>One Month</option>
                     </select>
                   </Col>
                 </div>
@@ -1015,11 +1064,12 @@ const HashstackCrypto = props => {
                 </div>
                 <div className="row mb-4">
                   <Col sm={12}>
-                    <select className="form-select">
+                    <select className="form-select" onChange={handleCollateralChange3}>
                       <option selected disabled>Collateral market</option>
-                      <option>USDT</option>
-                      <option>USDC</option>
-                      <option>BTC</option>
+                      <option value={symbols[0]}>USDT</option>
+                      <option value={symbols[1]}>USDC</option>
+                      <option value={symbols[2]}>BTC</option>
+                      {/* <option value={}>BNB</option> */}
                     </select>
                   </Col>
                 </div>
@@ -1135,7 +1185,7 @@ const HashstackCrypto = props => {
                                                 className="form-control"
                                                 id="horizontal-password-Input"
                                                 placeholder="Amount"
-                                                onChange={(event) => {inputVal1 = event.target.value}}
+                                                onChange={(event) => { inputVal1 = event.target.value }}
                                               />
                                             </Col>
                                           </div>
@@ -1194,7 +1244,7 @@ const HashstackCrypto = props => {
                                                 className="form-control"
                                                 id="horizontal-password-Input"
                                                 placeholder="Amount"
-                                                onChange={(event) => {inputVal1 = event.target.value}}
+                                                onChange={(event) => { inputVal1 = event.target.value }}
                                               />
                                             </Col>
                                           </div>
@@ -1386,7 +1436,7 @@ const HashstackCrypto = props => {
                                               className="form-control"
                                               id="horizontal-password-Input"
                                               placeholder="Amount"
-                                              onChange={(event) => {inputVal1 = event.target.value}}
+                                              onChange={(event) => { inputVal1 = event.target.value }}
                                             />
                                           </Col>
                                         </div>
@@ -1509,7 +1559,7 @@ const HashstackCrypto = props => {
                                                 className="form-control"
                                                 id="horizontal-password-Input"
                                                 placeholder="Amount"
-                                                onChange={(event) => {inputVal1 = event.target.value}}
+                                                onChange={(event) => { inputVal1 = event.target.value }}
                                               />
                                             </Col>
                                           </div>
@@ -1569,7 +1619,7 @@ const HashstackCrypto = props => {
                                                 className="form-control"
                                                 id="horizontal-password-Input"
                                                 placeholder="Amount"
-                                                onChange={(event) => {inputVal1 = event.target.value}}
+                                                onChange={(event) => { inputVal1 = event.target.value }}
                                               />
                                             </Col>
                                           </div>
@@ -1756,10 +1806,10 @@ const HashstackCrypto = props => {
                               <th scope="col"></th>
                               <th scope="col">
                                 <select className="form-select form-select-sm">
-                                  <option>One Week</option>
-                                  <option>Two weeks</option>
-                                  <option>Four weeks</option>
-                                  <option>Twelve weeks</option>
+                                  <option>None</option>
+                                  <option selected>Two weeks</option>
+                                  <option>One Month</option>
+                                  <option>Three Months</option>
                                 </select>
                               </th>
                               <th scope="col">
@@ -1794,7 +1844,7 @@ const HashstackCrypto = props => {
                                 </div>
                               </th>
                               <td>
-                                <div className="text-muted">$ {"60%"}</div>
+                                <div className="text-muted">{"60%"}</div>
                               </td>
                               <td>
                                 <div className="text-muted">
@@ -1833,16 +1883,16 @@ const HashstackCrypto = props => {
                                 </div>
                               </th>
                               <td>
-                                <div className="text-muted">$ {"60%"}</div>
+                                <div className="text-muted">{"60%"}</div>
                               </td>
                               <td>
                                 <div className="text-muted">
-                                  ${"60%"}
+                                  {"60%"}
                                 </div>
                               </td>
                               <td>
                                 <div className="text-muted">
-                                  ${"0.61"}
+                                  {"0.61"}
                                 </div>
                               </td>
                               <td style={{ width: "120px" }}>
@@ -1872,16 +1922,16 @@ const HashstackCrypto = props => {
                                 </div>
                               </th>
                               <td>
-                                <div className="text-muted">$ {"60%"}</div>
+                                <div className="text-muted">{"60%"}</div>
                               </td>
                               <td>
                                 <div className="text-muted">
-                                  ${"60%"}
+                                  {"60%"}
                                 </div>
                               </td>
                               <td>
                                 <div className="text-muted">
-                                  ${"0.61"}
+                                  {"0.61"}
                                 </div>
                               </td>
                               <td style={{ width: "120px" }}>
