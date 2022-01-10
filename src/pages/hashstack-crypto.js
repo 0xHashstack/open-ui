@@ -512,9 +512,19 @@ const HashstackCrypto = props => {
     )
   }
 
+
+  const handleDeposit = async () => {
+    try {
+      const tx = await wrapper?.getDepositInstance().createDeposit(symbols[0], comit_TWOWEEKS, inputVal1, decimals[0]);
+    } catch (err) {
+      console.error("ERROR MESSAGE: ", err.message)
+      alert(err.message)
+    }
+  }
+
   const handleBorrow = async () => {
     try {
-      const tx = await wrapper?.getLoanInstance().loanRequest(symbols[props.assetID], comit_ONEMONTH, inputVal1, decimals[props.assetID], symbols[props.assetID], inputVal2, decimals[props.assetID]);
+      const tx = await wrapper?.getDepositInstance().withdrawDeposit(symbols[0], comit_TWOWEEKS, inputVal1, decimals[0]);
     } catch (err) {
       console.error("ERROR MESSAGE: ", err.message)
       alert(err.message)
@@ -1499,6 +1509,7 @@ const HashstackCrypto = props => {
                                                 className="form-control"
                                                 id="horizontal-password-Input"
                                                 placeholder="Amount"
+                                                onChange={(event) => {inputVal1 = event.target.value}}
                                               />
                                             </Col>
                                           </div>
@@ -1508,6 +1519,7 @@ const HashstackCrypto = props => {
                                               // type="submit"
                                               color="primary"
                                               className="w-md"
+                                              onClick={handleBorrow}
                                             >
                                               Deposit
                                             </Button>
@@ -1557,6 +1569,7 @@ const HashstackCrypto = props => {
                                                 className="form-control"
                                                 id="horizontal-password-Input"
                                                 placeholder="Amount"
+                                                onChange={(event) => {inputVal1 = event.target.value}}
                                               />
                                             </Col>
                                           </div>
@@ -1566,6 +1579,7 @@ const HashstackCrypto = props => {
                                               // type="submit"
                                               color="primary"
                                               className="w-md"
+                                              onClick={handleDeposit}
                                             >
                                               Withdraw
                                             </Button>
