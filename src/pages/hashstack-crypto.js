@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import MetaTags from "react-meta-tags";
+import axios from "axios";
 import {
   Container,
   Row,
@@ -31,9 +32,8 @@ import { ellipseAddress } from '../util/blockchain';
 import BorrowBalance from "../components/BorrowBalance";
 import DepositBalance from "../components/DepositBalance";
 import { BNtoNum } from '../blockchain/utils';
-import axios from 'axios';
 
-const assets = [
+const assetsMock = [
   {
     assetId: 0,
     assetName: 'USDT.t',
@@ -86,13 +86,8 @@ const assets = [
 
 const HashstackCrypto = props => {
 
-  // useEffect(() => {
-  //   axios.get('http://testnet.hashstack.finance/getLoansByAccount?account=0x9324924723874238423828')
-  //   .then((results) => {
-  //     console.log(results)});
-  // });
-
   const [isMenu, setIsMenu] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [assets, setAssets] = useState([]);
   const [customActiveTab, setcustomActiveTab] = useState("1");
   const [passbookStatus, setPassbookStatus] = useState(false)
@@ -119,6 +114,16 @@ const HashstackCrypto = props => {
 
   const { connect, disconnect, account } = useContext(Web3ModalContext);
   const { web3Wrapper: wrapper } = useContext(Web3WrapperContext);
+
+
+  useEffect(() => {
+    axios.get("./data.json")
+      .then((res) => {
+        setAssets(res.data);
+        setIsLoading(false);
+      })
+      .catch(err => console.log(err));
+  },[assets]);
 
   const toggleMenu = () => {
     setIsMenu(!isMenu);
@@ -1118,6 +1123,77 @@ const HashstackCrypto = props => {
     }
   }
 
+  const PassbookTBody = (props) => {
+    const assets = props.assets;
+    if(props.isloading && assets.length === 0) {
+      return <span>{"Loading..."}</span>
+    } else if(assets.length > 0) {
+      return (
+        <>
+        {assets.map((asset, key) => (
+          <tr key={key}>
+            <th scope="row">
+              <div className="d-flex align-items-center">
+                <div className="avatar-xs me-3">
+                  <span
+                    className={
+                      "avatar-title rounded-circle bg-soft bg-" +
+                      asset.color +
+                      " text-" +
+                      asset.color +
+                      " font-size-18"
+                    }
+                  >
+                    <i className={asset.icon} />
+                  </span>
+                </div>
+                <span>{asset.title}</span>
+              </div>
+            </th>
+            <td>
+              <div className="text-muted">$ {asset.price}</div>
+            </td>
+            <td>
+              <div className="d-flex align-items-center">
+                <div className="avatar-xs me-3">
+                  <span
+                    className={
+                      "avatar-title rounded-circle bg-soft bg-" +
+                      asset.color +
+                      " text-" +
+                      asset.color +
+                      " font-size-18"
+                    }
+                  >
+                    <i className={asset.icon} />
+                  </span>
+                </div>
+                <span>{asset.title}</span>
+              </div>
+            </td>
+            <td>
+              <h5 className="font-size-14 mb-1">
+                {asset.investRate}
+              </h5>
+              <div className="text-muted">
+                ${asset.investPrice}
+              </div>
+            </td>
+            <td>
+              <h5 className="font-size-14 mb-1">
+                {asset.loansRate}
+              </h5>
+              <div className="text-muted">
+                ${asset.loansPrice}
+              </div>
+            </td>
+          </tr>
+        ))}
+        </>
+      );
+    }
+  }
+
   return (
     <React.Fragment>
       <div className="page-content">
@@ -1973,66 +2049,9 @@ const HashstackCrypto = props => {
                                 <th scope="col" colSpan="2">Interest</th>
                               </tr>
                             </thead>
+                            
                             <tbody>
-                              {assets.map((asset, key) => (
-                                <tr key={key}>
-                                  <th scope="row">
-                                    <div className="d-flex align-items-center">
-                                      <div className="avatar-xs me-3">
-                                        <span
-                                          className={
-                                            "avatar-title rounded-circle bg-soft bg-" +
-                                            asset.color +
-                                            " text-" +
-                                            asset.color +
-                                            " font-size-18"
-                                          }
-                                        >
-                                          <i className={asset.icon} />
-                                        </span>
-                                      </div>
-                                      <span>{asset.title}</span>
-                                    </div>
-                                  </th>
-                                  <td>
-                                    <div className="text-muted">$ {asset.price}</div>
-                                  </td>
-                                  <td>
-                                    <div className="d-flex align-items-center">
-                                      <div className="avatar-xs me-3">
-                                        <span
-                                          className={
-                                            "avatar-title rounded-circle bg-soft bg-" +
-                                            asset.color +
-                                            " text-" +
-                                            asset.color +
-                                            " font-size-18"
-                                          }
-                                        >
-                                          <i className={asset.icon} />
-                                        </span>
-                                      </div>
-                                      <span>{asset.title}</span>
-                                    </div>
-                                  </td>
-                                  <td>
-                                    <h5 className="font-size-14 mb-1">
-                                      {asset.investRate}
-                                    </h5>
-                                    <div className="text-muted">
-                                      ${asset.investPrice}
-                                    </div>
-                                  </td>
-                                  <td>
-                                    <h5 className="font-size-14 mb-1">
-                                      {asset.loansRate}
-                                    </h5>
-                                    <div className="text-muted">
-                                      ${asset.loansPrice}
-                                    </div>
-                                  </td>
-                                </tr>
-                              ))}
+                            <PassbookTBody isloading={isLoading} assets={assets}></PassbookTBody>
                             </tbody>
                           </Table>
                         </div>
