@@ -12,7 +12,9 @@ class DepositWrapper {
 
     //send transaction methods
     createDeposit(market: string, commitment: string, amount: number, decimal: number) {
-        return this.deposit.send("createDeposit", {}, market, commitment, NumToBN(amount, decimal));
+        const amountTosent = NumToBN(amount, decimal);
+        console.log(amountTosent);
+        return this.deposit.send("createDeposit", {}, market, commitment, amountTosent);
     }
 
     addToDeposit(market: string, commitment: string, amount: number, decimal: number) {

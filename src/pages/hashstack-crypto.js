@@ -22,12 +22,13 @@ import {
   TabContent,
   TabPane,
   Label,
+  Spinner
 } from "reactstrap";
 import Select from "react-select";
 import classnames from "classnames";
 import { Web3ModalContext } from '../contexts/Web3ModalProvider';
 import { Web3WrapperContext } from '../contexts/Web3WrapperProvider';
-import { markets, symbols, decimals, comit_ONEMONTH, comit_TWOWEEKS, comit_THREEMONTHS, comit_NONE } from '../blockchain/constants';
+import { markets, symbols, decimals, comit_ONEMONTH, comit_TWOWEEKS, comit_THREEMONTHS, comit_NONE, SymbolsMap, DecimalsMap } from '../blockchain/constants';
 import { ellipseAddress } from '../util/blockchain';
 import BorrowBalance from "../components/BorrowBalance";
 import DepositBalance from "../components/DepositBalance";
@@ -106,6 +107,10 @@ const HashstackCrypto = props => {
   const [modal_add_active_deposit, setmodal_add_active_deposit] = useState(false);
   const [modal_withdraw_active_deposit, setmodal_withdraw_active_deposit] = useState(false);
 
+  const [loanOption, setLoanOption] = useState();
+  const [swapOption, setSwapOption] = useState();
+  const [collateralOption, setCollateralOption] = useState();
+
   let inputVal1 = 0;
   let inputVal2 = 0;
 
@@ -117,13 +122,15 @@ const HashstackCrypto = props => {
 
 
   useEffect(() => {
-    axios.get("./data.json")
+    isLoading && axios.get("./data.json")
       .then((res) => {
         setAssets(res.data);
-        setIsLoading(false);
+        setTimeout(() => {
+          setIsLoading(false);
+        },3000);
       })
       .catch(err => console.log(err));
-  },[assets]);
+  },[]);
 
   const toggleMenu = () => {
     setIsMenu(!isMenu);
@@ -560,9 +567,23 @@ const HashstackCrypto = props => {
     console.log(data);
   }
 
+  
+  const handleLoanOptionChange = (e) => {
+    setLoanOption(e.target.value)
+  }
+
+  const handleSwapOptionChange = (e) => {
+    setSwapOption(e.target.value)
+  }
+
+  const handleCollateralOptionChange = (e) => {
+    setCollateralOption(e.target.value)
+  }
+
+
   const handleRepay = async () => {
     try {
-      const tx = await wrapper?.getLoanInstance().repayLoan(symbols[0], comit_ONEMONTH, inputVal1, decimals[0]);
+      const tx = await wrapper?.getLoanInstance().repayLoan(SymbolsMap[loanOption], comit_ONEMONTH, inputVal1, DecimalsMap[loanOption]);
     } catch (err) {
       console.error("ERROR MESSAGE: ", err.message)
       alert(err.message)
@@ -571,7 +592,7 @@ const HashstackCrypto = props => {
 
   const handleWithdrawLoan = async () => {
     try {
-      const tx = await wrapper?.getLoanInstance().pause();
+      const tx = await wrapper?.getLoanInstance().permissibleWithdrawal(SymbolsMap[loanOption], comit_ONEMONTH, SymbolsMap[loanOption], inputVal1, DecimalsMap[loanOption]);
     } catch (err) {
       console.error("ERROR MESSAGE: ", err.message)
       alert(err.message)
@@ -1126,7 +1147,7 @@ const HashstackCrypto = props => {
   const PassbookTBody = (props) => {
     const assets = props.assets;
     if(props.isloading && assets.length === 0) {
-      return <span>{"Loading..."}</span>
+      return (<center><Spinner>Loading...</Spinner></center>)
     } else if(assets.length > 0) {
       return (
         <>
@@ -1194,6 +1215,132 @@ const HashstackCrypto = props => {
     }
   }
 
+  const DashboardTBody = (props) => {
+    if(props.isloading) {
+      return  (<tr align="center"><center><Spinner>Loading...</Spinner></center></tr>)
+    } else {
+      return (<>
+      <tr key={0}>
+      <th scope="row">
+        <div className="d-flex align-items-center">
+          <div className="avatar-xs me-3">
+            <span
+              className={
+                "avatar-title rounded-circle bg-soft bg-" +
+                "info" +
+                " text-" +
+                "info" +
+                " font-size-18"
+              }
+            >
+              <i className={"mdi mdi-litecoin"} />
+            </span>
+          </div>
+          <span>{"USDT"}</span>
+        </div>
+      </th>
+      <td>
+        <div className="text-muted">{"60%"}</div>
+      </td>
+      <td>
+        <div className="text-muted">
+          {"60%"}
+        </div>
+      </td>
+      <td>
+        <div className="text-muted">
+          {"0.61"}
+        </div>
+      </td>
+      <td style={{ width: "120px" }}>
+        <DepositData1 assetID={0} title={'USDT'} />
+      </td>
+      <td style={{ width: "120px" }}>
+        <BorrowData1 assetID={0} title={'USDT'} />
+      </td>
+    </tr>
+    <tr key={1}>
+      <th scope="row">
+        <div className="d-flex align-items-center">
+          <div className="avatar-xs me-3">
+            <span
+              className={
+                "avatar-title rounded-circle bg-soft bg-" +
+                "primary" +
+                " text-" +
+                "primary" +
+                " font-size-18"
+              }
+            >
+              <i className={"mdi mdi-ethereum"} />
+            </span>
+          </div>
+          <span>{"USDC"}</span>
+        </div>
+      </th>
+      <td>
+        <div className="text-muted">{"60%"}</div>
+      </td>
+      <td>
+        <div className="text-muted">
+          {"60%"}
+        </div>
+      </td>
+      <td>
+        <div className="text-muted">
+          {"0.61"}
+        </div>
+      </td>
+      <td style={{ width: "120px" }}>
+        <DepositData2 assetID={1} title={'USDC'} />
+      </td>
+      <td style={{ width: "120px" }}>
+        <BorrowData2 assetID={1} title={'USDC'} />
+      </td>
+    </tr>
+    <tr key={2}>
+      <th scope="row">
+        <div className="d-flex align-items-center">
+          <div className="avatar-xs me-3">
+            <span
+              className={
+                "avatar-title rounded-circle bg-soft bg-" +
+                "warning" +
+                " text-" +
+                "warning" +
+                " font-size-18"
+              }
+            >
+              <i className={"mdi mdi-ethereum"} />
+            </span>
+          </div>
+          <span>{"BTC"}</span>
+        </div>
+      </th>
+      <td>
+        <div className="text-muted">{"60%"}</div>
+      </td>
+      <td>
+        <div className="text-muted">
+          {"60%"}
+        </div>
+      </td>
+      <td>
+        <div className="text-muted">
+          {"0.61"}
+        </div>
+      </td>
+      <td style={{ width: "120px" }}>
+        <DepositData3 assetID={2} title={'BTC'} />
+      </td>
+      <td style={{ width: "120px" }}>
+        <BorrowData3 assetID={2} title={'BTC'} />
+      </td>
+    </tr>
+    </>)
+    }
+  }
+
   return (
     <React.Fragment>
       <div className="page-content">
@@ -1247,10 +1394,10 @@ const HashstackCrypto = props => {
                                         <Form>
                                           <div className="row mb-4">
                                             <Col sm={12}>
-                                              <select className="form-select">
+                                              <select className="form-select" onChange={handleLoanOptionChange}>
                                                 <option selected disabled>Loan market</option>
-                                                <option>BTC</option>
-                                                <option>USDC</option>
+                                                <option value={"BTC"}>BTC</option>
+                                                <option value={"USDC"}>USDC</option>
                                               </select>
                                             </Col>
                                           </div>
@@ -1306,10 +1453,10 @@ const HashstackCrypto = props => {
                                         <Form>
                                           <div className="row mb-4">
                                             <Col sm={12}>
-                                              <select className="form-select">
+                                              <select className="form-select" onChange={handleLoanOptionChange}>
                                                 <option selected disabled>Loan market</option>
-                                                <option>BTC</option>
-                                                <option>USDC</option>
+                                                <option value={"BTC"}>BTC</option>
+                                                <option value={"USDC"}>USDC</option>
                                               </select>
                                             </Col>
                                           </div>
@@ -1371,19 +1518,19 @@ const HashstackCrypto = props => {
                                       <Form>
                                         <div className="row mb-4">
                                           <Col sm={12}>
-                                            <select className="form-select">
-                                              <option selected disabled>Loan market</option>
-                                              <option>BTC</option>
-                                              <option>USDC</option>
-                                            </select>
+                                              <select className="form-select" onChange={handleLoanOptionChange}>
+                                                <option selected disabled>Loan market</option>
+                                                <option value={"BTC"}>BTC</option>
+                                                <option value={"USDC"}>USDC</option>
+                                              </select>
                                           </Col>
                                         </div>
                                         <div className="row mb-4">
                                           <Col sm={12}>
-                                            <select className="form-select">
+                                            <select className="form-select" onChange={handleSwapOptionChange}>
                                               <option selected disabled>Swap Market</option>
-                                              <option>BTC</option>
-                                              <option>USDT</option>
+                                              <option value={"SXP"}>SXP</option>
+                                              <option value={"CAKE"}>CAKE</option>
                                             </select>
                                           </Col>
                                         </div>
@@ -1426,19 +1573,19 @@ const HashstackCrypto = props => {
                                       <Form>
                                         <div className="row mb-4">
                                           <Col sm={12}>
-                                            <select className="form-select">
+                                            <select className="form-select" onChange={handleLoanOptionChange}>
                                               <option selected disabled>Select Loan</option>
-                                              <option>BTC</option>
-                                              <option>USDC</option>
+                                              <option value={"BTC"}>BTC</option>
+                                              <option value={"USDC"}>USDC</option>
                                             </select>
                                           </Col>
                                         </div>
                                         <div className="row mb-4">
                                           <Col sm={12}>
-                                            <select className="form-select">
+                                            <select className="form-select" onChange={handleSwapOptionChange}>
                                               <option selected disabled>Select Market to Swap</option>
-                                              <option>SXP</option>
-                                              <option>CAKE</option>
+                                              <option value={"SXP"}>SXP</option>
+                                              <option value={"CAKE"}>CAKE</option>
                                             </select>
                                           </Col>
                                         </div>
@@ -1489,19 +1636,19 @@ const HashstackCrypto = props => {
                                       <Form>
                                         <div className="row mb-4">
                                           <Col sm={12}>
-                                            <select className="form-select">
+                                            <select className="form-select" onChange={handleLoanOptionChange}>
                                               <option selected disabled>Loan market</option>
-                                              <option>BTC</option>
-                                              <option>USDC</option>
+                                              <option value={"BTC"}>BTC</option>
+                                              <option value={"USDC"}>USDC</option>
                                             </select>
                                           </Col>
                                         </div>
                                         <div className="row mb-4">
                                           <Col sm={12}>
-                                            <select className="form-select">
+                                            <select className="form-select" onChange={handleCollateralOptionChange}>
                                               <option selected disabled>Collateral market</option>
-                                              <option>BTC</option>
-                                              <option>USDT</option>
+                                              <option value={"BTC"}>BTC</option>
+                                              <option value={"USDT"}>USDT</option>
                                             </select>
                                           </Col>
                                         </div>
@@ -1555,10 +1702,10 @@ const HashstackCrypto = props => {
                                       <Form>
                                         <div className="row mb-4">
                                           <Col sm={12}>
-                                            <select className="form-select">
+                                            <select className="form-select" onChange={handleLoanOptionChange}>
                                               <option selected disabled>Loan market</option>
-                                              <option>BTC</option>
-                                              <option>USDC</option>
+                                              <option value={"BTC"}>BTC</option>
+                                              <option value={"USDC"}>USDC</option>
                                             </select>
                                           </Col>
                                         </div>
@@ -1900,123 +2047,7 @@ const HashstackCrypto = props => {
                             </tr>
                           </thead>
                           <tbody>
-                            <tr key={0}>
-                              <th scope="row">
-                                <div className="d-flex align-items-center">
-                                  <div className="avatar-xs me-3">
-                                    <span
-                                      className={
-                                        "avatar-title rounded-circle bg-soft bg-" +
-                                        "info" +
-                                        " text-" +
-                                        "info" +
-                                        " font-size-18"
-                                      }
-                                    >
-                                      <i className={"mdi mdi-litecoin"} />
-                                    </span>
-                                  </div>
-                                  <span>{"USDT"}</span>
-                                </div>
-                              </th>
-                              <td>
-                                <div className="text-muted">{"60%"}</div>
-                              </td>
-                              <td>
-                                <div className="text-muted">
-                                  {"60%"}
-                                </div>
-                              </td>
-                              <td>
-                                <div className="text-muted">
-                                  {"0.61"}
-                                </div>
-                              </td>
-                              <td style={{ width: "120px" }}>
-                                <DepositData1 assetID={0} title={'USDT'} />
-                              </td>
-                              <td style={{ width: "120px" }}>
-                                <BorrowData1 assetID={0} title={'USDT'} />
-                              </td>
-                            </tr>
-                            <tr key={1}>
-                              <th scope="row">
-                                <div className="d-flex align-items-center">
-                                  <div className="avatar-xs me-3">
-                                    <span
-                                      className={
-                                        "avatar-title rounded-circle bg-soft bg-" +
-                                        "primary" +
-                                        " text-" +
-                                        "primary" +
-                                        " font-size-18"
-                                      }
-                                    >
-                                      <i className={"mdi mdi-ethereum"} />
-                                    </span>
-                                  </div>
-                                  <span>{"USDC"}</span>
-                                </div>
-                              </th>
-                              <td>
-                                <div className="text-muted">{"60%"}</div>
-                              </td>
-                              <td>
-                                <div className="text-muted">
-                                  {"60%"}
-                                </div>
-                              </td>
-                              <td>
-                                <div className="text-muted">
-                                  {"0.61"}
-                                </div>
-                              </td>
-                              <td style={{ width: "120px" }}>
-                                <DepositData2 assetID={1} title={'USDC'} />
-                              </td>
-                              <td style={{ width: "120px" }}>
-                                <BorrowData2 assetID={1} title={'USDC'} />
-                              </td>
-                            </tr>
-                            <tr key={2}>
-                              <th scope="row">
-                                <div className="d-flex align-items-center">
-                                  <div className="avatar-xs me-3">
-                                    <span
-                                      className={
-                                        "avatar-title rounded-circle bg-soft bg-" +
-                                        "warning" +
-                                        " text-" +
-                                        "warning" +
-                                        " font-size-18"
-                                      }
-                                    >
-                                      <i className={"mdi mdi-ethereum"} />
-                                    </span>
-                                  </div>
-                                  <span>{"BTC"}</span>
-                                </div>
-                              </th>
-                              <td>
-                                <div className="text-muted">{"60%"}</div>
-                              </td>
-                              <td>
-                                <div className="text-muted">
-                                  {"60%"}
-                                </div>
-                              </td>
-                              <td>
-                                <div className="text-muted">
-                                  {"0.61"}
-                                </div>
-                              </td>
-                              <td style={{ width: "120px" }}>
-                                <DepositData3 assetID={2} title={'BTC'} />
-                              </td>
-                              <td style={{ width: "120px" }}>
-                                <BorrowData3 assetID={2} title={'BTC'} />
-                              </td>
-                            </tr>
+                            <DashboardTBody isloading={isLoading}></DashboardTBody>
                           </tbody>
                         </Table>
                       </div>
