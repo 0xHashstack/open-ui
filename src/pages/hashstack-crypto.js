@@ -1346,8 +1346,8 @@ const HashstackCrypto = props => {
   }
 
   useEffect(() => {
-    wrapper?.getDepositInstance().deposit.on("DepositAdded", onDeposit);
-    wrapper?.getDepositInstance().deposit.on("Withdrawal", onWithdrawal)
+    wrapper?.getDepositInstance().deposit.on("DepositAdded", depositAdded);
+    wrapper?.getDepositInstance().deposit.on("Withdrawal", WithdrawalDeposit)
   }, []);
 
   const [addtoDepositSel, setAddtoDepositSel] = useState();
@@ -1374,8 +1374,14 @@ const HashstackCrypto = props => {
       const tx = await wrapper?.getDepositInstance().addToDeposit(addtoDepositSel, addToDepositVal, inputVal1, decimals[0]);
     } catch (err) {
       console.error("ERROR MESSAGE: ", err.message)
-      alert(err.message)
+      toast.error(`${err.message}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
     }
+  }
+
+  const depositAdded = (data) => {
+    let amount = BNtoNum(Number(data.amount))
+    toast.success(`Deposited Added: ${amount}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
+    console.log(data);
   }
 
   const handleWithdrawDeposit = async () => {
@@ -1383,8 +1389,14 @@ const HashstackCrypto = props => {
       const tx = await wrapper?.getDepositInstance().addToDeposit(withdrawDepositSel, withdrawDepositVal, inputVal1, decimals[0]);
     } catch (err) {
       console.error("ERROR MESSAGE: ", err.message)
-      alert(err.message)
+      toast.error(`${err.message}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
     }
+  }
+
+  const WithdrawalDeposit = (data) => {
+    let amount = BNtoNum(Number(data.amount))
+    toast.success(`Deposited Withdrawn: ${amount}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
+    console.log(data);
   }
 
   return (

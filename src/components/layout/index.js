@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import PropTypes from "prop-types"
+import axios from "axios";
 
 //actions
 import {
@@ -17,9 +18,24 @@ import Navbar from "./Navbar"
 import Header from "./Header"
 import Footer from "./Footer"
 
+import { Web3ModalContext } from "../../contexts/Web3ModalProvider";
+
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+toast.configure()
+
 const Layout = (props) => {
 
   const dispatch = useDispatch()
+
+  const { connect, disconnect, account } = useContext(Web3ModalContext);
+
+  // useEffect(() => {
+  //   axios.get(`https://testapi.hashstack.finance/isWhiteListedAccount?address=${account}`)
+  //     .then(res => { console.log(res) })
+  //     .catch(err => console.log("Error", err))
+  // }, [connect, account])
 
   const {
     topbarTheme, layoutWidth, isPreloader, showRightSidebar
@@ -107,6 +123,7 @@ const Layout = (props) => {
         />
         {/* <Navbar menuOpen={isMenuOpened} /> */}
         <div className="main-content">{props.children}</div>
+        {/* <>{toast.error("Error : You are not permiited to access. Contact Admin", {position: toast.POSITION.TOP_CENTER, autoClose: false, closeOnClick: true, })}</> */}
         <Footer />
       </div>
     </React.Fragment>
