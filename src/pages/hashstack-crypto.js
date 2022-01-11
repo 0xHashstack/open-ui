@@ -607,7 +607,7 @@ const HashstackCrypto = props => {
 
   const handleCollateral = async () => {
     try {
-      const tx = await wrapper?.getLoanInstance().addCollateral(symbols[0], comit_ONEMONTH, symbols[0], inputVal1, decimals[0]);
+      const tx = await wrapper?.getLoanInstance().addCollateral(SymbolsMap[loanOption], comit_ONEMONTH, SymbolsMap[collateralOption], inputVal1, decimals[0]);
     } catch (err) {
       console.error("ERROR MESSAGE: ", err.message)
       alert(err.message)
@@ -616,7 +616,7 @@ const HashstackCrypto = props => {
 
   const handleWithdrawCollateral = async () => {
     try {
-      const tx = await wrapper?.getLoanInstance().withdrawCollateral(symbols[0], comit_ONEMONTH);
+      const tx = await wrapper?.getLoanInstance().withdrawCollateral(SymbolsMap[loanOption], comit_ONEMONTH);
     } catch (err) {
       console.error("ERROR MESSAGE: ", err.message)
       alert(err.message)
@@ -630,9 +630,9 @@ const HashstackCrypto = props => {
   }
 
   const handleSwap = async () => {
-    console.log("Swap ", symbols[0], comit_ONEMONTH, symbols[1]);
+    // console.log("Swap ", symbols[0], comit_ONEMONTH, symbols[1]);
     try {
-      const tx = await wrapper?.getLoanInstance().swapLoan(symbols[0], comit_ONEMONTH, symbols[1]);
+      const tx = await wrapper?.getLoanInstance().swapLoan(SymbolsMap[loanOption], comit_ONEMONTH, SymbolsMap[swapOption]);
     } catch (err) {
       console.error("ERROR MESSAGE: ", err.message)
       alert(err.message)
@@ -640,9 +640,9 @@ const HashstackCrypto = props => {
   }
 
   const handleSwapToLoan = async () => {
-    console.log("Swap ", symbols[props.assetID], comit_ONEMONTH, symbols[swapTo]);
+    // console.log("Swap ", symbols[props.assetID], comit_ONEMONTH, symbols[swapTo]);
     try {
-      const tx = await wrapper?.getLoanInstance().swapToLoan(symbols[0], comit_ONEMONTH, symbols[1]);
+      const tx = await wrapper?.getLoanInstance().swapToLoan(SymbolsMap[swapOption], comit_ONEMONTH, SymbolsMap[loanOption]);
     } catch (err) {
       console.error("ERROR MESSAGE: ", err.message)
       alert(err.message)
