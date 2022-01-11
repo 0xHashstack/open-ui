@@ -31,11 +31,13 @@ const Layout = (props) => {
 
   const { connect, disconnect, account } = useContext(Web3ModalContext);
 
-  // useEffect(() => {
-  //   axios.get(`https://testapi.hashstack.finance/isWhiteListedAccount?address=${account}`)
-  //     .then(res => { console.log(res) })
-  //     .catch(err => console.log("Error", err))
-  // }, [connect, account])
+  useEffect(() => {
+    if(account) {
+    axios.get(`https://testapi.hashstack.finance/isWhiteListedAccount?address=${account}`)
+      .then(res => { console.log(res) })
+      .catch(err => console.log("Error", err))
+    }
+  }, [connect, account])
 
   const {
     topbarTheme, layoutWidth, isPreloader, showRightSidebar
