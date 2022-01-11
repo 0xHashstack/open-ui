@@ -1,8 +1,13 @@
 import {render, screen} from '@testing-library/react';
-import { HashstackCrypto } from './hashstack-crypto';
+import HashstackCrypto from './hashstack-crypto';
 
-fdescribe("HashstackCrypto", () => {
- 
+describe("HashstackCrypto", () => {
+    function noOp() {}
+    if (typeof window.URL.createObjectURL === 'undefined') {
+        Object.defineProperty(window.URL, 'createObjectURL', { value: noOp });
+        console.log('Created custom');
+    }
+    window.Worker = noOp;
    test("renders Component", () => {
     render(<HashstackCrypto/>);
     // expect(screen.getByRole("heading", { name: /location search/i })
