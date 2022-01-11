@@ -11,7 +11,7 @@
     "@portis/web3": "^4.0.6",
     "@solana/wallet-adapter-tokenpocket": "^0.2.0",
     "@testing-library/jest-dom": "^5.15.0",
-    "@testing-library/react": "^11.2.7",
+    "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^12.8.3",
     "@toruslabs/torus-embed": "^1.18.4",
     "@usedapp/core": "^0.6.3",

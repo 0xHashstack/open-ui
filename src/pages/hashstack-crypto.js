@@ -24,70 +24,19 @@ import {
   Label,
   Spinner
 } from "reactstrap";
-import Select from "react-select";
 import classnames from "classnames";
 import { Web3ModalContext } from '../contexts/Web3ModalProvider';
 import { Web3WrapperContext } from '../contexts/Web3WrapperProvider';
 import { markets, symbols, decimals, comit_ONEMONTH, comit_TWOWEEKS, comit_THREEMONTHS, comit_NONE, SymbolsMap, DecimalsMap } from '../blockchain/constants';
-import { ellipseAddress } from '../util/blockchain';
-import BorrowBalance from "../components/BorrowBalance";
-import DepositBalance from "../components/DepositBalance";
+// import { ellipseAddress } from '../util/blockchain';
+// import BorrowBalance from "../components/BorrowBalance";
+// import DepositBalance from "../components/DepositBalance";
 import { BNtoNum } from '../blockchain/utils';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 toast.configure()
 
-const assetsMock = [
-  {
-    assetId: 0,
-    assetName: 'USDT.t',
-    AssetFullname: "USD Tether",
-    APY: 15,
-    icon: "mdi mdi-litecoin",
-    color: "info",
-    title: "USDT",
-    investRate: "0.0682",
-    investPrice: "2936.14",
-    price: "3726.06",
-    loansRate: "0.0234",
-    loansPrice: "523.17",
-    totalRate: "0.0823",
-    totalPrice: "3254.23",
-  },
-  {
-    assetId: 1,
-    assetName: 'USDC.t',
-    AssetFullname: "USD Coin",
-    APY: 18,
-    icon: "mdi mdi-ethereum",
-    color: "primary",
-    title: "USDC",
-    investRate: "0.0814",
-    investPrice: "3256.29",
-    price: "4235.78",
-    loansRate: "0.0253",
-    loansPrice: "675.04",
-    totalRate: "0.0921",
-    totalPrice: "4536.24",
-  },
-  {
-    assetId: 2,
-    assetName: 'BTC.t',
-    AssetFullname: "Bitcoin",
-    APY: 18,
-    icon: "mdi mdi-bitcoin",
-    color: "warning",
-    title: "BTC",
-    investRate: "1.2601",
-    investPrice: "6225.74",
-    price: "7525.47",
-    loansRate: "0.1512",
-    loansPrice: "742.32",
-    totalRate: "4.2562",
-    totalPrice: "6425.42",
-  }
-];
 
 const HashstackCrypto = props => {
 
@@ -118,8 +67,8 @@ const HashstackCrypto = props => {
   let inputVal1 = 0;
   let inputVal2 = 0;
 
-  let swapTo = 0;
-  let swapAmount = 0;
+  // let swapTo = 0;
+  // let swapAmount = 0;
 
   const { connect, disconnect, account } = useContext(Web3ModalContext);
   const { web3Wrapper: wrapper } = useContext(Web3WrapperContext);
@@ -1150,9 +1099,9 @@ const HashstackCrypto = props => {
 
   const PassbookTBody = (props) => {
     const assets = props.assets;
-    if (props.isloading && assets.length === 0) {
-      return (<center><Spinner>Loading...</Spinner></center>)
-    } else if (assets.length > 0) {
+    if(props.isloading && assets.length === 0) {
+      return (<Spinner>Loading...</Spinner>)
+    } else if(assets.length > 0) {
       return (
         <>
           {assets.map((asset, key) => (
