@@ -1,7 +1,7 @@
 import {render, screen} from '@testing-library/react';
 import HashstackCrypto from './hashstack-crypto';
 
-describe("HashstackCrypto", () => {
+describe("HashstackCrypto Component", () => {
     function noOp() {}
     if (typeof window.URL.createObjectURL === 'undefined') {
         Object.defineProperty(window.URL, 'createObjectURL', { value: noOp });
