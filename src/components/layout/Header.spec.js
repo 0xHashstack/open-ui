@@ -1,8 +1,8 @@
 import {render, screen} from '@testing-library/react';
-import { Header } from './Header';
+import Header from './Header';
 
 describe("HashstackCrypto", () => {
-    openMenu = jest.fn(); 
+    const openMenu = jest.fn(); 
     test("renders Component", () => {
         render(<Header theme={"Light"}
         isMenuOpened={false}

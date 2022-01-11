@@ -9,7 +9,7 @@ const Footer = () => {
           <Row>
             <Col md={6}>{new Date().getFullYear()} © Hashstack.</Col>
             <Col md={6}>
-              <div className="text-sm-end d-none d-sm-block">
+              <div className="text-sm-end d-none d-sm-block" data-testid="footer-text">
                 Design & Develop by Hashstack Finance
               </div>
             </Col>
