@@ -33,6 +33,10 @@ import { ellipseAddress } from '../util/blockchain';
 import BorrowBalance from "../components/BorrowBalance";
 import DepositBalance from "../components/DepositBalance";
 import { BNtoNum } from '../blockchain/utils';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+toast.configure()
 
 const assetsMock = [
   {
@@ -127,10 +131,10 @@ const HashstackCrypto = props => {
         setAssets(res.data);
         setTimeout(() => {
           setIsLoading(false);
-        },3000);
+        }, 3000);
       })
       .catch(err => console.log(err));
-  },[]);
+  }, []);
 
   const toggleMenu = () => {
     setIsMenu(!isMenu);
@@ -218,13 +222,13 @@ const HashstackCrypto = props => {
         const tx = await wrapper?.getDepositInstance().createDeposit(symbols[props.assetID], commitPeriod1, inputVal1, decimals[props.assetID]);
       } catch (err) {
         console.error("ERROR MESSAGE: ", err.message)
-        alert(err.message)
+        toast.error(`${err.message}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
       }
     }
 
     const onDeposit = (data) => {
       let amount = BNtoNum(Number(data.amount))
-      alert("Deposited amount: " + amount);
+      toast.success(`Deposited amount: ${amount}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
       console.log(data);
     }
 
@@ -233,13 +237,13 @@ const HashstackCrypto = props => {
         const tx = await wrapper?.getDepositInstance().withdrawDeposit(symbols[props.assetID], comit_TWOWEEKS, inputVal1, 0, decimals[props.assetID]);
       } catch (err) {
         console.error("ERROR MESSAGE: ", err.message)
-        alert(err.message)
+        toast.error(`${err.message}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
       }
     }
 
     const onWithdrawal = (data) => {
       let amount = BNtoNum(Number(data.amount));
-      alert("Withdrawal amount: " + amount);
+      toast.success(`Withdrawal amount:  ${amount}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
       console.log(data);
     }
 
@@ -332,13 +336,13 @@ const HashstackCrypto = props => {
         const tx = await wrapper?.getDepositInstance().createDeposit(symbols[props.assetID], commitPeriod2, inputVal1, decimals[props.assetID]);
       } catch (err) {
         console.error("ERROR MESSAGE: ", err.message)
-        alert(err.message)
+        toast.error(`${err.message}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
       }
     }
 
     const onDeposit = (data) => {
       let amount = BNtoNum(Number(data.amount))
-      alert("Deposited amount: " + amount);
+      toast.success(`Deposited amount: ${amount}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
       console.log(data);
     }
 
@@ -347,13 +351,13 @@ const HashstackCrypto = props => {
         const tx = await wrapper?.getDepositInstance().withdrawDeposit(symbols[props.assetID], comit_TWOWEEKS, inputVal1, 0, decimals[props.assetID]);
       } catch (err) {
         console.error("ERROR MESSAGE: ", err.message)
-        alert(err.message)
+        toast.error(`${err.message}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
       }
     }
 
     const onWithdrawal = (data) => {
       let amount = BNtoNum(Number(data.amount));
-      alert("Withdrawal amount: " + amount);
+      toast.error(`Withdrawal amount: ${amount}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
       console.log(data);
     }
 
@@ -446,13 +450,13 @@ const HashstackCrypto = props => {
         const tx = await wrapper?.getDepositInstance().createDeposit(symbols[props.assetID], commitPeriod3, inputVal1, decimals[props.assetID]);
       } catch (err) {
         console.error("ERROR MESSAGE: ", err.message)
-        alert(err.message)
+        toast.error(`${err.message}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
       }
     }
 
     const onDeposit = (data) => {
       let amount = BNtoNum(Number(data.amount))
-      alert("Deposited amount: " + amount);
+      toast.success(`Deposited amount: ${amount}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
       console.log(data);
     }
 
@@ -461,13 +465,13 @@ const HashstackCrypto = props => {
         const tx = await wrapper?.getDepositInstance().withdrawDeposit(symbols[props.assetID], comit_TWOWEEKS, inputVal1, 0, decimals[props.assetID]);
       } catch (err) {
         console.error("ERROR MESSAGE: ", err.message)
-        alert(err.message)
+        toast.error(`${err.message}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
       }
     }
 
     const onWithdrawal = (data) => {
       let amount = BNtoNum(Number(data.amount));
-      alert("Withdrawal amount: " + amount);
+      toast.success(`Withdrawal amount: ${amount}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
       console.log(data);
     }
 
@@ -567,7 +571,7 @@ const HashstackCrypto = props => {
     console.log(data);
   }
 
-  
+
   const handleLoanOptionChange = (e) => {
     setLoanOption(e.target.value)
   }
@@ -586,7 +590,7 @@ const HashstackCrypto = props => {
       const tx = await wrapper?.getLoanInstance().repayLoan(SymbolsMap[loanOption], comit_ONEMONTH, inputVal1, DecimalsMap[loanOption]);
     } catch (err) {
       console.error("ERROR MESSAGE: ", err.message)
-      alert(err.message)
+      toast.error(`${err.message}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
     }
   }
 
@@ -595,13 +599,13 @@ const HashstackCrypto = props => {
       const tx = await wrapper?.getLoanInstance().permissibleWithdrawal(SymbolsMap[loanOption], comit_ONEMONTH, SymbolsMap[loanOption], inputVal1, DecimalsMap[loanOption]);
     } catch (err) {
       console.error("ERROR MESSAGE: ", err.message)
-      alert(err.message)
+      toast.error(`${err.message}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
     }
   }
 
   const onCollateralReleased = (data) => {
     let amount = BNtoNum(Number(data.amount))
-    alert("Collateral amount released: " + amount);
+    toast.success(`Collateral amount released: ${amount}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
     console.log(data);
   }
 
@@ -610,7 +614,7 @@ const HashstackCrypto = props => {
       const tx = await wrapper?.getLoanInstance().addCollateral(SymbolsMap[loanOption], comit_ONEMONTH, SymbolsMap[collateralOption], inputVal1, decimals[0]);
     } catch (err) {
       console.error("ERROR MESSAGE: ", err.message)
-      alert(err.message)
+      toast.error(`${err.message}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
     }
   }
 
@@ -619,13 +623,13 @@ const HashstackCrypto = props => {
       const tx = await wrapper?.getLoanInstance().withdrawCollateral(SymbolsMap[loanOption], comit_ONEMONTH);
     } catch (err) {
       console.error("ERROR MESSAGE: ", err.message)
-      alert(err.message)
+      toast.error(`${err.message}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
     }
   }
 
   const onCollateralAdded = (data) => {
     let amount = BNtoNum(Number(data.amount))
-    alert("Collateral amount added: " + amount);
+    toast.success(`Collateral amount added: ${amount}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
     console.log(data);
   }
 
@@ -635,7 +639,7 @@ const HashstackCrypto = props => {
       const tx = await wrapper?.getLoanInstance().swapLoan(SymbolsMap[loanOption], comit_ONEMONTH, SymbolsMap[swapOption]);
     } catch (err) {
       console.error("ERROR MESSAGE: ", err.message)
-      alert(err.message)
+      toast.error(`${err.message}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
     }
   }
 
@@ -645,7 +649,7 @@ const HashstackCrypto = props => {
       const tx = await wrapper?.getLoanInstance().swapToLoan(SymbolsMap[swapOption], comit_ONEMONTH, SymbolsMap[loanOption]);
     } catch (err) {
       console.error("ERROR MESSAGE: ", err.message)
-      alert(err.message)
+      toast.error(`${err.message}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
     }
   }
 
@@ -677,13 +681,13 @@ const HashstackCrypto = props => {
         const tx = await wrapper?.getLoanInstance().loanRequest(symbols[props.assetID], commitBorrowPeriod1, inputVal1, decimals[props.assetID], collateralMarket1, inputVal2, decimals[props.assetID]);
       } catch (err) {
         console.error("ERROR MESSAGE: ", err.message)
-        alert(err.message)
+        toast.error(`${err.message}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
       }
     }
 
     const onLoanRequested = (data) => {
       let amount = BNtoNum(Number(data.amount))
-      alert("Requested amount: " + amount);
+      toast.success(`Requested amount: ${amount}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
       console.log(data);
     }
 
@@ -692,13 +696,13 @@ const HashstackCrypto = props => {
         const tx = await wrapper?.getLoanInstance().repayLoan(symbols[props.assetID], comit_ONEMONTH, inputVal1, decimals[props.assetID]);
       } catch (err) {
         console.error("ERROR MESSAGE: ", err.message)
-        alert(err.message)
+        toast.error(`${err.message}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
       }
     }
 
     const onCollateralReleased = (data) => {
       let amount = BNtoNum(Number(data.amount))
-      alert("Collateral amount released: " + amount);
+      toast.success(`Collateral amount released: ${amount}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
       console.log(data);
     }
 
@@ -707,13 +711,13 @@ const HashstackCrypto = props => {
         const tx = await wrapper?.getLoanInstance().addCollateral(symbols[props.assetID], comit_ONEMONTH, symbols[props.assetID], inputVal1, decimals[props.assetID]);
       } catch (err) {
         console.error("ERROR MESSAGE: ", err.message)
-        alert(err.message)
+        toast.error(`${err.message}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
       }
     }
 
     const onCollateralAdded = (data) => {
       let amount = BNtoNum(Number(data.amount))
-      alert("Collateral amount added: " + amount);
+      toast.success(`Collateral amount added: ${amount}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
       console.log(data);
     }
 
@@ -839,13 +843,13 @@ const HashstackCrypto = props => {
         const tx = await wrapper?.getLoanInstance().loanRequest(symbols[props.assetID], commitBorrowPeriod2, inputVal1, decimals[props.assetID], collateralMarket2, inputVal2, decimals[props.assetID]);
       } catch (err) {
         console.error("ERROR MESSAGE: ", err.message)
-        alert(err.message)
+        toast.error(`${err.message}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
       }
     }
 
     const onLoanRequested = (data) => {
       let amount = BNtoNum(Number(data.amount))
-      alert("Requested amount: " + amount);
+      toast.success(`Requested amount: ${amount}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
       console.log(data);
     }
 
@@ -854,13 +858,13 @@ const HashstackCrypto = props => {
         const tx = await wrapper?.getLoanInstance().repayLoan(symbols[props.assetID], comit_ONEMONTH, inputVal1, decimals[props.assetID]);
       } catch (err) {
         console.error("ERROR MESSAGE: ", err.message)
-        alert(err.message)
+        toast.error(`${err.message}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
       }
     }
 
     const onCollateralReleased = (data) => {
       let amount = BNtoNum(Number(data.amount))
-      alert("Collateral amount released: " + amount);
+      toast.success(`Collateral amount released: ${amount}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
       console.log(data);
     }
 
@@ -869,13 +873,13 @@ const HashstackCrypto = props => {
         const tx = await wrapper?.getLoanInstance().addCollateral(symbols[props.assetID], comit_ONEMONTH, symbols[props.assetID], inputVal1, decimals[props.assetID]);
       } catch (err) {
         console.error("ERROR MESSAGE: ", err.message)
-        alert(err.message)
+        toast.error(`${err.message}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
       }
     }
 
     const onCollateralAdded = (data) => {
       let amount = BNtoNum(Number(data.amount))
-      alert("Collateral amount added: " + amount);
+      toast.success(`Collateral amount added: ${amount}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
       console.log(data);
     }
 
@@ -1001,13 +1005,13 @@ const HashstackCrypto = props => {
         const tx = await wrapper?.getLoanInstance().loanRequest(symbols[props.assetID], commitBorrowPeriod3, inputVal1, decimals[props.assetID], collateralMarket3, inputVal2, decimals[props.assetID]);
       } catch (err) {
         console.error("ERROR MESSAGE: ", err.message)
-        alert(err.message)
+        toast.error(`${err.message}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
       }
     }
 
     const onLoanRequested = (data) => {
       let amount = BNtoNum(Number(data.amount))
-      alert("Requested amount: " + amount);
+      toast.success(`Requested amount: ${amount}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
       console.log(data);
     }
 
@@ -1016,13 +1020,13 @@ const HashstackCrypto = props => {
         const tx = await wrapper?.getLoanInstance().repayLoan(symbols[props.assetID], comit_ONEMONTH, inputVal1, decimals[props.assetID]);
       } catch (err) {
         console.error("ERROR MESSAGE: ", err.message)
-        alert(err.message)
+        toast.error(`${err.message}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
       }
     }
 
     const onCollateralReleased = (data) => {
       let amount = BNtoNum(Number(data.amount))
-      alert("Collateral amount released: " + amount);
+      toast.success(`Collateral amount released: ${amount}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
       console.log(data);
     }
 
@@ -1031,13 +1035,13 @@ const HashstackCrypto = props => {
         const tx = await wrapper?.getLoanInstance().addCollateral(symbols[props.assetID], comit_ONEMONTH, symbols[props.assetID], inputVal1, decimals[props.assetID]);
       } catch (err) {
         console.error("ERROR MESSAGE: ", err.message)
-        alert(err.message)
+        toast.error(`${err.message}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
       }
     }
 
     const onCollateralAdded = (data) => {
       let amount = BNtoNum(Number(data.amount))
-      alert("Collateral amount added: " + amount);
+      toast.success(`Collateral amount added: ${amount}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
       console.log(data);
     }
 
@@ -1146,198 +1150,240 @@ const HashstackCrypto = props => {
 
   const PassbookTBody = (props) => {
     const assets = props.assets;
-    if(props.isloading && assets.length === 0) {
+    if (props.isloading && assets.length === 0) {
       return (<center><Spinner>Loading...</Spinner></center>)
-    } else if(assets.length > 0) {
+    } else if (assets.length > 0) {
       return (
         <>
-        {assets.map((asset, key) => (
-          <tr key={key}>
-            <th scope="row">
-              <div className="d-flex align-items-center">
-                <div className="avatar-xs me-3">
-                  <span
-                    className={
-                      "avatar-title rounded-circle bg-soft bg-" +
-                      asset.color +
-                      " text-" +
-                      asset.color +
-                      " font-size-18"
-                    }
-                  >
-                    <i className={asset.icon} />
-                  </span>
+          {assets.map((asset, key) => (
+            <tr key={key}>
+              <th scope="row">
+                <div className="d-flex align-items-center">
+                  <div className="avatar-xs me-3">
+                    <span
+                      className={
+                        "avatar-title rounded-circle bg-soft bg-" +
+                        asset.color +
+                        " text-" +
+                        asset.color +
+                        " font-size-18"
+                      }
+                    >
+                      <i className={asset.icon} />
+                    </span>
+                  </div>
+                  <span>{asset.title}</span>
                 </div>
-                <span>{asset.title}</span>
-              </div>
-            </th>
-            <td>
-              <div className="text-muted">$ {asset.price}</div>
-            </td>
-            <td>
-              <div className="d-flex align-items-center">
-                <div className="avatar-xs me-3">
-                  <span
-                    className={
-                      "avatar-title rounded-circle bg-soft bg-" +
-                      asset.color +
-                      " text-" +
-                      asset.color +
-                      " font-size-18"
-                    }
-                  >
-                    <i className={asset.icon} />
-                  </span>
+              </th>
+              <td>
+                <div className="text-muted">$ {asset.price}</div>
+              </td>
+              <td>
+                <div className="d-flex align-items-center">
+                  <div className="avatar-xs me-3">
+                    <span
+                      className={
+                        "avatar-title rounded-circle bg-soft bg-" +
+                        asset.color +
+                        " text-" +
+                        asset.color +
+                        " font-size-18"
+                      }
+                    >
+                      <i className={asset.icon} />
+                    </span>
+                  </div>
+                  <span>{asset.title}</span>
                 </div>
-                <span>{asset.title}</span>
-              </div>
-            </td>
-            <td>
-              <h5 className="font-size-14 mb-1">
-                {asset.investRate}
-              </h5>
-              <div className="text-muted">
-                ${asset.investPrice}
-              </div>
-            </td>
-            <td>
-              <h5 className="font-size-14 mb-1">
-                {asset.loansRate}
-              </h5>
-              <div className="text-muted">
-                ${asset.loansPrice}
-              </div>
-            </td>
-          </tr>
-        ))}
+              </td>
+              <td>
+                <h5 className="font-size-14 mb-1">
+                  {asset.investRate}
+                </h5>
+                <div className="text-muted">
+                  ${asset.investPrice}
+                </div>
+              </td>
+              <td>
+                <h5 className="font-size-14 mb-1">
+                  {asset.loansRate}
+                </h5>
+                <div className="text-muted">
+                  ${asset.loansPrice}
+                </div>
+              </td>
+            </tr>
+          ))}
         </>
       );
     }
   }
 
   const DashboardTBody = (props) => {
-    if(props.isloading) {
-      return  (<tr align="center"><center><Spinner>Loading...</Spinner></center></tr>)
+    if (props.isloading) {
+      return (<tr align="center"><center><Spinner>Loading...</Spinner></center></tr>)
     } else {
       return (<>
-      <tr key={0}>
-      <th scope="row">
-        <div className="d-flex align-items-center">
-          <div className="avatar-xs me-3">
-            <span
-              className={
-                "avatar-title rounded-circle bg-soft bg-" +
-                "info" +
-                " text-" +
-                "info" +
-                " font-size-18"
-              }
-            >
-              <i className={"mdi mdi-litecoin"} />
-            </span>
-          </div>
-          <span>{"USDT"}</span>
-        </div>
-      </th>
-      <td>
-        <div className="text-muted">{"60%"}</div>
-      </td>
-      <td>
-        <div className="text-muted">
-          {"60%"}
-        </div>
-      </td>
-      <td>
-        <div className="text-muted">
-          {"0.61"}
-        </div>
-      </td>
-      <td style={{ width: "120px" }}>
-        <DepositData1 assetID={0} title={'USDT'} />
-      </td>
-      <td style={{ width: "120px" }}>
-        <BorrowData1 assetID={0} title={'USDT'} />
-      </td>
-    </tr>
-    <tr key={1}>
-      <th scope="row">
-        <div className="d-flex align-items-center">
-          <div className="avatar-xs me-3">
-            <span
-              className={
-                "avatar-title rounded-circle bg-soft bg-" +
-                "primary" +
-                " text-" +
-                "primary" +
-                " font-size-18"
-              }
-            >
-              <i className={"mdi mdi-ethereum"} />
-            </span>
-          </div>
-          <span>{"USDC"}</span>
-        </div>
-      </th>
-      <td>
-        <div className="text-muted">{"60%"}</div>
-      </td>
-      <td>
-        <div className="text-muted">
-          {"60%"}
-        </div>
-      </td>
-      <td>
-        <div className="text-muted">
-          {"0.61"}
-        </div>
-      </td>
-      <td style={{ width: "120px" }}>
-        <DepositData2 assetID={1} title={'USDC'} />
-      </td>
-      <td style={{ width: "120px" }}>
-        <BorrowData2 assetID={1} title={'USDC'} />
-      </td>
-    </tr>
-    <tr key={2}>
-      <th scope="row">
-        <div className="d-flex align-items-center">
-          <div className="avatar-xs me-3">
-            <span
-              className={
-                "avatar-title rounded-circle bg-soft bg-" +
-                "warning" +
-                " text-" +
-                "warning" +
-                " font-size-18"
-              }
-            >
-              <i className={"mdi mdi-ethereum"} />
-            </span>
-          </div>
-          <span>{"BTC"}</span>
-        </div>
-      </th>
-      <td>
-        <div className="text-muted">{"60%"}</div>
-      </td>
-      <td>
-        <div className="text-muted">
-          {"60%"}
-        </div>
-      </td>
-      <td>
-        <div className="text-muted">
-          {"0.61"}
-        </div>
-      </td>
-      <td style={{ width: "120px" }}>
-        <DepositData3 assetID={2} title={'BTC'} />
-      </td>
-      <td style={{ width: "120px" }}>
-        <BorrowData3 assetID={2} title={'BTC'} />
-      </td>
-    </tr>
-    </>)
+        <tr key={0}>
+          <th scope="row">
+            <div className="d-flex align-items-center">
+              <div className="avatar-xs me-3">
+                <span
+                  className={
+                    "avatar-title rounded-circle bg-soft bg-" +
+                    "info" +
+                    " text-" +
+                    "info" +
+                    " font-size-18"
+                  }
+                >
+                  <i className={"mdi mdi-litecoin"} />
+                </span>
+              </div>
+              <span>{"USDT"}</span>
+            </div>
+          </th>
+          <td>
+            <div className="text-muted">{"60%"}</div>
+          </td>
+          <td>
+            <div className="text-muted">
+              {"60%"}
+            </div>
+          </td>
+          <td>
+            <div className="text-muted">
+              {"0.61"}
+            </div>
+          </td>
+          <td style={{ width: "120px" }}>
+            <DepositData1 assetID={0} title={'USDT'} />
+          </td>
+          <td style={{ width: "120px" }}>
+            <BorrowData1 assetID={0} title={'USDT'} />
+          </td>
+        </tr>
+        <tr key={1}>
+          <th scope="row">
+            <div className="d-flex align-items-center">
+              <div className="avatar-xs me-3">
+                <span
+                  className={
+                    "avatar-title rounded-circle bg-soft bg-" +
+                    "primary" +
+                    " text-" +
+                    "primary" +
+                    " font-size-18"
+                  }
+                >
+                  <i className={"mdi mdi-ethereum"} />
+                </span>
+              </div>
+              <span>{"USDC"}</span>
+            </div>
+          </th>
+          <td>
+            <div className="text-muted">{"60%"}</div>
+          </td>
+          <td>
+            <div className="text-muted">
+              {"60%"}
+            </div>
+          </td>
+          <td>
+            <div className="text-muted">
+              {"0.61"}
+            </div>
+          </td>
+          <td style={{ width: "120px" }}>
+            <DepositData2 assetID={1} title={'USDC'} />
+          </td>
+          <td style={{ width: "120px" }}>
+            <BorrowData2 assetID={1} title={'USDC'} />
+          </td>
+        </tr>
+        <tr key={2}>
+          <th scope="row">
+            <div className="d-flex align-items-center">
+              <div className="avatar-xs me-3">
+                <span
+                  className={
+                    "avatar-title rounded-circle bg-soft bg-" +
+                    "warning" +
+                    " text-" +
+                    "warning" +
+                    " font-size-18"
+                  }
+                >
+                  <i className={"mdi mdi-ethereum"} />
+                </span>
+              </div>
+              <span>{"BTC"}</span>
+            </div>
+          </th>
+          <td>
+            <div className="text-muted">{"60%"}</div>
+          </td>
+          <td>
+            <div className="text-muted">
+              {"60%"}
+            </div>
+          </td>
+          <td>
+            <div className="text-muted">
+              {"0.61"}
+            </div>
+          </td>
+          <td style={{ width: "120px" }}>
+            <DepositData3 assetID={2} title={'BTC'} />
+          </td>
+          <td style={{ width: "120px" }}>
+            <BorrowData3 assetID={2} title={'BTC'} />
+          </td>
+        </tr>
+      </>)
+    }
+  }
+
+  useEffect(() => {
+    wrapper?.getDepositInstance().deposit.on("DepositAdded", onDeposit);
+    wrapper?.getDepositInstance().deposit.on("Withdrawal", onWithdrawal)
+  }, []);
+
+  const [addtoDepositSel, setAddtoDepositSel] = useState();
+  const [withdrawDepositSel, setWithdrawDepositSel] = useState();
+  const [addToDepositVal, setAddToDepositVal] = useState();
+  const [withdrawDepositVal, setWithdrawDepositVal] = useState();
+
+  const handleAddToDepositSelect = (e) => {
+    setAddtoDepositSel(e.target.value)
+  }
+  const handleWithdrawDepositSelect = (e) => {
+    setWithdrawDepositSel(e.target.value)
+  }
+
+  const handleAddToDepositTime = (e) => {
+    setAddToDepositVal(e.target.value)
+  }
+  const handleWithdrawDepositTime = (e) => {
+    setWithdrawDepositVal(e.target.value)
+  }
+
+  const handleAddToDeposit = async () => {
+    try {
+      const tx = await wrapper?.getDepositInstance().addToDeposit(addtoDepositSel, addToDepositVal, inputVal1, decimals[0]);
+    } catch (err) {
+      console.error("ERROR MESSAGE: ", err.message)
+      alert(err.message)
+    }
+  }
+
+  const handleWithdrawDeposit = async () => {
+    try {
+      const tx = await wrapper?.getDepositInstance().addToDeposit(withdrawDepositSel, withdrawDepositVal, inputVal1, decimals[0]);
+    } catch (err) {
+      console.error("ERROR MESSAGE: ", err.message)
+      alert(err.message)
     }
   }
 
@@ -1518,11 +1564,11 @@ const HashstackCrypto = props => {
                                       <Form>
                                         <div className="row mb-4">
                                           <Col sm={12}>
-                                              <select className="form-select" onChange={handleLoanOptionChange}>
-                                                <option selected disabled>Loan market</option>
-                                                <option value={"BTC"}>BTC</option>
-                                                <option value={"USDC"}>USDC</option>
-                                              </select>
+                                            <select className="form-select" onChange={handleLoanOptionChange}>
+                                              <option selected disabled>Loan market</option>
+                                              <option value={"BTC"}>BTC</option>
+                                              <option value={"USDC"}>USDC</option>
+                                            </select>
                                           </Col>
                                         </div>
                                         <div className="row mb-4">
@@ -1755,7 +1801,7 @@ const HashstackCrypto = props => {
                                         tog_add_active_deposit();
                                       }}
                                     >
-                                      Add Deposit
+                                      Add to Deposit
                                     </Button>
                                     <Modal
                                       isOpen={modal_add_active_deposit}
@@ -1768,10 +1814,22 @@ const HashstackCrypto = props => {
                                         <Form>
                                           <div className="row mb-4">
                                             <Col sm={12}>
-                                              <select className="form-select">
-                                                <option selected disabled>Deposit market</option>
-                                                <option>BTC</option>
-                                                <option>BTC</option>
+                                              <select className="form-select" onChange={handleAddToDepositSelect}>
+                                                <option selected disabled>Select market</option>
+                                                <option value={symbols[0]}>USDT</option>
+                                                <option value={symbols[1]}>USDC</option>
+                                                <option value={symbols[2]}>BTC</option>
+                                              </select>
+                                            </Col>
+                                          </div>
+                                          <div className="row mb-4">
+                                            <Col sm={12}>
+                                              <select className="form-select" onChange={handleAddToDepositTime}>
+                                                <option selected disabled>Minimum commitment period</option>
+                                                <option value={comit_NONE}>None</option>
+                                                <option value={comit_TWOWEEKS}>Two Weeks</option>
+                                                <option value={comit_ONEMONTH}>One Month</option>
+                                                <option value={comit_THREEMONTHS}>Three Month</option>
                                               </select>
                                             </Col>
                                           </div>
@@ -1792,9 +1850,9 @@ const HashstackCrypto = props => {
                                               // type="submit"
                                               color="primary"
                                               className="w-md"
-                                              onClick={handleBorrow}
+                                              onClick={handleAddToDeposit}
                                             >
-                                              Deposit
+                                              Add to Deposit
                                             </Button>
                                           </div>
                                         </Form>
@@ -1815,7 +1873,7 @@ const HashstackCrypto = props => {
                                         tog_withdraw_active_deposit();
                                       }}
                                     >
-                                      Withdraw
+                                      Withdraw Deposit
                                     </Button>
                                     <Modal
                                       isOpen={modal_withdraw_active_deposit}
@@ -1828,10 +1886,22 @@ const HashstackCrypto = props => {
                                         <Form>
                                           <div className="row mb-4">
                                             <Col sm={12}>
-                                              <select className="form-select">
-                                                <option selected disabled>Deposit market</option>
-                                                <option>BTC</option>
-                                                <option>BTC</option>
+                                              <select className="form-select" onChange={handleWithdrawDepositSelect}>
+                                                <option selected disabled>Select market</option>
+                                                <option value={symbols[0]}>USDT</option>
+                                                <option value={symbols[1]}>USDC</option>
+                                                <option value={symbols[2]}>BTC</option>
+                                              </select>
+                                            </Col>
+                                          </div>
+                                          <div className="row mb-4">
+                                            <Col sm={12}>
+                                              <select className="form-select" onChange={handleWithdrawDepositTime}>
+                                                <option selected disabled>Minimum commitment period</option>
+                                                <option value={comit_NONE}>None</option>
+                                                <option value={comit_TWOWEEKS}>Two Weeks</option>
+                                                <option value={comit_ONEMONTH}>One Month</option>
+                                                <option value={comit_THREEMONTHS}>Three Month</option>
                                               </select>
                                             </Col>
                                           </div>
@@ -1852,9 +1922,9 @@ const HashstackCrypto = props => {
                                               // type="submit"
                                               color="primary"
                                               className="w-md"
-                                              onClick={handleDeposit}
+                                              onClick={handleWithdrawDeposit}
                                             >
-                                              Withdraw
+                                              Withdraw Deposit
                                             </Button>
                                           </div>
                                         </Form>
@@ -2080,9 +2150,9 @@ const HashstackCrypto = props => {
                                 <th scope="col" colSpan="2">Interest</th>
                               </tr>
                             </thead>
-                            
+
                             <tbody>
-                            <PassbookTBody isloading={isLoading} assets={assets}></PassbookTBody>
+                              <PassbookTBody isloading={isLoading} assets={assets}></PassbookTBody>
                             </tbody>
                           </Table>
                         </div>
@@ -2097,7 +2167,6 @@ const HashstackCrypto = props => {
                                 <th scope="col">Deposit Market</th>
                                 <th scope="col">Commitment</th>
                                 <th scope="col">Amount</th>
-                                <th scope="col">Savings Interest</th>
                                 <th scope="col" colSpan="2">Interest earned</th>
                               </tr>
                             </thead>
@@ -2123,16 +2192,13 @@ const HashstackCrypto = props => {
                                     </div>
                                   </th>
                                   <td>
-                                    <div className="text-muted">$ {asset.totalRate} days</div>
+                                    <div className="text-muted">{asset.totalRate} days</div>
                                   </td>
                                   <td>
-                                    <div className="text-muted">$ {asset.totalPrice}</div>
+                                    <div className="text-muted">{asset.totalPrice}</div>
                                   </td>
                                   <td>
-                                    <div className="text-muted">$ {asset.investRate}</div>
-                                  </td>
-                                  <td>
-                                    <div className="text-muted">$ {asset.loansRate} </div>
+                                    <div className="text-muted">{asset.loansRate} </div>
                                   </td>
                                 </tr>
                               ))}
