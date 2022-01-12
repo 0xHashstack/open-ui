@@ -42,13 +42,11 @@ class Contract {
   on(event, callback, onerr) {
     if (this.events[event])
       return;
-    this.contract.events[event]({
-      filter: {
-        address: this.account
-      }
-    },(err, res) => {
+    this.contract.once(event, (err, res) => {
       if (err === null) {
-        callback(res.returnValues, this.tag);
+        if(res.returnValues.account == this.account) {
+          callback(res.returnValues, this.tag);
+        }
       } else {
         if (onerr) onerr(err);
         else console.log(err);
