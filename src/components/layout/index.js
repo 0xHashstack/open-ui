@@ -28,16 +28,21 @@ toast.configure()
 const Layout = (props) => {
 
   const dispatch = useDispatch()
+  const [checkAccess, setCheckAccess] = useState()
 
   const { connect, disconnect, account } = useContext(Web3ModalContext);
 
   useEffect(() => {
-    if(account) {
-    axios.get(`https://testapi.hashstack.finance/isWhiteListedAccount?address=${account}`)
-      .then(res => { console.log(res) })
-      .catch(err => console.log("Error", err))
+    if (account) {
+      axios.get(`https://testapi.hashstack.finance/isWhiteListedAccount?address=${account}`)
+        .then(res => {
+          if (res.data) {
+            setCheckAccess(res.data.isWhiteListed)
+          }
+        })
+        .catch(err => console.log("Error", err))
     }
-  }, [connect, account])
+  }, [account])
 
   const {
     topbarTheme, layoutWidth, isPreloader, showRightSidebar
@@ -124,8 +129,13 @@ const Layout = (props) => {
           openLeftMenuCallBack={openMenu}
         />
         {/* <Navbar menuOpen={isMenuOpened} /> */}
-        <div className="main-content">{props.children}</div>
-        {/* <>{toast.error("Error : You are not permiited to access. Contact Admin", {position: toast.POSITION.TOP_CENTER, autoClose: false, closeOnClick: true, })}</> */}
+        {account !== null && checkAccess === false ?
+          (console.log({ account, connect, checkAccess }),
+            <>{toast.error("Error : You are not permiited to access. Contact Admin", { position: toast.POSITION.TOP_CENTER, autoClose: false, closeOnClick: true, })}</>)
+          :
+          (console.log("Other", { account, checkAccess }),
+            <div className="main-content">{props.children}</div>)
+        }
         <Footer />
       </div>
     </React.Fragment>

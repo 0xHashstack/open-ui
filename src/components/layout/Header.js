@@ -183,7 +183,7 @@ const Header = props => {
                   <h5 style={{ textAlign: "center" }}>Get Token</h5>
                   <hr />
                   <div className="row mb-4">
-                    <Col sm={4}>
+                    <Col sm={3}>
                       <Button
                         className="btn-block btn-lg"
                         color="light"
@@ -193,7 +193,7 @@ const Header = props => {
                         Bitcoin
                       </Button>
                     </Col>
-                    <Col sm={4}>
+                    <Col sm={3}>
                       <Button
                         color="light"
                         className="btn-block btn-lg"
@@ -203,7 +203,7 @@ const Header = props => {
                         USDC
                       </Button>
                     </Col>
-                    <Col sm={4}>
+                    <Col sm={3}>
                       <Button
                         color="light"
                         className="btn-block btn-lg"
@@ -211,6 +211,18 @@ const Header = props => {
                         onClick={handleUSDTToken}
                       >
                         USDT
+                      </Button>
+                    </Col>
+                    <Col sm={3}>
+                      <Button
+                        color="light"
+                        className="btn-block btn-lg"
+                        outline
+                        onClick={() => {
+                          window.open("https://testnet.binance.org/faucet-smart", "_blank")
+                        }}
+                      >
+                        BNB
                       </Button>
                     </Col>
                   </div>

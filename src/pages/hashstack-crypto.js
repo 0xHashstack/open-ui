@@ -168,7 +168,7 @@ const HashstackCrypto = props => {
 
     const handleDeposit = async () => {
       try {
-        const tx = await wrapper?.getDepositInstance().createDeposit(symbols[props.assetID], commitPeriod1, inputVal1, decimals[props.assetID]);
+        const tx = await wrapper?.getDepositInstance().createDeposit(SymbolsMap.USDC, commitPeriod1, inputVal1, DecimalsMap.USDC);
       } catch (err) {
         console.error("ERROR MESSAGE: ", err.message)
         toast.error(`${err.message}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
@@ -233,7 +233,7 @@ const HashstackCrypto = props => {
                 </div>
                 <div className="row mb-4">
                   <Col sm={12}>
-                    <select className="form-select" placeholder="Borrow Type" onChange={handleDepositChange1}>
+                    <select className="form-select" placeholder="Commitment" onChange={handleDepositChange1}>
                       <option selected disabled>Commitment</option>
                       <option value={comit_NONE}>None</option>
                       <option value={comit_TWOWEEKS}>Two Weeks</option>
@@ -282,7 +282,7 @@ const HashstackCrypto = props => {
 
     const handleDeposit = async () => {
       try {
-        const tx = await wrapper?.getDepositInstance().createDeposit(symbols[props.assetID], commitPeriod2, inputVal1, decimals[props.assetID]);
+        const tx = await wrapper?.getDepositInstance().createDeposit(SymbolsMap.USDT, commitPeriod2, inputVal1, DecimalsMap.USDT);
       } catch (err) {
         console.error("ERROR MESSAGE: ", err.message)
         toast.error(`${err.message}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
@@ -347,7 +347,7 @@ const HashstackCrypto = props => {
                 </div>
                 <div className="row mb-4">
                   <Col sm={12}>
-                    <select className="form-select" placeholder="Borrow Type" onChange={handleDepositChange2}>
+                    <select className="form-select" placeholder="Commitment" onChange={handleDepositChange2}>
                       <option selected disabled>Commitment</option>
                       <option value={comit_NONE}>None</option>
                       <option value={comit_TWOWEEKS}>Two Weeks</option>
@@ -396,7 +396,7 @@ const HashstackCrypto = props => {
 
     const handleDeposit = async () => {
       try {
-        const tx = await wrapper?.getDepositInstance().createDeposit(symbols[props.assetID], commitPeriod3, inputVal1, decimals[props.assetID]);
+        const tx = await wrapper?.getDepositInstance().createDeposit(SymbolsMap.BTC, commitPeriod3, inputVal1, DecimalsMap.BTC);
       } catch (err) {
         console.error("ERROR MESSAGE: ", err.message)
         toast.error(`${err.message}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
@@ -461,7 +461,7 @@ const HashstackCrypto = props => {
                 </div>
                 <div className="row mb-4">
                   <Col sm={12}>
-                    <select className="form-select" placeholder="Borrow Type" onChange={handleDepositChange3}>
+                    <select className="form-select" placeholder="Commitment" onChange={handleDepositChange3}>
                       <option selected disabled>Commitment</option>
                       <option value={comit_NONE}>None</option>
                       <option value={comit_TWOWEEKS}>Two Weeks</option>
@@ -707,8 +707,8 @@ const HashstackCrypto = props => {
                 </div>
                 <div className="row mb-4">
                   <Col sm={12}>
-                    <select className="form-select" placeholder="Borrow Type" onChange={handleBorrowChange1}>
-                      <option selected disabled>Borrow Type</option>
+                    <select className="form-select" placeholder="Commitment" onChange={handleBorrowChange1}>
+                      <option selected disabled>Commitment</option>
                       <option value={comit_NONE}>None</option>
                       <option value={comit_ONEMONTH}>One Month</option>
                     </select>
@@ -869,8 +869,8 @@ const HashstackCrypto = props => {
                 </div>
                 <div className="row mb-4">
                   <Col sm={12}>
-                    <select className="form-select" placeholder="Borrow Type" onChange={handleBorrowChange2}>
-                      <option selected disabled>Borrow Type</option>
+                    <select className="form-select" placeholder="Commitment" onChange={handleBorrowChange2}>
+                      <option selected disabled>Commitment</option>
                       <option value={comit_NONE}>None</option>
                       <option value={comit_ONEMONTH}>One Month</option>
                     </select>
@@ -1031,8 +1031,8 @@ const HashstackCrypto = props => {
                 </div>
                 <div className="row mb-4">
                   <Col sm={12}>
-                    <select className="form-select" placeholder="Borrow Type" onChange={handleBorrowChange3}>
-                      <option selected disabled>Borrow Type</option>
+                    <select className="form-select" placeholder="Commitment" onChange={handleBorrowChange3}>
+                      <option selected disabled>Commitment</option>
                       <option value={comit_NONE}>None</option>
                       <option value={comit_ONEMONTH}>One Month</option>
                     </select>
