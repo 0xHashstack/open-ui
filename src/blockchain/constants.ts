@@ -52,6 +52,18 @@ export const latestPrice = [
   '64931.45'
 ]
 
+export const DepositInterestRates = {
+  "NONE": "7.8%",
+  "TWOWEEKS": "10%",
+  "ONEMONTH": "15%",
+  "THREEMONTHS": "18%"
+}
+
+export const BorrowInterestRates = {
+  "NONE": "18%",
+  "ONEMONTH": "15%"
+}
+
 // export const decimals = [18,18,18,8];
 export const decimals = [8,18,18];
 

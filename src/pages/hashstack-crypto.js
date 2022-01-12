@@ -27,10 +27,8 @@ import {
 import classnames from "classnames";
 import { Web3ModalContext } from '../contexts/Web3ModalProvider';
 import { Web3WrapperContext } from '../contexts/Web3WrapperProvider';
-import { markets, symbols, decimals, comit_ONEMONTH, comit_TWOWEEKS, comit_THREEMONTHS, comit_NONE, SymbolsMap, DecimalsMap } from '../blockchain/constants';
-// import { ellipseAddress } from '../util/blockchain';
-// import BorrowBalance from "../components/BorrowBalance";
-// import DepositBalance from "../components/DepositBalance";
+import { markets, symbols, decimals, comit_ONEMONTH, comit_TWOWEEKS, comit_THREEMONTHS, comit_NONE,
+  SymbolsMap, DecimalsMap, DepositInterestRates, BorrowInterestRates } from '../blockchain/constants';
 import { BNtoNum } from '../blockchain/utils';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -63,12 +61,11 @@ const HashstackCrypto = props => {
   const [loanOption, setLoanOption] = useState();
   const [swapOption, setSwapOption] = useState();
   const [collateralOption, setCollateralOption] = useState();
+  const [depositInterestChange, setDepositInterestChange] = useState("NONE");
+  const [borrowInterestChange, setBorrowInterestChange] = useState("NONE");
 
   let inputVal1 = 0;
   let inputVal2 = 0;
-
-  // let swapTo = 0;
-  // let swapAmount = 0;
 
   const { connect, disconnect, account } = useContext(Web3ModalContext);
   const { web3Wrapper: wrapper } = useContext(Web3WrapperContext);
@@ -80,7 +77,7 @@ const HashstackCrypto = props => {
         setAssets(res.data);
         setTimeout(() => {
           setIsLoading(false);
-        }, 3000);
+        }, 2000);
       })
       .catch(err => console.log(err));
   }, []);
@@ -531,6 +528,14 @@ const HashstackCrypto = props => {
 
   const handleCollateralOptionChange = (e) => {
     setCollateralOption(e.target.value)
+  }
+
+  const handleDepositInterestChange = (e) => {
+    setDepositInterestChange(e.target.value);
+  }
+
+  const handleBorrowInterestChange = (e) => {
+    setBorrowInterestChange(e.target.value);
   }
 
 
@@ -1193,11 +1198,11 @@ const HashstackCrypto = props => {
             </div>
           </th>
           <td>
-            <div className="text-muted">{"60%"}</div>
+            <div className="text-muted">{DepositInterestRates[depositInterestChange]}</div>
           </td>
           <td>
             <div className="text-muted">
-              {"60%"}
+              {BorrowInterestRates[borrowInterestChange]}
             </div>
           </td>
           <td>
@@ -1232,11 +1237,11 @@ const HashstackCrypto = props => {
             </div>
           </th>
           <td>
-            <div className="text-muted">{"60%"}</div>
+            <div className="text-muted">{DepositInterestRates[depositInterestChange]}</div>
           </td>
           <td>
             <div className="text-muted">
-              {"60%"}
+              {BorrowInterestRates[borrowInterestChange]}
             </div>
           </td>
           <td>
@@ -1271,11 +1276,11 @@ const HashstackCrypto = props => {
             </div>
           </th>
           <td>
-            <div className="text-muted">{"60%"}</div>
+            <div className="text-muted">{DepositInterestRates[depositInterestChange]}</div>
           </td>
           <td>
             <div className="text-muted">
-              {"60%"}
+              {BorrowInterestRates[borrowInterestChange]}
             </div>
           </td>
           <td>
@@ -2059,17 +2064,17 @@ const HashstackCrypto = props => {
                             <tr>
                               <th scope="col"></th>
                               <th scope="col">
-                                <select className="form-select form-select-sm">
-                                  <option>None</option>
-                                  <option selected>Two weeks</option>
-                                  <option>One Month</option>
-                                  <option>Three Months</option>
+                                <select className="form-select form-select-sm" onChange={handleDepositInterestChange}>
+                                  <option value={"NONE"}>None</option>
+                                  <option value={"TWOWEEKS"}>Two Weeks</option>
+                                  <option value={"ONEMONTH"}>One Month</option>
+                                  <option value={"THREEMONTHS"}>Three Month</option>
                                 </select>
                               </th>
                               <th scope="col">
-                                <select className="form-select form-select-sm">
-                                  <option>One Month</option>
-                                  <option>Two Months</option>
+                                <select className="form-select form-select-sm" onChange={handleBorrowInterestChange}>
+                                    <option value={"NONE"}>None</option>
+                                    <option value={"ONEMONTH"}>One Month</option>
                                 </select>
                               </th>
                               <th scope="col"></th>
