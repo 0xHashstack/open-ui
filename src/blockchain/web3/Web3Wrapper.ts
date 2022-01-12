@@ -18,7 +18,7 @@ export default class Web3Wrapper {
   comptrollerInstance: any;
   liquidatorInstance: any;
   tokenListInstance: any;
-  reserveInstane: any;
+  reserveInstance: any;
   oracleOpenInstance: any;
   tokenDistributorInstance: any;
 
@@ -71,10 +71,10 @@ export default class Web3Wrapper {
   }
 
   getReserveInstance() {
-    if (!this.reserveInstane) {
-      this.reserveInstane = new ReserveWrapper(this.wrapperOptions);;
+    if (!this.reserveInstance) {
+      this.reserveInstance = new ReserveWrapper(this.wrapperOptions);;
     }
-    return this.reserveInstane;
+    return this.reserveInstance;
   }
 
   getOracleOpen() {
