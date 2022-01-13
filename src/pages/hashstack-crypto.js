@@ -790,7 +790,7 @@ const HashstackCrypto = (props) => {
 
     const handleBorrow = async () => {
       try {
-        const tx = await wrapper?.getLoanInstance().loanRequest(symbols[props.assetID], commitBorrowPeriod1, inputVal1, decimals[props.assetID], collateralMarket1, inputVal2, decimals[props.assetID]);
+        const tx = await wrapper?.getLoanInstance().loanRequest(symbols[props.assetID], CommitMap[commitBorrowPeriod1], inputVal1, decimals[props.assetID], collateralMarket1, inputVal2, decimals[props.assetID]);
       } catch (err) {
         console.error("ERROR MESSAGE: ", err.message)
         toast.error(`${err.message}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
@@ -872,8 +872,8 @@ const HashstackCrypto = (props) => {
                   <Col sm={12}>
                     <select className="form-select" placeholder="Commitment" onChange={handleBorrowChange1}>
                       <option selected disabled>Commitment</option>
-                      <option value={comit_NONE}>None</option>
-                      <option value={comit_ONEMONTH}>One Month</option>
+                      <option value={"NONE"}>None</option>
+                      <option value={"ONEMONTH"}>One Month</option>
                     </select>
                   </Col>
                 </div>
@@ -904,7 +904,7 @@ const HashstackCrypto = (props) => {
                 </div>
                 <div className="row mb-4">
                   <Col sm={6}>
-                    <p>Borrow APR <strong>15%</strong></p>
+                    <p>Borrow APR <strong>{BorrowInterestRates[commitBorrowPeriod1] || '15%'}</strong></p>
                   </Col>
                   <Col sm={6}>
                     <p style={{ float: "right" }}>Collateral APY <strong>0%</strong></p>
@@ -952,7 +952,7 @@ const HashstackCrypto = (props) => {
 
     const handleBorrow = async () => {
       try {
-        const tx = await wrapper?.getLoanInstance().loanRequest(symbols[props.assetID], commitBorrowPeriod2, inputVal1, decimals[props.assetID], collateralMarket2, inputVal2, decimals[props.assetID]);
+        const tx = await wrapper?.getLoanInstance().loanRequest(symbols[props.assetID], CommitMap[commitBorrowPeriod2], inputVal1, decimals[props.assetID], collateralMarket2, inputVal2, decimals[props.assetID]);
       } catch (err) {
         console.error("ERROR MESSAGE: ", err.message)
         toast.error(`${err.message}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
@@ -1034,8 +1034,8 @@ const HashstackCrypto = (props) => {
                   <Col sm={12}>
                     <select className="form-select" placeholder="Commitment" onChange={handleBorrowChange2}>
                       <option selected disabled>Commitment</option>
-                      <option value={comit_NONE}>None</option>
-                      <option value={comit_ONEMONTH}>One Month</option>
+                      <option value={"NONE"}>None</option>
+                      <option value={"ONEMONTH"}>One Month</option>
                     </select>
                   </Col>
                 </div>
@@ -1066,7 +1066,7 @@ const HashstackCrypto = (props) => {
                 </div>
                 <div className="row mb-4">
                   <Col sm={6}>
-                    <p>Borrow APR <strong>15%</strong></p>
+                    <p>Borrow APR <strong>{BorrowInterestRates[commitBorrowPeriod2] || '15%'}</strong></p>
                   </Col>
                   <Col sm={6}>
                     <p style={{ float: "right" }}>Collateral APY <strong>0%</strong></p>
@@ -1114,7 +1114,7 @@ const HashstackCrypto = (props) => {
 
     const handleBorrow = async () => {
       try {
-        const tx = await wrapper?.getLoanInstance().loanRequest(symbols[props.assetID], commitBorrowPeriod3, inputVal1, decimals[props.assetID], collateralMarket3, inputVal2, decimals[props.assetID]);
+        const tx = await wrapper?.getLoanInstance().loanRequest(symbols[props.assetID], CommitMap[commitBorrowPeriod3], inputVal1, decimals[props.assetID], collateralMarket3, inputVal2, decimals[props.assetID]);
       } catch (err) {
         console.error("ERROR MESSAGE: ", err.message)
         toast.error(`${err.message}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
@@ -1196,8 +1196,8 @@ const HashstackCrypto = (props) => {
                   <Col sm={12}>
                     <select className="form-select" placeholder="Commitment" onChange={handleBorrowChange3}>
                       <option selected disabled>Commitment</option>
-                      <option value={comit_NONE}>None</option>
-                      <option value={comit_ONEMONTH}>One Month</option>
+                      <option value={"NONE"}>None</option>
+                      <option value={"ONEMONTH"}>One Month</option>
                     </select>
                   </Col>
                 </div>
@@ -1228,7 +1228,7 @@ const HashstackCrypto = (props) => {
                 </div>
                 <div className="row mb-4">
                   <Col sm={6}>
-                    <p>Borrow APR <strong>15%</strong></p>
+                    <p>Borrow APR <strong>{BorrowInterestRates[commitBorrowPeriod3] || '15%'}</strong></p>
                   </Col>
                   <Col sm={6}>
                     <p style={{ float: "right" }}>Collateral APY <strong>0%</strong></p>
@@ -1276,7 +1276,7 @@ const HashstackCrypto = (props) => {
 
     const handleBorrow = async () => {
       try {
-        const tx = await wrapper?.getLoanInstance().loanRequest(symbols[props.assetID], commitBorrowPeriod4, inputVal1, decimals[props.assetID], collateralMarket4, inputVal2, decimals[props.assetID]);
+        const tx = await wrapper?.getLoanInstance().loanRequest(symbols[props.assetID], CommitMap[commitBorrowPeriod4], inputVal1, decimals[props.assetID], collateralMarket4, inputVal2, decimals[props.assetID]);
       } catch (err) {
         console.error("ERROR MESSAGE: ", err.message)
         toast.error(`${err.message}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
@@ -1358,8 +1358,8 @@ const HashstackCrypto = (props) => {
                   <Col sm={12}>
                     <select className="form-select" placeholder="Commitment" onChange={handleBorrowChange4}>
                       <option selected disabled>Commitment</option>
-                      <option value={comit_NONE}>None</option>
-                      <option value={comit_ONEMONTH}>One Month</option>
+                      <option value={"NONE"}>None</option>
+                      <option value={"ONEMONTH"}>One Month</option>
                     </select>
                   </Col>
                 </div>
@@ -1390,7 +1390,7 @@ const HashstackCrypto = (props) => {
                 </div>
                 <div className="row mb-4">
                   <Col sm={6}>
-                    <p>Borrow APR <strong>15%</strong></p>
+                    <p>Borrow APR <strong>{BorrowInterestRates[commitBorrowPeriod4] || '15%'}</strong></p>
                   </Col>
                   <Col sm={6}>
                     <p style={{ float: "right" }}>Collateral APY <strong>0%</strong></p>
@@ -2432,8 +2432,8 @@ const HashstackCrypto = (props) => {
                               </th>
                               <th scope="col">
                                 <select className="form-select form-select-sm" onChange={handleBorrowInterestChange}>
+                                  <option value={"NONE"}>None</option>
                                   <option value={"ONEMONTH"}>One Month</option>
-                                  <option value={"TWOMONTH"}>Two Month</option>
                                 </select>
                               </th>
                               <th scope="col"></th>
