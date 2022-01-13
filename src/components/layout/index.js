@@ -130,11 +130,9 @@ const Layout = (props) => {
         />
         {/* <Navbar menuOpen={isMenuOpened} /> */}
         {account !== null && checkAccess === false ?
-          (console.log({ account, connect, checkAccess }),
-            <>{toast.error("Error : You are not permiited to access. Contact Admin", { position: toast.POSITION.TOP_CENTER, autoClose: false, closeOnClick: true, })}</>)
+          <>{toast.error("Error : You are not permiited to access. Contact Admin", { position: toast.POSITION.TOP_CENTER, autoClose: false, closeOnClick: true, })}</>
           :
-          (console.log("Other", { account, checkAccess }),
-            <div className="main-content">{props.children}</div>)
+          <div className="main-content">{props.children}</div>
         }
         <Footer />
       </div>
