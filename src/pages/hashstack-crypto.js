@@ -2376,7 +2376,8 @@ const HashstackCrypto = (props) => {
                         <span className="d-none d-sm-block">Dashboard</span>
                       </NavLink>
                     </NavItem>
-                    <NavItem>
+                    {account ? (
+                    <><NavItem>
                       <NavLink
                         style={{ cursor: "pointer" }}
                         className={classnames({
@@ -2401,7 +2402,7 @@ const HashstackCrypto = (props) => {
                       >
                         <span className="d-none d-sm-block">Liquidation</span>
                       </NavLink>
-                    </NavItem>
+                    </NavItem></>) : null}
                   </Nav>
 
                   <TabContent
