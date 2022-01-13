@@ -27,10 +27,8 @@ import {
 import classnames from "classnames";
 import { Web3ModalContext } from '../contexts/Web3ModalProvider';
 import { Web3WrapperContext } from '../contexts/Web3WrapperProvider';
-import {
-  markets, symbols, decimals, comit_ONEMONTH, comit_TWOWEEKS, comit_THREEMONTHS, comit_NONE,
-  SymbolsMap, DecimalsMap, DepositInterestRates, BorrowInterestRates
-} from '../blockchain/constants';
+import { markets, symbols, decimals, comit_ONEMONTH, comit_TWOWEEKS, comit_THREEMONTHS, comit_NONE,
+  SymbolsMap, DecimalsMap, DepositInterestRates, BorrowInterestRates, CommitMap } from '../blockchain/constants';
 import { BNtoNum } from '../blockchain/utils';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -170,7 +168,7 @@ const HashstackCrypto = props => {
 
     useEffect(() => {
       wrapper?.getDepositInstance().deposit.on("NewDeposit", onDeposit);
-      wrapper?.getDepositInstance().deposit.on("Withdrawal", onWithdrawal)
+      // wrapper?.getDepositInstance().deposit.on("Withdrawal", onWithdrawal)
     }, []);
 
     const handleDepositChange1 = (e) => {
@@ -179,7 +177,7 @@ const HashstackCrypto = props => {
 
     const handleDeposit = async () => {
       try {
-        const tx = await wrapper?.getDepositInstance().createDeposit(SymbolsMap.USDT, commitPeriod1, inputVal1, DecimalsMap.USDT);
+        const tx = await wrapper?.getDepositInstance().createDeposit(SymbolsMap.USDT, CommitMap[commitPeriod1], inputVal1, DecimalsMap.USDT);
       } catch (err) {
         console.error("ERROR MESSAGE: ", err.message)
         toast.error(`${err.message}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
@@ -192,20 +190,20 @@ const HashstackCrypto = props => {
       console.log(data);
     }
 
-    const handleWithdraw = async () => {
-      try {
-        const tx = await wrapper?.getDepositInstance().withdrawDeposit(symbols[props.assetID], comit_TWOWEEKS, inputVal1, 0, decimals[props.assetID]);
-      } catch (err) {
-        console.error("ERROR MESSAGE: ", err.message)
-        toast.error(`${err.message}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
-      }
-    }
+    // const handleWithdraw = async () => {
+    //   try {
+    //     const tx = await wrapper?.getDepositInstance().withdrawDeposit(symbols[props.assetID], comit_TWOWEEKS, inputVal1, 0, decimals[props.assetID]);
+    //   } catch (err) {
+    //     console.error("ERROR MESSAGE: ", err.message)
+    //     toast.error(`${err.message}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
+    //   }
+    // }
 
-    const onWithdrawal = (data) => {
-      let amount = BNtoNum(Number(data.amount));
-      toast.success(`Withdrawal amount:  ${amount}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
-      console.log(data);
-    }
+    // const onWithdrawal = (data) => {
+    //   let amount = BNtoNum(Number(data.amount));
+    //   toast.success(`Withdrawal amount:  ${amount}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
+    //   console.log(data);
+    // }
 
     return (
       <>
@@ -246,19 +244,19 @@ const HashstackCrypto = props => {
                   <Col sm={12}>
                     <select className="form-select" placeholder="Commitment" onChange={handleDepositChange1}>
                       <option selected disabled>Commitment</option>
-                      <option value={comit_NONE}>None</option>
-                      <option value={comit_TWOWEEKS}>Two Weeks</option>
-                      <option value={comit_ONEMONTH}>One Month</option>
-                      <option value={comit_THREEMONTHS}>Three Months</option>
+                      <option value={"NONE"}>None</option>
+                      <option value={"TWOWEEKS"}>Two Weeks</option>
+                      <option value={"ONEMONTH"}>One Month</option>
+                      <option value={"THREEMONTHS"}>Three Months</option>
                     </select>
                   </Col>
                 </div>
                 <div className="row mb-4">
                   <Col sm={6}>
-                    <p>fixed APY <strong>15%</strong></p>
+                    <p>Fixed APY <strong>{DepositInterestRates[commitPeriod1] || "7.8%"}</strong></p>
                   </Col>
                   <Col sm={6}>
-                    <p style={{ float: "right" }}>fixed APY <strong>15%</strong></p>
+                    <p style={{ float: "right" }}>Fixed APY <strong>{DepositInterestRates[commitPeriod1] || "7.8%"}</strong></p>
                   </Col>
                 </div>
                 <div className="d-grid gap-2">
@@ -293,7 +291,7 @@ const HashstackCrypto = props => {
 
     const handleDeposit = async () => {
       try {
-        const tx = await wrapper?.getDepositInstance().createDeposit(SymbolsMap.USDC, commitPeriod2, inputVal1, DecimalsMap.USDC);
+        const tx = await wrapper?.getDepositInstance().createDeposit(SymbolsMap.USDC, CommitMap[commitPeriod2], inputVal1, DecimalsMap.USDC);
       } catch (err) {
         console.error("ERROR MESSAGE: ", err.message)
         toast.error(`${err.message}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
@@ -360,19 +358,19 @@ const HashstackCrypto = props => {
                   <Col sm={12}>
                     <select className="form-select" placeholder="Commitment" onChange={handleDepositChange2}>
                       <option selected disabled>Commitment</option>
-                      <option value={comit_NONE}>None</option>
-                      <option value={comit_TWOWEEKS}>Two Weeks</option>
-                      <option value={comit_ONEMONTH}>One Month</option>
-                      <option value={comit_THREEMONTHS}>Three Months</option>
+                      <option value={"NONE"}>None</option>
+                      <option value={"TWOWEEKS"}>Two Weeks</option>
+                      <option value={"ONEMONTH"}>One Month</option>
+                      <option value={"THREEMONTHS"}>Three Months</option>
                     </select>
                   </Col>
                 </div>
                 <div className="row mb-4">
                   <Col sm={6}>
-                    <p>fixed APY <strong>15%</strong></p>
+                    <p>Fixed APY <strong>{DepositInterestRates[commitPeriod2] || "7.8%"}</strong></p>
                   </Col>
                   <Col sm={6}>
-                    <p style={{ float: "right" }}>fixed APY <strong>15%</strong></p>
+                    <p style={{ float: "right" }}>Fixed APY <strong>{DepositInterestRates[commitPeriod2] || "7.8%"}</strong></p>
                   </Col>
                 </div>
                 <div className="d-grid gap-2">
@@ -407,7 +405,7 @@ const HashstackCrypto = props => {
 
     const handleDeposit = async () => {
       try {
-        const tx = await wrapper?.getDepositInstance().createDeposit(SymbolsMap.BTC, commitPeriod3, inputVal1, DecimalsMap.BTC);
+        const tx = await wrapper?.getDepositInstance().createDeposit(SymbolsMap.BTC, CommitMap[commitPeriod3], inputVal1, DecimalsMap.BTC);
       } catch (err) {
         console.error("ERROR MESSAGE: ", err.message)
         toast.error(`${err.message}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
@@ -474,19 +472,19 @@ const HashstackCrypto = props => {
                   <Col sm={12}>
                     <select className="form-select" placeholder="Commitment" onChange={handleDepositChange3}>
                       <option selected disabled>Commitment</option>
-                      <option value={comit_NONE}>None</option>
-                      <option value={comit_TWOWEEKS}>Two Weeks</option>
-                      <option value={comit_ONEMONTH}>One Month</option>
-                      <option value={comit_THREEMONTHS}>Three Months</option>
+                      <option value={"NONE"}>None</option>
+                      <option value={"TWOWEEKS"}>Two Weeks</option>
+                      <option value={"ONEMONTH"}>One Month</option>
+                      <option value={"THREEMONTHS"}>Three Months</option>
                     </select>
                   </Col>
                 </div>
                 <div className="row mb-4">
                   <Col sm={6}>
-                    <p>fixed APY <strong>15%</strong></p>
+                    <p>Fixed APY <strong>{DepositInterestRates[commitPeriod3] || "7.8%"}</strong></p>
                   </Col>
                   <Col sm={6}>
-                    <p style={{ float: "right" }}>fixed APY <strong>15%</strong></p>
+                    <p style={{ float: "right" }}>Fixed APY <strong>{DepositInterestRates[commitPeriod3] || "7.8%"}</strong></p>
                   </Col>
                 </div>
                 <div className="d-grid gap-2">
@@ -1187,7 +1185,7 @@ const HashstackCrypto = props => {
     }
   }
 
-  const DashboardTBody = (props) => {
+  const DashboardTBody = (props) => { 
     if (props.isloading) {
       return (<tr align="center"><center><Spinner>Loading...</Spinner></center></tr>)
     } else {
