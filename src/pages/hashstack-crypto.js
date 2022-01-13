@@ -1526,11 +1526,6 @@ const HashstackCrypto = (props) => {
               {BorrowInterestRates[borrowInterestChange]}
             </div>
           </td>
-          <td>
-            <div className="text-muted">
-              {"0.61"}
-            </div>
-          </td>
           <td style={{ width: "120px" }}>
             <DepositData1 assetID={0} title={'USDT'} />
           </td>
@@ -1563,11 +1558,6 @@ const HashstackCrypto = (props) => {
           <td>
             <div className="text-muted">
               {BorrowInterestRates[borrowInterestChange]}
-            </div>
-          </td>
-          <td>
-            <div className="text-muted">
-              {"0.61"}
             </div>
           </td>
           <td style={{ width: "120px" }}>
@@ -1604,11 +1594,6 @@ const HashstackCrypto = (props) => {
               {BorrowInterestRates[borrowInterestChange]}
             </div>
           </td>
-          <td>
-            <div className="text-muted">
-              {"0.61"}
-            </div>
-          </td>
           <td style={{ width: "120px" }}>
             <DepositData3 assetID={2} title={'BTC'} />
           </td>
@@ -1641,11 +1626,6 @@ const HashstackCrypto = (props) => {
           <td>
             <div className="text-muted">
               {BorrowInterestRates[borrowInterestChange]}
-            </div>
-          </td>
-          <td>
-            <div className="text-muted">
-              {"0.61"}
             </div>
           </td>
           <td style={{ width: "120px" }}>
@@ -2419,7 +2399,6 @@ const HashstackCrypto = (props) => {
                               <th scope="col">Markets</th>
                               <th scope="col">Savings interest</th>
                               <th scope="col">Borrow interest</th>
-                              <th scope="col">D2D</th>
                               <th scope="col">Deposit</th>
                               <th scope="col" colSpan="2">Borrow</th>
                             </tr>
