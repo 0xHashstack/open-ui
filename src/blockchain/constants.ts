@@ -62,6 +62,13 @@ export const DepositInterestRates = {
   "THREEMONTHS": "18%"
 }
 
+export const VariableDepositInterestRates = {
+  "NONE": "0%",
+  "TWOWEEKS": "Upto 2.1%",
+  "ONEMONTH": "Upto 3.6%",
+  "THREEMONTHS": "Upto 6%"
+}
+
 export const BorrowInterestRates = {
   "NONE": "18%",
   "ONEMONTH": "15%"

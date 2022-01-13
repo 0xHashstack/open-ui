@@ -29,7 +29,7 @@ import { Web3ModalContext } from '../contexts/Web3ModalProvider';
 import { Web3WrapperContext } from '../contexts/Web3WrapperProvider';
 import {
   markets, symbols, decimals, comit_ONEMONTH, comit_TWOWEEKS, comit_THREEMONTHS, comit_NONE,
-  SymbolsMap, DecimalsMap, DepositInterestRates, BorrowInterestRates, CommitMap
+  SymbolsMap, DecimalsMap, DepositInterestRates, BorrowInterestRates, CommitMap, VariableDepositInterestRates
 } from '../blockchain/constants';
 import { BNtoNum } from '../blockchain/utils';
 import { toast } from 'react-toastify';
@@ -289,7 +289,7 @@ const HashstackCrypto = (props) => {
                     <p>Fixed APY <strong>{DepositInterestRates[commitPeriod1] || "7.8%"}</strong></p>
                   </Col>
                   <Col sm={6}>
-                    <p style={{ float: "right" }}>Fixed APY <strong>{DepositInterestRates[commitPeriod1] || "7.8%"}</strong></p>
+                    <p style={{ float: "right" }}>Variable APY <strong>{VariableDepositInterestRates[commitPeriod1] || "0%"}</strong></p>
                   </Col>
                 </div>
                 <div className="d-grid gap-2">
@@ -403,7 +403,7 @@ const HashstackCrypto = (props) => {
                     <p>Fixed APY <strong>{DepositInterestRates[commitPeriod2] || "7.8%"}</strong></p>
                   </Col>
                   <Col sm={6}>
-                    <p style={{ float: "right" }}>Fixed APY <strong>{DepositInterestRates[commitPeriod2] || "7.8%"}</strong></p>
+                    <p style={{ float: "right" }}>Variable APY <strong>{VariableDepositInterestRates[commitPeriod2] || "0%"}</strong></p>
                   </Col>
                 </div>
                 <div className="d-grid gap-2">
@@ -517,7 +517,7 @@ const HashstackCrypto = (props) => {
                     <p>Fixed APY <strong>{DepositInterestRates[commitPeriod3] || "7.8%"}</strong></p>
                   </Col>
                   <Col sm={6}>
-                    <p style={{ float: "right" }}>Fixed APY <strong>{DepositInterestRates[commitPeriod3] || "7.8%"}</strong></p>
+                    <p style={{ float: "right" }}>Variable APY <strong>{VariableDepositInterestRates[commitPeriod3] || "0%"}</strong></p>
                   </Col>
                 </div>
                 <div className="d-grid gap-2">
@@ -631,7 +631,7 @@ const HashstackCrypto = (props) => {
                     <p>Fixed APY <strong>{DepositInterestRates[commitPeriod4] || "7.8%"}</strong></p>
                   </Col>
                   <Col sm={6}>
-                    <p style={{ float: "right" }}>Fixed APY <strong>{DepositInterestRates[commitPeriod4] || "7.8%"}</strong></p>
+                    <p style={{ float: "right" }}>Variable APY <strong>{VariableDepositInterestRates[commitPeriod4] || "0%"}</strong></p>
                   </Col>
                 </div>
                 <div className="d-grid gap-2">
