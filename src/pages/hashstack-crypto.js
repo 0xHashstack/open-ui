@@ -139,7 +139,7 @@ const HashstackCrypto = props => {
   }
 
   function tog_borrow4() {
-    setmodal_borrow4(!modal_borrow3);
+    setmodal_borrow4(!modal_borrow4);
     removeBodyCss();
   }
 
@@ -1313,7 +1313,7 @@ const HashstackCrypto = props => {
           Borrow
         </button>
         <Modal
-          isOpen={modal_borrow3}
+          isOpen={modal_borrow4}
           toggle={() => {
             tog_borrow4();
           }}
