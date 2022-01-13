@@ -87,8 +87,7 @@ const HashstackCrypto = (props) => {
         }, 2000);
       })
       .catch(err => console.log(err));
-
-      axios({
+      account && axios({
         method: 'get',
         url: `getLoansByAccount?account=${account}`,
         withCredentials: false
@@ -99,10 +98,10 @@ const HashstackCrypto = (props) => {
         .catch(err => {
           console.log(err)
       })
-  }, []);
+  }, [account]);
 
   useEffect(() => {
-    axios({
+    account && axios({
       method: 'get',
       url: `getDepositsByAccount?account=${account}`,
       withCredentials: false
@@ -114,7 +113,7 @@ const HashstackCrypto = (props) => {
         console.log(err)
       })
 
-  }, [])
+  }, [account])
 
   const toggleMenu = () => {
     setIsMenu(!isMenu);

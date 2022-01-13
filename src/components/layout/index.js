@@ -28,7 +28,7 @@ toast.configure()
 const Layout = (props) => {
 
   const dispatch = useDispatch()
-  const [checkAccess, setCheckAccess] = useState()
+  const [checkAccess, setCheckAccess] = useState(true)
 
   const { connect, disconnect, account } = useContext(Web3ModalContext);
 
@@ -129,8 +129,8 @@ const Layout = (props) => {
           openLeftMenuCallBack={openMenu}
         />
         {/* <Navbar menuOpen={isMenuOpened} /> */}
-        {account !== null && checkAccess ?
-          <>{toast.error("Error : You are not permiited to access. Contact Admin", { position: toast.POSITION.TOP_CENTER, autoClose: false, closeOnClick: true, })}</>
+        {account !== null && !checkAccess ?
+          <>{toast.error(`Error : You are not permiited to access. Contact Admin.`, { position: toast.POSITION.TOP_CENTER, autoClose: false, closeOnClick: true, })}</>
           :
           <div className="main-content">{props.children}</div>
         }
