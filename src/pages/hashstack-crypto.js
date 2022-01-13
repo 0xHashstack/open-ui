@@ -88,7 +88,7 @@ const HashstackCrypto = (props) => {
 
       axios({
         method: 'get',
-        url: `https://testapi.hashstack.finance/getLoansByAccount?account=0xAcfefBF5558Bfd53076575B3b315E379AFb05260`,
+        url: `getLoansByAccount?account=0xAcfefBF5558Bfd53076575B3b315E379AFb05260`,
         withCredentials: false
       }).then(res => {
           console.log(res.data)
@@ -102,7 +102,7 @@ const HashstackCrypto = (props) => {
   useEffect(() => {
     axios({
       method: 'get',
-      url: `https://testapi.hashstack.finance/getDepositsByAccount?account=0xAcfefBF5558Bfd53076575B3b315E379AFb05260`,
+      url: `getDepositsByAccount?account=0xAcfefBF5558Bfd53076575B3b315E379AFb05260`,
       withCredentials: false
     }).then(res => {
         console.log(res.data)
@@ -111,6 +111,7 @@ const HashstackCrypto = (props) => {
       .catch(err => {
         console.log(err)
       })
+
   }, [])
 
   const toggleMenu = () => {
