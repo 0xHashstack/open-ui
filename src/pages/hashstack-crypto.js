@@ -27,8 +27,10 @@ import {
 import classnames from "classnames";
 import { Web3ModalContext } from '../contexts/Web3ModalProvider';
 import { Web3WrapperContext } from '../contexts/Web3WrapperProvider';
-import { markets, symbols, decimals, comit_ONEMONTH, comit_TWOWEEKS, comit_THREEMONTHS, comit_NONE,
-  SymbolsMap, DecimalsMap, DepositInterestRates, BorrowInterestRates, CommitMap } from '../blockchain/constants';
+import {
+  markets, symbols, decimals, comit_ONEMONTH, comit_TWOWEEKS, comit_THREEMONTHS, comit_NONE,
+  SymbolsMap, DecimalsMap, DepositInterestRates, BorrowInterestRates, CommitMap
+} from '../blockchain/constants';
 import { BNtoNum } from '../blockchain/utils';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -88,7 +90,7 @@ const HashstackCrypto = (props) => {
 
       axios({
         method: 'get',
-        url: `getLoansByAccount?account=0xAcfefBF5558Bfd53076575B3b315E379AFb05260`,
+        url: `getLoansByAccount?account=${account}`,
         withCredentials: false
       }).then(res => {
           console.log(res.data)
@@ -102,7 +104,7 @@ const HashstackCrypto = (props) => {
   useEffect(() => {
     axios({
       method: 'get',
-      url: `getDepositsByAccount?account=0xAcfefBF5558Bfd53076575B3b315E379AFb05260`,
+      url: `getDepositsByAccount?account=${account}`,
       withCredentials: false
     }).then(res => {
         console.log(res.data)
@@ -1493,7 +1495,7 @@ const HashstackCrypto = (props) => {
     }
   }
 
-  const DashboardTBody = (props) => { 
+  const DashboardTBody = (props) => {
     if (props.isloading) {
       return (<tr align="center"><center><Spinner>Loading...</Spinner></center></tr>)
     } else {
@@ -2141,9 +2143,9 @@ const HashstackCrypto = (props) => {
                                             <Col sm={12}>
                                               <select className="form-select" onChange={handleAddToDepositSelect}>
                                                 <option selected disabled>Select market</option>
-                                                <option value={symbols[0]}>USDT</option>
-                                                <option value={symbols[1]}>USDC</option>
-                                                <option value={symbols[2]}>BTC</option>
+                                                {activeDepositsData.map((asset, key) => {
+                                                  return <option key={key} value={asset.market}>{asset.market}</option>
+                                                })}
                                               </select>
                                             </Col>
                                           </div>
@@ -2151,10 +2153,11 @@ const HashstackCrypto = (props) => {
                                             <Col sm={12}>
                                               <select className="form-select" onChange={handleAddToDepositTime}>
                                                 <option selected disabled>Minimum commitment period</option>
-                                                <option value={comit_NONE}>None</option>
-                                                <option value={comit_TWOWEEKS}>Two Weeks</option>
-                                                <option value={comit_ONEMONTH}>One Month</option>
-                                                <option value={comit_THREEMONTHS}>Three Month</option>
+                                                {activeDepositsData.map((asset, key) => {
+                                                  if (asset.market === addtoDepositSel) {
+                                                    return <option key={key} value={asset.commitment}>{asset.commitment}</option>
+                                                  }
+                                                })}
                                               </select>
                                             </Col>
                                           </div>
@@ -2213,9 +2216,9 @@ const HashstackCrypto = (props) => {
                                             <Col sm={12}>
                                               <select className="form-select" onChange={handleWithdrawDepositSelect}>
                                                 <option selected disabled>Select market</option>
-                                                <option value={symbols[0]}>USDT</option>
-                                                <option value={symbols[1]}>USDC</option>
-                                                <option value={symbols[2]}>BTC</option>
+                                                {activeDepositsData.map((asset, key) => {
+                                                  return <option key={key} value={asset.market}>{asset.market}</option>
+                                                })}
                                               </select>
                                             </Col>
                                           </div>
@@ -2223,10 +2226,11 @@ const HashstackCrypto = (props) => {
                                             <Col sm={12}>
                                               <select className="form-select" onChange={handleWithdrawDepositTime}>
                                                 <option selected disabled>Minimum commitment period</option>
-                                                <option value={comit_NONE}>None</option>
-                                                <option value={comit_TWOWEEKS}>Two Weeks</option>
-                                                <option value={comit_ONEMONTH}>One Month</option>
-                                                <option value={comit_THREEMONTHS}>Three Month</option>
+                                                {activeDepositsData.map((asset, key) => {
+                                                  if (asset.market === withdrawDepositSel) {
+                                                    return <option key={key} value={asset.commitment}>{asset.commitment}</option>
+                                                  }
+                                                })}
                                               </select>
                                             </Col>
                                           </div>
@@ -2523,7 +2527,7 @@ const HashstackCrypto = (props) => {
                                     <div className="text-muted">{asset.amount}</div>
                                   </td>
                                   <td>
-                                    <div className="text-muted">{asset.acquiredYield} </div>
+                                    <div className="text-muted">{asset.acquiredYield}</div>
                                   </td>
                                 </tr>
                               ))}
