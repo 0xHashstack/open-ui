@@ -165,6 +165,7 @@ const Header = props => {
               outline
               className="btn-outline"
               style={{ float: "right" }}
+              disabled={account === null}
               onClick={() => {
                 tog_token();
               }}
