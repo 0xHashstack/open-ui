@@ -46,9 +46,11 @@ const HashstackCrypto = props => {
   const [modal_deposit1, setmodal_deposit1] = useState(false);
   const [modal_deposit2, setmodal_deposit2] = useState(false);
   const [modal_deposit3, setmodal_deposit3] = useState(false);
+  const [modal_deposit4, setmodal_deposit4] = useState(false);
   const [modal_borrow1, setmodal_borrow1] = useState(false);
   const [modal_borrow2, setmodal_borrow2] = useState(false);
   const [modal_borrow3, setmodal_borrow3] = useState(false);
+  const [modal_borrow4, setmodal_borrow4] = useState(false);
   const [modal_repay_loan, setmodal_repay_loan] = useState(false);
   const [modal_withdraw_loan, setmodal_withdraw_loan] = useState(false);
   const [modal_swap_loan, setmodal_swap_loan] = useState(false);
@@ -105,6 +107,12 @@ const HashstackCrypto = props => {
     setmodal_deposit3(!modal_deposit3);
     removeBodyCss();
   }
+
+  function tog_center4() {
+    setmodal_deposit4(!modal_deposit4);
+    removeBodyCss();
+  }
+
   function tog_borrow1() {
     setmodal_borrow1(!modal_borrow1);
     removeBodyCss();
@@ -117,6 +125,12 @@ const HashstackCrypto = props => {
     setmodal_borrow3(!modal_borrow3);
     removeBodyCss();
   }
+
+  function tog_borrow4() {
+    setmodal_borrow4(!modal_borrow3);
+    removeBodyCss();
+  }
+
   function tog_repay_loan() {
     setmodal_repay_loan(!modal_repay_loan);
     removeBodyCss();
@@ -473,6 +487,120 @@ const HashstackCrypto = props => {
                   </Col>
                   <Col sm={6}>
                     <p style={{ float: "right" }}>Fixed APY <strong>{DepositInterestRates[commitPeriod3] || "7.8%"}</strong></p>
+                  </Col>
+                </div>
+                <div className="d-grid gap-2">
+                  <Button
+                    color="primary"
+                    className="w-md"
+                    onClick={handleDeposit}
+                  >
+                    Deposit
+                  </Button>
+                </div>
+              </Form>
+              : <h2>You are not connected to your wallet.</h2>}
+          </div>
+        </Modal>
+      </>
+    )
+  }
+
+  const DepositData4 = (props) => {
+
+    const [commitPeriod4, setCommitPeriod4] = useState();
+
+    useEffect(() => {
+      wrapper?.getDepositInstance().deposit.on("NewDeposit", onDeposit);
+      wrapper?.getDepositInstance().deposit.on("Withdrawal", onWithdrawal)
+    }, []);
+
+    const handleDepositChange4 = (e) => {
+      setCommitPeriod4(e.target.value)
+    }
+
+    const handleDeposit = async () => {
+      try {
+        const tx = await wrapper?.getDepositInstance().createDeposit(SymbolsMap.BNB, CommitMap[commitPeriod4], inputVal1, DecimalsMap.BNB);
+      } catch (err) {
+        console.error("ERROR MESSAGE: ", err.message)
+        toast.error(`${err.message}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
+      }
+    }
+
+    const onDeposit = (data) => {
+      let amount = BNtoNum(Number(data.amount))
+      toast.success(`Deposited amount: ${amount}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
+      console.log(data);
+    }
+
+    const handleWithdraw = async () => {
+      try {
+        const tx = await wrapper?.getDepositInstance().withdrawDeposit(symbols[props.assetID], comit_TWOWEEKS, inputVal1, 0, decimals[props.assetID]);
+      } catch (err) {
+        console.error("ERROR MESSAGE: ", err.message)
+        toast.error(`${err.message}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
+      }
+    }
+
+    const onWithdrawal = (data) => {
+      let amount = BNtoNum(Number(data.amount));
+      toast.success(`Withdrawal amount: ${amount}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
+      console.log(data);
+    }
+
+    return (
+      <>
+        <button
+          type="button"
+          className="btn btn-dark btn-sm w-xs"
+          onClick={() => {
+            tog_center4();
+          }}
+        >
+          Deposit
+        </button>
+        <Modal
+          isOpen={modal_deposit4}
+          toggle={() => {
+            tog_center4();
+          }}
+          centered
+        >
+          <div className="modal-body">
+            {account ?
+              <Form>
+                <div className="row mb-4">
+                  <h6>BNB</h6>
+                </div>
+                <div className="row mb-4">
+                  <Col sm={12}>
+                    <Input
+                      type="number"
+                      className="form-control"
+                      id="amount"
+                      placeholder="Amount"
+                      onChange={(event) => { inputVal1 = Number(event.target.value) }}
+                    />
+                  </Col>
+                </div>
+                <div className="row mb-4">
+                  <Col sm={12}>
+                    <select className="form-select" placeholder="Commitment" onChange={handleDepositChange4}>
+                      <option selected disabled>Commitment</option>
+                      <option value={"NONE"}>None</option>
+                      <option value={"TWOWEEKS"}>Two Weeks</option>
+                      <option value={"ONEMONTH"}>One Month</option>
+                      <option value={"THREEMONTHS"}>Three Months</option>
+                    </select>
+                  </Col>
+                </div>
+                <div className="row mb-4">
+                  <Col sm={6}>
+                    <p>Fixed APY <strong>{DepositInterestRates[commitPeriod4] || "7.8%"}</strong></p>
+                  </Col>
+                  <Col sm={6}>
+                    <p style={{ float: "right" }}>Fixed APY <strong>{DepositInterestRates[commitPeriod4] || "7.8%"}</strong></p>
                   </Col>
                 </div>
                 <div className="d-grid gap-2">
@@ -1094,6 +1222,168 @@ const HashstackCrypto = props => {
     )
   }
 
+  const BorrowData4 = (props) => {
+
+    const [commitBorrowPeriod4, setCommitBorrowPeriod4] = useState();
+    const [collateralMarket4, setCollateralMarket4] = useState();
+
+    useEffect(() => {
+      wrapper?.getLoanInstance().loan1.on("NewLoan", onLoanRequested);
+      wrapper?.getLoanInstance().loan1.on("AddCollateral", onCollateralAdded)
+      wrapper?.getLoanInstance().loan.on("CollateralReleased", onCollateralReleased);
+      // wrapper?.getLoanInstance().loan.on("MarketSwapped", (data) => {
+      //   alert(data)
+      // })
+    });
+
+    const handleBorrowChange4 = (e) => {
+      setCommitBorrowPeriod4(e.target.value)
+    }
+
+    const handleCollateralChange4 = (e) => {
+      setCollateralMarket4(e.target.value)
+    }
+
+    const handleBorrow = async () => {
+      try {
+        const tx = await wrapper?.getLoanInstance().loanRequest(symbols[props.assetID], commitBorrowPeriod4, inputVal1, decimals[props.assetID], collateralMarket4, inputVal2, decimals[props.assetID]);
+      } catch (err) {
+        console.error("ERROR MESSAGE: ", err.message)
+        toast.error(`${err.message}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
+      }
+    }
+
+    const onLoanRequested = (data) => {
+      let amount = BNtoNum(Number(data.amount))
+      toast.success(`Requested amount: ${amount}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
+      console.log(data);
+    }
+
+    const handleRepay = async () => {
+      try {
+        const tx = await wrapper?.getLoanInstance().repayLoan(symbols[props.assetID], comit_ONEMONTH, inputVal1, decimals[props.assetID]);
+      } catch (err) {
+        console.error("ERROR MESSAGE: ", err.message)
+        toast.error(`${err.message}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
+      }
+    }
+
+    const onCollateralReleased = (data) => {
+      let amount = BNtoNum(Number(data.amount))
+      toast.success(`Collateral amount released: ${amount}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
+      console.log(data);
+    }
+
+    const handleCollateral = async () => {
+      try {
+        const tx = await wrapper?.getLoanInstance().addCollateral(symbols[props.assetID], comit_ONEMONTH, symbols[props.assetID], inputVal1, decimals[props.assetID]);
+      } catch (err) {
+        console.error("ERROR MESSAGE: ", err.message)
+        toast.error(`${err.message}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
+      }
+    }
+
+    const onCollateralAdded = (data) => {
+      let amount = BNtoNum(Number(data.amount))
+      toast.success(`Collateral amount added: ${amount}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
+      console.log(data);
+    }
+
+    return (
+      <>
+        <button
+          type="button"
+          className="btn btn-secondary btn-sm w-xs"
+          onClick={() => {
+            tog_borrow4();
+          }}
+        >
+          Borrow
+        </button>
+        <Modal
+          isOpen={modal_borrow3}
+          toggle={() => {
+            tog_borrow4();
+          }}
+          centered
+        >
+          <div className="modal-body">
+            {account ?
+              <Form>
+                <div className="row mb-4">
+                  <h6>{props.title}</h6>
+                </div>
+                <div className="row mb-4">
+                  <Col sm={12}>
+                    <Input
+                      type="text"
+                      className="form-control"
+                      id="horizontal-password-Input"
+                      placeholder="Amount"
+                      onChange={(event) => { inputVal1 = event.target.value }}
+                    />
+                  </Col>
+                </div>
+                <div className="row mb-4">
+                  <Col sm={12}>
+                    <select className="form-select" placeholder="Commitment" onChange={handleBorrowChange4}>
+                      <option selected disabled>Commitment</option>
+                      <option value={comit_NONE}>None</option>
+                      <option value={comit_ONEMONTH}>One Month</option>
+                    </select>
+                  </Col>
+                </div>
+                <div className="row mb-4">
+                  <h6>Collateral</h6>
+                </div>
+                <div className="row mb-4">
+                  <Col sm={12}>
+                    <select className="form-select" onChange={handleCollateralChange4}>
+                      <option selected disabled>Collateral market</option>
+                      <option value={symbols[0]}>USDT</option>
+                      <option value={symbols[1]}>USDC</option>
+                      <option value={symbols[2]}>BTC</option>
+                      {/* <option value={}>BNB</option> */}
+                    </select>
+                  </Col>
+                </div>
+                <div className="row mb-4">
+                  <Col sm={12}>
+                    <Input
+                      type="text"
+                      className="form-control"
+                      id="horizontal-password-Input"
+                      placeholder="Amount"
+                      onChange={(event) => { inputVal2 = event.target.value }}
+                    />
+                  </Col>
+                </div>
+                <div className="row mb-4">
+                  <Col sm={6}>
+                    <p>Borrow APR <strong>15%</strong></p>
+                  </Col>
+                  <Col sm={6}>
+                    <p style={{ float: "right" }}>Collateral APY <strong>0%</strong></p>
+                  </Col>
+                </div>
+
+                <div className="d-grid gap-2">
+                  <Button
+                    color="primary"
+                    className="w-md"
+                    onClick={handleBorrow}
+                  >
+                    Request Loan
+                  </Button>
+                </div>
+              </Form>
+              : <h2>You are not connected to your wallet.</h2>}
+          </div>
+        </Modal>
+      </>
+    )
+  }
+
   const passbookActive = (e) => {
     if (e.target.value === "ActiveDeposit") {
       setPassbookStatus(true)
@@ -1269,7 +1559,7 @@ const HashstackCrypto = props => {
                     " font-size-18"
                   }
                 >
-                  <i className={"mdi mdi-ethereum"} />
+                  <i className={"mdi mdi-bitcoin"} />
                 </span>
               </div>
               <span>{"BTC"}</span>
@@ -1293,6 +1583,45 @@ const HashstackCrypto = props => {
           </td>
           <td style={{ width: "120px" }}>
             <BorrowData3 assetID={2} title={'BTC'} />
+          </td>
+        </tr>
+        <tr key={3}>
+          <th scope="row">
+            <div className="d-flex align-items-center">
+              <div className="avatar-xs me-3">
+                <span
+                  className={
+                    "avatar-title rounded-circle bg-soft bg-" +
+                    "warning" +
+                    " text-" +
+                    "warning" +
+                    " font-size-18"
+                  }
+                >
+                  <i className={"mdi mdi-drag-variant"} />
+                </span>
+              </div>
+              <span>{"BNB"}</span>
+            </div>
+          </th>
+          <td>
+            <div className="text-muted">{DepositInterestRates[depositInterestChange]}</div>
+          </td>
+          <td>
+            <div className="text-muted">
+              {BorrowInterestRates[borrowInterestChange]}
+            </div>
+          </td>
+          <td>
+            <div className="text-muted">
+              {"0.61"}
+            </div>
+          </td>
+          <td style={{ width: "120px" }}>
+            <DepositData4 assetID={3} title={'BNB'} />
+          </td>
+          <td style={{ width: "120px" }}>
+            <BorrowData4 assetID={3} title={'BNB'} />
           </td>
         </tr>
       </>)
