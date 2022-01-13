@@ -13,6 +13,14 @@ export default class Web3Wrapper {
   chainId: number;
   account: string;
   wrapperOptions: any;
+  depositInstance: any;
+  loanInstance: any;
+  comptrollerInstance: any;
+  liquidatorInstance: any;
+  tokenListInstance: any;
+  reserveInstance: any;
+  oracleOpenInstance: any;
+  tokenDistributorInstance: any;
 
   constructor(web3, chainId, account, options = {}) {
 
@@ -27,35 +35,59 @@ export default class Web3Wrapper {
   }
 
   getDepositInstance() {
-    return new DepositWrapper(this.wrapperOptions);
+    if (!this.depositInstance) {
+      this.depositInstance = new DepositWrapper(this.wrapperOptions);
+    }
+    return this.depositInstance;
+
   }
 
   getLoanInstance() {
-    return new LoanWrapper(this.wrapperOptions);
+    if (!this.loanInstance) {
+      this.loanInstance = new LoanWrapper(this.wrapperOptions);;
+    }
+    return this.loanInstance;
   }
 
   getComptrollerInstance() {
-    return new ComptrollerWeb3Wrapper(this.wrapperOptions);
+    if (!this.comptrollerInstance) {
+      this.comptrollerInstance = new ComptrollerWeb3Wrapper(this.wrapperOptions);;
+    }
+    return this.comptrollerInstance;
   }
 
   getLiquidatorInstance() {
-    return new LiquidatorWrapper(this.wrapperOptions);
+    if (!this.liquidatorInstance) {
+      this.liquidatorInstance = new LiquidatorWrapper(this.wrapperOptions);;
+    }
+    return this.liquidatorInstance;
   }
 
   getTokenListInstance() {
-    return new TokenList(this.wrapperOptions);
+    if (!this.tokenListInstance) {
+      this.tokenListInstance = new TokenList(this.wrapperOptions);;
+    }
+    return this.tokenListInstance;
   }
 
   getReserveInstance() {
-    return new ReserveWrapper(this.wrapperOptions);
+    if (!this.reserveInstance) {
+      this.reserveInstance = new ReserveWrapper(this.wrapperOptions);;
+    }
+    return this.reserveInstance;
   }
 
   getOracleOpen() {
-    return new OracleOpenWrapper(this.wrapperOptions);
+    if (!this.oracleOpenInstance) {
+      this.oracleOpenInstance = new OracleOpenWrapper(this.wrapperOptions);;
+    }
+    return this.oracleOpenInstance;
   }
 
   getTokenDistributorInstance() {
-    return new TokenDistributorWrapper(this.wrapperOptions);
+    if (!this.tokenDistributorInstance) {
+      this.tokenDistributorInstance = new TokenDistributorWrapper(this.wrapperOptions);;
+    }
+    return this.tokenDistributorInstance;
   }
-
 }
