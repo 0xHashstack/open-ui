@@ -2281,9 +2281,8 @@ const HashstackCrypto = (props) => {
                         <i className="mdi mdi-dots-horizontal font-size-18" />
                       </DropdownToggle>
                       <DropdownMenu>
-                        <DropdownItem href="#">Action</DropdownItem>
-                        <DropdownItem href="#">Another action</DropdownItem>
-                        <DropdownItem href="#">Something else</DropdownItem>
+                        <DropdownItem href="#">Deposit</DropdownItem>
+                        <DropdownItem href="#">Borrow</DropdownItem>
                       </DropdownMenu>
                     </Dropdown>
 
