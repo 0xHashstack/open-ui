@@ -41,6 +41,7 @@ const HashstackCrypto = props => {
   const [isMenu, setIsMenu] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [assets, setAssets] = useState([]);
+  const [activeDepositsData, setActiveDepositsData] = useState([]);
   const [customActiveTab, setcustomActiveTab] = useState("1");
   const [passbookStatus, setPassbookStatus] = useState(false)
   const [modal_deposit1, setmodal_deposit1] = useState(false);
@@ -83,6 +84,17 @@ const HashstackCrypto = props => {
       })
       .catch(err => console.log(err));
   }, []);
+
+  useEffect(() => {
+    axios.get(`https://testapi.hashstack.finance/getDepositsByAccount?account=0xAcfefBF5558Bfd53076575B3b315E379AFb05260`)
+      .then(res => {
+        console.log(res.data)
+        setActiveDepositsData(res.data.data)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }, [])
 
   const toggleMenu = () => {
     setIsMenu(!isMenu);
@@ -179,7 +191,7 @@ const HashstackCrypto = props => {
 
     const handleDeposit = async () => {
       try {
-        const tx = await wrapper?.getDepositInstance().createDeposit(SymbolsMap.USDC, CommitMap[commitPeriod1], inputVal1, DecimalsMap.USDC);
+        const tx = await wrapper?.getDepositInstance().createDeposit(SymbolsMap.USDT, CommitMap[commitPeriod1], inputVal1, DecimalsMap.USDT);
       } catch (err) {
         console.error("ERROR MESSAGE: ", err.message)
         toast.error(`${err.message}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
@@ -293,7 +305,7 @@ const HashstackCrypto = props => {
 
     const handleDeposit = async () => {
       try {
-        const tx = await wrapper?.getDepositInstance().createDeposit(SymbolsMap.USDT, CommitMap[commitPeriod2], inputVal1, DecimalsMap.USDT);
+        const tx = await wrapper?.getDepositInstance().createDeposit(SymbolsMap.USDC, CommitMap[commitPeriod2], inputVal1, DecimalsMap.USDC);
       } catch (err) {
         console.error("ERROR MESSAGE: ", err.message)
         toast.error(`${err.message}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
@@ -1394,9 +1406,9 @@ const HashstackCrypto = props => {
 
   const PassbookTBody = (props) => {
     const assets = props.assets;
-    if(props.isloading && assets.length === 0) {
+    if (props.isloading && assets.length === 0) {
       return (<Spinner>Loading...</Spinner>)
-    } else if(assets.length > 0) {
+    } else if (assets.length > 0) {
       return (
         <>
           {assets.map((asset, key) => (
@@ -2402,8 +2414,8 @@ const HashstackCrypto = props => {
                               </th>
                               <th scope="col">
                                 <select className="form-select form-select-sm" onChange={handleBorrowInterestChange}>
-                                    <option value={"NONE"}>None</option>
-                                    <option value={"ONEMONTH"}>One Month</option>
+                                  <option value={"ONEMONTH"}>One Month</option>
+                                  <option value={"TWOMONTH"}>Two Month</option>
                                 </select>
                               </th>
                               <th scope="col"></th>
@@ -2466,7 +2478,7 @@ const HashstackCrypto = props => {
                               </tr>
                             </thead>
                             <tbody>
-                              {assets.map((asset, key) => (
+                              {activeDepositsData.map((asset, key) => (
                                 <tr key={key}>
                                   <th scope="row">
                                     <div className="d-flex align-items-center">
@@ -2483,17 +2495,17 @@ const HashstackCrypto = props => {
                                           <i className={asset.icon} />
                                         </span>
                                       </div>
-                                      <span>{asset.title}</span>
+                                      <span>{asset.market}</span>
                                     </div>
                                   </th>
                                   <td>
-                                    <div className="text-muted">{asset.totalRate} days</div>
+                                    <div className="text-muted">{asset.commitment}</div>
                                   </td>
                                   <td>
-                                    <div className="text-muted">{asset.totalPrice}</div>
+                                    <div className="text-muted">{asset.amount}</div>
                                   </td>
                                   <td>
-                                    <div className="text-muted">{asset.loansRate} </div>
+                                    <div className="text-muted">{asset.acquiredYield} </div>
                                   </td>
                                 </tr>
                               ))}
