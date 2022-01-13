@@ -34,7 +34,7 @@ const Layout = (props) => {
 
   useEffect(() => {
     if (account) {
-      axios.get(`https://testapi.hashstack.finance/isWhiteListedAccount?address=${account}`)
+      axios.get(`isWhiteListedAccount?address=${account}`)
         .then(res => {
           if (res.data) {
             setCheckAccess(res.data.isWhiteListed)
@@ -129,7 +129,7 @@ const Layout = (props) => {
           openLeftMenuCallBack={openMenu}
         />
         {/* <Navbar menuOpen={isMenuOpened} /> */}
-        {account !== null && checkAccess === false ?
+        {account !== null && checkAccess ?
           <>{toast.error("Error : You are not permiited to access. Contact Admin", { position: toast.POSITION.TOP_CENTER, autoClose: false, closeOnClick: true, })}</>
           :
           <div className="main-content">{props.children}</div>
