@@ -36,12 +36,14 @@ import 'react-toastify/dist/ReactToastify.css';
 toast.configure()
 
 
-const HashstackCrypto = props => {
+const HashstackCrypto = (props) => {
 
   const [isMenu, setIsMenu] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [assets, setAssets] = useState([]);
   const [activeDepositsData, setActiveDepositsData] = useState([]);
+  const [activeLoansData, setActiveLoansData] = useState([]);
+
   const [customActiveTab, setcustomActiveTab] = useState("1");
   const [passbookStatus, setPassbookStatus] = useState(false)
   const [modal_deposit1, setmodal_deposit1] = useState(false);
@@ -83,11 +85,26 @@ const HashstackCrypto = props => {
         }, 2000);
       })
       .catch(err => console.log(err));
+
+      axios({
+        method: 'get',
+        url: `https://testapi.hashstack.finance/getLoansByAccount?account=0xAcfefBF5558Bfd53076575B3b315E379AFb05260`,
+        withCredentials: false
+      }).then(res => {
+          console.log(res.data)
+          setActiveLoansData(res.data.data)
+        })
+        .catch(err => {
+          console.log(err)
+      })
   }, []);
 
   useEffect(() => {
-    axios.get(`https://testapi.hashstack.finance/getDepositsByAccount?account=0xAcfefBF5558Bfd53076575B3b315E379AFb05260`)
-      .then(res => {
+    axios({
+      method: 'get',
+      url: `https://testapi.hashstack.finance/getDepositsByAccount?account=0xAcfefBF5558Bfd53076575B3b315E379AFb05260`,
+      withCredentials: false
+    }).then(res => {
         console.log(res.data)
         setActiveDepositsData(res.data.data)
       })
