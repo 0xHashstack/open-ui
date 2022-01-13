@@ -1427,7 +1427,7 @@ const HashstackCrypto = (props) => {
   const PassbookTBody = (props) => {
     const assets = props.assets;
     if (props.isloading && assets.length === 0) {
-      return (<Spinner>Loading...</Spinner>)
+      return (<tr align="center"><td colSpan="4"><Spinner>Loading...</Spinner></td></tr>)
     } else if (assets.length > 0) {
       return (
         <>
@@ -1497,7 +1497,7 @@ const HashstackCrypto = (props) => {
 
   const DashboardTBody = (props) => {
     if (props.isloading) {
-      return (<tr align="center"><center><Spinner>Loading...</Spinner></center></tr>)
+      return (<tr align="center"><td colSpan="6"><Spinner>Loading...</Spinner></td></tr>)
     } else {
       return (<>
         <tr key={0}>
@@ -2500,7 +2500,7 @@ const HashstackCrypto = (props) => {
                               </tr>
                             </thead>
                             <tbody>
-                              {activeDepositsData.map((asset, key) => (
+                              {activeDepositsData.length > 0 ? activeDepositsData.map((asset, key) => (
                                 <tr key={key}>
                                   <th scope="row">
                                     <div className="d-flex align-items-center">
@@ -2530,7 +2530,7 @@ const HashstackCrypto = (props) => {
                                     <div className="text-muted">{asset.acquiredYield}</div>
                                   </td>
                                 </tr>
-                              ))}
+                              )) : <tr align="center"><td colSpan="5">No Records found.</td></tr>}
                             </tbody>
                           </Table>
                         </div>
