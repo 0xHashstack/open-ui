@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import axios from "axios";
 import Dashboard from './pages/Dashboard';
 import HashstackCrypto from './pages/hashstack-crypto';
 import Web3ModalProvider from "contexts/Web3ModalProvider";
@@ -12,6 +13,8 @@ import "./assets/scss/theme.scss";
 import Layout from './components/layout';
 import { Provider } from "react-redux";
 import store from "./store";
+
+axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
 ReactDOM.render(
   <Provider store={store}>

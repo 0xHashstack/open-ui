@@ -10,8 +10,10 @@ const useDashboardData = () => {
     try {
       const data = await utils.getDashboardData();
       setDashboardData(data);
-      if (window)
+      if (window){
         console.log("Dashboard Data:", data);
+      }
+        
     } catch (e) {
       console.log(e);
       setDashboardData(null);

@@ -79,23 +79,24 @@ const HashstackCrypto = (props) => {
 
 
   useEffect(() => {
-    isLoading && axios.get("./data.json")
-      .then((res) => {
-        setAssets(res.data);
-        setTimeout(() => {
-          setIsLoading(false);
-        }, 2000);
-      })
-      .catch(err => console.log(err));
+
+    setAssets([]);
+
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+
     account && axios({
       method: 'get',
       url: `getLoansByAccount?account=${account}`,
       withCredentials: false
     }).then(res => {
-      console.log(res.data)
+      console.log(res.data);
+      setIsLoading(false);
       setActiveLoansData(res.data.data)
     })
       .catch(err => {
+        setIsLoading(false);
         console.log(err)
       })
   }, [account]);
@@ -106,10 +107,12 @@ const HashstackCrypto = (props) => {
       url: `getDepositsByAccount?account=${account}`,
       withCredentials: false
     }).then(res => {
-      console.log(res.data)
+      console.log(res.data);
+      setIsLoading(false);
       setActiveDepositsData(res.data.data)
     })
       .catch(err => {
+        setIsLoading(false);
         console.log(err)
       })
 
@@ -1491,6 +1494,8 @@ const HashstackCrypto = (props) => {
           ))}
         </>
       );
+    } else {
+      return (<><tr align="center"><td colSpan="5">No Records found.</td></tr></>);
     }
   }
 
