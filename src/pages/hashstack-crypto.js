@@ -46,7 +46,7 @@ const HashstackCrypto = (props) => {
   const [activeDepositsData, setActiveDepositsData] = useState([]);
   const [activeLoansData, setActiveLoansData] = useState([]);
 
-  const [customActiveTab, setcustomActiveTab] = useState("1");
+  const [customActiveTab, setCustomActiveTab] = useState("1");
   const [passbookStatus, setPassbookStatus] = useState(false)
   const [modal_deposit1, setmodal_deposit1] = useState(false);
   const [modal_deposit2, setmodal_deposit2] = useState(false);
@@ -80,24 +80,24 @@ const HashstackCrypto = (props) => {
 
   useEffect(() => {
 
-      setAssets([]);
+    setAssets([]);
 
-      setTimeout(() => {
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+
+    account && axios({
+      method: 'get',
+      url: `getLoansByAccount?account=${account}`,
+      withCredentials: false
+    }).then(res => {
+      console.log(res.data);
+      setIsLoading(false);
+      setActiveLoansData(res.data.data)
+    })
+      .catch(err => {
         setIsLoading(false);
-      }, 2000);
-
-      account && axios({
-        method: 'get',
-        url: `getLoansByAccount?account=${account}`,
-        withCredentials: false
-      }).then(res => {
-          console.log(res.data);
-          setIsLoading(false);
-          setActiveLoansData(res.data.data)
-        })
-        .catch(err => {
-          setIsLoading(false);
-          console.log(err)
+        console.log(err)
       })
   }, [account]);
 
@@ -107,10 +107,10 @@ const HashstackCrypto = (props) => {
       url: `getDepositsByAccount?account=${account}`,
       withCredentials: false
     }).then(res => {
-        console.log(res.data);
-        setIsLoading(false);
-        setActiveDepositsData(res.data.data)
-      })
+      console.log(res.data);
+      setIsLoading(false);
+      setActiveDepositsData(res.data.data)
+    })
       .catch(err => {
         setIsLoading(false);
         console.log(err)
@@ -123,7 +123,7 @@ const HashstackCrypto = (props) => {
   };
   const toggleCustom = tab => {
     if (customActiveTab !== tab) {
-      setcustomActiveTab(tab);
+      setCustomActiveTab(tab);
     }
   };
   function removeBodyCss() {
@@ -213,7 +213,7 @@ const HashstackCrypto = (props) => {
 
     const handleDeposit = async () => {
       try {
-        const tx = await wrapper?.getDepositInstance().createDeposit(SymbolsMap.USDT, CommitMap[commitPeriod1], inputVal1, DecimalsMap.USDT);
+        const tx = await wrapper?.getDepositInstance().addToDeposit(SymbolsMap.USDT, CommitMap[commitPeriod1], inputVal1, DecimalsMap.USDT);
       } catch (err) {
         console.error("ERROR MESSAGE: ", err.message)
         toast.error(`${err.message}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
@@ -305,7 +305,7 @@ const HashstackCrypto = (props) => {
                   </Button>
                 </div>
               </Form>
-              : <h2>You are not connected to your wallet.</h2>}
+              : <h2>Please connect your wallet</h2>}
           </div>
         </Modal>
       </>
@@ -327,7 +327,7 @@ const HashstackCrypto = (props) => {
 
     const handleDeposit = async () => {
       try {
-        const tx = await wrapper?.getDepositInstance().createDeposit(SymbolsMap.USDC, CommitMap[commitPeriod2], inputVal1, DecimalsMap.USDC);
+        const tx = await wrapper?.getDepositInstance().addToDeposit(SymbolsMap.USDC, CommitMap[commitPeriod2], inputVal1, DecimalsMap.USDC);
       } catch (err) {
         console.error("ERROR MESSAGE: ", err.message)
         toast.error(`${err.message}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
@@ -419,7 +419,7 @@ const HashstackCrypto = (props) => {
                   </Button>
                 </div>
               </Form>
-              : <h2>You are not connected to your wallet.</h2>}
+              : <h2>Please connect your wallet</h2>}
           </div>
         </Modal>
       </>
@@ -441,7 +441,7 @@ const HashstackCrypto = (props) => {
 
     const handleDeposit = async () => {
       try {
-        const tx = await wrapper?.getDepositInstance().createDeposit(SymbolsMap.BTC, CommitMap[commitPeriod3], inputVal1, DecimalsMap.BTC);
+        const tx = await wrapper?.getDepositInstance().addToDeposit(SymbolsMap.BTC, CommitMap[commitPeriod3], inputVal1, DecimalsMap.BTC);
       } catch (err) {
         console.error("ERROR MESSAGE: ", err.message)
         toast.error(`${err.message}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
@@ -533,7 +533,7 @@ const HashstackCrypto = (props) => {
                   </Button>
                 </div>
               </Form>
-              : <h2>You are not connected to your wallet.</h2>}
+              : <h2>Please connect your wallet</h2>}
           </div>
         </Modal>
       </>
@@ -555,7 +555,7 @@ const HashstackCrypto = (props) => {
 
     const handleDeposit = async () => {
       try {
-        const tx = await wrapper?.getDepositInstance().createDeposit(SymbolsMap.BNB, CommitMap[commitPeriod4], inputVal1, DecimalsMap.BNB);
+        const tx = await wrapper?.getDepositInstance().addToDeposit(SymbolsMap.BNB, CommitMap[commitPeriod4], inputVal1, DecimalsMap.BNB);
       } catch (err) {
         console.error("ERROR MESSAGE: ", err.message)
         toast.error(`${err.message}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
@@ -647,7 +647,7 @@ const HashstackCrypto = (props) => {
                   </Button>
                 </div>
               </Form>
-              : <h2>You are not connected to your wallet.</h2>}
+              : <h2>Please connect your wallet</h2>}
           </div>
         </Modal>
       </>
@@ -657,7 +657,7 @@ const HashstackCrypto = (props) => {
 
   const handleDeposit = async () => {
     try {
-      const tx = await wrapper?.getDepositInstance().createDeposit(symbols[0], comit_TWOWEEKS, inputVal1, decimals[0]);
+      const tx = await wrapper?.getDepositInstance().addToDeposit(symbols[0], comit_TWOWEEKS, inputVal1, decimals[0]);
     } catch (err) {
       console.error("ERROR MESSAGE: ", err.message)
       alert(err.message)
@@ -925,7 +925,7 @@ const HashstackCrypto = (props) => {
                   </Button>
                 </div>
               </Form>
-              : <h2>You are not connected to your wallet.</h2>}
+              : <h2>Please connect your wallet</h2>}
           </div>
         </Modal>
       </>
@@ -1087,7 +1087,7 @@ const HashstackCrypto = (props) => {
                   </Button>
                 </div>
               </Form>
-              : <h2>You are not connected to your wallet.</h2>}
+              : <h2>Please connect your wallet</h2>}
           </div>
         </Modal>
       </>
@@ -1249,7 +1249,7 @@ const HashstackCrypto = (props) => {
                   </Button>
                 </div>
               </Form>
-              : <h2>You are not connected to your wallet.</h2>}
+              : <h2>Please connect your wallet</h2>}
           </div>
         </Modal>
       </>
@@ -1411,7 +1411,7 @@ const HashstackCrypto = (props) => {
                   </Button>
                 </div>
               </Form>
-              : <h2>You are not connected to your wallet.</h2>}
+              : <h2>Please connect your wallet</h2>}
           </div>
         </Modal>
       </>
@@ -1649,13 +1649,13 @@ const HashstackCrypto = (props) => {
     wrapper?.getDepositInstance().deposit.on("Withdrawal", WithdrawalDeposit)
   }, []);
 
-  const [addtoDepositSel, setAddtoDepositSel] = useState();
+  const [addToDepositSel, setAddToDepositSel] = useState();
   const [withdrawDepositSel, setWithdrawDepositSel] = useState();
   const [addToDepositVal, setAddToDepositVal] = useState();
   const [withdrawDepositVal, setWithdrawDepositVal] = useState();
 
   const handleAddToDepositSelect = (e) => {
-    setAddtoDepositSel(e.target.value)
+    setAddToDepositSel(e.target.value)
   }
   const handleWithdrawDepositSelect = (e) => {
     setWithdrawDepositSel(e.target.value)
@@ -1670,7 +1670,7 @@ const HashstackCrypto = (props) => {
 
   const handleAddToDeposit = async () => {
     try {
-      const tx = await wrapper?.getDepositInstance().addToDeposit(addtoDepositSel, addToDepositVal, inputVal1, decimals[0]);
+      const tx = await wrapper?.getDepositInstance().addToDeposit(addToDepositSel, addToDepositVal, inputVal1, decimals[0]);
     } catch (err) {
       console.error("ERROR MESSAGE: ", err.message)
       toast.error(`${err.message}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
@@ -2138,7 +2138,7 @@ const HashstackCrypto = (props) => {
                                               <select className="form-select" onChange={handleAddToDepositTime}>
                                                 <option selected disabled>Minimum commitment period</option>
                                                 {activeDepositsData.map((asset, key) => {
-                                                  if (asset.market === addtoDepositSel) {
+                                                  if (asset.market === addToDepositSel) {
                                                     return <option key={key} value={asset.commitment}>{asset.commitment}</option>
                                                   }
                                                 })}
@@ -2361,32 +2361,32 @@ const HashstackCrypto = (props) => {
                       </NavLink>
                     </NavItem>
                     {account ? (
-                    <><NavItem>
-                      <NavLink
-                        style={{ cursor: "pointer" }}
-                        className={classnames({
-                          active: customActiveTab === "2",
-                        })}
-                        onClick={() => {
-                          toggleCustom("2");
-                        }}
-                      >
-                        <span className="d-none d-sm-block">Passbook</span>
-                      </NavLink>
-                    </NavItem>
-                    <NavItem>
-                      <NavLink
-                        style={{ cursor: "pointer" }}
-                        className={classnames({
-                          active: customActiveTab === "3",
-                        })}
-                        onClick={() => {
-                          toggleCustom("3");
-                        }}
-                      >
-                        <span className="d-none d-sm-block">Liquidation</span>
-                      </NavLink>
-                    </NavItem></>) : null}
+                      <><NavItem>
+                        <NavLink
+                          style={{ cursor: "pointer" }}
+                          className={classnames({
+                            active: customActiveTab === "2",
+                          })}
+                          onClick={() => {
+                            toggleCustom("2");
+                          }}
+                        >
+                          <span className="d-none d-sm-block">Passbook</span>
+                        </NavLink>
+                      </NavItem>
+                        <NavItem>
+                          <NavLink
+                            style={{ cursor: "pointer" }}
+                            className={classnames({
+                              active: customActiveTab === "3",
+                            })}
+                            onClick={() => {
+                              toggleCustom("3");
+                            }}
+                          >
+                            <span className="d-none d-sm-block">Liquidation</span>
+                          </NavLink>
+                        </NavItem></>) : null}
                   </Nav>
 
                   <TabContent
