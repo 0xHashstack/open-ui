@@ -204,6 +204,7 @@ const HashstackCrypto = (props) => {
 
     useEffect(() => {
       wrapper?.getDepositInstance().deposit.on("NewDeposit", onDeposit);
+      wrapper?.getDepositInstance().deposit.on("DepositAdded", onDeposit);
       // wrapper?.getDepositInstance().deposit.on("Withdrawal", onWithdrawal)
     }, []);
 
@@ -318,6 +319,7 @@ const HashstackCrypto = (props) => {
 
     useEffect(() => {
       wrapper?.getDepositInstance().deposit.on("NewDeposit", onDeposit);
+      wrapper?.getDepositInstance().deposit.on("DepositAdded", onDeposit);
       wrapper?.getDepositInstance().deposit.on("Withdrawal", onWithdrawal)
     }, []);
 
@@ -432,6 +434,7 @@ const HashstackCrypto = (props) => {
 
     useEffect(() => {
       wrapper?.getDepositInstance().deposit.on("NewDeposit", onDeposit);
+      wrapper?.getDepositInstance().deposit.on("DepositAdded", onDeposit);
       wrapper?.getDepositInstance().deposit.on("Withdrawal", onWithdrawal)
     }, []);
 
@@ -546,6 +549,7 @@ const HashstackCrypto = (props) => {
 
     useEffect(() => {
       wrapper?.getDepositInstance().deposit.on("NewDeposit", onDeposit);
+      wrapper?.getDepositInstance().deposit.on("DepositAdded", onDeposit);
       wrapper?.getDepositInstance().deposit.on("Withdrawal", onWithdrawal)
     }, []);
 
