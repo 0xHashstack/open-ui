@@ -312,37 +312,43 @@
         {
           "indexed": true,
           "internalType": "address",
-          "name": "_account",
+          "name": "account",
           "type": "address"
         },
         {
           "indexed": false,
           "internalType": "bytes32",
-          "name": "loanmarket",
+          "name": "loanMarket",
+          "type": "bytes32"
+        },
+        {
+          "indexed": false,
+          "internalType": "bytes32",
+          "name": "commitment",
           "type": "bytes32"
         },
         {
           "indexed": false,
           "internalType": "uint256",
-          "name": "loanamount",
+          "name": "loanAmount",
           "type": "uint256"
         },
         {
           "indexed": false,
           "internalType": "bytes32",
-          "name": "collateralmarket",
+          "name": "collateralMarket",
           "type": "bytes32"
         },
         {
           "indexed": false,
           "internalType": "uint256",
-          "name": "collateralamount",
+          "name": "collateralAmount",
           "type": "uint256"
         },
         {
           "indexed": true,
           "internalType": "uint256",
-          "name": "loanid",
+          "name": "loanId",
           "type": "uint256"
         }
       ],

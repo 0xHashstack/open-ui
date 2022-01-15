@@ -75,7 +75,7 @@
     "eject": "react-scripts eject",
     "start:development": "env-cmd -f .env.development yarn start",
     "build:staging": "env-cmd -f .env.staging yarn build",
-    "build:qa": "env-cmd -f .env.test yarn build",
+    "build:qa": "env-cmd -f .env.qa yarn build",
     "build:production": "env-cmd -f .env.production yarn build"
   },
   "eslintConfig": {
