@@ -174,7 +174,7 @@ const Layout = (props) => {
           </Row>
         </Container>
       )
-    } else if (account !== null && checkAccess === true && accountWhitelisted === true) {
+    } else if (account !== null && checkAccess === true) {
       return (
         <div id="layout-wrapper">
           <Header
