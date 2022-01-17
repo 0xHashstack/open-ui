@@ -9,8 +9,6 @@ import 'react-toastify/dist/ReactToastify.css';
 toast.configure()
 
 const Header = props => {
-  const [isSearch, setSearch] = useState(false);
-  const [connect_wallet_modal, setconnect_wallet_modal] = useState(false);
   const [get_token, setGet_token] = useState(false);
 
   const { connect, disconnect, account } = useContext(Web3ModalContext);
@@ -35,7 +33,7 @@ const Header = props => {
       const tx = await wrapper?.getTokenDistributorInstance().requestTokens3();
     } catch (err) {
       console.error("ERROR MESSAGE: ", err.message)
-      toast.error(`${err.message}`, {position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true })
+      toast.error(`${err.message}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true })
     }
   }
 
@@ -44,7 +42,7 @@ const Header = props => {
       const tx = await wrapper?.getTokenDistributorInstance().requestTokens2();
     } catch (err) {
       console.error("ERROR MESSAGE: ", err.message)
-      toast.error(`${err.message}`, {position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true })
+      toast.error(`${err.message}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true })
     }
   }
 
@@ -53,17 +51,12 @@ const Header = props => {
       const tx = await wrapper?.getTokenDistributorInstance().requestTokens1();
     } catch (err) {
       console.error("ERROR MESSAGE: ", err.message)
-      toast.error(`${err.message}`, {position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true })
+      toast.error(`${err.message}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true })
     }
   }
 
   function removeBodyCss() {
     document.body.classList.add("no_padding");
-  }
-
-  function tog_connect_wallet() {
-    setconnect_wallet_modal(!connect_wallet_modal);
-    removeBodyCss();
   }
 
   function tog_token() {
@@ -250,71 +243,10 @@ const Header = props => {
                   outline
                   className="btn-outline"
                   onClick={handleConnectWallet}
-                // onClick={() => {
-                //   tog_connect_wallet();
-                // }}
                 >
                   <i className="fas fa-wallet font-size-16 align-middle me-2"></i>{" "}
                   Connect
                 </Button>
-                {/* <Modal
-                  isOpen={connect_wallet_modal}
-                  toggle={() => {
-                    tog_connect_wallet();
-                  }}
-                  centered
-                >
-                  <div className="modal-body">
-                    <Form>
-                      <h5 style={{ textAlign: "center" }}>Connect to Wallet</h5>
-                      <hr />
-                      <div className="row mb-4">
-                        <Col sm={6}>
-                          <Button
-                            type="submit"
-                            className="btn-block btn-lg"
-                            color="light"
-                            outline
-                          >
-                            Bitcoin
-                          </Button>
-                        </Col>
-                        <Col sm={6}>
-                          <Button
-                            type="submit"
-                            className="btn-block btn-lg"
-                            color="light"
-                            outline
-                          >
-                            Binance
-                          </Button>
-                        </Col>
-                      </div>
-                      <div className="row mb-4">
-                        <Col sm={6}>
-                          <Button
-                            type="submit"
-                            color="light"
-                            className="btn-block btn-lg"
-                            outline
-                          >
-                            USDC
-                          </Button>
-                        </Col>
-                        <Col sm={6}>
-                          <Button
-                            type="submit"
-                            color="light"
-                            className="btn-block btn-lg"
-                            outline
-                          >
-                            USDT
-                          </Button>
-                        </Col>
-                      </div>
-                    </Form>
-                  </div>
-                </Modal> */}
               </div>
             }
 

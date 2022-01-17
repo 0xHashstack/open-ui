@@ -1,6 +1,7 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext, useCallback } from 'react';
 import PropTypes from "prop-types"
 import axios from "axios";
+import { Button, Container, Row, Col } from "reactstrap";
 
 //actions
 import {
@@ -28,7 +29,8 @@ toast.configure()
 const Layout = (props) => {
 
   const dispatch = useDispatch()
-  const [checkAccess, setCheckAccess] = useState(true)
+  const [checkAccess, setCheckAccess] = useState(true);
+  const [accountWhitelisted, setAccountWhitelisted] = useState(false);
 
   const { connect, disconnect, account } = useContext(Web3ModalContext);
 
@@ -43,6 +45,10 @@ const Layout = (props) => {
         .catch(err => console.log("Error", err))
     }
   }, [account])
+
+  const handleConnectWallet = useCallback(() => {
+    connect();
+  }, [connect]);
 
   const {
     topbarTheme, layoutWidth, isPreloader, showRightSidebar
@@ -107,6 +113,82 @@ const Layout = (props) => {
     setIsMenuOpened(!isMenuOpened);
   }
 
+  const handleAccountWhitelist = () => {
+    axios.post(`addAccount`,
+      {
+        "address": account,
+        "whiteListed": true
+      })
+      .then(res => {
+        if (res.data) {
+          setAccountWhitelisted(res.data.success);
+          setCheckAccess(true);
+        }
+      })
+      .catch(err => console.log("Error", err))
+  }
+
+  function switchScreens() {
+    if (account === null) {
+      return (
+        <Container>
+          <Row style={{ marginTop: '25ch' }}>
+            <Col lg="12">
+              <div className="text-center mb-5">
+                <h4 className="font-weight-medium">Connect your wallet to access Hashstack&apos;s closed beta testnet</h4>
+                <div className="mt-5 text-center">
+                  <Button
+                    color="dark"
+                    outline
+                    className="btn-outline"
+                    onClick={handleConnectWallet}
+                  >
+                    Connect Wallet
+                  </Button>
+                </div>
+              </div>
+            </Col>
+          </Row>
+        </Container>
+      )
+    } else if (account !== null && checkAccess === false) {
+      return (
+        <Container>
+          <Row style={{ marginTop: '25ch' }}>
+            <Col lg="12">
+              <div className="text-center mb-5">
+                <h4 className="font-weight-medium">Uh, oh!</h4>
+                <h4 className="font-weight-medium">It appears though you are not whitelisted. You can request for whitelist from below</h4>
+                <div className="mt-5 text-center">
+                  <Button
+                    color="dark"
+                    outline
+                    className="btn-outline"
+                    onClick={handleAccountWhitelist}
+                  >
+                    Request to Whitelist
+                  </Button>
+                </div>
+              </div>
+            </Col>
+          </Row>
+        </Container>
+      )
+    } else if (account !== null && checkAccess === true && accountWhitelisted === true) {
+      return (
+        <div id="layout-wrapper">
+          <Header
+            theme={"Light"}
+            isMenuOpened={isMenuOpened}
+            openLeftMenuCallBack={openMenu}
+          />
+          <div className="main-content">{props.children}</div>
+          <Footer />
+        </div>
+      )
+    }
+  }
+
   return (
     <React.Fragment>
       <div id="preloader">
@@ -122,21 +204,8 @@ const Layout = (props) => {
         </div>
       </div>
 
-      <div id="layout-wrapper">
-        <Header
-          theme={"Light"}
-          isMenuOpened={isMenuOpened}
-          openLeftMenuCallBack={openMenu}
-        />
-        {/* <Navbar menuOpen={isMenuOpened} /> */}
-        {account !== null && !checkAccess ?
-          <>{toast.error(`Error : You are not permiited to access. Contact Admin.`, { position: toast.POSITION.TOP_CENTER, autoClose: false, closeOnClick: true, })}</>
-          :
-          <div className="main-content">{props.children}</div>
-        }
-        <Footer />
-      </div>
-    </React.Fragment>
+      {switchScreens()}
+    </React.Fragment >
   );
 }
 
