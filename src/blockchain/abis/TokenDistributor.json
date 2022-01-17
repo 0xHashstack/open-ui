@@ -1,5 +1,33 @@
 [
 	{
+		"inputs": [],
+		"name": "requestTokens1",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "requestTokens2",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "requestTokens3",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "requestTokens4",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "address",
@@ -14,6 +42,11 @@
 			{
 				"internalType": "address",
 				"name": "_tokenInstance3",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "_tokenInstance4",
 				"type": "address"
 			}
 		],
@@ -37,27 +70,6 @@
 			}
 		],
 		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "requestTokens1",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "requestTokens2",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "requestTokens3",
-		"outputs": [],
-		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -89,6 +101,19 @@
 	{
 		"inputs": [],
 		"name": "tokenAmount3",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "tokenAmount4",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -140,6 +165,19 @@
 	},
 	{
 		"inputs": [],
+		"name": "tokenInstance4",
+		"outputs": [
+			{
+				"internalType": "contract ERC20",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
 		"name": "waitTime",
 		"outputs": [
 			{
@@ -152,3 +190,5 @@
 		"type": "function"
 	}
 ]
+
+
