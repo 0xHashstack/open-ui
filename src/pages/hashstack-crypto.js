@@ -645,31 +645,6 @@ const HashstackCrypto = (props) => {
   }
 
 
-  const handleDeposit = async () => {
-    try {
-      const tx = await wrapper?.getDepositInstance().addToDeposit(symbols[0], comit_TWOWEEKS, inputVal1, decimals[0]);
-    } catch (err) {
-      console.error("ERROR MESSAGE: ", err.message)
-      alert(err.message)
-    }
-  }
-
-  const handleBorrow = async () => {
-    try {
-      const tx = await wrapper?.getDepositInstance().withdrawDeposit(symbols[0], comit_TWOWEEKS, inputVal1, decimals[0]);
-    } catch (err) {
-      console.error("ERROR MESSAGE: ", err.message)
-      alert(err.message)
-    }
-  }
-
-  const onLoanRequested = (data) => {
-    let amount = BNtoNum(Number(data.amount))
-    alert("Requested amount: " + amount);
-    console.log(data);
-  }
-
-
   const handleLoanOptionChange = (e) => {
     setLoanOption(e.target.value)
   }
