@@ -47,6 +47,12 @@ export const NumToBN = (value, decimal = 18) => {
   return new BigNumber(value).shiftedBy(decimal).toString();
 }
 
+export const GetErrorText = (err) => {
+  if(err) {
+    return JSON.parse(err.split('.')[1]).message || 'Oops! Something went wrong.';
+  }
+}
+
 export const toFixed = (num, digit) => {
   if (isNaN(num)) return 0;
   var fixed_num = Number(num).toFixed(digit)

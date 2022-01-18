@@ -2,6 +2,7 @@
   "name": "hashstack",
   "version": "0.1.0",
   "private": true,
+  "repository": "https://github.com/0xHashstack/open-ui",
   "dependencies": {
     "@burner-wallet/burner-connect-provider": "^0.1.1",
     "@ckeditor/ckeditor5-build-classic": "31.0.0",
