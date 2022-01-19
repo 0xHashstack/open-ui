@@ -1,6 +1,6 @@
 import React, { useState, useContext, useCallback, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Row, Col, Modal, Button, Form } from "reactstrap";
+import { Col, Modal, Button, Form } from "reactstrap";
 import { Web3ModalContext } from "../../contexts/Web3ModalProvider";
 import { Web3WrapperContext } from "../../contexts/Web3WrapperProvider";
 import { toast } from 'react-toastify';
@@ -70,7 +70,8 @@ const Header = props => {
         <div className="navbar-header">
           <div className="d-flex">
             <div className="navbar-brand-box">
-              <Link to="/" className="logo logo-dark">
+              <Link to="" className="logo logo-dark">
+                <img src="./logo.png" style={{width: '30px', height: '30px', marginRight: '0.5rem'}}></img>
                 <span className="logo-sm">
                   <strong style={{ color: 'white', fontSize: '22px', fontWeight: '600' }}>Hashstack</strong>
                 </span>
@@ -79,7 +80,8 @@ const Header = props => {
                 </span>
               </Link>
 
-              <Link to="/" className="logo logo-light">
+              <Link to="" className="logo logo-light">
+              <img src="./logo.png" style={{width: '30px', height: '30px', marginRight: '0.5rem'}}></img>
                 <span className="logo-sm">
                   <strong style={{ color: 'white', fontSize: '22px', fontWeight: '600' }}>Hashstack</strong>
                 </span>
