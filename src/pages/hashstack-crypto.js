@@ -2279,6 +2279,7 @@ const HashstackCrypto = (props) => {
                               <th scope="col"></th>
                               <th scope="col">
                                 <select className="form-select form-select-sm" onChange={handleDepositInterestChange}>
+                                  <option selected disabled>Commitment</option>
                                   <option value={"NONE"}>None</option>
                                   <option value={"TWOWEEKS"}>Two Weeks</option>
                                   <option value={"ONEMONTH"}>One Month</option>
@@ -2287,6 +2288,7 @@ const HashstackCrypto = (props) => {
                               </th>
                               <th scope="col">
                                 <select className="form-select form-select-sm" onChange={handleBorrowInterestChange}>
+                                  <option selected disabled>Commitment</option>
                                   <option value={"NONE"}>None</option>
                                   <option value={"ONEMONTH"}>One Month</option>
                                 </select>
