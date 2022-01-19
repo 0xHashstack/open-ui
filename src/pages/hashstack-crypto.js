@@ -201,9 +201,7 @@ const HashstackCrypto = (props) => {
     const [commitPeriod1, setCommitPeriod1] = useState();
 
     useEffect(() => {
-      wrapper?.getDepositInstance().deposit.on("NewDeposit", onDeposit);
       wrapper?.getDepositInstance().deposit.on("DepositAdded", onDeposit);
-      // wrapper?.getDepositInstance().deposit.on("Withdrawal", onWithdrawal)
     }, []);
 
     const handleDepositChange1 = (e) => {
@@ -300,9 +298,7 @@ const HashstackCrypto = (props) => {
     const [commitPeriod2, setCommitPeriod2] = useState();
 
     useEffect(() => {
-      wrapper?.getDepositInstance().deposit.on("NewDeposit", onDeposit);
       wrapper?.getDepositInstance().deposit.on("DepositAdded", onDeposit);
-      wrapper?.getDepositInstance().deposit.on("Withdrawal", onWithdrawal)
     }, []);
 
     const handleDepositChange2 = (e) => {
@@ -320,19 +316,6 @@ const HashstackCrypto = (props) => {
     const onDeposit = (data) => {
       let amount = BNtoNum(Number(data.amount))
       toast.success(`Deposited amount: ${amount}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
-    }
-
-    const handleWithdraw = async () => {
-      try {
-        const tx = await wrapper?.getDepositInstance().withdrawDeposit(symbols[props.assetID], comit_TWOWEEKS, inputVal1, 0, decimals[props.assetID]);
-      } catch (err) {
-        toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
-      }
-    }
-
-    const onWithdrawal = (data) => {
-      let amount = BNtoNum(Number(data.amount));
-      toast.error(`Withdrawal amount: ${amount}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
     }
 
     return (
@@ -411,9 +394,7 @@ const HashstackCrypto = (props) => {
     const [commitPeriod3, setCommitPeriod3] = useState();
 
     useEffect(() => {
-      wrapper?.getDepositInstance().deposit.on("NewDeposit", onDeposit);
       wrapper?.getDepositInstance().deposit.on("DepositAdded", onDeposit);
-      wrapper?.getDepositInstance().deposit.on("Withdrawal", onWithdrawal)
     }, []);
 
     const handleDepositChange3 = (e) => {
@@ -433,18 +414,6 @@ const HashstackCrypto = (props) => {
       toast.success(`Deposited amount: ${amount}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
     }
 
-    const handleWithdraw = async () => {
-      try {
-        const tx = await wrapper?.getDepositInstance().withdrawDeposit(symbols[props.assetID], comit_TWOWEEKS, inputVal1, 0, decimals[props.assetID]);
-      } catch (err) {
-        toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
-      }
-    }
-
-    const onWithdrawal = (data) => {
-      let amount = BNtoNum(Number(data.amount));
-      toast.success(`Withdrawal amount: ${amount}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
-    }
 
     return (
       <>
@@ -522,9 +491,7 @@ const HashstackCrypto = (props) => {
     const [commitPeriod4, setCommitPeriod4] = useState();
 
     useEffect(() => {
-      wrapper?.getDepositInstance().deposit.on("NewDeposit", onDeposit);
       wrapper?.getDepositInstance().deposit.on("DepositAdded", onDeposit);
-      wrapper?.getDepositInstance().deposit.on("Withdrawal", onWithdrawal)
     }, []);
 
     const handleDepositChange4 = (e) => {
@@ -544,18 +511,6 @@ const HashstackCrypto = (props) => {
       toast.success(`Deposited amount: ${amount}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
     }
 
-    const handleWithdraw = async () => {
-      try {
-        const tx = await wrapper?.getDepositInstance().withdrawDeposit(symbols[props.assetID], comit_TWOWEEKS, inputVal1, 0, decimals[props.assetID]);
-      } catch (err) {
-        toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
-      }
-    }
-
-    const onWithdrawal = (data) => {
-      let amount = BNtoNum(Number(data.amount));
-      toast.success(`Withdrawal amount: ${amount}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
-    }
 
     return (
       <>
