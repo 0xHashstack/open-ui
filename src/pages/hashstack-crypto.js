@@ -84,7 +84,7 @@ const HashstackCrypto = (props) => {
 
     setTimeout(() => {
       setIsLoading(false);
-    }, 1000);
+    }, 100);
 
     account && axios({
       method: 'get',
