@@ -28,7 +28,7 @@ import classnames from "classnames";
 import { Web3ModalContext } from '../contexts/Web3ModalProvider';
 import { Web3WrapperContext } from '../contexts/Web3WrapperProvider';
 import {
-  markets, symbols, decimals, comit_ONEMONTH, comit_TWOWEEKS, comit_THREEMONTHS, comit_NONE,
+  symbols, decimals, comit_ONEMONTH, comit_TWOWEEKS,
   SymbolsMap, DecimalsMap, DepositInterestRates, BorrowInterestRates, CommitMap, VariableDepositInterestRates
 } from '../blockchain/constants';
 import { BNtoNum, GetErrorText } from '../blockchain/utils';
@@ -642,31 +642,6 @@ const HashstackCrypto = (props) => {
         </Modal>
       </>
     )
-  }
-
-
-  const handleDeposit = async () => {
-    try {
-      const tx = await wrapper?.getDepositInstance().addToDeposit(symbols[0], comit_TWOWEEKS, inputVal1, decimals[0]);
-    } catch (err) {
-      console.error("ERROR MESSAGE: ", err.message)
-      alert(err.message)
-    }
-  }
-
-  const handleBorrow = async () => {
-    try {
-      const tx = await wrapper?.getDepositInstance().withdrawDeposit(symbols[0], comit_TWOWEEKS, inputVal1, decimals[0]);
-    } catch (err) {
-      console.error("ERROR MESSAGE: ", err.message)
-      alert(err.message)
-    }
-  }
-
-  const onLoanRequested = (data) => {
-    let amount = BNtoNum(Number(data.amount))
-    alert("Requested amount: " + amount);
-    console.log(data);
   }
 
 
