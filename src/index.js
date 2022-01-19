@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import axios from "axios";
-import Dashboard from './pages/Dashboard';
 import HashstackCrypto from './pages/hashstack-crypto';
 import Web3ModalProvider from "contexts/Web3ModalProvider";
 import Web3WrapperProvider from "contexts/Web3WrapperProvider";
