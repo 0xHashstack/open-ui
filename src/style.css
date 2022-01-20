@@ -357,3 +357,14 @@ a {
 .ui.button {
   width:90%;
 }
+
+@font-face {
+  font-family: "AvenirNextLTPro";
+  src: local("AvenirNextLTPro"),
+ url("./assets/fonts/AvenirNextLTPro-Regular.otf") format("opentype");
+/* font-weight: bold; */
+}
+
+.font-face-AvenirNextLTPro {
+  font-family: "AvenirNextLTPro";
+}

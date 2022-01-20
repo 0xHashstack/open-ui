@@ -8,10 +8,12 @@ import { MoralisProvider } from "react-moralis";
 import { MoralisDappProvider } from "./providers/MoralisDappProvider/MoralisDappProvider";
 import { BrowserRouter } from 'react-router-dom';
 import { DAppProvider } from "@usedapp/core";
-import "./assets/scss/theme.scss";
 import Layout from './components/layout';
 import { Provider } from "react-redux";
 import store from "./store";
+
+import "./assets/scss/theme.scss";
+import './assets/fonts/AvenirNextLTPro-Regular.otf';
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
