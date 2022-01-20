@@ -280,6 +280,7 @@ const HashstackCrypto = (props) => {
                   <Button
                     color="primary"
                     className="w-md"
+                    disabled={commitPeriod1 === undefined} 
                     onClick={handleDeposit}
                   >
                     Deposit
@@ -377,6 +378,7 @@ const HashstackCrypto = (props) => {
                     color="primary"
                     className="w-md"
                     onClick={handleDeposit}
+                    disabled={commitPeriod2 === undefined} 
                   >
                     Deposit
                   </Button>
@@ -474,6 +476,7 @@ const HashstackCrypto = (props) => {
                     color="primary"
                     className="w-md"
                     onClick={handleDeposit}
+                    disabled={commitPeriod3 === undefined} 
                   >
                     Deposit
                   </Button>
@@ -571,6 +574,7 @@ const HashstackCrypto = (props) => {
                     color="primary"
                     className="w-md"
                     onClick={handleDeposit}
+                    disabled={commitPeriod4 === undefined} 
                   >
                     Deposit
                   </Button>
