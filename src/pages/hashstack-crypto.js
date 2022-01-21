@@ -2201,7 +2201,7 @@ const HashstackCrypto = (props) => {
                                 <h5 className="font-size-14">Get Earnings</h5>
                                 <p className="text-muted">
                                   New common language will be more simple and
-                                  regular than the existing.
+                                  regular than the existing. 
                                 </p>
                               </div>
                             </div>
