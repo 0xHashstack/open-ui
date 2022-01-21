@@ -813,6 +813,7 @@ const HashstackCrypto = (props) => {
                   <Button
                     color="primary"
                     className="w-md"
+                    disabled={commitBorrowPeriod1 === undefined} 
                     onClick={handleBorrow}
                   >
                     Request Loan
@@ -969,6 +970,7 @@ const HashstackCrypto = (props) => {
                   <Button
                     color="primary"
                     className="w-md"
+                    disabled={commitBorrowPeriod2 === undefined}
                     onClick={handleBorrow}
                   >
                     Request Loan
@@ -1125,6 +1127,7 @@ const HashstackCrypto = (props) => {
                   <Button
                     color="primary"
                     className="w-md"
+                    disabled={commitBorrowPeriod3 === undefined}
                     onClick={handleBorrow}
                   >
                     Request Loan
@@ -1281,6 +1284,7 @@ const HashstackCrypto = (props) => {
                   <Button
                     color="primary"
                     className="w-md"
+                    disabled={commitBorrowPeriod4 === undefined}
                     onClick={handleBorrow}
                   >
                     Request Loan
