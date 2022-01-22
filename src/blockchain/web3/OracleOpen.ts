@@ -12,6 +12,10 @@ class OracleOpenWrapper {
     liquidationTrigger(address: string, loanId: number) {
         return this.oracleOpen.send("liquidationTrigger", {}, address, String(loanId));
     }
+
+    setFairPrice(requestId: number, fairPrice: number, market: string, amount: number) {
+        return this.oracleOpen.send("setFairPrice", {}, requestId, fairPrice, market, amount);
+    }
     
     //getter method
     getLatestPrice(market: string) {
