@@ -1,4 +1,3 @@
-import { diamondAddress } from '../constants';
 import Comptroller from '../contracts/Comptroller';
 import { NumToBN } from '../utils';
 
@@ -8,7 +7,7 @@ class ComptrollerWeb3Wrapper {
     comptroller: Comptroller;
   
     constructor(wrapperOptions) {
-        this.comptroller = new Comptroller(wrapperOptions, diamondAddress);
+        this.comptroller = new Comptroller(wrapperOptions, process.env.REACT_APP_DIAMOND_ADDRESS);
     }
 
     //send transaction methods
