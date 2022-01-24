@@ -14,7 +14,6 @@ class Contract {
     this.web3 = options.web3;
     this.chainId = options.chainId;
     this.account = options.account;
-
     this.contract = new this.web3.eth.Contract(abi, address);
 
     if (tag) this.tag = tag;

@@ -1,5 +1,5 @@
 import Web3 from 'web3';
-import { defaultChainId, rpcUrls, diamondAddress } from './constants';
+import { defaultChainId, rpcUrls } from './constants';
 import { BigNumber } from "bignumber.js";
 import TokenList from './contracts/TokenList';
 
@@ -59,7 +59,7 @@ export const toFixed = (num, digit) => {
 
 
 export const isMarketSupported = async (symbol) => {
-  const tokenList = new TokenList(getDefaultContractOptions(), diamondAddress);
+  const tokenList = new TokenList(getDefaultContractOptions(), process.env.REACT_APP_DIAMOND_ADDRESS);
   const isSupported = await tokenList.call("isMarketSupported", symbol);
   return {
     isSupport : isSupported

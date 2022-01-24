@@ -1,4 +1,3 @@
-import { diamondAddress } from '../constants';
 import OracleOpen from '../contracts/OracleOpen';
 
 class OracleOpenWrapper {
@@ -6,7 +5,7 @@ class OracleOpenWrapper {
     oracleOpen: OracleOpen
 
     constructor(wrapperOptions) {
-        this.oracleOpen = new OracleOpen(wrapperOptions, diamondAddress);
+        this.oracleOpen = new OracleOpen(wrapperOptions, process.env.REACT_APP_DIAMOND_ADDRESS);
     }
 
     liquidationTrigger(address: string, loanId: number) {

@@ -1,4 +1,3 @@
-import { diamondAddress } from '../constants';
 import Reserve from '../contracts/Reserve';
 import { NumToBN } from '../utils';
 
@@ -6,7 +5,7 @@ class ReserveWrapper {
     reserve: Reserve
 
     constructor(wrapperOptions: any) {
-        this.reserve = new Reserve(wrapperOptions, diamondAddress);
+        this.reserve = new Reserve(wrapperOptions, process.env.REACT_APP_DIAMOND_ADDRESS);
     }
 
     transferAnyBEP20(address: string, recipient: string, value: number, decimal: number) {
