@@ -82,14 +82,13 @@ const HashstackCrypto = (props) => {
     setAssets([]);
     setTimeout(() => {
       setIsLoading(false);
-    }, 1000);
+    }, 100);
 
     account && axios({
       method: 'get',
       url: `getLoansByAccount?account=${account}`,
       withCredentials: false
     }).then(res => {
-      console.log(res.data);
       setIsLoading(false);
       setActiveLoansData(res.data.data)
     })
@@ -105,7 +104,6 @@ const HashstackCrypto = (props) => {
       url: `getDepositsByAccount?account=${account}`,
       withCredentials: false
     }).then(res => {
-      console.log(res.data);
       setIsLoading(false);
       setActiveDepositsData(res.data.data)
     })
@@ -201,9 +199,7 @@ const HashstackCrypto = (props) => {
     const [commitPeriod1, setCommitPeriod1] = useState();
 
     useEffect(() => {
-      wrapper?.getDepositInstance().deposit.on("NewDeposit", onDeposit);
       wrapper?.getDepositInstance().deposit.on("DepositAdded", onDeposit);
-      // wrapper?.getDepositInstance().deposit.on("Withdrawal", onWithdrawal)
     }, []);
 
     const handleDepositChange1 = (e) => {
@@ -214,7 +210,6 @@ const HashstackCrypto = (props) => {
       try {
         const tx = await wrapper?.getDepositInstance().addToDeposit(SymbolsMap.USDT, CommitMap[commitPeriod1], inputVal1, DecimalsMap.USDT);
       } catch (err) {
-        console.error("ERROR MESSAGE: ", err.message)
         toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
       }
     }
@@ -222,7 +217,6 @@ const HashstackCrypto = (props) => {
     const onDeposit = (data) => {
       let amount = BNtoNum(Number(data.amount))
       toast.success(`Deposited amount: ${amount}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
-      console.log(data);
     }
 
 
@@ -284,6 +278,7 @@ const HashstackCrypto = (props) => {
                   <Button
                     color="primary"
                     className="w-md"
+                    disabled={commitPeriod1 === undefined} 
                     onClick={handleDeposit}
                   >
                     Deposit
@@ -302,9 +297,7 @@ const HashstackCrypto = (props) => {
     const [commitPeriod2, setCommitPeriod2] = useState();
 
     useEffect(() => {
-      wrapper?.getDepositInstance().deposit.on("NewDeposit", onDeposit);
       wrapper?.getDepositInstance().deposit.on("DepositAdded", onDeposit);
-      wrapper?.getDepositInstance().deposit.on("Withdrawal", onWithdrawal)
     }, []);
 
     const handleDepositChange2 = (e) => {
@@ -315,7 +308,6 @@ const HashstackCrypto = (props) => {
       try {
         const tx = await wrapper?.getDepositInstance().addToDeposit(SymbolsMap.USDC, CommitMap[commitPeriod2], inputVal1, DecimalsMap.USDC);
       } catch (err) {
-        console.error("ERROR MESSAGE: ", err.message)
         toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
       }
     }
@@ -323,22 +315,6 @@ const HashstackCrypto = (props) => {
     const onDeposit = (data) => {
       let amount = BNtoNum(Number(data.amount))
       toast.success(`Deposited amount: ${amount}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
-      console.log(data);
-    }
-
-    const handleWithdraw = async () => {
-      try {
-        const tx = await wrapper?.getDepositInstance().withdrawDeposit(symbols[props.assetID], comit_TWOWEEKS, inputVal1, 0, decimals[props.assetID]);
-      } catch (err) {
-        console.error("ERROR MESSAGE: ", err.message)
-        toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
-      }
-    }
-
-    const onWithdrawal = (data) => {
-      let amount = BNtoNum(Number(data.amount));
-      toast.error(`Withdrawal amount: ${amount}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
-      console.log(data);
     }
 
     return (
@@ -400,6 +376,7 @@ const HashstackCrypto = (props) => {
                     color="primary"
                     className="w-md"
                     onClick={handleDeposit}
+                    disabled={commitPeriod2 === undefined} 
                   >
                     Deposit
                   </Button>
@@ -417,9 +394,7 @@ const HashstackCrypto = (props) => {
     const [commitPeriod3, setCommitPeriod3] = useState();
 
     useEffect(() => {
-      wrapper?.getDepositInstance().deposit.on("NewDeposit", onDeposit);
       wrapper?.getDepositInstance().deposit.on("DepositAdded", onDeposit);
-      wrapper?.getDepositInstance().deposit.on("Withdrawal", onWithdrawal)
     }, []);
 
     const handleDepositChange3 = (e) => {
@@ -430,7 +405,6 @@ const HashstackCrypto = (props) => {
       try {
         const tx = await wrapper?.getDepositInstance().addToDeposit(SymbolsMap.BTC, CommitMap[commitPeriod3], inputVal1, DecimalsMap.BTC);
       } catch (err) {
-        console.error("ERROR MESSAGE: ", err.message)
         toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
       }
     }
@@ -438,23 +412,8 @@ const HashstackCrypto = (props) => {
     const onDeposit = (data) => {
       let amount = BNtoNum(Number(data.amount))
       toast.success(`Deposited amount: ${amount}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
-      console.log(data);
     }
 
-    const handleWithdraw = async () => {
-      try {
-        const tx = await wrapper?.getDepositInstance().withdrawDeposit(symbols[props.assetID], comit_TWOWEEKS, inputVal1, 0, decimals[props.assetID]);
-      } catch (err) {
-        console.error("ERROR MESSAGE: ", err.message)
-        toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
-      }
-    }
-
-    const onWithdrawal = (data) => {
-      let amount = BNtoNum(Number(data.amount));
-      toast.success(`Withdrawal amount: ${amount}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
-      console.log(data);
-    }
 
     return (
       <>
@@ -515,6 +474,7 @@ const HashstackCrypto = (props) => {
                     color="primary"
                     className="w-md"
                     onClick={handleDeposit}
+                    disabled={commitPeriod3 === undefined} 
                   >
                     Deposit
                   </Button>
@@ -532,9 +492,7 @@ const HashstackCrypto = (props) => {
     const [commitPeriod4, setCommitPeriod4] = useState();
 
     useEffect(() => {
-      wrapper?.getDepositInstance().deposit.on("NewDeposit", onDeposit);
       wrapper?.getDepositInstance().deposit.on("DepositAdded", onDeposit);
-      wrapper?.getDepositInstance().deposit.on("Withdrawal", onWithdrawal)
     }, []);
 
     const handleDepositChange4 = (e) => {
@@ -545,7 +503,6 @@ const HashstackCrypto = (props) => {
       try {
         const tx = await wrapper?.getDepositInstance().addToDeposit(SymbolsMap.BNB, CommitMap[commitPeriod4], inputVal1, DecimalsMap.BNB);
       } catch (err) {
-        console.error("ERROR MESSAGE: ", err.message)
         toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
       }
     }
@@ -553,23 +510,8 @@ const HashstackCrypto = (props) => {
     const onDeposit = (data) => {
       let amount = BNtoNum(Number(data.amount))
       toast.success(`Deposited amount: ${amount}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
-      console.log(data);
     }
 
-    const handleWithdraw = async () => {
-      try {
-        const tx = await wrapper?.getDepositInstance().withdrawDeposit(symbols[props.assetID], comit_TWOWEEKS, inputVal1, 0, decimals[props.assetID]);
-      } catch (err) {
-        console.error("ERROR MESSAGE: ", err.message)
-        toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
-      }
-    }
-
-    const onWithdrawal = (data) => {
-      let amount = BNtoNum(Number(data.amount));
-      toast.success(`Withdrawal amount: ${amount}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
-      console.log(data);
-    }
 
     return (
       <>
@@ -630,6 +572,7 @@ const HashstackCrypto = (props) => {
                     color="primary"
                     className="w-md"
                     onClick={handleDeposit}
+                    disabled={commitPeriod4 === undefined} 
                   >
                     Deposit
                   </Button>
@@ -668,7 +611,6 @@ const HashstackCrypto = (props) => {
     try {
       const tx = await wrapper?.getLoanInstance().repayLoan(SymbolsMap[loanOption], comit_ONEMONTH, inputVal1, DecimalsMap[loanOption]);
     } catch (err) {
-      console.error("ERROR MESSAGE: ", err.message)
       toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
     }
   }
@@ -677,7 +619,6 @@ const HashstackCrypto = (props) => {
     try {
       const tx = await wrapper?.getLoanInstance().permissibleWithdrawal(SymbolsMap[loanOption], comit_ONEMONTH, SymbolsMap[loanOption], inputVal1, DecimalsMap[loanOption]);
     } catch (err) {
-      console.error("ERROR MESSAGE: ", err.message)
       toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
     }
   }
@@ -685,14 +626,12 @@ const HashstackCrypto = (props) => {
   const onCollateralReleased = (data) => {
     let amount = BNtoNum(Number(data.amount))
     toast.success(`Collateral amount released: ${amount}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
-    console.log(data);
   }
 
   const handleCollateral = async () => {
     try {
       const tx = await wrapper?.getLoanInstance().addCollateral(SymbolsMap[loanOption], comit_ONEMONTH, SymbolsMap[collateralOption], inputVal1, decimals[0]);
     } catch (err) {
-      console.error("ERROR MESSAGE: ", err.message)
       toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
     }
   }
@@ -701,7 +640,6 @@ const HashstackCrypto = (props) => {
     try {
       const tx = await wrapper?.getLoanInstance().withdrawCollateral(SymbolsMap[loanOption], comit_ONEMONTH);
     } catch (err) {
-      console.error("ERROR MESSAGE: ", err.message)
       toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
     }
   }
@@ -709,7 +647,6 @@ const HashstackCrypto = (props) => {
   const onCollateralAdded = (data) => {
     let amount = BNtoNum(Number(data.amount))
     toast.success(`Collateral amount added: ${amount}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
-    console.log(data);
   }
 
   const handleSwap = async () => {
@@ -717,7 +654,6 @@ const HashstackCrypto = (props) => {
     try {
       const tx = await wrapper?.getLoanInstance().swapLoan(SymbolsMap[loanOption], comit_ONEMONTH, SymbolsMap[swapOption]);
     } catch (err) {
-      console.error("ERROR MESSAGE: ", err.message)
       toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
     }
   }
@@ -727,7 +663,6 @@ const HashstackCrypto = (props) => {
     try {
       const tx = await wrapper?.getLoanInstance().swapToLoan(SymbolsMap[swapOption], comit_ONEMONTH, SymbolsMap[loanOption]);
     } catch (err) {
-      console.error("ERROR MESSAGE: ", err.message)
       toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
     }
   }
@@ -759,7 +694,6 @@ const HashstackCrypto = (props) => {
       try {
         const tx = await wrapper?.getLoanInstance().loanRequest(symbols[props.assetID], CommitMap[commitBorrowPeriod1], inputVal1, decimals[props.assetID], collateralMarket1, inputVal2, decimals[props.assetID]);
       } catch (err) {
-        console.error("ERROR MESSAGE: ", err.message)
         toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
       }
     }
@@ -767,14 +701,12 @@ const HashstackCrypto = (props) => {
     const onLoanRequested = (data) => {
       let amount = BNtoNum(Number(data.amount))
       toast.success(`Requested amount: ${amount}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
-      console.log(data);
     }
 
     const handleRepay = async () => {
       try {
         const tx = await wrapper?.getLoanInstance().repayLoan(symbols[props.assetID], comit_ONEMONTH, inputVal1, decimals[props.assetID]);
       } catch (err) {
-        console.error("ERROR MESSAGE: ", err.message)
         toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
       }
     }
@@ -782,14 +714,12 @@ const HashstackCrypto = (props) => {
     const onCollateralReleased = (data) => {
       let amount = BNtoNum(Number(data.amount))
       toast.success(`Collateral amount released: ${amount}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
-      console.log(data);
     }
 
     const handleCollateral = async () => {
       try {
         const tx = await wrapper?.getLoanInstance().addCollateral(symbols[props.assetID], comit_ONEMONTH, symbols[props.assetID], inputVal1, decimals[props.assetID]);
       } catch (err) {
-        console.error("ERROR MESSAGE: ", err.message)
         toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
       }
     }
@@ -797,7 +727,6 @@ const HashstackCrypto = (props) => {
     const onCollateralAdded = (data) => {
       let amount = BNtoNum(Number(data.amount))
       toast.success(`Collateral amount added: ${amount}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
-      console.log(data);
     }
 
     return (
@@ -882,6 +811,7 @@ const HashstackCrypto = (props) => {
                   <Button
                     color="primary"
                     className="w-md"
+                    disabled={commitBorrowPeriod1 === undefined} 
                     onClick={handleBorrow}
                   >
                     Request Loan
@@ -921,7 +851,6 @@ const HashstackCrypto = (props) => {
       try {
         const tx = await wrapper?.getLoanInstance().loanRequest(symbols[props.assetID], CommitMap[commitBorrowPeriod2], inputVal1, decimals[props.assetID], collateralMarket2, inputVal2, decimals[props.assetID]);
       } catch (err) {
-        console.error("ERROR MESSAGE: ", err.message)
         toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
       }
     }
@@ -929,14 +858,12 @@ const HashstackCrypto = (props) => {
     const onLoanRequested = (data) => {
       let amount = BNtoNum(Number(data.amount))
       toast.success(`Requested amount: ${amount}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
-      console.log(data);
     }
 
     const handleRepay = async () => {
       try {
         const tx = await wrapper?.getLoanInstance().repayLoan(symbols[props.assetID], comit_ONEMONTH, inputVal1, decimals[props.assetID]);
       } catch (err) {
-        console.error("ERROR MESSAGE: ", err.message)
         toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
       }
     }
@@ -944,14 +871,12 @@ const HashstackCrypto = (props) => {
     const onCollateralReleased = (data) => {
       let amount = BNtoNum(Number(data.amount))
       toast.success(`Collateral amount released: ${amount}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
-      console.log(data);
     }
 
     const handleCollateral = async () => {
       try {
         const tx = await wrapper?.getLoanInstance().addCollateral(symbols[props.assetID], comit_ONEMONTH, symbols[props.assetID], inputVal1, decimals[props.assetID]);
       } catch (err) {
-        console.error("ERROR MESSAGE: ", err.message)
         toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
       }
     }
@@ -959,7 +884,6 @@ const HashstackCrypto = (props) => {
     const onCollateralAdded = (data) => {
       let amount = BNtoNum(Number(data.amount))
       toast.success(`Collateral amount added: ${amount}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
-      console.log(data);
     }
 
     return (
@@ -1044,6 +968,7 @@ const HashstackCrypto = (props) => {
                   <Button
                     color="primary"
                     className="w-md"
+                    disabled={commitBorrowPeriod2 === undefined}
                     onClick={handleBorrow}
                   >
                     Request Loan
@@ -1083,7 +1008,6 @@ const HashstackCrypto = (props) => {
       try {
         const tx = await wrapper?.getLoanInstance().loanRequest(symbols[props.assetID], CommitMap[commitBorrowPeriod3], inputVal1, decimals[props.assetID], collateralMarket3, inputVal2, decimals[props.assetID]);
       } catch (err) {
-        console.error("ERROR MESSAGE: ", err.message)
         toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
       }
     }
@@ -1091,14 +1015,12 @@ const HashstackCrypto = (props) => {
     const onLoanRequested = (data) => {
       let amount = BNtoNum(Number(data.amount))
       toast.success(`Requested amount: ${amount}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
-      console.log(data);
     }
 
     const handleRepay = async () => {
       try {
         const tx = await wrapper?.getLoanInstance().repayLoan(symbols[props.assetID], comit_ONEMONTH, inputVal1, decimals[props.assetID]);
       } catch (err) {
-        console.error("ERROR MESSAGE: ", err.message)
         toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
       }
     }
@@ -1106,14 +1028,12 @@ const HashstackCrypto = (props) => {
     const onCollateralReleased = (data) => {
       let amount = BNtoNum(Number(data.amount))
       toast.success(`Collateral amount released: ${amount}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
-      console.log(data);
     }
 
     const handleCollateral = async () => {
       try {
         const tx = await wrapper?.getLoanInstance().addCollateral(symbols[props.assetID], comit_ONEMONTH, symbols[props.assetID], inputVal1, decimals[props.assetID]);
       } catch (err) {
-        console.error("ERROR MESSAGE: ", err.message)
         toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
       }
     }
@@ -1121,7 +1041,6 @@ const HashstackCrypto = (props) => {
     const onCollateralAdded = (data) => {
       let amount = BNtoNum(Number(data.amount))
       toast.success(`Collateral amount added: ${amount}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
-      console.log(data);
     }
 
     return (
@@ -1206,6 +1125,7 @@ const HashstackCrypto = (props) => {
                   <Button
                     color="primary"
                     className="w-md"
+                    disabled={commitBorrowPeriod3 === undefined}
                     onClick={handleBorrow}
                   >
                     Request Loan
@@ -1245,7 +1165,6 @@ const HashstackCrypto = (props) => {
       try {
         const tx = await wrapper?.getLoanInstance().loanRequest(symbols[props.assetID], CommitMap[commitBorrowPeriod4], inputVal1, decimals[props.assetID], collateralMarket4, inputVal2, decimals[props.assetID]);
       } catch (err) {
-        console.error("ERROR MESSAGE: ", err.message)
         toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
       }
     }
@@ -1253,14 +1172,12 @@ const HashstackCrypto = (props) => {
     const onLoanRequested = (data) => {
       let amount = BNtoNum(Number(data.amount))
       toast.success(`Requested amount: ${amount}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
-      console.log(data);
     }
 
     const handleRepay = async () => {
       try {
         const tx = await wrapper?.getLoanInstance().repayLoan(symbols[props.assetID], comit_ONEMONTH, inputVal1, decimals[props.assetID]);
       } catch (err) {
-        console.error("ERROR MESSAGE: ", err.message)
         toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
       }
     }
@@ -1268,14 +1185,12 @@ const HashstackCrypto = (props) => {
     const onCollateralReleased = (data) => {
       let amount = BNtoNum(Number(data.amount))
       toast.success(`Collateral amount released: ${amount}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
-      console.log(data);
     }
 
     const handleCollateral = async () => {
       try {
         const tx = await wrapper?.getLoanInstance().addCollateral(symbols[props.assetID], comit_ONEMONTH, symbols[props.assetID], inputVal1, decimals[props.assetID]);
       } catch (err) {
-        console.error("ERROR MESSAGE: ", err.message)
         toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
       }
     }
@@ -1283,7 +1198,6 @@ const HashstackCrypto = (props) => {
     const onCollateralAdded = (data) => {
       let amount = BNtoNum(Number(data.amount))
       toast.success(`Collateral amount added: ${amount}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
-      console.log(data);
     }
 
     return (
@@ -1368,6 +1282,7 @@ const HashstackCrypto = (props) => {
                   <Button
                     color="primary"
                     className="w-md"
+                    disabled={commitBorrowPeriod4 === undefined}
                     onClick={handleBorrow}
                   >
                     Request Loan
@@ -1635,7 +1550,6 @@ const HashstackCrypto = (props) => {
     try {
       const tx = await wrapper?.getDepositInstance().addToDeposit(addToDepositSel, addToDepositVal, inputVal1, decimals[0]);
     } catch (err) {
-      console.error("ERROR MESSAGE: ", err.message)
       toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
     }
   }
@@ -1643,14 +1557,12 @@ const HashstackCrypto = (props) => {
   const depositAdded = (data) => {
     let amount = BNtoNum(Number(data.amount))
     toast.success(`Deposited Added: ${amount}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
-    console.log(data);
   }
 
   const handleWithdrawDeposit = async () => {
     try {
       const tx = await wrapper?.getDepositInstance().addToDeposit(withdrawDepositSel, withdrawDepositVal, inputVal1, decimals[0]);
     } catch (err) {
-      console.error("ERROR MESSAGE: ", err.message)
       toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
     }
   }
@@ -1658,7 +1570,6 @@ const HashstackCrypto = (props) => {
   const WithdrawalDeposit = (data) => {
     let amount = BNtoNum(Number(data.amount))
     toast.success(`Deposited Withdrawn: ${amount}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
-    console.log(data);
   }
 
   return (
@@ -2292,7 +2203,7 @@ const HashstackCrypto = (props) => {
                                 <h5 className="font-size-14">Get Earnings</h5>
                                 <p className="text-muted">
                                   New common language will be more simple and
-                                  regular than the existing.
+                                  regular than the existing. 
                                 </p>
                               </div>
                             </div>
@@ -2374,6 +2285,7 @@ const HashstackCrypto = (props) => {
                               <th scope="col"></th>
                               <th scope="col">
                                 <select className="form-select form-select-sm" onChange={handleDepositInterestChange}>
+                                  <option selected disabled>Commitment</option>
                                   <option value={"NONE"}>None</option>
                                   <option value={"TWOWEEKS"}>Two Weeks</option>
                                   <option value={"ONEMONTH"}>One Month</option>
@@ -2382,6 +2294,7 @@ const HashstackCrypto = (props) => {
                               </th>
                               <th scope="col">
                                 <select className="form-select form-select-sm" onChange={handleBorrowInterestChange}>
+                                  <option selected disabled>Commitment</option>
                                   <option value={"NONE"}>None</option>
                                   <option value={"ONEMONTH"}>One Month</option>
                                 </select>
