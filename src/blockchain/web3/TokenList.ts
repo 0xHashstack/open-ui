@@ -1,4 +1,3 @@
-import { diamondAddress } from '../constants';
 import TokenList from '../contracts/TokenList';
 import { NumToBN } from '../utils';
 
@@ -7,7 +6,7 @@ class TokenListWrapper {
     tokenList: TokenList
 
     constructor(wrapperOptions: any) {
-        this.tokenList = new TokenList(wrapperOptions, diamondAddress);
+        this.tokenList = new TokenList(wrapperOptions, process.env.REACT_APP_DIAMOND_ADDRESS);
     }
 
     addMarketSupport(market: string, decimals: number, tokenAddress: string, amount: number, amountDecimal: number) {

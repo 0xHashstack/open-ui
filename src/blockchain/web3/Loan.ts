@@ -1,4 +1,3 @@
-import { diamondAddress } from '../constants';
 import Loan from 'blockchain/contracts/Loan';
 import { NumToBN } from '../utils';
 import Loan1 from 'blockchain/contracts/Loan1';
@@ -10,8 +9,8 @@ class LoanWrapper {
     loan1: Loan1;
 
     constructor(wrapperOptions: any) {
-        this.loan = new Loan(wrapperOptions, diamondAddress);
-        this.loan1 = new Loan1(wrapperOptions, diamondAddress);
+        this.loan = new Loan(wrapperOptions, process.env.REACT_APP_DIAMOND_ADDRESS);
+        this.loan1 = new Loan1(wrapperOptions, process.env.REACT_APP_DIAMOND_ADDRESS);
     }
 
     //send transaction methods

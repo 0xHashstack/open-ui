@@ -33,7 +33,7 @@ export const symbols = [
   "0x57424e4200000000000000000000000000000000000000000000000000000000"
 ]
 
-export const diamondAddress = "0x123De8ceb0C3a2582bd7Bcf7d885187CdE016067";
+// export const diamondAddress = "0x123De8ceb0C3a2582bd7Bcf7d885187CdE016067";
 export const addresses = {
   // wone: {
   //   1666700000: '0xD77B20D7301E6F16291221f50EB37589fdAB3720'
