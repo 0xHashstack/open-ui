@@ -9,17 +9,16 @@ class TokenDistributorWrapper {
         this.tokenDistributor = new TokenDistributor(wrapperOptions, tokenDistributorAddress);
     }
 
-    //send transaction methods
-    requestTokens1() {
-        return this.tokenDistributor.send("requestTokens1", {});
-    }
+    TokenRequestMap = {
+        "BTC": "requestTokens1",
+        "Bitcoin": "requestTokens1",
+        "USDC": "requestTokens2",
+        "USDT": "requestTokens3"
+    };
 
-    requestTokens2() {
-        return this.tokenDistributor.send("requestTokens2", {});
-    }
-    
-    requestTokens3() {
-        return this.tokenDistributor.send("requestTokens3", {});
+    //send transaction methods
+    requestTokens(token) {
+        return this.tokenDistributor.send(this.TokenRequestMap[token], {});
     }
      
 }
