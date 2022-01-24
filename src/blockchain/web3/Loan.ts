@@ -1,7 +1,7 @@
 import Loan from 'blockchain/contracts/Loan';
 import { NumToBN } from '../utils';
 import Loan1 from 'blockchain/contracts/Loan1';
-
+import { pancakeSwapTokenAddress } from 'blockchain/constants';
 class LoanWrapper {
     
     //Contract
@@ -31,7 +31,20 @@ class LoanWrapper {
     }
 
     loanRequest(market: string, commitment: string, loanAmount: number, loanDecimal: number, collateralMarket: string, collateralAmount: number, collateralDecimal: number) {
-        return this.loan1.send("loanRequest", {}, market, commitment, NumToBN(loanAmount, loanDecimal), collateralMarket, NumToBN(collateralAmount, collateralDecimal));
+        let marketAddress = pancakeSwapTokenAddress[market];
+        let API_URL = `https://testapi.hashstack.finance/seedTokenPrice?marketAddress=${marketAddress}&market=${market}&amount=${loanAmount}&decimal=${loanDecimal}`
+        console.log(API_URL)
+        return fetch(API_URL).then(response => response.json()).then((data) => {
+            if(!data["success"]) {
+                console.log("MarketAddress: ", marketAddress);
+                console.log("Market: ", market);
+                console.log("Amount: ", loanAmount);
+                console.log("Data: ", data);
+                throw new Error("Error in setting fair price")
+            }
+            console.log("Set Fair Price Successful");
+            return this.loan1.send("loanRequest", {}, market, commitment, NumToBN(loanAmount, loanDecimal), collateralMarket, NumToBN(collateralAmount, collateralDecimal));
+        })
     }
     
     addCollateral(market: string, commitment: string, collateralMarket: string, collateralAmount: number, collateralDecimal: number) {
