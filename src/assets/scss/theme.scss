@@ -41,6 +41,21 @@ body {
   z-index: 9999 !important;
 }
 
+// React Toastify Style Config
+.Toastify__toast-container--top-right {
+  margin-top: 5em;
+}
+.Toastify__toast-theme--light {
+  color: white;
+  background-color: #2a3042;
+}
+.Toastify__close-button > svg {
+  color: white;
+}
+.Toastify__close-button:hover, .Toastify__close-button:focus {
+  color: white;
+}
+
 .leaflet-pane {
   z-index: 1;
 }

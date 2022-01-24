@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Col, Modal, Button, Form } from "reactstrap";
 import { Web3ModalContext } from "../../contexts/Web3ModalProvider";
 import { Web3WrapperContext } from "../../contexts/Web3WrapperProvider";
+import { GetErrorText } from "../../blockchain/utils";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -33,7 +34,7 @@ const Header = props => {
       const tx = await wrapper?.getTokenDistributorInstance().requestTokens3();
     } catch (err) {
       console.error("ERROR MESSAGE: ", err.message)
-      toast.error(`${err.message}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true })
+      toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true })
     }
   }
 
@@ -42,7 +43,7 @@ const Header = props => {
       const tx = await wrapper?.getTokenDistributorInstance().requestTokens2();
     } catch (err) {
       console.error("ERROR MESSAGE: ", err.message)
-      toast.error(`${err.message}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true })
+      toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true })
     }
   }
 
@@ -51,7 +52,7 @@ const Header = props => {
       const tx = await wrapper?.getTokenDistributorInstance().requestTokens1();
     } catch (err) {
       console.error("ERROR MESSAGE: ", err.message)
-      toast.error(`${err.message}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true })
+      toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true })
     }
   }
 
@@ -71,7 +72,7 @@ const Header = props => {
           <div className="d-flex">
             <div className="navbar-brand-box">
               <Link to="" className="logo logo-dark">
-                <img src="./logo.png" style={{width: '30px', height: '30px', marginRight: '0.5rem'}}></img>
+                <img src="./logo.png" style={{ width: '30px', height: '30px', marginRight: '0.5rem' }}></img>
                 <span className="logo-sm">
                   <strong style={{ color: 'white', fontSize: '22px', fontWeight: '600' }}>Hashstack</strong>
                 </span>
@@ -81,7 +82,7 @@ const Header = props => {
               </Link>
 
               <Link to="" className="logo logo-light">
-              <img src="./logo.png" style={{width: '30px', height: '30px', marginRight: '0.5rem'}}></img>
+                <img src="./logo.png" style={{ width: '30px', height: '30px', marginRight: '0.5rem' }}></img>
                 <span className="logo-sm">
                   <strong style={{ color: 'white', fontSize: '22px', fontWeight: '600' }}>Hashstack</strong>
                 </span>
