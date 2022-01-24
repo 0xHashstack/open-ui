@@ -11,7 +11,7 @@ toast.configure()
 const Header = props => {
   const [get_token, setGet_token] = useState(false);
 
-  const { connect, disconnect, account } = useContext(Web3ModalContext);
+  const { connect, disconnect, account, chainId } = useContext(Web3ModalContext);
   const { web3Wrapper: wrapper } = useContext(Web3WrapperContext);
 
   useEffect(() => {

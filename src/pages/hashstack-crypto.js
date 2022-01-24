@@ -74,14 +74,12 @@ const HashstackCrypto = (props) => {
   let inputVal1 = 0;
   let inputVal2 = 0;
 
-  const { connect, disconnect, account } = useContext(Web3ModalContext);
+  const { connect, disconnect, chainId, account } = useContext(Web3ModalContext);
   const { web3Wrapper: wrapper } = useContext(Web3WrapperContext);
 
 
   useEffect(() => {
-
     setAssets([]);
-
     setTimeout(() => {
       setIsLoading(false);
     }, 100);
