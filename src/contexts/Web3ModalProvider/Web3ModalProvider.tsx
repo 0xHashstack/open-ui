@@ -176,7 +176,7 @@ const Web3ModalProvider = (props: any) => {
     const _account = accounts[0];
     const _networkId = await _web3.eth.net.getId();
     const _chainId = await _web3.eth.getChainId();
-    if (chainId != 97)
+    if (_chainId != 97)
       toast.warn(`Please connect to BSC Testnet`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
     else
       toast.success("Connected to BSC Testnet", { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
