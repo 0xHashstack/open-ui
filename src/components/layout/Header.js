@@ -5,6 +5,7 @@ import { Web3ModalContext } from "../../contexts/Web3ModalProvider";
 import { Web3WrapperContext } from "../../contexts/Web3WrapperProvider";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { GetErrorText } from "../../blockchain/utils";
 
 toast.configure()
 
@@ -33,7 +34,7 @@ const Header = props => {
       const tx = await wrapper?.getTokenDistributorInstance().requestTokens3();
     } catch (err) {
       console.error("ERROR MESSAGE: ", err.message)
-      toast.error(`${err.message}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true })
+      toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true })
     }
   }
 
@@ -42,7 +43,7 @@ const Header = props => {
       const tx = await wrapper?.getTokenDistributorInstance().requestTokens2();
     } catch (err) {
       console.error("ERROR MESSAGE: ", err.message)
-      toast.error(`${err.message}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true })
+      toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true })
     }
   }
 
@@ -51,7 +52,7 @@ const Header = props => {
       const tx = await wrapper?.getTokenDistributorInstance().requestTokens1();
     } catch (err) {
       console.error("ERROR MESSAGE: ", err.message)
-      toast.error(`${err.message}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true })
+      toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true })
     }
   }
 
