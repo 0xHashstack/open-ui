@@ -6,7 +6,6 @@ import { Web3WrapperContext } from "../../contexts/Web3WrapperProvider";
 import { GetErrorText } from "../../blockchain/utils";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { GetErrorText } from "../../blockchain/utils";
 
 toast.configure()
 
