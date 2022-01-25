@@ -199,6 +199,7 @@ const HashstackCrypto = (props) => {
     const [commitPeriod1, setCommitPeriod1] = useState();
 
     useEffect(() => {
+      wrapper?.getDepositInstance().deposit.on("NewDeposit", onDeposit);
       wrapper?.getDepositInstance().deposit.on("DepositAdded", onDeposit);
     }, []);
 
@@ -297,6 +298,7 @@ const HashstackCrypto = (props) => {
     const [commitPeriod2, setCommitPeriod2] = useState();
 
     useEffect(() => {
+      wrapper?.getDepositInstance().deposit.on("NewDeposit", onDeposit);
       wrapper?.getDepositInstance().deposit.on("DepositAdded", onDeposit);
     }, []);
 
@@ -394,6 +396,7 @@ const HashstackCrypto = (props) => {
     const [commitPeriod3, setCommitPeriod3] = useState();
 
     useEffect(() => {
+      wrapper?.getDepositInstance().deposit.on("NewDeposit", onDeposit);
       wrapper?.getDepositInstance().deposit.on("DepositAdded", onDeposit);
     }, []);
 
@@ -492,6 +495,7 @@ const HashstackCrypto = (props) => {
     const [commitPeriod4, setCommitPeriod4] = useState();
 
     useEffect(() => {
+      wrapper?.getDepositInstance().deposit.on("NewDeposit", onDeposit);
       wrapper?.getDepositInstance().deposit.on("DepositAdded", onDeposit);
     }, []);
 
