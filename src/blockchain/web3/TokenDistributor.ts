@@ -13,12 +13,12 @@ class TokenDistributorWrapper {
         "BTC": "requestTokens3",
         "Bitcoin": "requestTokens3",
         "USDC": "requestTokens2",
-        "USDT": "requestTokens1"
+        "USDT": "requestTokens1",
+        "BNB": "requestTokens4"
     };
 
     //send transaction methods
     requestTokens(token) {
-        debugger;
         return this.tokenDistributor.send(this.TokenRequestMap[token], {});
     }
      
