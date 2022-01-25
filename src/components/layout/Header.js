@@ -200,9 +200,7 @@ const Header = props => {
                         color="light"
                         className="btn-block btn-lg"
                         outline
-                        onClick={() => {
-                          window.open("https://testnet.binance.org/faucet-smart", "_blank")
-                        }}
+                        onClick={handleGetToken}
                       >
                         BNB
                       </Button>

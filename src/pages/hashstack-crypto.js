@@ -199,6 +199,7 @@ const HashstackCrypto = (props) => {
     const [commitPeriod1, setCommitPeriod1] = useState();
 
     useEffect(() => {
+      wrapper?.getDepositInstance().deposit.on("NewDeposit", onDeposit);
       wrapper?.getDepositInstance().deposit.on("DepositAdded", onDeposit);
     }, []);
 
@@ -297,6 +298,7 @@ const HashstackCrypto = (props) => {
     const [commitPeriod2, setCommitPeriod2] = useState();
 
     useEffect(() => {
+      wrapper?.getDepositInstance().deposit.on("NewDeposit", onDeposit);
       wrapper?.getDepositInstance().deposit.on("DepositAdded", onDeposit);
     }, []);
 
@@ -394,6 +396,7 @@ const HashstackCrypto = (props) => {
     const [commitPeriod3, setCommitPeriod3] = useState();
 
     useEffect(() => {
+      wrapper?.getDepositInstance().deposit.on("NewDeposit", onDeposit);
       wrapper?.getDepositInstance().deposit.on("DepositAdded", onDeposit);
     }, []);
 
@@ -492,6 +495,7 @@ const HashstackCrypto = (props) => {
     const [commitPeriod4, setCommitPeriod4] = useState();
 
     useEffect(() => {
+      wrapper?.getDepositInstance().deposit.on("NewDeposit", onDeposit);
       wrapper?.getDepositInstance().deposit.on("DepositAdded", onDeposit);
     }, []);
 
@@ -687,7 +691,7 @@ const HashstackCrypto = (props) => {
 
     const handleBorrow = async () => {
       try {
-        const tx = await wrapper?.getLoanInstance().loanRequest(symbols[props.assetID], CommitMap[commitBorrowPeriod1], inputVal1, decimals[props.assetID], collateralMarket1, inputVal2, DecimalsMap[collateralMarket1]);
+        const tx = await wrapper?.getLoanInstance().loanRequest(SymbolsMap[props.assetID], CommitMap[commitBorrowPeriod1], inputVal1, DecimalsMap[props.assetID], SymbolsMap[collateralMarket1], inputVal2, DecimalsMap[collateralMarket1]);
       } catch (err) {
         toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
       }
@@ -813,8 +817,9 @@ const HashstackCrypto = (props) => {
 
     const handleBorrow = async () => {
       try {
-        const tx = await wrapper?.getLoanInstance().loanRequest(symbols[props.assetID], CommitMap[commitBorrowPeriod2], inputVal1, decimals[props.assetID], collateralMarket2, inputVal2, DecimalsMap[collateralMarket2]);
+        const tx = await wrapper?.getLoanInstance().loanRequest(SymbolsMap[props.assetID], CommitMap[commitBorrowPeriod2], inputVal1, DecimalsMap[props.assetID], SymbolsMap[collateralMarket2], inputVal2, DecimalsMap[collateralMarket2]);
       } catch (err) {
+        console.log(err);
         toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
       }
     }
@@ -940,7 +945,7 @@ const HashstackCrypto = (props) => {
 
     const handleBorrow = async () => {
       try {
-        const tx = await wrapper?.getLoanInstance().loanRequest(symbols[props.assetID], CommitMap[commitBorrowPeriod3], inputVal1, decimals[props.assetID], collateralMarket3, inputVal2, DecimalsMap[collateralMarket3]);
+        const tx = await wrapper?.getLoanInstance().loanRequest(SymbolsMap[props.assetID], CommitMap[commitBorrowPeriod3], inputVal1, DecimalsMap[props.assetID], SymbolsMap[collateralMarket3], inputVal2, DecimalsMap[collateralMarket3]);
       } catch (err) {
         toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
       }
@@ -1067,7 +1072,7 @@ const HashstackCrypto = (props) => {
 
     const handleBorrow = async () => {
       try {
-        const tx = await wrapper?.getLoanInstance().loanRequest(symbols[props.assetID], CommitMap[commitBorrowPeriod4], inputVal1, decimals[props.assetID], collateralMarket4, inputVal2, DecimalsMap[collateralMarket4]);
+        const tx = await wrapper?.getLoanInstance().loanRequest(SymbolsMap[props.assetID], CommitMap[commitBorrowPeriod4], inputVal1, DecimalsMap[props.assetID], SymbolsMap[collateralMarket4], inputVal2, DecimalsMap[collateralMarket4]);
       } catch (err) {
         toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
       }
@@ -1291,7 +1296,7 @@ const HashstackCrypto = (props) => {
             <DepositData1 assetID={0} title={'USDT'} />
           </td>
           <td style={{ width: "120px" }}>
-            <BorrowData1 assetID={0} title={'USDT'} />
+            <BorrowData1 assetID={"USDT"} title={'USDT'} />
           </td>
         </tr>
         <tr key={1}>
@@ -1325,7 +1330,7 @@ const HashstackCrypto = (props) => {
             <DepositData2 assetID={1} title={'USDC'} />
           </td>
           <td style={{ width: "120px" }}>
-            <BorrowData2 assetID={1} title={'USDC'} />
+            <BorrowData2 assetID={"USDC"} title={'USDC'} />
           </td>
         </tr>
         <tr key={2}>
@@ -1359,7 +1364,7 @@ const HashstackCrypto = (props) => {
             <DepositData3 assetID={2} title={'BTC'} />
           </td>
           <td style={{ width: "120px" }}>
-            <BorrowData3 assetID={2} title={'BTC'} />
+            <BorrowData3 assetID={"BTC"} title={'BTC'} />
           </td>
         </tr>
         <tr key={3}>
@@ -1393,7 +1398,7 @@ const HashstackCrypto = (props) => {
             <DepositData4 assetID={3} title={'BNB'} />
           </td>
           <td style={{ width: "120px" }}>
-            <BorrowData4 assetID={3} title={'BNB'} />
+            <BorrowData4 assetID={"BNB"} title={'BNB'} />
           </td>
         </tr>
       </>)
