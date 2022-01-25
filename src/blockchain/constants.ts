@@ -105,13 +105,14 @@ export const pancakeSwapTokenAddress = {
 
 export const EventMap = {
   "GET_TOKEN": "",
-  "NEW_DEPOSIT": "",
-  "DEPOSIT_ADDED": "",
-  "WITHDRAW_DEPOSIT": "",
-  "REQUEST_LOAN": "",
-  "WITHDRAW_LOAN": "",
-  "ADD_COLLATERAL": "",
-  "WITHDRAW_COLLATERAL": "",
-  "SWAP_LOAN": "",
-  "SWAP_TO_LOAN": ""
+  "NEW_DEPOSIT": "NewDeposit",
+  "DEPOSIT_ADDED": "DepositAdded",
+  "WITHDRAW_DEPOSIT": "Withdrawal",
+  "REQUEST_LOAN": "NewLoan",
+  "REPAY_LOAN": "LoanRepaid",
+  "WITHDRAW_LOAN": "WithdrawalProcessed",
+  "ADD_COLLATERAL": "AddCollateral",
+  "WITHDRAW_COLLATERAL": "CollateralReleased",
+  "SWAP_LOAN": "MarketSwapped",
+  "SWAP_TO_LOAN": "MarketSwapped"
 };
