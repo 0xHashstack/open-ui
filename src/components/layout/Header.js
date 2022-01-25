@@ -6,7 +6,6 @@ import { Web3WrapperContext } from "../../contexts/Web3WrapperProvider";
 import { GetErrorText } from "../../blockchain/utils";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { GetErrorText } from "../../blockchain/utils";
 
 toast.configure()
 
@@ -17,9 +16,9 @@ const Header = props => {
   const { web3Wrapper: wrapper } = useContext(Web3WrapperContext);
 
   useEffect(() => {
-    wrapper?.getTokenDistributorInstance().requestTokens1(); //USDT
-    wrapper?.getTokenDistributorInstance().requestTokens2(); //USDC
-    wrapper?.getTokenDistributorInstance().requestTokens3(); //BTC
+    wrapper?.getTokenDistributorInstance().requestTokens("USDT"); //USDT
+    wrapper?.getTokenDistributorInstance().requestTokens("USDC"); //USDC
+    wrapper?.getTokenDistributorInstance().requestTokens("BTC"); //BTC
   }, [])
 
   const handleConnectWallet = useCallback(() => {
@@ -30,32 +29,17 @@ const Header = props => {
     disconnect();
   }, [disconnect]);
 
-  const handleBTCToken = async () => {
+
+  const handleGetToken = async (event) => {
     try {
-      const tx = await wrapper?.getTokenDistributorInstance().requestTokens3();
+      const tx = await wrapper?.getTokenDistributorInstance().requestTokens(event.target.textContent);
     } catch (err) {
       console.error("ERROR MESSAGE: ", err.message)
       toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true })
     }
   }
 
-  const handleUSDCToken = async () => {
-    try {
-      const tx = await wrapper?.getTokenDistributorInstance().requestTokens2();
-    } catch (err) {
-      console.error("ERROR MESSAGE: ", err.message)
-      toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true })
-    }
-  }
 
-  const handleUSDTToken = async () => {
-    try {
-      const tx = await wrapper?.getTokenDistributorInstance().requestTokens1();
-    } catch (err) {
-      console.error("ERROR MESSAGE: ", err.message)
-      toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true })
-    }
-  }
 
   function removeBodyCss() {
     document.body.classList.add("no_padding");
@@ -186,7 +170,7 @@ const Header = props => {
                         className="btn-block btn-lg"
                         color="light"
                         outline
-                        onClick={handleBTCToken}
+                        onClick={handleGetToken}
                       >
                         Bitcoin
                       </Button>
@@ -196,7 +180,7 @@ const Header = props => {
                         color="light"
                         className="btn-block btn-lg"
                         outline
-                        onClick={handleUSDCToken}
+                        onClick={handleGetToken}
                       >
                         USDC
                       </Button>
@@ -206,7 +190,7 @@ const Header = props => {
                         color="light"
                         className="btn-block btn-lg"
                         outline
-                        onClick={handleUSDTToken}
+                        onClick={handleGetToken}
                       >
                         USDT
                       </Button>

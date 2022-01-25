@@ -15,7 +15,6 @@ import {
 import { useSelector, useDispatch } from "react-redux"
 
 //components
-// import Navbar from "./Navbar"
 import Header from "./Header"
 import Footer from "./Footer"
 

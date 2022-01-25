@@ -1076,7 +1076,7 @@ const HashstackCrypto = (props) => {
     const onLoanRequested = (data) => {
       let amount = BNtoNum(Number(data.amount))
       toast.success(`Requested amount: ${amount}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
-    }
+    } 
 
     return (
       <>
