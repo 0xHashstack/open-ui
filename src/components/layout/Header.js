@@ -16,9 +16,10 @@ const Header = props => {
   const { web3Wrapper: wrapper } = useContext(Web3WrapperContext);
 
   useEffect(() => {
-    wrapper?.getTokenDistributorInstance().requestTokens("USDT"); //USDT
-    wrapper?.getTokenDistributorInstance().requestTokens("USDC"); //USDC
-    wrapper?.getTokenDistributorInstance().requestTokens("BTC"); //BTC
+    wrapper?.getTokenDistributorInstance().tokenDistributor.on("ConfirmTransaction1", onSuccessCallback); //USDT
+    wrapper?.getTokenDistributorInstance().tokenDistributor.on("ConfirmTransaction2", onSuccessCallback); //USDC
+    wrapper?.getTokenDistributorInstance().tokenDistributor.on("ConfirmTransaction3", onSuccessCallback); //BTC
+    wrapper?.getTokenDistributorInstance().tokenDistributor.on("ConfirmTransaction4", onSuccessCallback); //BNB
   }, [])
 
   const handleConnectWallet = useCallback(() => {
@@ -35,8 +36,13 @@ const Header = props => {
       const tx = await wrapper?.getTokenDistributorInstance().requestTokens(event.target.textContent);
     } catch (err) {
       console.error("ERROR MESSAGE: ", err.message)
-      toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true })
+      toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 5000, closeOnClick: true })
     }
+  }
+
+  
+  const onSuccessCallback = (data) => {
+    toast.success(`Deposited amount: ${amount}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 5000, closeOnClick: true, })
   }
 
 
