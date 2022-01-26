@@ -43,7 +43,6 @@ class LoanWrapper {
         //         throw new Error("Error in setting fair price")
         //     }
         //     console.log("Set Fair Price Successful");
-        debugger;
             return this.loan1.send("loanRequest", {}, market, commitment, NumToBN(loanAmount, loanDecimal), collateralMarket, NumToBN(collateralAmount, collateralDecimal));
         // })
     }
