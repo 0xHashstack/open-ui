@@ -18,9 +18,10 @@ const Header = props => {
   const { web3Wrapper: wrapper } = useContext(Web3WrapperContext);
 
   useEffect(() => {
-    wrapper?.getTokenDistributorInstance().requestTokens("USDT"); //USDT
-    wrapper?.getTokenDistributorInstance().requestTokens("USDC"); //USDC
-    wrapper?.getTokenDistributorInstance().requestTokens("BTC"); //BTC
+    wrapper?.getTokenDistributorInstance().tokenDistributor.on("ConfirmTransaction1", onSuccessCallback); //USDT
+    wrapper?.getTokenDistributorInstance().tokenDistributor.on("ConfirmTransaction2", onSuccessCallback); //USDC
+    wrapper?.getTokenDistributorInstance().tokenDistributor.on("ConfirmTransaction3", onSuccessCallback); //BTC
+    wrapper?.getTokenDistributorInstance().tokenDistributor.on("ConfirmTransaction4", onSuccessCallback); //BNB
   }, [])
 
   const handleConnectWallet = useCallback(() => {
@@ -39,6 +40,11 @@ const Header = props => {
       console.error("ERROR MESSAGE: ", err.message)
       toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.TOP_RIGHT, closeOnClick: true })
     }
+  }
+
+  
+  const onSuccessCallback = (data) => {
+    toast.success(`Tokens Received Successfully.`, { position: toast.POSITION.TOP_RIGHT, closeOnClick: true, })
   }
 
 
@@ -202,9 +208,7 @@ const Header = props => {
                         color="light"
                         className="btn-block btn-lg"
                         outline
-                        onClick={() => {
-                          window.open("https://testnet.binance.org/faucet-smart", "_blank")
-                        }}
+                        onClick={handleGetToken}
                       >
                         BNB
                       </Button>

@@ -201,6 +201,7 @@ const HashstackCrypto = (props) => {
     const [commitPeriod1, setCommitPeriod1] = useState();
 
     useEffect(() => {
+      wrapper?.getDepositInstance().deposit.on("NewDeposit", onDeposit);
       wrapper?.getDepositInstance().deposit.on("DepositAdded", onDeposit);
     }, []);
 
@@ -280,7 +281,7 @@ const HashstackCrypto = (props) => {
                   <Button
                     color="primary"
                     className="w-md"
-                    disabled={commitPeriod1 === undefined} 
+                    disabled={commitPeriod1 === undefined}
                     onClick={handleDeposit}
                   >
                     Deposit
@@ -299,6 +300,7 @@ const HashstackCrypto = (props) => {
     const [commitPeriod2, setCommitPeriod2] = useState();
 
     useEffect(() => {
+      wrapper?.getDepositInstance().deposit.on("NewDeposit", onDeposit);
       wrapper?.getDepositInstance().deposit.on("DepositAdded", onDeposit);
     }, []);
 
@@ -378,7 +380,7 @@ const HashstackCrypto = (props) => {
                     color="primary"
                     className="w-md"
                     onClick={handleDeposit}
-                    disabled={commitPeriod2 === undefined} 
+                    disabled={commitPeriod2 === undefined}
                   >
                     Deposit
                   </Button>
@@ -396,6 +398,7 @@ const HashstackCrypto = (props) => {
     const [commitPeriod3, setCommitPeriod3] = useState();
 
     useEffect(() => {
+      wrapper?.getDepositInstance().deposit.on("NewDeposit", onDeposit);
       wrapper?.getDepositInstance().deposit.on("DepositAdded", onDeposit);
     }, []);
 
@@ -476,7 +479,7 @@ const HashstackCrypto = (props) => {
                     color="primary"
                     className="w-md"
                     onClick={handleDeposit}
-                    disabled={commitPeriod3 === undefined} 
+                    disabled={commitPeriod3 === undefined}
                   >
                     Deposit
                   </Button>
@@ -494,6 +497,7 @@ const HashstackCrypto = (props) => {
     const [commitPeriod4, setCommitPeriod4] = useState();
 
     useEffect(() => {
+      wrapper?.getDepositInstance().deposit.on("NewDeposit", onDeposit);
       wrapper?.getDepositInstance().deposit.on("DepositAdded", onDeposit);
     }, []);
 
@@ -574,7 +578,7 @@ const HashstackCrypto = (props) => {
                     color="primary"
                     className="w-md"
                     onClick={handleDeposit}
-                    disabled={commitPeriod4 === undefined} 
+                    disabled={commitPeriod4 === undefined}
                   >
                     Deposit
                   </Button>
@@ -689,7 +693,7 @@ const HashstackCrypto = (props) => {
 
     const handleBorrow = async () => {
       try {
-        const tx = await wrapper?.getLoanInstance().loanRequest(symbols[props.assetID], CommitMap[commitBorrowPeriod1], inputVal1, decimals[props.assetID], collateralMarket1, inputVal2, DecimalsMap[collateralMarket1]);
+        const tx = await wrapper?.getLoanInstance().loanRequest(SymbolsMap[props.assetID], CommitMap[commitBorrowPeriod1], inputVal1, DecimalsMap[props.assetID], SymbolsMap[collateralMarket1], inputVal2, DecimalsMap[collateralMarket1]);
       } catch (err) {
         toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.TOP_RIGHT, closeOnClick: true, })
       }
@@ -782,7 +786,7 @@ const HashstackCrypto = (props) => {
                   <Button
                     color="primary"
                     className="w-md"
-                    disabled={commitBorrowPeriod1 === undefined} 
+                    disabled={commitBorrowPeriod1 === undefined}
                     onClick={handleBorrow}
                   >
                     Request Loan
@@ -815,7 +819,7 @@ const HashstackCrypto = (props) => {
 
     const handleBorrow = async () => {
       try {
-        const tx = await wrapper?.getLoanInstance().loanRequest(symbols[props.assetID], CommitMap[commitBorrowPeriod2], inputVal1, decimals[props.assetID], collateralMarket2, inputVal2, DecimalsMap[collateralMarket2]);
+        const tx = await wrapper?.getLoanInstance().loanRequest(SymbolsMap[props.assetID], CommitMap[commitBorrowPeriod2], inputVal1, DecimalsMap[props.assetID], SymbolsMap[collateralMarket2], inputVal2, DecimalsMap[collateralMarket2]);
       } catch (err) {
         toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.TOP_RIGHT, closeOnClick: true, })
       }
@@ -942,7 +946,7 @@ const HashstackCrypto = (props) => {
 
     const handleBorrow = async () => {
       try {
-        const tx = await wrapper?.getLoanInstance().loanRequest(symbols[props.assetID], CommitMap[commitBorrowPeriod3], inputVal1, decimals[props.assetID], collateralMarket3, inputVal2, DecimalsMap[collateralMarket3]);
+        const tx = await wrapper?.getLoanInstance().loanRequest(SymbolsMap[props.assetID], CommitMap[commitBorrowPeriod3], inputVal1, DecimalsMap[props.assetID], SymbolsMap[collateralMarket3], inputVal2, DecimalsMap[collateralMarket3]);
       } catch (err) {
         toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.TOP_RIGHT, closeOnClick: true, })
       }
@@ -1069,7 +1073,7 @@ const HashstackCrypto = (props) => {
 
     const handleBorrow = async () => {
       try {
-        const tx = await wrapper?.getLoanInstance().loanRequest(symbols[props.assetID], CommitMap[commitBorrowPeriod4], inputVal1, decimals[props.assetID], collateralMarket4, inputVal2, DecimalsMap[collateralMarket4]);
+        const tx = await wrapper?.getLoanInstance().loanRequest(SymbolsMap[props.assetID], CommitMap[commitBorrowPeriod4], inputVal1, DecimalsMap[props.assetID], SymbolsMap[collateralMarket4], inputVal2, DecimalsMap[collateralMarket4]);
       } catch (err) {
         toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.TOP_RIGHT, closeOnClick: true, })
       }
@@ -1078,7 +1082,7 @@ const HashstackCrypto = (props) => {
     const onLoanRequested = (data) => {
       let amount = BNtoNum(Number(data.amount))
       toast.success(`Requested amount: ${amount}`, { position: toast.POSITION.TOP_RIGHT, closeOnClick: true, })
-    } 
+    }
 
     return (
       <>
@@ -1208,11 +1212,11 @@ const HashstackCrypto = (props) => {
                       <i className={asset.icon} />
                     </span>
                   </div>
-                  <span>{asset.title}</span>
+                  <span>{asset.loanMarket}</span>
                 </div>
               </th>
               <td>
-                <div className="text-muted">$ {asset.price}</div>
+                <div className="text-muted">$ {asset.loanAmount}</div>
               </td>
               <td>
                 <div className="d-flex align-items-center">
@@ -1229,7 +1233,7 @@ const HashstackCrypto = (props) => {
                       <i className={asset.icon} />
                     </span>
                   </div>
-                  <span>{asset.title}</span>
+                  <span>{asset.collateralMarket}</span>
                 </div>
               </td>
               <td>
@@ -1293,7 +1297,7 @@ const HashstackCrypto = (props) => {
             <DepositData1 assetID={0} title={'USDT'} />
           </td>
           <td style={{ width: "120px" }}>
-            <BorrowData1 assetID={0} title={'USDT'} />
+            <BorrowData1 assetID={"USDT"} title={'USDT'} />
           </td>
         </tr>
         <tr key={1}>
@@ -1327,7 +1331,7 @@ const HashstackCrypto = (props) => {
             <DepositData2 assetID={1} title={'USDC'} />
           </td>
           <td style={{ width: "120px" }}>
-            <BorrowData2 assetID={1} title={'USDC'} />
+            <BorrowData2 assetID={"USDC"} title={'USDC'} />
           </td>
         </tr>
         <tr key={2}>
@@ -1361,7 +1365,7 @@ const HashstackCrypto = (props) => {
             <DepositData3 assetID={2} title={'BTC'} />
           </td>
           <td style={{ width: "120px" }}>
-            <BorrowData3 assetID={2} title={'BTC'} />
+            <BorrowData3 assetID={"BTC"} title={'BTC'} />
           </td>
         </tr>
         <tr key={3}>
@@ -1395,7 +1399,7 @@ const HashstackCrypto = (props) => {
             <DepositData4 assetID={3} title={'BNB'} />
           </td>
           <td style={{ width: "120px" }}>
-            <BorrowData4 assetID={3} title={'BNB'} />
+            <BorrowData4 assetID={"BNB"} title={'BNB'} />
           </td>
         </tr>
       </>)
@@ -2083,7 +2087,7 @@ const HashstackCrypto = (props) => {
                                 <h5 className="font-size-14">Get Earnings</h5>
                                 <p className="text-muted">
                                   New common language will be more simple and
-                                  regular than the existing. 
+                                  regular than the existing.
                                 </p>
                               </div>
                             </div>
@@ -2220,7 +2224,7 @@ const HashstackCrypto = (props) => {
                             </thead>
 
                             <tbody>
-                              <PassbookTBody isloading={isLoading} assets={assets}></PassbookTBody>
+                              <PassbookTBody isloading={isLoading} assets={activeLoansData}></PassbookTBody>
                             </tbody>
                           </Table>
                         </div>
