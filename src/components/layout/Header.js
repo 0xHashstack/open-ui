@@ -36,13 +36,13 @@ const Header = props => {
       const tx = await wrapper?.getTokenDistributorInstance().requestTokens(event.target.textContent);
     } catch (err) {
       console.error("ERROR MESSAGE: ", err.message)
-      toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true })
+      toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 5000, closeOnClick: true })
     }
   }
 
   
   const onSuccessCallback = (data) => {
-    toast.success(`Deposited amount: ${amount}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true, })
+    toast.success(`Deposited amount: ${amount}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 5000, closeOnClick: true, })
   }
 
 
