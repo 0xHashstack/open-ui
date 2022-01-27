@@ -1,17 +1,16 @@
-import { diamondAddress } from '../constants';
 import Loan from 'blockchain/contracts/Loan';
 import { NumToBN } from '../utils';
 import Loan1 from 'blockchain/contracts/Loan1';
-
+// import { pancakeSwapTokenAddress } from 'blockchain/constants';
 class LoanWrapper {
-    
+
     //Contract
-    loan: Loan; 
+    loan: Loan;
     loan1: Loan1;
 
     constructor(wrapperOptions: any) {
-        this.loan = new Loan(wrapperOptions, diamondAddress);
-        this.loan1 = new Loan1(wrapperOptions, diamondAddress);
+        this.loan = new Loan(wrapperOptions, process.env.REACT_APP_DIAMOND_ADDRESS);
+        this.loan1 = new Loan1(wrapperOptions, process.env.REACT_APP_DIAMOND_ADDRESS);
     }
 
     //send transaction methods
@@ -32,9 +31,11 @@ class LoanWrapper {
     }
 
     loanRequest(market: string, commitment: string, loanAmount: number, loanDecimal: number, collateralMarket: string, collateralAmount: number, collateralDecimal: number) {
-        return this.loan1.send("loanRequest", {}, market, commitment, NumToBN(loanAmount, loanDecimal), collateralMarket, NumToBN(collateralAmount, collateralDecimal));
+        let loanAmountToSend = NumToBN(loanAmount, loanDecimal);
+        let collateralAmountToSend = NumToBN(collateralAmount, collateralDecimal);
+        return this.loan1.send("loanRequest", {}, market, commitment, loanAmountToSend, collateralMarket, collateralAmountToSend);
     }
-    
+
     addCollateral(market: string, commitment: string, collateralMarket: string, collateralAmount: number, collateralDecimal: number) {
         return this.loan1.send("addCollateral", {}, market, commitment, collateralMarket, NumToBN(collateralAmount, collateralDecimal));
     }
@@ -76,7 +77,7 @@ class LoanWrapper {
     unpauseLoan() {
         return this.loan.send("unpauseLoan", {});
     }
-    
+
     pauseLoan1() {
         return this.loan1.send("pauseLoan1", {});
     }

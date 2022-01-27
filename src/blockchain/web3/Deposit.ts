@@ -1,4 +1,3 @@
-import { diamondAddress } from '../constants';
 import Deposit from '../contracts/Deposit';
 import { NumToBN } from '../utils';
 
@@ -7,7 +6,7 @@ class DepositWrapper {
     deposit: Deposit;
   
     constructor(wrapperOptions: any) {
-        this.deposit = new Deposit(wrapperOptions, diamondAddress);
+        this.deposit = new Deposit(wrapperOptions, process.env.REACT_APP_DIAMOND_ADDRESS);
     }
 
     //send transaction methods

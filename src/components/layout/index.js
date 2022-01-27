@@ -15,7 +15,6 @@ import {
 import { useSelector, useDispatch } from "react-redux"
 
 //components
-import Navbar from "./Navbar"
 import Header from "./Header"
 import Footer from "./Footer"
 
@@ -40,6 +39,7 @@ const Layout = (props) => {
         .then(res => {
           if (res.data) {
             setCheckAccess(res.data.isWhiteListed)
+            localStorage.setItem('authWhitelist', JSON.stringify({'account' : account, 'whiteListed': res.data.isWhiteListed}))
           }
         })
         .catch(err => console.log("Error", err))
@@ -129,7 +129,8 @@ const Layout = (props) => {
   }
 
   function switchScreens() {
-    if (account === null) {
+    const storedData = localStorage.getItem('authWhitelist');
+    if (account === null && storedData.account === '') {
       return (
         <Container>
           <Row style={{ marginTop: '25ch' }}>

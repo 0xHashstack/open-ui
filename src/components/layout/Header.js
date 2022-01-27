@@ -1,23 +1,27 @@
 import React, { useState, useContext, useCallback, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Row, Col, Modal, Button, Form } from "reactstrap";
+import { Col, Modal, Button, Form } from "reactstrap";
 import { Web3ModalContext } from "../../contexts/Web3ModalProvider";
 import { Web3WrapperContext } from "../../contexts/Web3WrapperProvider";
+import { GetErrorText } from "../../blockchain/utils";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-toast.configure()
+toast.configure({
+  autoClose: 5000
+})
 
 const Header = props => {
   const [get_token, setGet_token] = useState(false);
 
-  const { connect, disconnect, account } = useContext(Web3ModalContext);
+  const { connect, disconnect, account, chainId } = useContext(Web3ModalContext);
   const { web3Wrapper: wrapper } = useContext(Web3WrapperContext);
 
   useEffect(() => {
-    wrapper?.getTokenDistributorInstance().requestTokens1(); //USDT
-    wrapper?.getTokenDistributorInstance().requestTokens2(); //USDC
-    wrapper?.getTokenDistributorInstance().requestTokens3(); //BTC
+    wrapper?.getTokenDistributorInstance().tokenDistributor.on("ConfirmTransaction1", onSuccessCallback); //USDT
+    wrapper?.getTokenDistributorInstance().tokenDistributor.on("ConfirmTransaction2", onSuccessCallback); //USDC
+    wrapper?.getTokenDistributorInstance().tokenDistributor.on("ConfirmTransaction3", onSuccessCallback); //BTC
+    wrapper?.getTokenDistributorInstance().tokenDistributor.on("ConfirmTransaction4", onSuccessCallback); //BNB
   }, [])
 
   const handleConnectWallet = useCallback(() => {
@@ -26,34 +30,24 @@ const Header = props => {
 
   const handleDisconnectWallet = useCallback(() => {
     disconnect();
+    localStorage.setItem('authWhitelist', {})
   }, [disconnect]);
 
-  const handleBTCToken = async () => {
+  const handleGetToken = async (event) => {
     try {
-      const tx = await wrapper?.getTokenDistributorInstance().requestTokens3();
+      const tx = await wrapper?.getTokenDistributorInstance().requestTokens(event.target.textContent);
     } catch (err) {
       console.error("ERROR MESSAGE: ", err.message)
-      toast.error(`${err.message}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true })
+      toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.TOP_RIGHT, closeOnClick: true })
     }
   }
 
-  const handleUSDCToken = async () => {
-    try {
-      const tx = await wrapper?.getTokenDistributorInstance().requestTokens2();
-    } catch (err) {
-      console.error("ERROR MESSAGE: ", err.message)
-      toast.error(`${err.message}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true })
-    }
+  
+  const onSuccessCallback = (data) => {
+    toast.success(`Tokens Received Successfully.`, { position: toast.POSITION.TOP_RIGHT, closeOnClick: true, })
   }
 
-  const handleUSDTToken = async () => {
-    try {
-      const tx = await wrapper?.getTokenDistributorInstance().requestTokens1();
-    } catch (err) {
-      console.error("ERROR MESSAGE: ", err.message)
-      toast.error(`${err.message}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 8000, closeOnClick: true })
-    }
-  }
+
 
   function removeBodyCss() {
     document.body.classList.add("no_padding");
@@ -70,7 +64,8 @@ const Header = props => {
         <div className="navbar-header">
           <div className="d-flex">
             <div className="navbar-brand-box">
-              <Link to="/" className="logo logo-dark">
+              <Link to="" className="logo logo-dark">
+                <img src="./logo.png" style={{ width: '30px', height: '30px', marginRight: '0.5rem' }}></img>
                 <span className="logo-sm">
                   <strong style={{ color: 'white', fontSize: '22px', fontWeight: '600' }}>Hashstack</strong>
                 </span>
@@ -79,7 +74,8 @@ const Header = props => {
                 </span>
               </Link>
 
-              <Link to="/" className="logo logo-light">
+              <Link to="" className="logo logo-light">
+                <img src="./logo.png" style={{ width: '30px', height: '30px', marginRight: '0.5rem' }}></img>
                 <span className="logo-sm">
                   <strong style={{ color: 'white', fontSize: '22px', fontWeight: '600' }}>Hashstack</strong>
                 </span>
@@ -182,7 +178,7 @@ const Header = props => {
                         className="btn-block btn-lg"
                         color="light"
                         outline
-                        onClick={handleBTCToken}
+                        onClick={handleGetToken}
                       >
                         Bitcoin
                       </Button>
@@ -192,7 +188,7 @@ const Header = props => {
                         color="light"
                         className="btn-block btn-lg"
                         outline
-                        onClick={handleUSDCToken}
+                        onClick={handleGetToken}
                       >
                         USDC
                       </Button>
@@ -202,7 +198,7 @@ const Header = props => {
                         color="light"
                         className="btn-block btn-lg"
                         outline
-                        onClick={handleUSDTToken}
+                        onClick={handleGetToken}
                       >
                         USDT
                       </Button>
@@ -212,9 +208,7 @@ const Header = props => {
                         color="light"
                         className="btn-block btn-lg"
                         outline
-                        onClick={() => {
-                          window.open("https://testnet.binance.org/faucet-smart", "_blank")
-                        }}
+                        onClick={handleGetToken}
                       >
                         BNB
                       </Button>

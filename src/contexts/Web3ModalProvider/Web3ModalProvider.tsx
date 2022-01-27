@@ -11,6 +11,8 @@ import { Bitski } from "bitski";
 import BurnerConnectProvider from "@burner-wallet/burner-connect-provider";
 import DcentProvider from "dcent-provider";
 import Authereum from "authereum";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface IWeb3ModalContext {
   web3: Web3 | null;
@@ -137,17 +139,21 @@ const Web3ModalProvider = (props: any) => {
       const networkId = await _web3.eth.net.getId();
       setChainId(chainId);
       setNetworkId(networkId);
+    
     });
 
     _provider.on("networkChanged", async (networkId: number) => {
       const chainId = await _web3.eth.getChainId();
       setChainId(chainId);
       setNetworkId(networkId);
+      if (chainId != 97)
+        toast.warn(`Please connect to BSC Testnet`, { position: toast.POSITION.TOP_RIGHT, autoClose: 5000, closeOnClick: true, })
+      else
+        toast.success("Connected to BSC Testnet", { position: toast.POSITION.TOP_RIGHT, autoClose: 5000, closeOnClick: true, })
     });
     _provider.on("connect", () => {
       console.log('------')
       authenticate()
-
     });
   }, [resetWeb3])
 
@@ -170,12 +176,14 @@ const Web3ModalProvider = (props: any) => {
     const _account = accounts[0];
     const _networkId = await _web3.eth.net.getId();
     const _chainId = await _web3.eth.getChainId();
-
+    if (_chainId != 97)
+      toast.warn(`Please connect to BSC Testnet`, { position: toast.POSITION.TOP_RIGHT, autoClose: 5000, closeOnClick: true, })
+    else
+      toast.success("Connected to BSC Testnet", { position: toast.POSITION.TOP_RIGHT, autoClose: 5000, closeOnClick: true, })
     setAccount(_account);
     setNetworkId(_networkId);
     setChainId(_chainId);
     setConnected(true);
-    // }    
   }, [web3Modal, subscribeProvider]);
 
   useEffect(() => {

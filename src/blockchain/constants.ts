@@ -102,3 +102,20 @@ export const pancakeSwapTokenAddress = {
   "0x4254432e74000000000000000000000000000000000000000000000000000000": "0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c", //BTC,
   "0x57424e4200000000000000000000000000000000000000000000000000000000": "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c" //BNB
 }
+<<<<<<< HEAD
+=======
+
+export const EventMap = {
+  "GET_TOKEN": "",
+  "NEW_DEPOSIT": "NewDeposit",
+  "DEPOSIT_ADDED": "DepositAdded",
+  "WITHDRAW_DEPOSIT": "Withdrawal",
+  "REQUEST_LOAN": "NewLoan",
+  "REPAY_LOAN": "LoanRepaid",
+  "WITHDRAW_LOAN": "WithdrawalProcessed",
+  "ADD_COLLATERAL": "AddCollateral",
+  "WITHDRAW_COLLATERAL": "CollateralReleased",
+  "SWAP_LOAN": "MarketSwapped",
+  "SWAP_TO_LOAN": "MarketSwapped"
+};
+>>>>>>> 5349d8b1da55df8e5ab92b2a7f2ecd169d98e17b
