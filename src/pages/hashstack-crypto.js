@@ -678,7 +678,7 @@ const HashstackCrypto = (props) => {
     const [collateralMarket1, setCollateralMarket1] = useState();
 
     useEffect(() => {
-      wrapper?.getLoanInstance().loan1.on("NewLoan", onLoanRequested);
+      wrapper?.getLoanInstance().loan.on("NewLoan", onLoanRequested);
     });
 
     const handleBorrowChange1 = (e) => {
@@ -804,7 +804,7 @@ const HashstackCrypto = (props) => {
     const [collateralMarket2, setCollateralMarket2] = useState();
 
     useEffect(() => {
-      wrapper?.getLoanInstance().loan1.on("NewLoan", onLoanRequested);
+      wrapper?.getLoanInstance().loan.on("NewLoan", onLoanRequested);
     });
 
     const handleBorrowChange2 = (e) => {
@@ -932,7 +932,7 @@ const HashstackCrypto = (props) => {
     const [collateralMarket3, setCollateralMarket3] = useState();
 
     useEffect(() => {
-      wrapper?.getLoanInstance().loan1.on("NewLoan", onLoanRequested);
+      wrapper?.getLoanInstance().loan.on("NewLoan", onLoanRequested);
     });
 
     const handleBorrowChange3 = (e) => {
@@ -1059,7 +1059,7 @@ const HashstackCrypto = (props) => {
     const [collateralMarket4, setCollateralMarket4] = useState();
 
     useEffect(() => {
-      wrapper?.getLoanInstance().loan1.on("NewLoan", onLoanRequested);
+      wrapper?.getLoanInstance().loan.on("NewLoan", onLoanRequested);
     });
 
     const handleBorrowChange4 = (e) => {
