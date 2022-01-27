@@ -3,9 +3,9 @@ import { NumToBN } from '../utils';
 import Loan1 from 'blockchain/contracts/Loan1';
 // import { pancakeSwapTokenAddress } from 'blockchain/constants';
 class LoanWrapper {
-    
+
     //Contract
-    loan: Loan; 
+    loan: Loan;
     loan1: Loan1;
 
     constructor(wrapperOptions: any) {
@@ -31,23 +31,11 @@ class LoanWrapper {
     }
 
     loanRequest(market: string, commitment: string, loanAmount: number, loanDecimal: number, collateralMarket: string, collateralAmount: number, collateralDecimal: number) {
-        // let marketAddress = pancakeSwapTokenAddress[market];
-        // let API_URL = `https://testapi.hashstack.finance/seedTokenPrice?marketAddress=${marketAddress}&market=${market}&amount=${loanAmount}&decimal=${loanDecimal}`
-        // console.log(API_URL)
-        // return fetch(API_URL).then(response => response.json()).then((data) => {
-        //     if(!data["success"]) {
-        //         console.log("MarketAddress: ", marketAddress);
-        //         console.log("Market: ", market);
-        //         console.log("Amount: ", loanAmount);
-        //         console.log("Data: ", data);
-        //         throw new Error("Error in setting fair price")
-        //     }
-        //     console.log("Set Fair Price Successful");
-        debugger;
-            return this.loan1.send("loanRequest", {}, market, commitment, NumToBN(loanAmount, loanDecimal), collateralMarket, NumToBN(collateralAmount, collateralDecimal));
-        // })
+        let loanAmountToSend = NumToBN(loanAmount, loanDecimal);
+        let collateralAmountToSend = NumToBN(collateralAmount, collateralDecimal);
+        return this.loan1.send("loanRequest", {}, market, commitment, loanAmountToSend, collateralMarket, collateralAmountToSend);
     }
-    
+
     addCollateral(market: string, commitment: string, collateralMarket: string, collateralAmount: number, collateralDecimal: number) {
         return this.loan1.send("addCollateral", {}, market, commitment, collateralMarket, NumToBN(collateralAmount, collateralDecimal));
     }
@@ -89,7 +77,7 @@ class LoanWrapper {
     unpauseLoan() {
         return this.loan.send("unpauseLoan", {});
     }
-    
+
     pauseLoan1() {
         return this.loan1.send("pauseLoan1", {});
     }
