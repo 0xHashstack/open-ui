@@ -39,7 +39,7 @@ const Layout = (props) => {
         .then(res => {
           if (res.data) {
             setCheckAccess(res.data.isWhiteListed)
-            localStorage.setItem('authWhitelist', JSON.stringify({'account' : account, 'whiteListed': res.data.isWhiteListed}))
+            localStorage.setItem('authWhitelist', JSON.stringify({ 'account': account, 'whiteListed': res.data.isWhiteListed }))
           }
         })
         .catch(err => console.log("Error", err))
@@ -129,7 +129,7 @@ const Layout = (props) => {
   }
 
   function switchScreens() {
-    const storedData = localStorage.getItem('authWhitelist');
+    const storedData = JSON.parse(localStorage.getItem('authWhitelist'));
     if (account === null && storedData.account === '') {
       return (
         <Container>
