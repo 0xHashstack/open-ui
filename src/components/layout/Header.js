@@ -7,7 +7,9 @@ import { GetErrorText } from "../../blockchain/utils";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-toast.configure()
+toast.configure({
+  autoClose: 5000
+})
 
 const Header = props => {
   const [get_token, setGet_token] = useState(false);
@@ -28,21 +30,21 @@ const Header = props => {
 
   const handleDisconnectWallet = useCallback(() => {
     disconnect();
+    localStorage.setItem('authWhitelist', {})
   }, [disconnect]);
-
 
   const handleGetToken = async (event) => {
     try {
       const tx = await wrapper?.getTokenDistributorInstance().requestTokens(event.target.textContent);
     } catch (err) {
       console.error("ERROR MESSAGE: ", err.message)
-      toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.TOP_RIGHT, autoClose: 5000, closeOnClick: true })
+      toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.TOP_RIGHT, closeOnClick: true })
     }
   }
 
   
   const onSuccessCallback = (data) => {
-    toast.success(`Tokens Received Successfully.`, { position: toast.POSITION.TOP_RIGHT, autoClose: 5000, closeOnClick: true, })
+    toast.success(`Tokens Received Successfully.`, { position: toast.POSITION.TOP_RIGHT, closeOnClick: true, })
   }
 
 
