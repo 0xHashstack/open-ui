@@ -1237,19 +1237,19 @@ const HashstackCrypto = (props) => {
                 </div>
               </td>
               <td>
-                <h5 className="font-size-14 mb-1">
+                {/* <h5 className="font-size-14 mb-1">
                   {asset.investRate}
-                </h5>
+                </h5> */}
                 <div className="text-muted">
-                  ${asset.investPrice}
+                  ${BNtoNum(Number(asset.collateralAmount))}
                 </div>
               </td>
               <td>
-                <h5 className="font-size-14 mb-1">
+                {/* <h5 className="font-size-14 mb-1">
                   {asset.loansRate}
-                </h5>
+                </h5> */}
                 <div className="text-muted">
-                  ${asset.loansPrice}
+                  ${asset.cdr}
                 </div>
               </td>
             </tr>
