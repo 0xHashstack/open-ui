@@ -700,7 +700,7 @@ const HashstackCrypto = (props) => {
     }
 
     const onLoanRequested = (data) => {
-      let amount = BNtoNum(Number(data.amount))
+      let amount = BNtoNum(Number(data.loanAmount))
       toast.success(`Requested amount: ${amount}`, { position: toast.POSITION.TOP_RIGHT, closeOnClick: true, })
     }
 
@@ -826,7 +826,7 @@ const HashstackCrypto = (props) => {
     }
 
     const onLoanRequested = (data) => {
-      let amount = BNtoNum(Number(data.amount))
+      let amount = BNtoNum(Number(data.loanAmount))
       toast.success(`Requested amount: ${amount}`, { position: toast.POSITION.TOP_RIGHT, closeOnClick: true, })
     }
 
@@ -953,7 +953,7 @@ const HashstackCrypto = (props) => {
     }
 
     const onLoanRequested = (data) => {
-      let amount = BNtoNum(Number(data.amount))
+      let amount = BNtoNum(Number(data.loanAmount))
       toast.success(`Requested amount: ${amount}`, { position: toast.POSITION.TOP_RIGHT, closeOnClick: true, })
     }
 
@@ -1080,7 +1080,7 @@ const HashstackCrypto = (props) => {
     }
 
     const onLoanRequested = (data) => {
-      let amount = BNtoNum(Number(data.amount))
+      let amount = BNtoNum(Number(data.loanAmount))
       toast.success(`Requested amount: ${amount}`, { position: toast.POSITION.TOP_RIGHT, closeOnClick: true, })
     }
 
@@ -1216,7 +1216,7 @@ const HashstackCrypto = (props) => {
                 </div>
               </th>
               <td>
-                <div className="text-muted">$ {asset.loanAmount}</div>
+                <div className="text-muted">$ {BNtoNum(Number(asset.loanAmount))}</div>
               </td>
               <td>
                 <div className="d-flex align-items-center">
