@@ -27,5 +27,6 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
+    - run: apt-get install -y build-essential
     - run: yarn
-    - run: yarn build 
+    - run: yarn build:production
