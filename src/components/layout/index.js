@@ -130,7 +130,7 @@ const Layout = (props) => {
 
   function switchScreens() {
     const storedData = localStorage.getItem('authWhitelist');
-    if (account === null && storedData.account === '') {
+    if (account === null) {
       return (
         <Container>
           <Row style={{ marginTop: '25ch' }}>
