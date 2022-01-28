@@ -5,9 +5,9 @@ name: open-ui build
 
 on:
   push:
-    branches: [ release-v0.1.0 ]
+    branches: [ master ]
   pull_request:
-    branches: [ release-v0.1.0 ]
+    branches: [ master ]
   workflow_dispatch:
 
 jobs:
@@ -27,6 +27,6 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - run: apt-get install -y build-essential
+    - run: sudo npm install -g env-cmd
     - run: yarn
-    - run: yarn build:production
+    - run: sudo yarn build:production
