@@ -44,7 +44,7 @@ const Header = props => {
 
   
   const onSuccessCallback = (data) => {
-    toast.success(`Tokens Received Successfully.`, { position: toast.POSITION.TOP_RIGHT, closeOnClick: true, })
+    toast.success(`${data.message || 'Tokens Received Successfully.'}`, { position: toast.POSITION.TOP_RIGHT, closeOnClick: true, })
   }
 
 

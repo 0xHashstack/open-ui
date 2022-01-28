@@ -2267,11 +2267,11 @@ const HashstackCrypto = (props) => {
                                     <div className="text-muted">{asset.commitment}</div>
                                   </td>
                                   <td>
-                                    <div className="text-muted">{asset.amount}</div>
+                                    <div className="text-muted">{BNtoNum(Number(asset.amount))}</div>
                                   </td>
                                   <td>
                                     <div className="text-muted">{asset.acquiredYield}</div>
-                                  </td>
+                                  </td> 
                                 </tr>
                               )) : <tr align="center"><td colSpan="5">No Records found.</td></tr>}
                             </tbody>
