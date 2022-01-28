@@ -30,7 +30,7 @@ const Header = props => {
 
   const handleDisconnectWallet = useCallback(() => {
     disconnect();
-    localStorage.setItem('authWhitelist', JSON.stringify({ 'account': '', 'whiteListed': '' }))
+    localStorage.setItem('authWhitelist', {})
   }, [disconnect]);
 
   const handleGetToken = async (event) => {
@@ -42,6 +42,7 @@ const Header = props => {
     }
   }
 
+  
   const onSuccessCallback = (data) => {
     toast.success(`Tokens Received Successfully.`, { position: toast.POSITION.TOP_RIGHT, closeOnClick: true, })
   }
