@@ -147,9 +147,9 @@ const Web3ModalProvider = (props: any) => {
       setChainId(chainId);
       setNetworkId(networkId);
       if (chainId != 97)
-        toast.warn(`Please connect to BSC Testnet`, { position: toast.POSITION.TOP_RIGHT, autoClose: 5000, closeOnClick: true, })
+        toast.warn(`Please connect to BSC Testnet`, { position: toast.POSITION.BOTTOM_RIGHT, autoClose: 4000, closeOnClick: true, })
       else
-        toast.success("Connected to BSC Testnet", { position: toast.POSITION.TOP_RIGHT, autoClose: 5000, closeOnClick: true, })
+        toast.success("Connected to BSC Testnet", { position: toast.POSITION.BOTTOM_RIGHT, autoClose: 4000, closeOnClick: true, })
     });
     _provider.on("connect", () => {
       console.log('------')
@@ -177,9 +177,9 @@ const Web3ModalProvider = (props: any) => {
     const _networkId = await _web3.eth.net.getId();
     const _chainId = await _web3.eth.getChainId();
     if (_chainId != 97)
-      toast.warn(`Please connect to BSC Testnet`, { position: toast.POSITION.TOP_RIGHT, autoClose: 5000, closeOnClick: true, })
+      toast.warn(`Please connect to BSC Testnet`, { position: toast.POSITION.BOTTOM_RIGHT, autoClose: 4000, closeOnClick: true, })
     else
-      toast.success("Connected to BSC Testnet", { position: toast.POSITION.TOP_RIGHT, autoClose: 5000, closeOnClick: true, })
+      toast.success("Connected to BSC Testnet", { position: toast.POSITION.BOTTOM_RIGHT, autoClose: 4000, closeOnClick: true, })
     setAccount(_account);
     setNetworkId(_networkId);
     setChainId(_chainId);

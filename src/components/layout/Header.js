@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 toast.configure({
-  autoClose: 5000
+  autoClose: 4000
 })
 
 const Header = props => {
@@ -38,13 +38,13 @@ const Header = props => {
       const tx = await wrapper?.getTokenDistributorInstance().requestTokens(event.target.textContent);
     } catch (err) {
       console.error("ERROR MESSAGE: ", err.message)
-      toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.TOP_RIGHT, closeOnClick: true })
+      toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true })
     }
   }
 
   
   const onSuccessCallback = (data) => {
-    toast.success(`${data.message || 'Tokens Received Successfully.'}`, { position: toast.POSITION.TOP_RIGHT, closeOnClick: true, })
+    toast.success(`${data.message || 'Tokens Received Successfully.'}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
   }
 
 
