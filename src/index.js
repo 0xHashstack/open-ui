@@ -13,7 +13,6 @@ import { DAppProvider } from "@usedapp/core";
 import Layout from './components/layout';
 import { Provider } from "react-redux";
 import store from "./store";
-
 import "./assets/scss/theme.scss";
 import './assets/fonts/AvenirNextLTPro-Regular.otf';
 
@@ -22,6 +21,7 @@ Sentry.init({
   integrations: [new Integrations.BrowserTracing()],
   tracesSampleRate: 1.0,
 });
+
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
