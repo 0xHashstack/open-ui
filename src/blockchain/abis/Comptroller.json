@@ -20,12 +20,6 @@
           "type": "uint256"
         },
         {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "oldAPR",
-          "type": "uint256"
-        },
-        {
           "indexed": true,
           "internalType": "uint256",
           "name": "timestamp",
@@ -48,12 +42,6 @@
           "indexed": true,
           "internalType": "uint256",
           "name": "newAPY",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "oldAPY",
           "type": "uint256"
         },
         {
@@ -406,10 +394,6 @@
       ],
       "name": "YieldConversionFeesUpdated",
       "type": "event"
-    },
-    {
-      "stateMutability": "payable",
-      "type": "fallback"
     },
     {
       "inputs": [
@@ -794,19 +778,6 @@
       "type": "function"
     },
     {
-      "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "loanID",
-          "type": "uint256"
-        }
-      ],
-      "name": "liquidationTrigger",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
       "inputs": [],
       "name": "pauseComptroller",
       "outputs": [],
@@ -1075,9 +1046,5 @@
       ],
       "stateMutability": "nonpayable",
       "type": "function"
-    },
-    {
-      "stateMutability": "payable",
-      "type": "receive"
     }
   ]
