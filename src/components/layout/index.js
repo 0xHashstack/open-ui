@@ -8,9 +8,11 @@ import {
   changeLayout,
   changeTopbarTheme,
   changeLayoutWidth,
-  showRightSidebarAction
+  showRightSidebarAction,
+  changePreloader
 } from "../../store/actions"
 
+import { cacheService } from "../../helpers/CacheService";
 //redux
 import { useSelector, useDispatch } from "react-redux"
 
@@ -28,27 +30,43 @@ toast.configure()
 const Layout = (props) => {
 
   const dispatch = useDispatch()
-  const [checkAccess, setCheckAccess] = useState(true);
-  const [accountWhitelisted, setAccountWhitelisted] = useState(false);
+
 
   const { connect, disconnect, account } = useContext(Web3ModalContext);
+  const [ isWhiteListedAccount, setIsWhiteListedAccount ] = useState(false);
+  const [ isWhiteListedAccountRequested, setIsWhiteListedAccountRequested ] = useState(false); 
 
   useEffect(() => {
+    dispatch(changePreloader(true));
     if (account) {
       axios.get(`isWhiteListedAccount?address=${account}`)
         .then(res => {
+          dispatch(changePreloader(true));
           if (res.data) {
-            setCheckAccess(res.data.isWhiteListed)
             localStorage.setItem('authWhitelist', JSON.stringify({'account' : account, 'whiteListed': res.data.isWhiteListed}))
+            cacheService.setItem(`${account.toUpperCase()}_IsWhiteListedAccount`, res.data['isWhiteListed']);
           }
+          dispatch(changePreloader(true));
+          cacheService.setItem(`${account.toUpperCase()}_IsWhiteListedAccountRequested`, Boolean(cacheService.getItem(`${account.toUpperCase()}_IsWhiteListedAccountRequested`)));
+          setIsWhiteListedAccountRequested(Boolean(cacheService.getItem(`${account.toUpperCase()}_IsWhiteListedAccountRequested`)));
+          setIsWhiteListedAccount(Boolean(cacheService.getItem(`${account.toUpperCase()}_IsWhiteListedAccount`)));
+          
+          setTimeout(() => {dispatch(changePreloader(false));}, 300);
         })
-        .catch(err => console.log("Error", err))
+        .catch(err => console.log("Error", err));
     }
   }, [account])
 
   const handleConnectWallet = useCallback(() => {
     connect();
   }, [connect]);
+
+  
+  const handleDisconnectWallet = useCallback(() => {
+    disconnect();
+    localStorage.setItem('authWhitelist', {})
+  }, [disconnect]);
+
 
   const {
     topbarTheme, layoutWidth, isPreloader, showRightSidebar
@@ -89,7 +107,7 @@ const Layout = (props) => {
       setTimeout(function () {
         document.getElementById("preloader").style.display = "none"
         document.getElementById("status").style.display = "none"
-      }, 2500)
+      }, 3000)
     } else {
       document.getElementById("preloader").style.display = "none"
       document.getElementById("status").style.display = "none"
@@ -121,11 +139,14 @@ const Layout = (props) => {
       })
       .then(res => {
         if (res.data) {
-          setAccountWhitelisted(res.data.success);
-          setCheckAccess(true);
+          cacheService.setItem(`${account.toUpperCase()}_IsWhiteListedAccountRequested`, true);
+          cacheService.setItem(`${account.toUpperCase()}_IsWhiteListedAccount`, res.data.data['whiteListed']);
+
+          setIsWhiteListedAccountRequested(true);
+          setIsWhiteListedAccount(res.data.data['whiteListed']);
         }
       })
-      .catch(err => console.log("Error", err))
+      .catch(err => {console.log("Error", err); cacheService.setItem(`${account.toUpperCase()}_IsWhiteListedAccountRequested`, false);})
   }
 
   function switchScreens() {
@@ -152,7 +173,7 @@ const Layout = (props) => {
           </Row>
         </Container>
       )
-    } else if (account !== null && checkAccess === false) {
+    } else if (account !== null && (!isWhiteListedAccount) && (!isWhiteListedAccountRequested)) {
       return (
         <Container>
           <Row style={{ marginTop: '25ch' }}>
@@ -175,7 +196,31 @@ const Layout = (props) => {
           </Row>
         </Container>
       )
-    } else if (account !== null && checkAccess === true) {
+    } else if (account !== null && (!isWhiteListedAccount) && isWhiteListedAccountRequested) {
+      return (
+        <Container>
+          <Row style={{ marginTop: '25ch' }}>
+            <Col lg="12">
+              <div className="text-center mb-5">
+                <h4 className="font-weight-medium">Congratulations!</h4>
+                <h4 className="font-weight-medium">Request sent Successfully. Your account will be whitelisted within 3 days.</h4>
+                <div className="mt-5 text-center">
+                <Button
+                    color="dark"
+                    outline
+                    className="btn-outline"
+                    onClick={handleDisconnectWallet}
+                  >
+                    Disconnect
+                  </Button>
+                </div>
+              </div>
+            </Col>
+          </Row>
+        </Container>
+      )
+    }
+     else if (account !== null && isWhiteListedAccount) {
       return (
         <div id="layout-wrapper">
           <Header
