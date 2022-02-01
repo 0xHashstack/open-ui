@@ -18,10 +18,7 @@ const Header = props => {
   const { web3Wrapper: wrapper } = useContext(Web3WrapperContext);
 
   useEffect(() => {
-    wrapper?.getTokenDistributorInstance().tokenDistributor.on("ConfirmTransaction1", onSuccessCallback); //USDT
-    wrapper?.getTokenDistributorInstance().tokenDistributor.on("ConfirmTransaction2", onSuccessCallback); //USDC
-    wrapper?.getTokenDistributorInstance().tokenDistributor.on("ConfirmTransaction3", onSuccessCallback); //BTC
-    wrapper?.getTokenDistributorInstance().tokenDistributor.on("ConfirmTransaction4", onSuccessCallback); //BNB
+    wrapper?.getFaucetInstance().faucet.on("TokensIssued", onSuccessCallback);
   }, [])
 
   const handleConnectWallet = useCallback(() => {
@@ -35,7 +32,7 @@ const Header = props => {
 
   const handleGetToken = async (event) => {
     try {
-      const tx = await wrapper?.getTokenDistributorInstance().requestTokens(event.target.textContent);
+      const tx = await wrapper?.getFaucetInstance().getTokens(event.target.textContent);
     } catch (err) {
       console.error("ERROR MESSAGE: ", err.message)
       toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true })
@@ -46,8 +43,6 @@ const Header = props => {
   const onSuccessCallback = (data) => {
     toast.success(`${data.message || 'Tokens Received Successfully.'}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
   }
-
-
 
   function removeBodyCss() {
     document.body.classList.add("no_padding");
