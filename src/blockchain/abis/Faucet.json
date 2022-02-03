@@ -56,7 +56,7 @@
             {
                 "indexed": true,
                 "internalType": "address",
-                "name": "sender",
+                "name": "account",
                 "type": "address"
             }
         ],

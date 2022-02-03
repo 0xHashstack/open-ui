@@ -7,6 +7,7 @@ import OracleOpenWrapper from './OracleOpen';
 import ReserveWrapper from './Reserve';
 import Faucet from './Faucet';
 import TokenList from './TokenList';
+import MockBep20Wrapper from './MockBep20';
 
 export default class Web3Wrapper {
   web3: Web3;
@@ -21,6 +22,7 @@ export default class Web3Wrapper {
   reserveInstance: any;
   oracleOpenInstance: any;
   faucetInstance: any;
+  mockBep20Instance: any;
 
   constructor(web3, chainId, account, options = {}) {
 
@@ -86,8 +88,15 @@ export default class Web3Wrapper {
 
   getFaucetInstance() {
     if (!this.faucetInstance) {
-      this.faucetInstance = new Faucet(this.wrapperOptions);;
+      this.faucetInstance = new Faucet(this.wrapperOptions);
     }
     return this.faucetInstance;
+  }
+
+  getMockBep20Instance() {
+    if(!this.mockBep20Instance) {
+      this.mockBep20Instance = new MockBep20Wrapper(this.wrapperOptions);
+    }
+    return this.mockBep20Instance;
   }
 }
