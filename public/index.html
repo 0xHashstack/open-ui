@@ -15,9 +15,28 @@
     />
     <link rel="icon" href="./favicon.png" />
     <title>Hashstack Finance</title>
+    <style>
+      #userback_button_container  .userback-button {
+        transform: rotate(-90deg) translate(50%, -50%);
+        transform-origin: 100% 50%;
+        right: -2px;
+        top: 45% !important;
+        margin-top: -20px;
+        bottom: auto;
+      }
+    </style>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
+    <script>
+      window.Userback = window.Userback || {};
+      Userback.access_token = '33835|64681|Us5siKzciH5vXqhFFWCKiLVv1';
+      (function(d) {
+      var s = d.createElement('script');s.async = true;
+      s.src = 'https://static.userback.io/widget/v1.js';
+      (d.head || d.body).appendChild(s);
+      })(document);
+    </script>
     <div id="root"></div>
     <!--
       This HTML file is a template.
@@ -29,14 +48,5 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
-    <script>
-      window.Userback = window.Userback || {};
-      Userback.access_token = '33835|64681|Us5siKzciH5vXqhFFWCKiLVv1';
-      (function(d) {
-      var s = d.createElement('script');s.async = true;
-      s.src = 'https://static.userback.io/widget/v1.js';
-      (d.head || d.body).appendChild(s);
-      })(document);
-    </script>
   </body>
 </html>

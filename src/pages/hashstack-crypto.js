@@ -1435,11 +1435,11 @@ const HashstackCrypto = (props) => {
     wrapper?.getDepositInstance().deposit.on("DepositAdded", depositAdded);
     wrapper?.getDepositInstance().deposit.on("Withdrawal", WithdrawalDeposit);
 
-    wrapper?.getLoanInstance().loanExt.on("AddCollateral", onCollateralAdded);
-    wrapper?.getLoanInstance().loanExt.on("CollateralReleased", onCollateralReleased);
+    // wrapper?.getLoanInstance().loanExt.on("AddCollateral", onCollateralAdded);
+    // wrapper?.getLoanInstance().loanExt.on("CollateralReleased", onCollateralReleased);
 
-    wrapper?.getLoanInstance().loanExt.on("MarketSwapped", onSwapLoan);
-    wrapper?.getLoanInstance().loanExt.on("MarketSwapped", onSwapToLoan);
+    // wrapper?.getLoanInstance().loanExt.on("MarketSwapped", onSwapLoan);
+    // wrapper?.getLoanInstance().loanExt.on("MarketSwapped", onSwapToLoan);
 
   }, []);
 
