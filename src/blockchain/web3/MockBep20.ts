@@ -20,20 +20,20 @@ class MockBep20Wrapper {
         this.tWBNB = new MockBep20(wrapperOptions, "0x89A1BdA646968710f5EBf8aB3394E673fEE1671D");
     }
 
-   approve(market: string, sender: string, value: number, decimal: number) {
+   approve(market: string, value: number, decimal: number) {
         switch (market) {
             case SymbolsMap.BTC:
-                return this.tBTC.send("approve", {}, sender, NumToBN(value, decimal));
+                return this.tBTC.send("approve", {}, process.env.REACT_APP_DIAMOND_ADDRESS, NumToBN(value, decimal));
             case SymbolsMap.USDC:
-                return this.tUSDC.send("approve", {}, sender, NumToBN(value, decimal));
+                return this.tUSDC.send("approve", {}, process.env.REACT_APP_DIAMOND_ADDRESS, NumToBN(value, decimal));
             case SymbolsMap.USDT:
-                return this.tUSDT.send("approve", {}, sender, NumToBN(value, decimal));
+                return this.tUSDT.send("approve", {}, process.env.REACT_APP_DIAMOND_ADDRESS, NumToBN(value, decimal));
             case SymbolsMap.SXP:
-                return this.tSXP.send("approve", {}, sender, NumToBN(value, decimal));
+                return this.tSXP.send("approve", {}, process.env.REACT_APP_DIAMOND_ADDRESS, NumToBN(value, decimal));
             case SymbolsMap.CAKE:
-                return this.tCake.send("approve", {}, sender, NumToBN(value, decimal));
+                return this.tCake.send("approve", {}, process.env.REACT_APP_DIAMOND_ADDRESS, NumToBN(value, decimal));
             case SymbolsMap.BNB:
-                return this.tWBNB.send("approve", {}, sender, NumToBN(value, decimal));
+                return this.tWBNB.send("approve", {}, process.env.REACT_APP_DIAMOND_ADDRESS, NumToBN(value, decimal));
             default:
                 break;
        }

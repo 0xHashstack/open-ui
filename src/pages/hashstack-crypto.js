@@ -211,7 +211,7 @@ const HashstackCrypto = (props) => {
 
     const handleDeposit = async () => {
       try {
-        const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap.USDT, account, inputVal1, DecimalsMap.USDT);
+        const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap.USDT, inputVal1, DecimalsMap.USDT);
         console.log("Approve Transaction sent: ", approveTransactionHash);
         const tx = await wrapper?.getDepositInstance().addToDeposit(SymbolsMap.USDT, CommitMap[commitPeriod1], inputVal1, DecimalsMap.USDT);
         console.log("Deposit transaction sent: ", tx);
@@ -313,7 +313,7 @@ const HashstackCrypto = (props) => {
 
     const handleDeposit = async () => {
       try {
-        const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap.USDC, account, inputVal1, DecimalsMap.USDC);
+        const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap.USDC, inputVal1, DecimalsMap.USDC);
         console.log("Approve Transaction sent: ", approveTransactionHash);
         const tx = await wrapper?.getDepositInstance().addToDeposit(SymbolsMap.USDC, CommitMap[commitPeriod2], inputVal1, DecimalsMap.USDC);
       } catch (err) {
@@ -413,7 +413,7 @@ const HashstackCrypto = (props) => {
 
     const handleDeposit = async () => {
       try {
-        const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap.BTC, account, inputVal1, DecimalsMap.BTC);
+        const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap.BTC, inputVal1, DecimalsMap.BTC);
         console.log("Approve Transaction sent: ", approveTransactionHash);
         const tx = await wrapper?.getDepositInstance().addToDeposit(SymbolsMap.BTC, CommitMap[commitPeriod3], inputVal1, DecimalsMap.BTC);
       } catch (err) {
@@ -514,7 +514,7 @@ const HashstackCrypto = (props) => {
 
     const handleDeposit = async () => {
       try {
-        const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap.BNB, account, inputVal1, DecimalsMap.BNB);
+        const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap.BNB, inputVal1, DecimalsMap.BNB);
         console.log("Approve Transaction sent: ", approveTransactionHash);
         const tx = await wrapper?.getDepositInstance().addToDeposit(SymbolsMap.BNB, CommitMap[commitPeriod4], inputVal1, DecimalsMap.BNB);
       } catch (err) {
@@ -702,6 +702,8 @@ const HashstackCrypto = (props) => {
 
     const handleBorrow = async () => {
       try {
+        const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[props.assetID], inputVal1, DecimalsMap[props.assetID]);
+        console.log("Approve Transaction sent: ", approveTransactionHash);
         const tx = await wrapper?.getLoanInstance().loanRequest(SymbolsMap[props.assetID], CommitMap[commitBorrowPeriod1], inputVal1, DecimalsMap[props.assetID], SymbolsMap[collateralMarket1], inputVal2, DecimalsMap[collateralMarket1]);
       } catch (err) {
         toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
@@ -828,6 +830,8 @@ const HashstackCrypto = (props) => {
 
     const handleBorrow = async () => {
       try {
+        const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[props.assetID], inputVal1, DecimalsMap[props.assetID]);
+        console.log("Approve Transaction sent: ", approveTransactionHash);
         const tx = await wrapper?.getLoanInstance().loanRequest(SymbolsMap[props.assetID], CommitMap[commitBorrowPeriod2], inputVal1, DecimalsMap[props.assetID], SymbolsMap[collateralMarket2], inputVal2, DecimalsMap[collateralMarket2]);
       } catch (err) {
         toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
@@ -955,6 +959,8 @@ const HashstackCrypto = (props) => {
 
     const handleBorrow = async () => {
       try {
+        const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[props.assetID], inputVal1, DecimalsMap[props.assetID]);
+        console.log("Approve Transaction sent: ", approveTransactionHash);
         const tx = await wrapper?.getLoanInstance().loanRequest(SymbolsMap[props.assetID], CommitMap[commitBorrowPeriod3], inputVal1, DecimalsMap[props.assetID], SymbolsMap[collateralMarket3], inputVal2, DecimalsMap[collateralMarket3]);
       } catch (err) {
         toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
@@ -1082,6 +1088,8 @@ const HashstackCrypto = (props) => {
 
     const handleBorrow = async () => {
       try {
+        const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[props.assetID], inputVal1, DecimalsMap[props.assetID]);
+        console.log("Approve Transaction sent: ", approveTransactionHash);
         const tx = await wrapper?.getLoanInstance().loanRequest(SymbolsMap[props.assetID], CommitMap[commitBorrowPeriod4], inputVal1, DecimalsMap[props.assetID], SymbolsMap[collateralMarket4], inputVal2, DecimalsMap[collateralMarket4]);
       } catch (err) {
         toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
