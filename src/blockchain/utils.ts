@@ -30,10 +30,10 @@ export const getDefaultWeb3 = () => {
 
 export const getDefaultContractOptions = () => {
   const web3 = getDefaultWeb3();
-  return { 
-    web3, 
-    chainId: defaultChainId, 
-    account: null 
+  return {
+    web3,
+    chainId: defaultChainId,
+    account: null
   };
 }
 
@@ -46,8 +46,14 @@ export const NumToBN = (value, decimal = 18) => {
 }
 
 export const GetErrorText = (err) => {
-  if(err) {
-    return JSON.parse(err.split('.')[1]).message || 'Oops! Something went wrong.';
+  if (err) {
+    try {
+      return JSON.parse(err.split('.')[1]).message || 'Oops! Something went wrong.';
+    }
+    catch (error) {
+      console.log(error);
+      return err;
+    }
   }
 }
 
@@ -62,6 +68,6 @@ export const isMarketSupported = async (symbol) => {
   const tokenList = new TokenList(getDefaultContractOptions(), process.env.REACT_APP_DIAMOND_ADDRESS);
   const isSupported = await tokenList.call("isMarketSupported", symbol);
   return {
-    isSupport : isSupported
+    isSupport: isSupported
   }
 }
