@@ -662,6 +662,16 @@ const HashstackCrypto = (props) => {
     toast.success(`Collateral amount added: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
   }
 
+  const onSwapLoan = (data) => {
+    let amount = BNtoNum(Number(data.amount))
+    toast.success(`Swap Loan: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
+  }
+
+  const onSwapToLoan = (data) => {
+    let amount = BNtoNum(Number(data.amount))
+    toast.success(`Swap to Loan: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
+  }
+
   const handleSwap = async () => {
     // console.log("Swap ", symbols[0], comit_ONEMONTH, symbols[1]);
     try {
@@ -1423,7 +1433,14 @@ const HashstackCrypto = (props) => {
 
   useEffect(() => {
     wrapper?.getDepositInstance().deposit.on("DepositAdded", depositAdded);
-    wrapper?.getDepositInstance().deposit.on("Withdrawal", WithdrawalDeposit)
+    wrapper?.getDepositInstance().deposit.on("Withdrawal", WithdrawalDeposit);
+
+    wrapper?.getLoanInstance().loanExt.on("AddCollateral", onCollateralAdded);
+    wrapper?.getLoanInstance().loanExt.on("CollateralReleased", onCollateralReleased);
+
+    wrapper?.getLoanInstance().loanExt.on("MarketSwapped", onSwapLoan);
+    wrapper?.getLoanInstance().loanExt.on("MarketSwapped", onSwapToLoan);
+
   }, []);
 
   const [addToDepositSel, setAddToDepositSel] = useState();
