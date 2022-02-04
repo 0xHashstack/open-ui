@@ -44,7 +44,6 @@ const HashstackCrypto = (props) => {
 
   const [isMenu, setIsMenu] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [assets, setAssets] = useState([]);
   const [activeDepositsData, setActiveDepositsData] = useState([]);
   const [activeLoansData, setActiveLoansData] = useState([]);
 
@@ -81,7 +80,6 @@ const HashstackCrypto = (props) => {
 
 
   useEffect(() => {
-    setAssets([]);
     setTimeout(() => {
       setIsLoading(false);
     }, 100);
