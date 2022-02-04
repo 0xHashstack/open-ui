@@ -664,12 +664,12 @@ const HashstackCrypto = (props) => {
 
   const onSwapLoan = (data) => {
     let amount = BNtoNum(Number(data.amount))
-    toast.success(`Swap Loan: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
+    toast.success(`Swap Loan Successful: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
   }
 
   const onSwapToLoan = (data) => {
     let amount = BNtoNum(Number(data.amount))
-    toast.success(`Swap to Loan: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
+    toast.success(`Swap to Loan Successful: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
   }
 
   const handleSwap = async () => {
