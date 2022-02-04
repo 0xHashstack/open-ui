@@ -43,7 +43,6 @@ const Layout = (props) => {
         .then(res => {
           dispatch(changePreloader(true));
           if (res.data) {
-            localStorage.setItem('authWhitelist', JSON.stringify({'account' : account, 'whiteListed': res.data.isWhiteListed}))
             cacheService.setItem(`${account.toUpperCase()}_IsWhiteListedAccount`, res.data['isWhiteListed']);
           }
           dispatch(changePreloader(true));
@@ -64,7 +63,6 @@ const Layout = (props) => {
   
   const handleDisconnectWallet = useCallback(() => {
     disconnect();
-    localStorage.setItem('authWhitelist', {})
   }, [disconnect]);
 
 
@@ -150,7 +148,6 @@ const Layout = (props) => {
   }
 
   function switchScreens() {
-    const storedData = localStorage.getItem('authWhitelist');
     if (account === null) {
       return (
         <Container>

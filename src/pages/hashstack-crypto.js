@@ -28,7 +28,7 @@ import classnames from "classnames";
 import { Web3ModalContext } from '../contexts/Web3ModalProvider';
 import { Web3WrapperContext } from '../contexts/Web3WrapperProvider';
 import {
-  symbols, decimals, comit_ONEMONTH, comit_TWOWEEKS,
+  decimals, comit_ONEMONTH,
   SymbolsMap, DecimalsMap, DepositInterestRates, BorrowInterestRates, CommitMap, VariableDepositInterestRates
 } from '../blockchain/constants';
 import { BNtoNum, GetErrorText } from '../blockchain/utils';
@@ -216,13 +216,13 @@ const HashstackCrypto = (props) => {
         const tx = await wrapper?.getDepositInstance().addToDeposit(SymbolsMap.USDT, CommitMap[commitPeriod1], inputVal1, DecimalsMap.USDT);
         console.log("Deposit transaction sent: ", tx);
       } catch (err) {
-        toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
+        toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
       }
     }
 
     const onDeposit = (data) => {
       let amount = BNtoNum(Number(data.amount))
-      toast.success(`Deposited amount: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
+      toast.success(`Deposited amount: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
 
 
@@ -317,13 +317,13 @@ const HashstackCrypto = (props) => {
         console.log("Approve Transaction sent: ", approveTransactionHash);
         const tx = await wrapper?.getDepositInstance().addToDeposit(SymbolsMap.USDC, CommitMap[commitPeriod2], inputVal1, DecimalsMap.USDC);
       } catch (err) {
-        toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
+        toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
       }
     }
 
     const onDeposit = (data) => {
       let amount = BNtoNum(Number(data.amount))
-      toast.success(`Deposited amount: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
+      toast.success(`Deposited amount: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
 
     return (
@@ -417,13 +417,13 @@ const HashstackCrypto = (props) => {
         console.log("Approve Transaction sent: ", approveTransactionHash);
         const tx = await wrapper?.getDepositInstance().addToDeposit(SymbolsMap.BTC, CommitMap[commitPeriod3], inputVal1, DecimalsMap.BTC);
       } catch (err) {
-        toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
+        toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
       }
     }
 
     const onDeposit = (data) => {
       let amount = BNtoNum(Number(data.amount))
-      toast.success(`Deposited amount: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
+      toast.success(`Deposited amount: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
 
 
@@ -518,13 +518,13 @@ const HashstackCrypto = (props) => {
         console.log("Approve Transaction sent: ", approveTransactionHash);
         const tx = await wrapper?.getDepositInstance().addToDeposit(SymbolsMap.BNB, CommitMap[commitPeriod4], inputVal1, DecimalsMap.BNB);
       } catch (err) {
-        toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
+        toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
       }
     }
 
     const onDeposit = (data) => {
       let amount = BNtoNum(Number(data.amount))
-      toast.success(`Deposited amount: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
+      toast.success(`Deposited amount: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
 
 
@@ -626,7 +626,7 @@ const HashstackCrypto = (props) => {
     try {
       const tx = await wrapper?.getLoanInstance().repayLoan(SymbolsMap[loanOption], comit_ONEMONTH, inputVal1, DecimalsMap[loanOption]);
     } catch (err) {
-      toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
+      toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
   }
 
@@ -634,20 +634,20 @@ const HashstackCrypto = (props) => {
     try {
       const tx = await wrapper?.getLoanInstance().permissibleWithdrawal(SymbolsMap[loanOption], comit_ONEMONTH, SymbolsMap[loanOption], inputVal1, DecimalsMap[loanOption]);
     } catch (err) {
-      toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
+      toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
   }
 
   const onCollateralReleased = (data) => {
     let amount = BNtoNum(Number(data.amount))
-    toast.success(`Collateral amount released: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
+    toast.success(`Collateral amount released: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
   }
 
   const handleCollateral = async () => {
     try {
       const tx = await wrapper?.getLoanInstance().addCollateral(SymbolsMap[loanOption], comit_ONEMONTH, SymbolsMap[collateralOption], inputVal1, decimals[0]);
     } catch (err) {
-      toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
+      toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
   }
 
@@ -655,13 +655,13 @@ const HashstackCrypto = (props) => {
     try {
       const tx = await wrapper?.getLoanInstance().withdrawCollateral(SymbolsMap[loanOption], comit_ONEMONTH);
     } catch (err) {
-      toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
+      toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
   }
 
   const onCollateralAdded = (data) => {
     let amount = BNtoNum(Number(data.amount))
-    toast.success(`Collateral amount added: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
+    toast.success(`Collateral amount added: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
   }
 
   const handleSwap = async () => {
@@ -669,7 +669,7 @@ const HashstackCrypto = (props) => {
     try {
       const tx = await wrapper?.getLoanInstance().swapLoan(SymbolsMap[loanOption], comit_ONEMONTH, SymbolsMap[swapOption]);
     } catch (err) {
-      toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
+      toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
   }
 
@@ -678,7 +678,7 @@ const HashstackCrypto = (props) => {
     try {
       const tx = await wrapper?.getLoanInstance().swapToLoan(SymbolsMap[swapOption], comit_ONEMONTH, SymbolsMap[loanOption]);
     } catch (err) {
-      toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
+      toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
   }
 
@@ -706,13 +706,13 @@ const HashstackCrypto = (props) => {
         console.log("Approve Transaction sent: ", approveTransactionHash);
         const tx = await wrapper?.getLoanInstance().loanRequest(SymbolsMap[props.assetID], CommitMap[commitBorrowPeriod1], inputVal1, DecimalsMap[props.assetID], SymbolsMap[collateralMarket1], inputVal2, DecimalsMap[collateralMarket1]);
       } catch (err) {
-        toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
+        toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
       }
     }
 
     const onLoanRequested = (data) => {
       let amount = BNtoNum(Number(data.loanAmount))
-      toast.success(`Requested amount: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
+      toast.success(`Requested amount: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
 
     return (
@@ -834,13 +834,13 @@ const HashstackCrypto = (props) => {
         console.log("Approve Transaction sent: ", approveTransactionHash);
         const tx = await wrapper?.getLoanInstance().loanRequest(SymbolsMap[props.assetID], CommitMap[commitBorrowPeriod2], inputVal1, DecimalsMap[props.assetID], SymbolsMap[collateralMarket2], inputVal2, DecimalsMap[collateralMarket2]);
       } catch (err) {
-        toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
+        toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
       }
     }
 
     const onLoanRequested = (data) => {
       let amount = BNtoNum(Number(data.loanAmount))
-      toast.success(`Requested amount: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
+      toast.success(`Requested amount: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
 
 
@@ -963,13 +963,13 @@ const HashstackCrypto = (props) => {
         console.log("Approve Transaction sent: ", approveTransactionHash);
         const tx = await wrapper?.getLoanInstance().loanRequest(SymbolsMap[props.assetID], CommitMap[commitBorrowPeriod3], inputVal1, DecimalsMap[props.assetID], SymbolsMap[collateralMarket3], inputVal2, DecimalsMap[collateralMarket3]);
       } catch (err) {
-        toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
+        toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
       }
     }
 
     const onLoanRequested = (data) => {
       let amount = BNtoNum(Number(data.loanAmount))
-      toast.success(`Requested amount: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
+      toast.success(`Requested amount: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
 
 
@@ -1092,13 +1092,13 @@ const HashstackCrypto = (props) => {
         console.log("Approve Transaction sent: ", approveTransactionHash);
         const tx = await wrapper?.getLoanInstance().loanRequest(SymbolsMap[props.assetID], CommitMap[commitBorrowPeriod4], inputVal1, DecimalsMap[props.assetID], SymbolsMap[collateralMarket4], inputVal2, DecimalsMap[collateralMarket4]);
       } catch (err) {
-        toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
+        toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
       }
     }
 
     const onLoanRequested = (data) => {
       let amount = BNtoNum(Number(data.loanAmount))
-      toast.success(`Requested amount: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
+      toast.success(`Requested amount: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
 
     return (
@@ -1451,26 +1451,26 @@ const HashstackCrypto = (props) => {
     try {
       const tx = await wrapper?.getDepositInstance().addToDeposit(addToDepositSel, addToDepositVal, inputVal1, decimals[0]);
     } catch (err) {
-      toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
+      toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
   }
 
   const depositAdded = (data) => {
     let amount = BNtoNum(Number(data.amount))
-    toast.success(`Deposited Added: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
+    toast.success(`Deposited Added: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
   }
 
   const handleWithdrawDeposit = async () => {
     try {
       const tx = await wrapper?.getDepositInstance().addToDeposit(withdrawDepositSel, withdrawDepositVal, inputVal1, decimals[0]);
     } catch (err) {
-      toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
+      toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
   }
 
   const WithdrawalDeposit = (data) => {
     let amount = BNtoNum(Number(data.amount))
-    toast.success(`Deposited Withdrawn: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
+    toast.success(`Deposited Withdrawn: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
   }
 
   return (

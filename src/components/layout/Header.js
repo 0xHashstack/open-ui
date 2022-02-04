@@ -27,21 +27,20 @@ const Header = props => {
 
   const handleDisconnectWallet = useCallback(() => {
     disconnect();
-    localStorage.setItem('authWhitelist', {})
   }, [disconnect]);
 
   const handleGetToken = async (event) => {
     try {
       const tx = await wrapper?.getFaucetInstance().getTokens(event.target.textContent);
     } catch (err) {
-      console.error("ERROR MESSAGE: ", err.message)
-      toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true })
+      console.error("ERROR MESSAGE: ", err.message);
+      toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true });
     }
   }
 
   
   const onSuccessCallback = (data) => {
-    toast.success(`${data.message || 'Tokens Received Successfully.'}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
+    toast.success(`${data.message || 'Tokens Received Successfully.'}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
   }
 
   function removeBodyCss() {
@@ -79,69 +78,7 @@ const Header = props => {
                 </span>
               </Link>
             </div>
-
-            {/* <button
-              type="button"
-              className="btn btn-sm px-3 font-size-16 d-lg-none header-item"
-              data-toggle="collapse"
-              onClick={() => {
-                props.toggleLeftmenu(!props.leftMenu);
-              }}
-              data-target="#topnav-menu-content"
-            >
-              <i className="fa fa-fw fa-bars" />
-            </button> 
-
-            <form className="app-search d-none d-lg-block">
-              <div className="position-relative">
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Search..."
-                />
-                <span className="bx bx-search-alt" />
-              </div>
-            </form> */}
           </div>
-
-          {/* <div className="d-flex">
-            <div className="dropdown d-inline-block d-lg-none ms-2">
-              <button
-                type="button"
-                className="btn header-item noti-icon "
-                id="page-header-search-dropdown"
-                onClick={() => setSearch(!isSearch)}
-              >
-                <i className="mdi mdi-magnify" />
-              </button>
-              <div
-                className={
-                  isSearch
-                    ? "dropdown-menu dropdown-menu-lg dropdown-menu-end p-0 show"
-                    : "dropdown-menu dropdown-menu-lg dropdown-menu-end p-0"
-                }
-                aria-labelledby="page-header-search-dropdown"
-              >
-                <form className="p-3">
-                  <div className="form-group m-0">
-                    <div className="input-group">
-                      <input
-                        type="text"
-                        className="form-control"
-                        placeholder={"Search..."}
-                        aria-label="Recipient's username"
-                      />
-                      <div className="input-group-append">
-                        <button className="btn btn-primary" type="submit">
-                          <i className="mdi mdi-magnify" />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div> */}
 
           <div className="d-flex flex-wrap gap-4">
             <Button
