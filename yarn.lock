@@ -15607,11 +15607,6 @@ react-select@4.3.1:
     react-input-autosize "^3.0.0"
     react-transition-group "^4.3.0"
 
-react-seo-robotstxt@^1.0.7:
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/react-seo-robotstxt/-/react-seo-robotstxt-1.0.7.tgz#249b78148fb25bdf2bf3194fceb48be20dcd12de"
-  integrity sha512-hAh2fahfHACZQoIdqldvDZjPI254qWrJYSrcgr9X1Am4rrwvN6EDrU37Giwxu6jfeT6iiJ7ZggMTnhDHZwPsOg==
-
 react-toastify@^8.1.0:
   version "8.1.0"
   resolved "https://registry.yarnpkg.com/react-toastify/-/react-toastify-8.1.0.tgz#acaca4e8c4415c8474562dd84a14e6f390ed7f17"

@@ -10,6 +10,7 @@ class LiquidatorWrapper {
     }
 
     swap(fromMarket: string, toMarket: string, fromAmount: number, decimal: number, mode: number) {
+        debugger
         return this.liquidator.send("swap", {}, fromMarket, toMarket, NumToBN(fromAmount, decimal), String(mode));
     }
 

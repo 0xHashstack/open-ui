@@ -213,7 +213,7 @@ const HashstackCrypto = (props) => {
       try {
         const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap.USDT, inputVal1, DecimalsMap.USDT);
         console.log("Approve Transaction sent: ", approveTransactionHash);
-        const tx = await wrapper?.getDepositInstance().addToDeposit(SymbolsMap.USDT, CommitMap[commitPeriod1], inputVal1, DecimalsMap.USDT);
+        const tx = await wrapper?.getDepositInstance().depositRequest(SymbolsMap.USDT, CommitMap[commitPeriod1], inputVal1, DecimalsMap.USDT);
         console.log("Deposit transaction sent: ", tx);
       } catch (err) {
         toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
@@ -315,7 +315,7 @@ const HashstackCrypto = (props) => {
       try {
         const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap.USDC, inputVal1, DecimalsMap.USDC);
         console.log("Approve Transaction sent: ", approveTransactionHash);
-        const tx = await wrapper?.getDepositInstance().addToDeposit(SymbolsMap.USDC, CommitMap[commitPeriod2], inputVal1, DecimalsMap.USDC);
+        const tx = await wrapper?.getDepositInstance().depositRequest(SymbolsMap.USDC, CommitMap[commitPeriod2], inputVal1, DecimalsMap.USDC);
       } catch (err) {
         toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
       }
@@ -415,7 +415,7 @@ const HashstackCrypto = (props) => {
       try {
         const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap.BTC, inputVal1, DecimalsMap.BTC);
         console.log("Approve Transaction sent: ", approveTransactionHash);
-        const tx = await wrapper?.getDepositInstance().addToDeposit(SymbolsMap.BTC, CommitMap[commitPeriod3], inputVal1, DecimalsMap.BTC);
+        const tx = await wrapper?.getDepositInstance().depositRequest(SymbolsMap.BTC, CommitMap[commitPeriod3], inputVal1, DecimalsMap.BTC);
       } catch (err) {
         toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
       }
@@ -516,7 +516,7 @@ const HashstackCrypto = (props) => {
       try {
         const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap.BNB, inputVal1, DecimalsMap.BNB);
         console.log("Approve Transaction sent: ", approveTransactionHash);
-        const tx = await wrapper?.getDepositInstance().addToDeposit(SymbolsMap.BNB, CommitMap[commitPeriod4], inputVal1, DecimalsMap.BNB);
+        const tx = await wrapper?.getDepositInstance().depositRequest(SymbolsMap.BNB, CommitMap[commitPeriod4], inputVal1, DecimalsMap.BNB);
       } catch (err) {
         toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
       }
@@ -1449,7 +1449,7 @@ const HashstackCrypto = (props) => {
 
   const handleAddToDeposit = async () => {
     try {
-      const tx = await wrapper?.getDepositInstance().addToDeposit(addToDepositSel, addToDepositVal, inputVal1, decimals[0]);
+      const tx = await wrapper?.getDepositInstance().depositRequest(addToDepositSel, addToDepositVal, inputVal1, decimals[0]);
     } catch (err) {
       toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
     }
@@ -1462,7 +1462,7 @@ const HashstackCrypto = (props) => {
 
   const handleWithdrawDeposit = async () => {
     try {
-      const tx = await wrapper?.getDepositInstance().addToDeposit(withdrawDepositSel, withdrawDepositVal, inputVal1, decimals[0]);
+      const tx = await wrapper?.getDepositInstance().depositRequest(withdrawDepositSel, withdrawDepositVal, inputVal1, decimals[0]);
     } catch (err) {
       toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
     }
