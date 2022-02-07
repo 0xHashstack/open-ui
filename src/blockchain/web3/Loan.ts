@@ -45,7 +45,7 @@ class LoanWrapper {
     }
 
     permissibleWithdrawal(market: string, commitment: string, collateralMarket: string, amount: number, decimal: number) {
-        return this.loanExt.send("permissibleWithdrawal", market, commitment, collateralMarket, NumToBN(amount, decimal));
+        return this.loanExt.send("withdrawPartialLoan", market, commitment, collateralMarket, NumToBN(amount, decimal));
     }
 
     //getter methods
