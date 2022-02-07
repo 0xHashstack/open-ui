@@ -1245,7 +1245,7 @@ const HashstackCrypto = (props) => {
                 </div>
               </th>
               <td>
-                <div className="text-muted">$ {BNtoNum(Number(asset.loanAmount))}</div>
+                <div className="text-muted">$ {BNtoNum(Number(asset.loanAmount),DecimalsMap[asset.market])}</div>
               </td>
               <td>
                 <div className="d-flex align-items-center">
@@ -1270,7 +1270,7 @@ const HashstackCrypto = (props) => {
                   {asset.investRate}
                 </h5> */}
                 <div className="text-muted">
-                  ${BNtoNum(Number(asset.collateralAmount))}
+                  ${BNtoNum(Number(asset.collateralAmount), DecimalsMap[asset.market])}
                 </div>
               </td>
               <td>
@@ -2304,10 +2304,10 @@ const HashstackCrypto = (props) => {
                                     <div className="text-muted">{asset.commitment}</div>
                                   </td>
                                   <td>
-                                    <div className="text-muted">{BNtoNum(Number(asset.amount))}</div>
+                                    <div className="text-muted">{BNtoNum(Number(asset.amount), DecimalsMap[asset.market])}</div>
                                   </td>
                                   <td>
-                                    <div className="text-muted">{BNtoNum(Number(asset.acquiredYield))}</div>
+                                    <div className="text-muted">{BNtoNum(Number(asset.acquiredYield), DecimalsMap[asset.market])}</div>
                                   </td> 
                                 </tr>
                               )) : <tr align="center"><td colSpan="5">No Records found.</td></tr>}

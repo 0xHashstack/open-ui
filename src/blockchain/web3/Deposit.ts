@@ -25,7 +25,7 @@ class DepositWrapper {
     }
 
     convertYeild(market: string, commitment: string) {
-        return this.deposit.send("convertYield", {}, market, commitment)
+        return this.deposit.send("convertYield", {}, market, commitment);
     }
 
 
