@@ -46,6 +46,8 @@ const HashstackCrypto = (props) => {
   const [isLoading, setIsLoading] = useState(true);
   const [activeDepositsData, setActiveDepositsData] = useState([]);
   const [activeLoansData, setActiveLoansData] = useState([]);
+  const [activeDepositDropdownData, setActiveDepositDropdownData] = useState([]);
+  const [activeLoansDropdownData, setActiveLoansDropdownData] = useState([]);
 
   const [customActiveTab, setCustomActiveTab] = useState("1");
   const [passbookStatus, setPassbookStatus] = useState(false)
@@ -90,7 +92,8 @@ const HashstackCrypto = (props) => {
       withCredentials: false
     }).then(res => {
       setIsLoading(false);
-      setActiveLoansData(res.data.data)
+      setActiveLoansData(res.data.data);
+      setActiveLoansDropdownData(res.data.data);
     })
       .catch(err => {
         setIsLoading(false);
@@ -105,7 +108,8 @@ const HashstackCrypto = (props) => {
       withCredentials: false
     }).then(res => {
       setIsLoading(false);
-      setActiveDepositsData(res.data.data)
+      setActiveDepositsData(res.data.data);
+      setActiveDepositDropdownData(res.data.data);
     })
       .catch(err => {
         setIsLoading(false);
@@ -219,7 +223,7 @@ const HashstackCrypto = (props) => {
     }
 
     const onDeposit = (data) => {
-      let amount = BNtoNum(Number(data.amount))
+      let amount = BNtoNum(Number(data.amount),DecimalsMap[data.market]);
       toast.success(`Deposited amount: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
 
@@ -320,7 +324,7 @@ const HashstackCrypto = (props) => {
     }
 
     const onDeposit = (data) => {
-      let amount = BNtoNum(Number(data.amount))
+      let amount = BNtoNum(Number(data.amount), DecimalsMap[data.market]);
       toast.success(`Deposited amount: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
 
@@ -420,7 +424,7 @@ const HashstackCrypto = (props) => {
     }
 
     const onDeposit = (data) => {
-      let amount = BNtoNum(Number(data.amount))
+      let amount = BNtoNum(Number(data.amount), DecimalsMap[data.market]);
       toast.success(`Deposited amount: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
 
@@ -521,7 +525,7 @@ const HashstackCrypto = (props) => {
     }
 
     const onDeposit = (data) => {
-      let amount = BNtoNum(Number(data.amount))
+      let amount = BNtoNum(Number(data.amount), DecimalsMap[data.market]);
       toast.success(`Deposited amount: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
 
@@ -719,7 +723,7 @@ const HashstackCrypto = (props) => {
     }
 
     const onLoanRequested = (data) => {
-      let amount = BNtoNum(Number(data.loanAmount))
+      let amount = BNtoNum(Number(data.loanAmount), DecimalsMap[data.market]);
       toast.success(`Requested amount: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
 
@@ -847,7 +851,7 @@ const HashstackCrypto = (props) => {
     }
 
     const onLoanRequested = (data) => {
-      let amount = BNtoNum(Number(data.loanAmount))
+      let amount = BNtoNum(Number(data.loanAmount), DecimalsMap[data.market]);
       toast.success(`Requested amount: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
 
@@ -976,7 +980,7 @@ const HashstackCrypto = (props) => {
     }
 
     const onLoanRequested = (data) => {
-      let amount = BNtoNum(Number(data.loanAmount))
+      let amount = BNtoNum(Number(data.loanAmount), DecimalsMap[data.market]);
       toast.success(`Requested amount: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
 
@@ -1105,7 +1109,7 @@ const HashstackCrypto = (props) => {
     }
 
     const onLoanRequested = (data) => {
-      let amount = BNtoNum(Number(data.loanAmount))
+      let amount = BNtoNum(Number(data.loanAmount), DecimalsMap[data.market]);
       toast.success(`Requested amount: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
 
@@ -1438,7 +1442,7 @@ const HashstackCrypto = (props) => {
     wrapper?.getLoanInstance().loanExt.on("AddCollateral", onCollateralAdded);
     wrapper?.getLoanInstance().loan.on("CollateralReleased", onCollateralReleased);
 
-    wrapper?.getLoanInstance().loanExt.on("WithdrawalProcessed", onLoanWithdrawal);
+    wrapper?.getLoanInstance().loanExt.on("WithdrawPartialLoan", onLoanWithdrawal);
     wrapper?.getLoanInstance().loanExt.on("LoanRepaid", onLoanRepay);
 
   }, []);
@@ -1464,28 +1468,28 @@ const HashstackCrypto = (props) => {
 
   const handledepositRequest = async () => {
     try {
-      const tx = await wrapper?.getDepositInstance().depositRequest(depositRequestSel, depositRequestVal, inputVal1, decimals[0]);
+      const tx = await wrapper?.getDepositInstance().depositRequest(SymbolsMap[depositRequestSel.toUpperCase()], CommitMap[depositRequestVal], inputVal1, DecimalsMap[depositRequestSel.toUpperCase()]);
     } catch (err) {
       toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
   }
 
   const depositAdded = (data) => {
-    let amount = BNtoNum(Number(data.amount))
-    toast.success(`Deposited Added: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
+    let amount = BNtoNum(Number(data.amount), DecimalsMap[data.market])
+    toast.success(`Deposit Added: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
   }
 
   const handleWithdrawDeposit = async () => {
     try {
-      const tx = await wrapper?.getDepositInstance().withdrawDeposit(withdrawDepositSel, withdrawDepositVal, inputVal1, decimals[0]);
+      const tx = await wrapper?.getDepositInstance().withdrawDeposit(SymbolsMap[withdrawDepositSel.toUpperCase()], CommitMap[withdrawDepositVal], inputVal1, DecimalsMap[withdrawDepositSel.toUpperCase()]);
     } catch (err) {
       toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
   }
 
   const WithdrawalDeposit = (data) => {
-    let amount = BNtoNum(Number(data.amount))
-    toast.success(`Deposited Withdrawn: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
+    let amount = BNtoNum(Number(data.amount), DecimalsMap[data.market])
+    toast.success(`Deposit Withdrawn: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
   }
 
   return (
