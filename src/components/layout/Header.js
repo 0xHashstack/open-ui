@@ -122,6 +122,16 @@ const Header = props => {
                         outline
                         onClick={handleGetToken}
                       >
+                        BNB
+                      </Button>
+                    </Col>
+                    <Col sm={3}>
+                      <Button
+                        color="light"
+                        className="btn-block btn-lg"
+                        outline
+                        onClick={handleGetToken}
+                      >
                         USDC
                       </Button>
                     </Col>
@@ -133,16 +143,6 @@ const Header = props => {
                         onClick={handleGetToken}
                       >
                         USDT
-                      </Button>
-                    </Col>
-                    <Col sm={3}>
-                      <Button
-                        color="light"
-                        className="btn-block btn-lg"
-                        outline
-                        onClick={handleGetToken}
-                      >
-                        BNB
                       </Button>
                     </Col>
                   </div>
