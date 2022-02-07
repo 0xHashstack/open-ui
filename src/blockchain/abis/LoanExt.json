@@ -205,27 +205,18 @@
           "type": "uint256"
         }
       ],
-      "name": "WithdrawalProcessed",
+      "name": "WithdrawPartialLoan",
       "type": "event"
     },
     {
-      "inputs": [],
-      "name": "GetisReentrant",
-      "outputs": [
-        {
-          "internalType": "bool",
-          "name": "",
-          "type": "bool"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
+      "stateMutability": "payable",
+      "type": "fallback"
     },
     {
       "inputs": [
         {
           "internalType": "bytes32",
-          "name": "_market",
+          "name": "_loanMarket",
           "type": "bytes32"
         },
         {
@@ -259,7 +250,7 @@
       "inputs": [
         {
           "internalType": "bytes32",
-          "name": "_market",
+          "name": "_loanMarket",
           "type": "bytes32"
         }
       ],
@@ -323,7 +314,7 @@
       "outputs": [
         {
           "internalType": "bool",
-          "name": "success",
+          "name": "",
           "type": "bool"
         }
       ],
@@ -334,7 +325,7 @@
       "inputs": [
         {
           "internalType": "bytes32",
-          "name": "_market",
+          "name": "_loanMarket",
           "type": "bytes32"
         },
         {
@@ -387,7 +378,7 @@
       "inputs": [
         {
           "internalType": "bytes32",
-          "name": "_market",
+          "name": "_loanMarket",
           "type": "bytes32"
         }
       ],
@@ -401,5 +392,43 @@
       ],
       "stateMutability": "view",
       "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "_loanMarket",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "_commitment",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "_collateralMarket",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "withdrawPartialLoan",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "stateMutability": "payable",
+      "type": "receive"
     }
   ]
