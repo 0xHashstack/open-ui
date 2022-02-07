@@ -28,7 +28,7 @@ import classnames from "classnames";
 import { Web3ModalContext } from '../contexts/Web3ModalProvider';
 import { Web3WrapperContext } from '../contexts/Web3WrapperProvider';
 import {
-  symbols, decimals, comit_ONEMONTH, comit_TWOWEEKS,
+  decimals, comit_ONEMONTH, EventMap,
   SymbolsMap, DecimalsMap, DepositInterestRates, BorrowInterestRates, CommitMap, VariableDepositInterestRates
 } from '../blockchain/constants';
 import { BNtoNum, GetErrorText } from '../blockchain/utils';
@@ -44,9 +44,10 @@ const HashstackCrypto = (props) => {
 
   const [isMenu, setIsMenu] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [assets, setAssets] = useState([]);
   const [activeDepositsData, setActiveDepositsData] = useState([]);
   const [activeLoansData, setActiveLoansData] = useState([]);
+  const [activeDepositDropdownData, setActiveDepositDropdownData] = useState([]);
+  const [activeLoansDropdownData, setActiveLoansDropdownData] = useState([]);
 
   const [customActiveTab, setCustomActiveTab] = useState("1");
   const [passbookStatus, setPassbookStatus] = useState(false)
@@ -81,7 +82,6 @@ const HashstackCrypto = (props) => {
 
 
   useEffect(() => {
-    setAssets([]);
     setTimeout(() => {
       setIsLoading(false);
     }, 100);
@@ -92,7 +92,8 @@ const HashstackCrypto = (props) => {
       withCredentials: false
     }).then(res => {
       setIsLoading(false);
-      setActiveLoansData(res.data.data)
+      setActiveLoansData(res.data.data);
+      setActiveLoansDropdownData(res.data.data);
     })
       .catch(err => {
         setIsLoading(false);
@@ -107,7 +108,8 @@ const HashstackCrypto = (props) => {
       withCredentials: false
     }).then(res => {
       setIsLoading(false);
-      setActiveDepositsData(res.data.data)
+      setActiveDepositsData(res.data.data);
+      setActiveDepositDropdownData(res.data.data);
     })
       .catch(err => {
         setIsLoading(false);
@@ -213,16 +215,16 @@ const HashstackCrypto = (props) => {
       try {
         const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap.USDT, inputVal1, DecimalsMap.USDT);
         console.log("Approve Transaction sent: ", approveTransactionHash);
-        const tx = await wrapper?.getDepositInstance().addToDeposit(SymbolsMap.USDT, CommitMap[commitPeriod1], inputVal1, DecimalsMap.USDT);
+        const tx = await wrapper?.getDepositInstance().depositRequest(SymbolsMap.USDT, CommitMap[commitPeriod1], inputVal1, DecimalsMap.USDT);
         console.log("Deposit transaction sent: ", tx);
       } catch (err) {
-        toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
+        toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
       }
     }
 
     const onDeposit = (data) => {
-      let amount = BNtoNum(Number(data.amount))
-      toast.success(`Deposited amount: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
+      let amount = BNtoNum(Number(data.amount),DecimalsMap[data.market]);
+      toast.success(`Deposited amount: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
 
 
@@ -315,15 +317,15 @@ const HashstackCrypto = (props) => {
       try {
         const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap.USDC, inputVal1, DecimalsMap.USDC);
         console.log("Approve Transaction sent: ", approveTransactionHash);
-        const tx = await wrapper?.getDepositInstance().addToDeposit(SymbolsMap.USDC, CommitMap[commitPeriod2], inputVal1, DecimalsMap.USDC);
+        const tx = await wrapper?.getDepositInstance().depositRequest(SymbolsMap.USDC, CommitMap[commitPeriod2], inputVal1, DecimalsMap.USDC);
       } catch (err) {
-        toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
+        toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
       }
     }
 
     const onDeposit = (data) => {
-      let amount = BNtoNum(Number(data.amount))
-      toast.success(`Deposited amount: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
+      let amount = BNtoNum(Number(data.amount), DecimalsMap[data.market]);
+      toast.success(`Deposited amount: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
 
     return (
@@ -415,15 +417,15 @@ const HashstackCrypto = (props) => {
       try {
         const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap.BTC, inputVal1, DecimalsMap.BTC);
         console.log("Approve Transaction sent: ", approveTransactionHash);
-        const tx = await wrapper?.getDepositInstance().addToDeposit(SymbolsMap.BTC, CommitMap[commitPeriod3], inputVal1, DecimalsMap.BTC);
+        const tx = await wrapper?.getDepositInstance().depositRequest(SymbolsMap.BTC, CommitMap[commitPeriod3], inputVal1, DecimalsMap.BTC);
       } catch (err) {
-        toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
+        toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
       }
     }
 
     const onDeposit = (data) => {
-      let amount = BNtoNum(Number(data.amount))
-      toast.success(`Deposited amount: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
+      let amount = BNtoNum(Number(data.amount), DecimalsMap[data.market]);
+      toast.success(`Deposited amount: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
 
 
@@ -516,15 +518,15 @@ const HashstackCrypto = (props) => {
       try {
         const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap.BNB, inputVal1, DecimalsMap.BNB);
         console.log("Approve Transaction sent: ", approveTransactionHash);
-        const tx = await wrapper?.getDepositInstance().addToDeposit(SymbolsMap.BNB, CommitMap[commitPeriod4], inputVal1, DecimalsMap.BNB);
+        const tx = await wrapper?.getDepositInstance().depositRequest(SymbolsMap.BNB, CommitMap[commitPeriod4], inputVal1, DecimalsMap.BNB);
       } catch (err) {
-        toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
+        toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
       }
     }
 
     const onDeposit = (data) => {
-      let amount = BNtoNum(Number(data.amount))
-      toast.success(`Deposited amount: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
+      let amount = BNtoNum(Number(data.amount), DecimalsMap[data.market]);
+      toast.success(`Deposited amount: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
 
 
@@ -626,28 +628,31 @@ const HashstackCrypto = (props) => {
     try {
       const tx = await wrapper?.getLoanInstance().repayLoan(SymbolsMap[loanOption], comit_ONEMONTH, inputVal1, DecimalsMap[loanOption]);
     } catch (err) {
-      toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
+      toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
   }
 
   const handleWithdrawLoan = async () => {
     try {
-      const tx = await wrapper?.getLoanInstance().permissibleWithdrawal(SymbolsMap[loanOption], comit_ONEMONTH, SymbolsMap[loanOption], inputVal1, DecimalsMap[loanOption]);
+      const commit = activeLoansData.filter((asset, key) => {
+        return EventMap[asset.loanMarket.toUpperCase()] === loanOption;
+      })
+      const tx = await wrapper?.getLoanInstance().permissibleWithdrawal(SymbolsMap[loanOption], commit[0].commitment, SymbolsMap[EventMap[commit[0].collateralMarket.toUpperCase()]], inputVal1, DecimalsMap[loanOption]);
     } catch (err) {
-      toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
+      toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
   }
 
   const onCollateralReleased = (data) => {
     let amount = BNtoNum(Number(data.amount))
-    toast.success(`Collateral amount released: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
+    toast.success(`Collateral amount released: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
   }
 
   const handleCollateral = async () => {
     try {
       const tx = await wrapper?.getLoanInstance().addCollateral(SymbolsMap[loanOption], comit_ONEMONTH, SymbolsMap[collateralOption], inputVal1, decimals[0]);
     } catch (err) {
-      toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
+      toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
   }
 
@@ -655,13 +660,23 @@ const HashstackCrypto = (props) => {
     try {
       const tx = await wrapper?.getLoanInstance().withdrawCollateral(SymbolsMap[loanOption], comit_ONEMONTH);
     } catch (err) {
-      toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
+      toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
   }
 
   const onCollateralAdded = (data) => {
     let amount = BNtoNum(Number(data.amount))
-    toast.success(`Collateral amount added: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
+    toast.success(`Collateral amount added: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
+  }
+
+  const onLoanWithdrawal = (data) => {
+    let amount = BNtoNum(Number(data.amount))
+    toast.success(`Loan Withdraw Successfully: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
+  }
+
+  const onLoanRepay = (data) => {
+    let amount = BNtoNum(Number(data.amount))
+    toast.success(`Loan Repaid Successfully: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
   }
 
   const handleSwap = async () => {
@@ -669,7 +684,7 @@ const HashstackCrypto = (props) => {
     try {
       const tx = await wrapper?.getLoanInstance().swapLoan(SymbolsMap[loanOption], comit_ONEMONTH, SymbolsMap[swapOption]);
     } catch (err) {
-      toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
+      toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
   }
 
@@ -678,7 +693,7 @@ const HashstackCrypto = (props) => {
     try {
       const tx = await wrapper?.getLoanInstance().swapToLoan(SymbolsMap[swapOption], comit_ONEMONTH, SymbolsMap[loanOption]);
     } catch (err) {
-      toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
+      toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
   }
 
@@ -706,13 +721,13 @@ const HashstackCrypto = (props) => {
         console.log("Approve Transaction sent: ", approveTransactionHash);
         const tx = await wrapper?.getLoanInstance().loanRequest(SymbolsMap[props.assetID], CommitMap[commitBorrowPeriod1], inputVal1, DecimalsMap[props.assetID], SymbolsMap[collateralMarket1], inputVal2, DecimalsMap[collateralMarket1]);
       } catch (err) {
-        toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
+        toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
       }
     }
 
     const onLoanRequested = (data) => {
-      let amount = BNtoNum(Number(data.loanAmount))
-      toast.success(`Requested amount: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
+      let amount = BNtoNum(Number(data.loanAmount), DecimalsMap[data.market]);
+      toast.success(`Requested amount: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
 
     return (
@@ -834,13 +849,13 @@ const HashstackCrypto = (props) => {
         console.log("Approve Transaction sent: ", approveTransactionHash);
         const tx = await wrapper?.getLoanInstance().loanRequest(SymbolsMap[props.assetID], CommitMap[commitBorrowPeriod2], inputVal1, DecimalsMap[props.assetID], SymbolsMap[collateralMarket2], inputVal2, DecimalsMap[collateralMarket2]);
       } catch (err) {
-        toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
+        toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
       }
     }
 
     const onLoanRequested = (data) => {
-      let amount = BNtoNum(Number(data.loanAmount))
-      toast.success(`Requested amount: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
+      let amount = BNtoNum(Number(data.loanAmount), DecimalsMap[data.market]);
+      toast.success(`Requested amount: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
 
 
@@ -963,13 +978,13 @@ const HashstackCrypto = (props) => {
         console.log("Approve Transaction sent: ", approveTransactionHash);
         const tx = await wrapper?.getLoanInstance().loanRequest(SymbolsMap[props.assetID], CommitMap[commitBorrowPeriod3], inputVal1, DecimalsMap[props.assetID], SymbolsMap[collateralMarket3], inputVal2, DecimalsMap[collateralMarket3]);
       } catch (err) {
-        toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
+        toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
       }
     }
 
     const onLoanRequested = (data) => {
-      let amount = BNtoNum(Number(data.loanAmount))
-      toast.success(`Requested amount: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
+      let amount = BNtoNum(Number(data.loanAmount), DecimalsMap[data.market]);
+      toast.success(`Requested amount: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
 
 
@@ -1092,13 +1107,13 @@ const HashstackCrypto = (props) => {
         console.log("Approve Transaction sent: ", approveTransactionHash);
         const tx = await wrapper?.getLoanInstance().loanRequest(SymbolsMap[props.assetID], CommitMap[commitBorrowPeriod4], inputVal1, DecimalsMap[props.assetID], SymbolsMap[collateralMarket4], inputVal2, DecimalsMap[collateralMarket4]);
       } catch (err) {
-        toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
+        toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
       }
     }
 
     const onLoanRequested = (data) => {
-      let amount = BNtoNum(Number(data.loanAmount))
-      toast.success(`Requested amount: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
+      let amount = BNtoNum(Number(data.loanAmount), DecimalsMap[data.market]);
+      toast.success(`Requested amount: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
 
     return (
@@ -1233,7 +1248,7 @@ const HashstackCrypto = (props) => {
                 </div>
               </th>
               <td>
-                <div className="text-muted">$ {BNtoNum(Number(asset.loanAmount))}</div>
+                <div className="text-muted">$ {BNtoNum(Number(asset.loanAmount),DecimalsMap[asset.market])}</div>
               </td>
               <td>
                 <div className="d-flex align-items-center">
@@ -1258,7 +1273,7 @@ const HashstackCrypto = (props) => {
                   {asset.investRate}
                 </h5> */}
                 <div className="text-muted">
-                  ${BNtoNum(Number(asset.collateralAmount))}
+                  ${BNtoNum(Number(asset.collateralAmount), DecimalsMap[asset.market])}
                 </div>
               </td>
               <td>
@@ -1425,52 +1440,59 @@ const HashstackCrypto = (props) => {
 
   useEffect(() => {
     wrapper?.getDepositInstance().deposit.on("DepositAdded", depositAdded);
-    wrapper?.getDepositInstance().deposit.on("Withdrawal", WithdrawalDeposit)
+    wrapper?.getDepositInstance().deposit.on("Withdrawal", WithdrawalDeposit);
+
+    wrapper?.getLoanInstance().loanExt.on("AddCollateral", onCollateralAdded);
+    wrapper?.getLoanInstance().loan.on("CollateralReleased", onCollateralReleased);
+
+    wrapper?.getLoanInstance().loanExt.on("WithdrawPartialLoan", onLoanWithdrawal);
+    wrapper?.getLoanInstance().loanExt.on("LoanRepaid", onLoanRepay);
+
   }, []);
 
-  const [addToDepositSel, setAddToDepositSel] = useState();
+  const [depositRequestSel, setdepositRequestSel] = useState();
   const [withdrawDepositSel, setWithdrawDepositSel] = useState();
-  const [addToDepositVal, setAddToDepositVal] = useState();
+  const [depositRequestVal, setdepositRequestVal] = useState();
   const [withdrawDepositVal, setWithdrawDepositVal] = useState();
 
-  const handleAddToDepositSelect = (e) => {
-    setAddToDepositSel(e.target.value)
+  const handledepositRequestSelect = (e) => {
+    setdepositRequestSel(e.target.value)
   }
   const handleWithdrawDepositSelect = (e) => {
     setWithdrawDepositSel(e.target.value)
   }
 
-  const handleAddToDepositTime = (e) => {
-    setAddToDepositVal(e.target.value)
+  const handledepositRequestTime = (e) => {
+    setdepositRequestVal(e.target.value)
   }
   const handleWithdrawDepositTime = (e) => {
     setWithdrawDepositVal(e.target.value)
   }
 
-  const handleAddToDeposit = async () => {
+  const handledepositRequest = async () => {
     try {
-      const tx = await wrapper?.getDepositInstance().addToDeposit(addToDepositSel, addToDepositVal, inputVal1, decimals[0]);
+      const tx = await wrapper?.getDepositInstance().depositRequest(SymbolsMap[depositRequestSel.toUpperCase()], CommitMap[depositRequestVal], inputVal1, DecimalsMap[depositRequestSel.toUpperCase()]);
     } catch (err) {
-      toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
+      toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
   }
 
   const depositAdded = (data) => {
-    let amount = BNtoNum(Number(data.amount))
-    toast.success(`Deposited Added: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
+    let amount = BNtoNum(Number(data.amount), DecimalsMap[data.market])
+    toast.success(`Deposit Added: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
   }
 
   const handleWithdrawDeposit = async () => {
     try {
-      const tx = await wrapper?.getDepositInstance().addToDeposit(withdrawDepositSel, withdrawDepositVal, inputVal1, decimals[0]);
+      const tx = await wrapper?.getDepositInstance().withdrawDeposit(SymbolsMap[withdrawDepositSel.toUpperCase()], CommitMap[withdrawDepositVal], inputVal1, DecimalsMap[withdrawDepositSel.toUpperCase()]);
     } catch (err) {
-      toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
+      toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
   }
 
   const WithdrawalDeposit = (data) => {
-    let amount = BNtoNum(Number(data.amount))
-    toast.success(`Deposited Withdrawn: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
+    let amount = BNtoNum(Number(data.amount), DecimalsMap[data.market])
+    toast.success(`Deposit Withdrawn: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
   }
 
   return (
@@ -1528,8 +1550,11 @@ const HashstackCrypto = (props) => {
                                             <Col sm={12}>
                                               <select className="form-select" onChange={handleLoanOptionChange}>
                                                 <option selected disabled>Loan market</option>
-                                                <option value={"BTC"}>BTC</option>
-                                                <option value={"USDC"}>USDC</option>
+                                                {/* <option value={"BTC"}>BTC</option>
+                                                <option value={"USDC"}>USDC</option> */}
+                                                {activeLoansData.map((asset, key) => {
+                                                  return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
+                                                })}
                                               </select>
                                             </Col>
                                           </div>
@@ -1587,8 +1612,9 @@ const HashstackCrypto = (props) => {
                                             <Col sm={12}>
                                               <select className="form-select" onChange={handleLoanOptionChange}>
                                                 <option selected disabled>Loan market</option>
-                                                <option value={"BTC"}>BTC</option>
-                                                <option value={"USDC"}>USDC</option>
+                                                {activeLoansData.map((asset, key) => {
+                                                  return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
+                                                })}
                                               </select>
                                             </Col>
                                           </div>
@@ -1652,8 +1678,9 @@ const HashstackCrypto = (props) => {
                                           <Col sm={12}>
                                             <select className="form-select" onChange={handleLoanOptionChange}>
                                               <option selected disabled>Loan market</option>
-                                              <option value={"BTC"}>BTC</option>
-                                              <option value={"USDC"}>USDC</option>
+                                              {activeLoansData.map((asset, key) => {
+                                                  return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
+                                              })}
                                             </select>
                                           </Col>
                                         </div>
@@ -1705,19 +1732,21 @@ const HashstackCrypto = (props) => {
                                       <Form>
                                         <div className="row mb-4">
                                           <Col sm={12}>
-                                            <select className="form-select" onChange={handleLoanOptionChange}>
-                                              <option selected disabled>Select Loan</option>
-                                              <option value={"BTC"}>BTC</option>
-                                              <option value={"USDC"}>USDC</option>
-                                            </select>
-                                          </Col>
-                                        </div>
-                                        <div className="row mb-4">
-                                          <Col sm={12}>
                                             <select className="form-select" onChange={handleSwapOptionChange}>
                                               <option selected disabled>Select Market to Swap</option>
                                               <option value={"SXP"}>SXP</option>
                                               <option value={"CAKE"}>CAKE</option>
+                                            </select>
+                                          </Col>
+                                        </div>
+
+                                        <div className="row mb-4">
+                                          <Col sm={12}>
+                                            <select className="form-select" onChange={handleLoanOptionChange}>
+                                              <option selected disabled>Select Loan</option>
+                                              {activeLoansData.map((asset, key) => {
+                                                  return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
+                                              })}
                                             </select>
                                           </Col>
                                         </div>
@@ -1770,8 +1799,9 @@ const HashstackCrypto = (props) => {
                                           <Col sm={12}>
                                             <select className="form-select" onChange={handleLoanOptionChange}>
                                               <option selected disabled>Loan market</option>
-                                              <option value={"BTC"}>BTC</option>
-                                              <option value={"USDC"}>USDC</option>
+                                              {activeLoansData.map((asset, key) => {
+                                                  return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
+                                              })}
                                             </select>
                                           </Col>
                                         </div>
@@ -1779,8 +1809,9 @@ const HashstackCrypto = (props) => {
                                           <Col sm={12}>
                                             <select className="form-select" onChange={handleCollateralOptionChange}>
                                               <option selected disabled>Collateral market</option>
-                                              <option value={"BTC"}>BTC</option>
-                                              <option value={"USDT"}>USDT</option>
+                                              {activeLoansData.map((asset, key) => {
+                                                  return <option key={key} value={EventMap[asset.collateralMarket.toUpperCase()]}>{EventMap[asset.collateralMarket.toUpperCase()]}</option>
+                                              })}
                                             </select>
                                           </Col>
                                         </div>
@@ -1836,8 +1867,9 @@ const HashstackCrypto = (props) => {
                                           <Col sm={12}>
                                             <select className="form-select" onChange={handleLoanOptionChange}>
                                               <option selected disabled>Loan market</option>
-                                              <option value={"BTC"}>BTC</option>
-                                              <option value={"USDC"}>USDC</option>
+                                              {activeLoansData.map((asset, key) => {
+                                                  return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
+                                              })}
                                             </select>
                                           </Col>
                                         </div>
@@ -1900,7 +1932,7 @@ const HashstackCrypto = (props) => {
                                         <Form>
                                           <div className="row mb-4">
                                             <Col sm={12}>
-                                              <select className="form-select" onChange={handleAddToDepositSelect}>
+                                              <select className="form-select" onChange={handledepositRequestSelect}>
                                                 <option selected disabled>Select market</option>
                                                 {activeDepositsData.map((asset, key) => {
                                                   return <option key={key} value={asset.market}>{asset.market}</option>
@@ -1910,10 +1942,10 @@ const HashstackCrypto = (props) => {
                                           </div>
                                           <div className="row mb-4">
                                             <Col sm={12}>
-                                              <select className="form-select" onChange={handleAddToDepositTime}>
+                                              <select className="form-select" onChange={handledepositRequestTime}>
                                                 <option selected disabled>Minimum commitment period</option>
                                                 {activeDepositsData.map((asset, key) => {
-                                                  if (asset.market === addToDepositSel) {
+                                                  if (asset.market === depositRequestSel) {
                                                     return <option key={key} value={asset.commitment}>{asset.commitment}</option>
                                                   }
                                                 })}
@@ -1937,7 +1969,7 @@ const HashstackCrypto = (props) => {
                                               // type="submit"
                                               color="primary"
                                               className="w-md"
-                                              onClick={handleAddToDeposit}
+                                              onClick={handledepositRequest}
                                             >
                                               Add to Deposit
                                             </Button>
@@ -2284,10 +2316,10 @@ const HashstackCrypto = (props) => {
                                     <div className="text-muted">{asset.commitment}</div>
                                   </td>
                                   <td>
-                                    <div className="text-muted">{BNtoNum(Number(asset.amount))}</div>
+                                    <div className="text-muted">{BNtoNum(Number(asset.amount), DecimalsMap[asset.market])}</div>
                                   </td>
                                   <td>
-                                    <div className="text-muted">{asset.acquiredYield}</div>
+                                    <div className="text-muted">{BNtoNum(Number(asset.acquiredYield), DecimalsMap[asset.market])}</div>
                                   </td> 
                                 </tr>
                               )) : <tr align="center"><td colSpan="5">No Records found.</td></tr>}

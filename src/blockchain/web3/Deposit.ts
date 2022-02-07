@@ -16,8 +16,8 @@ class DepositWrapper {
         return this.deposit.send("createDeposit", {}, market, commitment, amountTosent);
     }
 
-    addToDeposit(market: string, commitment: string, amount: number, decimal: number) {
-        return this.deposit.send("addToDeposit", {}, market, commitment, NumToBN(amount, decimal));
+    depositRequest(market: string, commitment: string, amount: number, decimal: number) {
+        return this.deposit.send("depositRequest", {}, market, commitment, NumToBN(amount, decimal));
     }
     
     withdrawDeposit(market: string, commitment: string, amount: number, savingType: number, decimal: number) {
@@ -25,7 +25,7 @@ class DepositWrapper {
     }
 
     convertYeild(market: string, commitment: string) {
-        return this.deposit.send("convertYield", {}, market, commitment)
+        return this.deposit.send("convertYield", {}, market, commitment);
     }
 
 
