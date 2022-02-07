@@ -1720,19 +1720,20 @@ const HashstackCrypto = (props) => {
                                       <Form>
                                         <div className="row mb-4">
                                           <Col sm={12}>
-                                            <select className="form-select" onChange={handleLoanOptionChange}>
-                                              <option selected disabled>Select Loan</option>
-                                              <option value={"BTC"}>BTC</option>
-                                              <option value={"USDC"}>USDC</option>
-                                            </select>
-                                          </Col>
-                                        </div>
-                                        <div className="row mb-4">
-                                          <Col sm={12}>
                                             <select className="form-select" onChange={handleSwapOptionChange}>
                                               <option selected disabled>Select Market to Swap</option>
                                               <option value={"SXP"}>SXP</option>
                                               <option value={"CAKE"}>CAKE</option>
+                                            </select>
+                                          </Col>
+                                        </div>
+
+                                        <div className="row mb-4">
+                                          <Col sm={12}>
+                                            <select className="form-select" onChange={handleLoanOptionChange}>
+                                              <option selected disabled>Select Loan</option>
+                                              <option value={"BTC"}>BTC</option>
+                                              <option value={"USDC"}>USDC</option>
                                             </select>
                                           </Col>
                                         </div>
