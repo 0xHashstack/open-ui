@@ -123,6 +123,10 @@
       "type": "event"
     },
     {
+      "stateMutability": "payable",
+      "type": "fallback"
+    },
+    {
       "inputs": [
         {
           "internalType": "address",
@@ -131,7 +135,7 @@
         },
         {
           "internalType": "bytes32",
-          "name": "_market",
+          "name": "_loanMarket",
           "type": "bytes32"
         },
         {
@@ -163,7 +167,7 @@
       "outputs": [
         {
           "internalType": "uint256",
-          "name": "price",
+          "name": "",
           "type": "uint256"
         }
       ],
@@ -194,7 +198,7 @@
       "inputs": [
         {
           "internalType": "bytes32",
-          "name": "_market",
+          "name": "_loanMarket",
           "type": "bytes32"
         },
         {
@@ -212,7 +216,7 @@
       "outputs": [
         {
           "internalType": "bool",
-          "name": "success",
+          "name": "",
           "type": "bool"
         }
       ],
@@ -223,7 +227,7 @@
       "inputs": [
         {
           "internalType": "bytes32",
-          "name": "_market",
+          "name": "_loanMarket",
           "type": "bytes32"
         },
         {
@@ -262,16 +266,16 @@
         },
         {
           "internalType": "bytes32",
-          "name": "_market",
+          "name": "_loanMarket",
           "type": "bytes32"
         }
       ],
       "name": "swapToLoan",
       "outputs": [
         {
-          "internalType": "uint256",
-          "name": "swappedAmount",
-          "type": "uint256"
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
         }
       ],
       "stateMutability": "nonpayable",
@@ -288,7 +292,7 @@
       "inputs": [
         {
           "internalType": "bytes32",
-          "name": "_market",
+          "name": "_loanMarket",
           "type": "bytes32"
         },
         {
@@ -307,5 +311,9 @@
       ],
       "stateMutability": "nonpayable",
       "type": "function"
+    },
+    {
+      "stateMutability": "payable",
+      "type": "receive"
     }
   ]
