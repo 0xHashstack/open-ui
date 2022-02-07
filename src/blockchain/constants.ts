@@ -126,5 +126,10 @@ export const EventMap = {
   "ADD_COLLATERAL": "AddCollateral",
   "WITHDRAW_COLLATERAL": "CollateralReleased",
   "SWAP_LOAN": "MarketSwapped",
-  "SWAP_TO_LOAN": "MarketSwapped"
+  "SWAP_TO_LOAN": "MarketSwapped",
+
+  "USDC.T": "USDC",
+  "USDT.T": "USDT",
+  "BTC.T": "BTC",
+  "BNB.T": "BNB"
 };

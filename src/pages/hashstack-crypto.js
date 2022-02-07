@@ -28,7 +28,7 @@ import classnames from "classnames";
 import { Web3ModalContext } from '../contexts/Web3ModalProvider';
 import { Web3WrapperContext } from '../contexts/Web3WrapperProvider';
 import {
-  decimals, comit_ONEMONTH,
+  decimals, comit_ONEMONTH, EventMap,
   SymbolsMap, DecimalsMap, DepositInterestRates, BorrowInterestRates, CommitMap, VariableDepositInterestRates
 } from '../blockchain/constants';
 import { BNtoNum, GetErrorText } from '../blockchain/utils';
@@ -1547,8 +1547,11 @@ const HashstackCrypto = (props) => {
                                             <Col sm={12}>
                                               <select className="form-select" onChange={handleLoanOptionChange}>
                                                 <option selected disabled>Loan market</option>
-                                                <option value={"BTC"}>BTC</option>
-                                                <option value={"USDC"}>USDC</option>
+                                                {/* <option value={"BTC"}>BTC</option>
+                                                <option value={"USDC"}>USDC</option> */}
+                                                {activeLoansData.map((asset, key) => {
+                                                  return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
+                                                })}
                                               </select>
                                             </Col>
                                           </div>
@@ -1606,8 +1609,9 @@ const HashstackCrypto = (props) => {
                                             <Col sm={12}>
                                               <select className="form-select" onChange={handleLoanOptionChange}>
                                                 <option selected disabled>Loan market</option>
-                                                <option value={"BTC"}>BTC</option>
-                                                <option value={"USDC"}>USDC</option>
+                                                {activeLoansData.map((asset, key) => {
+                                                  return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
+                                                })}
                                               </select>
                                             </Col>
                                           </div>
@@ -1671,8 +1675,9 @@ const HashstackCrypto = (props) => {
                                           <Col sm={12}>
                                             <select className="form-select" onChange={handleLoanOptionChange}>
                                               <option selected disabled>Loan market</option>
-                                              <option value={"BTC"}>BTC</option>
-                                              <option value={"USDC"}>USDC</option>
+                                              {activeLoansData.map((asset, key) => {
+                                                  return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
+                                              })}
                                             </select>
                                           </Col>
                                         </div>
@@ -1736,8 +1741,9 @@ const HashstackCrypto = (props) => {
                                           <Col sm={12}>
                                             <select className="form-select" onChange={handleLoanOptionChange}>
                                               <option selected disabled>Select Loan</option>
-                                              <option value={"BTC"}>BTC</option>
-                                              <option value={"USDC"}>USDC</option>
+                                              {activeLoansData.map((asset, key) => {
+                                                  return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
+                                              })}
                                             </select>
                                           </Col>
                                         </div>
@@ -1790,8 +1796,9 @@ const HashstackCrypto = (props) => {
                                           <Col sm={12}>
                                             <select className="form-select" onChange={handleLoanOptionChange}>
                                               <option selected disabled>Loan market</option>
-                                              <option value={"BTC"}>BTC</option>
-                                              <option value={"USDC"}>USDC</option>
+                                              {activeLoansData.map((asset, key) => {
+                                                  return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
+                                              })}
                                             </select>
                                           </Col>
                                         </div>
@@ -1799,8 +1806,9 @@ const HashstackCrypto = (props) => {
                                           <Col sm={12}>
                                             <select className="form-select" onChange={handleCollateralOptionChange}>
                                               <option selected disabled>Collateral market</option>
-                                              <option value={"BTC"}>BTC</option>
-                                              <option value={"USDT"}>USDT</option>
+                                              {activeLoansData.map((asset, key) => {
+                                                  return <option key={key} value={EventMap[asset.collateralMarket.toUpperCase()]}>{EventMap[asset.collateralMarket.toUpperCase()]}</option>
+                                              })}
                                             </select>
                                           </Col>
                                         </div>
@@ -1856,8 +1864,9 @@ const HashstackCrypto = (props) => {
                                           <Col sm={12}>
                                             <select className="form-select" onChange={handleLoanOptionChange}>
                                               <option selected disabled>Loan market</option>
-                                              <option value={"BTC"}>BTC</option>
-                                              <option value={"USDC"}>USDC</option>
+                                              {activeLoansData.map((asset, key) => {
+                                                  return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
+                                              })}
                                             </select>
                                           </Col>
                                         </div>
