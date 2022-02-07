@@ -634,7 +634,10 @@ const HashstackCrypto = (props) => {
 
   const handleWithdrawLoan = async () => {
     try {
-      const tx = await wrapper?.getLoanInstance().permissibleWithdrawal(SymbolsMap[loanOption], comit_ONEMONTH, SymbolsMap[loanOption], inputVal1, DecimalsMap[loanOption]);
+      const commit = activeLoansData.filter((asset, key) => {
+        return EventMap[asset.loanMarket.toUpperCase()] === loanOption;
+      })
+      const tx = await wrapper?.getLoanInstance().permissibleWithdrawal(SymbolsMap[loanOption], commit[0].commitment, SymbolsMap[EventMap[commit[0].collateralMarket.toUpperCase()]], inputVal1, DecimalsMap[loanOption]);
     } catch (err) {
       toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
