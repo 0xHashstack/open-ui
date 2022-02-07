@@ -1477,7 +1477,7 @@ const HashstackCrypto = (props) => {
 
   const handleWithdrawDeposit = async () => {
     try {
-      const tx = await wrapper?.getDepositInstance().depositRequest(withdrawDepositSel, withdrawDepositVal, inputVal1, decimals[0]);
+      const tx = await wrapper?.getDepositInstance().withdrawDeposit(withdrawDepositSel, withdrawDepositVal, inputVal1, decimals[0]);
     } catch (err) {
       toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
@@ -2302,7 +2302,7 @@ const HashstackCrypto = (props) => {
                                     <div className="text-muted">{BNtoNum(Number(asset.amount))}</div>
                                   </td>
                                   <td>
-                                    <div className="text-muted">{asset.acquiredYield}</div>
+                                    <div className="text-muted">{BNtoNum(Number(asset.acquiredYield))}</div>
                                   </td> 
                                 </tr>
                               )) : <tr align="center"><td colSpan="5">No Records found.</td></tr>}
