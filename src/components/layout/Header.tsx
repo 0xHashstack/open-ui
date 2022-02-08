@@ -7,19 +7,18 @@ import { GetErrorText } from "../../blockchain/utils";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-toast.configure({
-  autoClose: 4000
-})
+toast.configure({ autoClose: 4000 });
 
-const Header = props => {
+
+const Header = () => {
   const [get_token, setGet_token] = useState(false);
 
-  const { connect, disconnect, account, chainId } = useContext(Web3ModalContext);
+  const { connect, disconnect, account } = useContext(Web3ModalContext);
   const { web3Wrapper: wrapper } = useContext(Web3WrapperContext);
 
   useEffect(() => {
     wrapper?.getFaucetInstance().faucet.on("TokensIssued", onSuccessCallback);
-  }, [])
+  }, []);
 
   const handleConnectWallet = useCallback(() => {
     connect();
@@ -29,19 +28,25 @@ const Header = props => {
     disconnect();
   }, [disconnect]);
 
-  const handleGetToken = async (event) => {
+  async function handleGetToken (event: any) {
     try {
-      const tx = await wrapper?.getFaucetInstance().getTokens(event.target.textContent);
-    } catch (err) {
-      console.error("ERROR MESSAGE: ", err.message);
-      toast.error(`${GetErrorText(err.message)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true });
+      await wrapper?.getFaucetInstance().getTokens(event.target.textContent);
+    } catch (error) {
+      console.log(error);
+      if (error instanceof Error) {
+        toast.error(`${GetErrorText(String(error.message))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
+      } else {
+        toast.error(`${GetErrorText(String(error))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
+      }
+      
     }
   }
+
 
   
   const onSuccessCallback = (data) => {
     toast.success(`${data.message || 'Tokens Received Successfully.'}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
-  }
+  };
 
   function removeBodyCss() {
     document.body.classList.add("no_padding");

@@ -23,11 +23,12 @@ Sentry.init({
 
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
+const appId = process.env.REACT_APP_MORALIS_APP_ID;
 
 ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>
-      <MoralisProvider appId="ymdgw0muLMW7cEiNA3eRatEjQAmdloRoObUrUemp" serverUrl="https://gwfyfk2dqlj8.usemoralis.com:2053/server">
+      <MoralisProvider appId={appId} serverUrl="https://gwfyfk2dqlj8.usemoralis.com:2053/server">
         <MoralisDappProvider>
           <Web3ModalProvider>
             <Web3WrapperProvider>

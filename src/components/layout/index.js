@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext, useCallback } from 'react';
-import PropTypes from "prop-types"
+import PropTypes from "prop-types";
 import axios from "axios";
 import { Button, Container, Row, Col } from "reactstrap";
 
@@ -14,11 +14,11 @@ import {
 
 import { cacheService } from "../../helpers/CacheService";
 //redux
-import { useSelector, useDispatch } from "react-redux"
+import { useSelector, useDispatch } from "react-redux";
 
 //components
-import Header from "./Header"
-import Footer from "./Footer"
+import Header from "./Header.tsx";
+import Footer from "./Footer.tsx";
 
 import { Web3ModalContext } from "../../contexts/Web3ModalProvider";
 
