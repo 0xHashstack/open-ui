@@ -28,7 +28,7 @@ import classnames from "classnames";
 import { Web3ModalContext } from '../contexts/Web3ModalProvider';
 import { Web3WrapperContext } from '../contexts/Web3WrapperProvider';
 import {
-  decimals, comit_ONEMONTH, EventMap,
+  decimals, comit_ONEMONTH, EventMap, CoinClassNames,
   SymbolsMap, DecimalsMap, DepositInterestRates, BorrowInterestRates, CommitMap, VariableDepositInterestRates
 } from '../blockchain/constants';
 import { BNtoNum, GetErrorText } from '../blockchain/utils';
@@ -1241,10 +1241,10 @@ const HashstackCrypto = (props) => {
                         " font-size-18"
                       }
                     >
-                      <i className={asset.icon} />
+                      <i className={CoinClassNames[EventMap[asset.loanMarket.toUpperCase()]]} />
                     </span>
                   </div>
-                  <span>{asset.loanMarket}</span>
+                  <span>{EventMap[asset.loanMarket.toUpperCase()]}</span>
                 </div>
               </th>
               <td>
@@ -1262,10 +1262,10 @@ const HashstackCrypto = (props) => {
                         " font-size-18"
                       }
                     >
-                      <i className={asset.icon} />
+                      <i className={CoinClassNames[EventMap[asset.collateralMarket.toUpperCase()]]} />
                     </span>
                   </div>
-                  <span>{asset.collateralMarket}</span>
+                  <span>{EventMap[asset.collateralMarket.toUpperCase()]}</span>
                 </div>
               </td>
               <td>
@@ -1281,7 +1281,7 @@ const HashstackCrypto = (props) => {
                   {asset.loansRate}
                 </h5> */}
                 <div className="text-muted">
-                  ${asset.cdr}
+                  ${Number(asset.cdr).toFixed(3)}
                 </div>
               </td>
             </tr>
@@ -1935,7 +1935,7 @@ const HashstackCrypto = (props) => {
                                               <select className="form-select" onChange={handledepositRequestSelect}>
                                                 <option selected disabled>Select market</option>
                                                 {activeDepositsData.map((asset, key) => {
-                                                  return <option key={key} value={asset.market}>{asset.market}</option>
+                                                  return <option key={key} value={EventMap[asset.market.toUpperCase()]}>{EventMap[asset.market.toUpperCase()]}</option>
                                                 })}
                                               </select>
                                             </Col>
@@ -1945,8 +1945,8 @@ const HashstackCrypto = (props) => {
                                               <select className="form-select" onChange={handledepositRequestTime}>
                                                 <option selected disabled>Minimum commitment period</option>
                                                 {activeDepositsData.map((asset, key) => {
-                                                  if (asset.market === depositRequestSel) {
-                                                    return <option key={key} value={asset.commitment}>{asset.commitment}</option>
+                                                  if (EventMap[asset.market.toUpperCase()] === depositRequestSel) {
+                                                    return <option key={key} value={asset.commitment}>{EventMap[asset.commitment]}</option>
                                                   }
                                                 })}
                                               </select>
@@ -2008,7 +2008,7 @@ const HashstackCrypto = (props) => {
                                               <select className="form-select" onChange={handleWithdrawDepositSelect}>
                                                 <option selected disabled>Select market</option>
                                                 {activeDepositsData.map((asset, key) => {
-                                                  return <option key={key} value={asset.market}>{asset.market}</option>
+                                                  return <option key={key} value={EventMap[asset.market.toUpperCase()]}>{EventMap[asset.market.toUpperCase()]}</option>
                                                 })}
                                               </select>
                                             </Col>
@@ -2018,8 +2018,8 @@ const HashstackCrypto = (props) => {
                                               <select className="form-select" onChange={handleWithdrawDepositTime}>
                                                 <option selected disabled>Minimum commitment period</option>
                                                 {activeDepositsData.map((asset, key) => {
-                                                  if (asset.market === withdrawDepositSel) {
-                                                    return <option key={key} value={asset.commitment}>{asset.commitment}</option>
+                                                  if (EventMap[asset.market.toUpperCase()] === withdrawDepositSel) {
+                                                    return <option key={key} value={asset.commitment}>{EventMap[asset.commitment]}</option>
                                                   }
                                                 })}
                                               </select>
@@ -2306,20 +2306,20 @@ const HashstackCrypto = (props) => {
                                             " font-size-18"
                                           }
                                         >
-                                          <i className={asset.icon} />
+                                          <i className={CoinClassNames[EventMap[asset.market.toUpperCase()]]} />
                                         </span>
                                       </div>
-                                      <span>{asset.market}</span>
+                                      <span>{EventMap[asset.market.toUpperCase()]}</span>
                                     </div>
                                   </th>
                                   <td>
-                                    <div className="text-muted">{asset.commitment}</div>
+                                    <div className="text-muted">{EventMap[asset.commitment]}</div>
                                   </td>
                                   <td>
                                     <div className="text-muted">{BNtoNum(Number(asset.amount), DecimalsMap[asset.market])}</div>
                                   </td>
                                   <td>
-                                    <div className="text-muted">{BNtoNum(Number(asset.acquiredYield), DecimalsMap[asset.market])}</div>
+                                    <div className="text-muted">{Number(asset.acquiredYield).toFixed(3)}</div>
                                   </td> 
                                 </tr>
                               )) : <tr align="center"><td colSpan="5">No Records found.</td></tr>}

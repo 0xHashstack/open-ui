@@ -131,5 +131,18 @@ export const EventMap = {
   "USDC.T": "USDC",
   "USDT.T": "USDT",
   "BTC.T": "BTC",
-  "BNB.T": "BNB"
+  "BNB.T": "BNB",
+
+  "NONE": "None",
+  "TWOWEEKS": "Two Weeks",
+  "ONEMONTH": "One Month",
+  "THREEMONTHS": "Three Months"
+
+};
+
+export const CoinClassNames = {
+  "USDT": "mdi mdi-litecoin",
+  "USDC": "mdi mdi-ethereum",
+  "BTC": "mdi mdi-bitcoin",
+  "BNB": "mdi mdi-drag-variant"
 };
