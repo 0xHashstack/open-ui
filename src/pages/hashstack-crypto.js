@@ -28,7 +28,7 @@ import classnames from "classnames";
 import { Web3ModalContext } from '../contexts/Web3ModalProvider';
 import { Web3WrapperContext } from '../contexts/Web3WrapperProvider';
 import {
-  decimals, comit_ONEMONTH, EventMap,
+  decimals, comit_ONEMONTH, EventMap, CoinClassNames,
   SymbolsMap, DecimalsMap, DepositInterestRates, BorrowInterestRates, CommitMap, VariableDepositInterestRates
 } from '../blockchain/constants';
 import { BNtoNum, GetErrorText } from '../blockchain/utils';
@@ -1241,10 +1241,10 @@ const HashstackCrypto = (props) => {
                         " font-size-18"
                       }
                     >
-                      <i className={asset.icon} />
+                      <i className={CoinClassNames[EventMap[asset.loanMarket.toUpperCase()]]} />
                     </span>
                   </div>
-                  <span>{asset.loanMarket}</span>
+                  <span>{EventMap[asset.loanMarket.toUpperCase()]}</span>
                 </div>
               </th>
               <td>
@@ -1262,10 +1262,10 @@ const HashstackCrypto = (props) => {
                         " font-size-18"
                       }
                     >
-                      <i className={asset.icon} />
+                      <i className={CoinClassNames[EventMap[asset.collateralMarket.toUpperCase()]]} />
                     </span>
                   </div>
-                  <span>{asset.collateralMarket}</span>
+                  <span>{EventMap[asset.collateralMarket.toUpperCase()]}</span>
                 </div>
               </td>
               <td>
@@ -2306,20 +2306,20 @@ const HashstackCrypto = (props) => {
                                             " font-size-18"
                                           }
                                         >
-                                          <i className={asset.icon} />
+                                          <i className={CoinClassNames[EventMap[asset.market.toUpperCase()]]} />
                                         </span>
                                       </div>
-                                      <span>{asset.market}</span>
+                                      <span>{EventMap[asset.market.toUpperCase()]}</span>
                                     </div>
                                   </th>
                                   <td>
-                                    <div className="text-muted">{asset.commitment}</div>
+                                    <div className="text-muted">{EventMap[asset.commitment]}</div>
                                   </td>
                                   <td>
                                     <div className="text-muted">{BNtoNum(Number(asset.amount), DecimalsMap[asset.market])}</div>
                                   </td>
                                   <td>
-                                    <div className="text-muted">{BNtoNum(Number(asset.acquiredYield), DecimalsMap[asset.market])}</div>
+                                    <div className="text-muted">{Number(asset.acquiredYield)}</div>
                                   </td> 
                                 </tr>
                               )) : <tr align="center"><td colSpan="5">No Records found.</td></tr>}
