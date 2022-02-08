@@ -122,7 +122,7 @@ export const EventMap = {
   "WITHDRAW_DEPOSIT": "Withdrawal",
   "REQUEST_LOAN": "NewLoan",
   "REPAY_LOAN": "LoanRepaid",
-  "WITHDRAW_LOAN": "WithdrawalProcessed",
+  "WITHDRAW_LOAN": "WithdrawPartialLoan",
   "ADD_COLLATERAL": "AddCollateral",
   "WITHDRAW_COLLATERAL": "CollateralReleased",
   "SWAP_LOAN": "MarketSwapped",

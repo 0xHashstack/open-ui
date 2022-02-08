@@ -16,8 +16,10 @@ const Header = () => {
   const { connect, disconnect, account } = useContext(Web3ModalContext);
   const { web3Wrapper: wrapper } = useContext(Web3WrapperContext);
 
+  
   useEffect(() => {
     wrapper?.getFaucetInstance().faucet.on("TokensIssued", onSuccessCallback);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleConnectWallet = useCallback(() => {

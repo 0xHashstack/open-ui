@@ -114,7 +114,8 @@ const Web3ModalProvider = (props: any) => {
     });
 
     setWeb3Modal(_web3Modal);
-  }, [])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const resetWeb3 = useCallback(() => {
     setWeb3(null);
@@ -122,7 +123,8 @@ const Web3ModalProvider = (props: any) => {
     setChainId(null);
     setNetworkId(null);
     setConnected(false);
-  }, [])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const subscribeProvider = useCallback(async (_provider: any, _web3: Web3) => {
     if (!_provider.on)
@@ -147,15 +149,15 @@ const Web3ModalProvider = (props: any) => {
       setChainId(chainId);
       setNetworkId(networkId);
       if (chainId != 97)
-        toast.warn(`Please connect to BSC Testnet`, { position: toast.POSITION.BOTTOM_RIGHT, autoClose: 4000, closeOnClick: true, })
+        toast.warn(`Please connect to BSC Testnet`, { position: toast.POSITION.BOTTOM_RIGHT, autoClose: 4000, closeOnClick: true });
       else
-        toast.success("Connected to BSC Testnet", { position: toast.POSITION.BOTTOM_RIGHT, autoClose: 4000, closeOnClick: true, })
+        toast.success("Connected to BSC Testnet", { position: toast.POSITION.BOTTOM_RIGHT, autoClose: 4000, closeOnClick: true });
     });
     _provider.on("connect", () => {
-      console.log('------')
-      authenticate()
+      console.log('------');
+      authenticate();
     });
-  }, [resetWeb3])
+  }, [resetWeb3]);
 
   const connect = useCallback(async () => {
     if (!web3Modal)
@@ -177,9 +179,9 @@ const Web3ModalProvider = (props: any) => {
     const _networkId = await _web3.eth.net.getId();
     const _chainId = await _web3.eth.getChainId();
     if (_chainId != 97)
-      toast.warn(`Please connect to BSC Testnet`, { position: toast.POSITION.BOTTOM_RIGHT, autoClose: 4000, closeOnClick: true, })
+      toast.warn(`Please connect to BSC Testnet`, { position: toast.POSITION.BOTTOM_RIGHT, autoClose: 4000, closeOnClick: true});
     else
-      toast.success("Connected to BSC Testnet", { position: toast.POSITION.BOTTOM_RIGHT, autoClose: 4000, closeOnClick: true, })
+      toast.success("Connected to BSC Testnet", { position: toast.POSITION.BOTTOM_RIGHT, autoClose: 4000, closeOnClick: true});
     setAccount(_account);
     setNetworkId(_networkId);
     setChainId(_chainId);

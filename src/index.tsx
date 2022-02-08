@@ -1,4 +1,3 @@
-import React from 'react';
 import ReactDOM from 'react-dom';
 import * as Sentry from "@sentry/react";
 import { Integrations } from "@sentry/tracing";
@@ -9,7 +8,7 @@ import Web3WrapperProvider from "contexts/Web3WrapperProvider";
 import { MoralisProvider } from "react-moralis";
 import { MoralisDappProvider } from "./providers/MoralisDappProvider/MoralisDappProvider";
 import { BrowserRouter } from 'react-router-dom';
-import Layout from './components/layout/index.tsx';
+import Layout from './components/layout/index';
 import { Provider } from "react-redux";
 import store from "./store";
 import "./assets/scss/theme.scss";
