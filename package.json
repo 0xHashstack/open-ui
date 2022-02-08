@@ -142,7 +142,7 @@
     "eslint-plugin-react": "^7.20.6",
     "prettier": "^2.1.1"
   },
-  "main": "index.js",
+  "main": "index.tsx",
   "keywords": [],
   "author": "",
   "license": "ISC",
