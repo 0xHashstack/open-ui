@@ -18,7 +18,7 @@ import { useSelector, useDispatch } from "react-redux"
 
 //components
 import Header from "./Header"
-import Footer from "./Footer"
+import Footer from "./Footer.tsx"
 
 import { Web3ModalContext } from "../../contexts/Web3ModalProvider";
 
