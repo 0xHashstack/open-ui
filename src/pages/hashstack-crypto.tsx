@@ -37,18 +37,16 @@ import 'react-toastify/dist/ReactToastify.css';
 
 toast.configure({
   autoClose: 4000
-})
+});
 
 
 const HashstackCrypto = () => {
 
   const [isMenu, setIsMenu] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  // const [transactionDone, setTransactionDone] = useState(false);
   const [activeDepositsData, setActiveDepositsData] = useState([]);
   const [activeLoansData, setActiveLoansData] = useState([]);
-  // const [activeDepositDropdownData, setActiveDepositDropdownData] = useState([]);
-  // const [activeLoansDropdownData, setActiveLoansDropdownData] = useState([]);
+
 
   const [customActiveTab, setCustomActiveTab] = useState("1");
   const [passbookStatus, setPassbookStatus] = useState(false)
@@ -204,6 +202,7 @@ const HashstackCrypto = () => {
     useEffect(() => {
       wrapper?.getDepositInstance().deposit.on("NewDeposit", onDeposit);
       wrapper?.getDepositInstance().deposit.on("DepositAdded", onDeposit);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const handleDepositChange1 = (e) => {
@@ -227,7 +226,6 @@ const HashstackCrypto = () => {
 
     const onDeposit = (data) => {
       let amount = BNtoNum(Number(data.amount),DecimalsMap[data.market]);
-      // setTransactionDone(!transactionDone);
       toast.success(`Deposited amount: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
 
@@ -311,6 +309,7 @@ const HashstackCrypto = () => {
     useEffect(() => {
       wrapper?.getDepositInstance().deposit.on("NewDeposit", onDeposit);
       wrapper?.getDepositInstance().deposit.on("DepositAdded", onDeposit);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const handleDepositChange2 = (e) => {
@@ -416,6 +415,7 @@ const HashstackCrypto = () => {
     useEffect(() => {
       wrapper?.getDepositInstance().deposit.on("NewDeposit", onDeposit);
       wrapper?.getDepositInstance().deposit.on("DepositAdded", onDeposit);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const handleDepositChange3 = (e) => {
@@ -522,6 +522,7 @@ const HashstackCrypto = () => {
     useEffect(() => {
       wrapper?.getDepositInstance().deposit.on("NewDeposit", onDeposit);
       wrapper?.getDepositInstance().deposit.on("DepositAdded", onDeposit);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const handleDepositChange4 = (e) => {
@@ -757,6 +758,7 @@ const HashstackCrypto = () => {
 
     useEffect(() => {
       wrapper?.getLoanInstance().loanExt.on("NewLoan", onLoanRequested);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     });
 
     const handleBorrowChange1 = (e) => {
@@ -892,6 +894,7 @@ const HashstackCrypto = () => {
 
     useEffect(() => {
       wrapper?.getLoanInstance().loanExt.on("NewLoan", onLoanRequested);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     });
 
     const handleBorrowChange2 = (e) => {
@@ -1028,6 +1031,7 @@ const HashstackCrypto = () => {
 
     useEffect(() => {
       wrapper?.getLoanInstance().loanExt.on("NewLoan", onLoanRequested);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     });
 
     const handleBorrowChange3 = (e) => {
@@ -1164,6 +1168,7 @@ const HashstackCrypto = () => {
 
     useEffect(() => {
       wrapper?.getLoanInstance().loanExt.on("NewLoan", onLoanRequested);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     });
 
     const handleBorrowChange4 = (e) => {
@@ -1527,7 +1532,7 @@ const HashstackCrypto = () => {
 
     wrapper?.getLoanInstance().loanExt.on("WithdrawPartialLoan", onLoanWithdrawal);
     wrapper?.getLoanInstance().loanExt.on("LoanRepaid", onLoanRepay);
-
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const [depositRequestSel, setdepositRequestSel] = useState();
