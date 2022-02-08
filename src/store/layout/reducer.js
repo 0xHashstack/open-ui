@@ -10,7 +10,7 @@ import {
   CHANGE_PRELOADER,
   TOGGLE_LEFTMENU,
   SHOW_SIDEBAR,
-} from "./actionTypes"
+} from "./actionTypes";
 
 //constants
 import {

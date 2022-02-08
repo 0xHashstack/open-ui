@@ -10,7 +10,7 @@ import {
   changeLayoutWidth,
   showRightSidebarAction,
   changePreloader
-} from "../../store/actions"
+} from "../../store/actions";
 
 import { cacheService } from "../../helpers/CacheService";
 //redux

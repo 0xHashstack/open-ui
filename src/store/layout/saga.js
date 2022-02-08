@@ -1,5 +1,5 @@
 // @flow
-import { all, call, fork, takeEvery, put } from "redux-saga/effects"
+import { all, call, fork, takeEvery, put } from "redux-saga/effects";
 
 import {
   CHANGE_LAYOUT,
@@ -9,12 +9,12 @@ import {
   CHANGE_SIDEBAR_TYPE,
   CHANGE_TOPBAR_THEME,
   SHOW_RIGHT_SIDEBAR,
-} from "./actionTypes"
+} from "./actionTypes";
 
 import {
   changeSidebarType as changeSidebarTypeAction,
   changeTopbarTheme as changeTopbarThemeAction,
-} from "./actions"
+} from "./actions";
 
 /**
  * Changes the body attribute
