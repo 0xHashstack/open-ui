@@ -1535,26 +1535,26 @@ const HashstackCrypto = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const [depositRequestSel, setdepositRequestSel] = useState();
+  const [depositRequestSel, setDepositRequestSel] = useState();
   const [withdrawDepositSel, setWithdrawDepositSel] = useState();
-  const [depositRequestVal, setdepositRequestVal] = useState();
+  const [depositRequestVal, setDepositRequestVal] = useState();
   const [withdrawDepositVal, setWithdrawDepositVal] = useState();
 
-  const handledepositRequestSelect = (e) => {
-    setdepositRequestSel(e.target.value)
+  const handleDepositRequestSelect = (e) => {
+    setDepositRequestSel(e.target.value)
   }
   const handleWithdrawDepositSelect = (e) => {
     setWithdrawDepositSel(e.target.value)
   }
 
-  const handledepositRequestTime = (e) => {
-    setdepositRequestVal(e.target.value)
+  const handleDepositRequestTime = (e) => {
+    setDepositRequestVal(e.target.value)
   }
   const handleWithdrawDepositTime = (e) => {
     setWithdrawDepositVal(e.target.value)
   }
 
-  const handledepositRequest = async () => {
+  const handleDepositRequest = async () => {
     try {
       const _depositRequestSel: string | undefined =  depositRequestSel;
       const _depositRequestVal: string | undefined =  depositRequestVal;
@@ -2029,7 +2029,7 @@ const HashstackCrypto = () => {
                                         <Form>
                                           <div className="row mb-4">
                                             <Col sm={12}>
-                                              <select className="form-select" onChange={handledepositRequestSelect}>
+                                              <select className="form-select" onChange={handleDepositRequestSelect}>
                                                 <option hidden>Select market</option>
                                                 {activeDepositsData.map((asset, key) => {
                                                   return <option key={key} value={EventMap[asset.market.toUpperCase()]}>{EventMap[asset.market.toUpperCase()]}</option>
@@ -2039,7 +2039,7 @@ const HashstackCrypto = () => {
                                           </div>
                                           <div className="row mb-4">
                                             <Col sm={12}>
-                                              <select className="form-select" onChange={handledepositRequestTime}>
+                                              <select className="form-select" onChange={handleDepositRequestTime}>
                                                 <option hidden>Minimum commitment period</option>
                                                 {activeDepositsData.filter((asset) => {
                                                   return (EventMap[asset.market.toUpperCase()] === depositRequestSel)
@@ -2066,7 +2066,7 @@ const HashstackCrypto = () => {
                                               // type="submit"
                                               color="primary"
                                               className="w-md"
-                                              onClick={handledepositRequest}
+                                              onClick={handleDepositRequest}
                                             >
                                               Add to Deposit
                                             </Button>
