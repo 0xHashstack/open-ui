@@ -95,7 +95,7 @@ const HashstackCrypto = () => {
     })
       .catch(err => {
         setIsLoading(false);
-        console.log(err)
+        console.log(err);
       })
   }, [account]);
 
@@ -110,7 +110,7 @@ const HashstackCrypto = () => {
     })
       .catch(err => {
         setIsLoading(false);
-        console.log(err)
+        console.log(err);
       })
 
   }, [account])
@@ -200,8 +200,8 @@ const HashstackCrypto = () => {
     const [commitPeriod1, setCommitPeriod1] = useState();
 
     useEffect(() => {
-      wrapper?.getDepositInstance().deposit.on("NewDeposit", onDeposit);
-      wrapper?.getDepositInstance().deposit.on("DepositAdded", onDeposit);
+      wrapper?.getDepositInstance().deposit.on(EventMap.NEW_DEPOSIT, onDeposit);
+      wrapper?.getDepositInstance().deposit.on(EventMap.DEPOSIT_ADDED, onDeposit);
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -307,8 +307,8 @@ const HashstackCrypto = () => {
     const [commitPeriod2, setCommitPeriod2] = useState();
 
     useEffect(() => {
-      wrapper?.getDepositInstance().deposit.on("NewDeposit", onDeposit);
-      wrapper?.getDepositInstance().deposit.on("DepositAdded", onDeposit);
+      wrapper?.getDepositInstance().deposit.on(EventMap.NEW_DEPOSIT, onDeposit);
+      wrapper?.getDepositInstance().deposit.on(EventMap.DEPOSIT_ADDED, onDeposit);
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -413,8 +413,8 @@ const HashstackCrypto = () => {
     const [commitPeriod3, setCommitPeriod3] = useState();
 
     useEffect(() => {
-      wrapper?.getDepositInstance().deposit.on("NewDeposit", onDeposit);
-      wrapper?.getDepositInstance().deposit.on("DepositAdded", onDeposit);
+      wrapper?.getDepositInstance().deposit.on(EventMap.NEW_DEPOSIT, onDeposit);
+      wrapper?.getDepositInstance().deposit.on(EventMap.DEPOSIT_ADDED, onDeposit);
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -520,8 +520,8 @@ const HashstackCrypto = () => {
     const [commitPeriod4, setCommitPeriod4] = useState();
 
     useEffect(() => {
-      wrapper?.getDepositInstance().deposit.on("NewDeposit", onDeposit);
-      wrapper?.getDepositInstance().deposit.on("DepositAdded", onDeposit);
+      wrapper?.getDepositInstance().deposit.on(EventMap.NEW_DEPOSIT, onDeposit);
+      wrapper?.getDepositInstance().deposit.on(EventMap.DEPOSIT_ADDED, onDeposit);
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -757,7 +757,7 @@ const HashstackCrypto = () => {
     const [collateralMarket1, setCollateralMarket1] = useState();
 
     useEffect(() => {
-      wrapper?.getLoanInstance().loanExt.on("NewLoan", onLoanRequested);
+      wrapper?.getLoanInstance().loanExt.on(EventMap.REQUEST_LOAN, onLoanRequested);
       // eslint-disable-next-line react-hooks/exhaustive-deps
     });
 
@@ -893,7 +893,7 @@ const HashstackCrypto = () => {
     const [collateralMarket2, setCollateralMarket2] = useState();
 
     useEffect(() => {
-      wrapper?.getLoanInstance().loanExt.on("NewLoan", onLoanRequested);
+      wrapper?.getLoanInstance().loanExt.on(EventMap.REQUEST_LOAN, onLoanRequested);
       // eslint-disable-next-line react-hooks/exhaustive-deps
     });
 
@@ -1030,7 +1030,7 @@ const HashstackCrypto = () => {
     const [collateralMarket3, setCollateralMarket3] = useState();
 
     useEffect(() => {
-      wrapper?.getLoanInstance().loanExt.on("NewLoan", onLoanRequested);
+      wrapper?.getLoanInstance().loanExt.on(EventMap.REQUEST_LOAN, onLoanRequested);
       // eslint-disable-next-line react-hooks/exhaustive-deps
     });
 
@@ -1167,7 +1167,7 @@ const HashstackCrypto = () => {
     const [collateralMarket4, setCollateralMarket4] = useState();
 
     useEffect(() => {
-      wrapper?.getLoanInstance().loanExt.on("NewLoan", onLoanRequested);
+      wrapper?.getLoanInstance().loanExt.on(EventMap.REQUEST_LOAN, onLoanRequested);
       // eslint-disable-next-line react-hooks/exhaustive-deps
     });
 
@@ -1524,14 +1524,14 @@ const HashstackCrypto = () => {
   }
 
   useEffect(() => {
-    wrapper?.getDepositInstance().deposit.on("DepositAdded", depositAdded);
-    wrapper?.getDepositInstance().deposit.on("Withdrawal", WithdrawalDeposit);
+    wrapper?.getDepositInstance().deposit.on(EventMap.DEPOSIT_ADDED, depositAdded);
+    wrapper?.getDepositInstance().deposit.on(EventMap.WITHDRAW_DEPOSIT, WithdrawalDeposit);
 
-    wrapper?.getLoanInstance().loanExt.on("AddCollateral", onCollateralAdded);
-    wrapper?.getLoanInstance().loan.on("CollateralReleased", onCollateralReleased);
+    wrapper?.getLoanInstance().loanExt.on(EventMap.ADD_COLLATERAL, onCollateralAdded);
+    wrapper?.getLoanInstance().loan.on(EventMap.WITHDRAW_COLLATERAL, onCollateralReleased);
 
-    wrapper?.getLoanInstance().loanExt.on("WithdrawPartialLoan", onLoanWithdrawal);
-    wrapper?.getLoanInstance().loanExt.on("LoanRepaid", onLoanRepay);
+    wrapper?.getLoanInstance().loanExt.on(EventMap.WITHDRAW_LOAN, onLoanWithdrawal);
+    wrapper?.getLoanInstance().loanExt.on(EventMap.REPAY_LOAN, onLoanRepay);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
