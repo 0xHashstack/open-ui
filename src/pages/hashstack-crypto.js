@@ -1935,7 +1935,7 @@ const HashstackCrypto = (props) => {
                                               <select className="form-select" onChange={handledepositRequestSelect}>
                                                 <option selected disabled>Select market</option>
                                                 {activeDepositsData.map((asset, key) => {
-                                                  return <option key={key} value={asset.market}>{asset.market}</option>
+                                                  return <option key={key} value={EventMap[asset.market.toUpperCase()]}>{EventMap[asset.market.toUpperCase()]}</option>
                                                 })}
                                               </select>
                                             </Col>
@@ -1945,8 +1945,8 @@ const HashstackCrypto = (props) => {
                                               <select className="form-select" onChange={handledepositRequestTime}>
                                                 <option selected disabled>Minimum commitment period</option>
                                                 {activeDepositsData.map((asset, key) => {
-                                                  if (asset.market === depositRequestSel) {
-                                                    return <option key={key} value={asset.commitment}>{asset.commitment}</option>
+                                                  if (EventMap[asset.market.toUpperCase()] === depositRequestSel) {
+                                                    return <option key={key} value={asset.commitment}>{EventMap[asset.commitment]}</option>
                                                   }
                                                 })}
                                               </select>
@@ -2008,7 +2008,7 @@ const HashstackCrypto = (props) => {
                                               <select className="form-select" onChange={handleWithdrawDepositSelect}>
                                                 <option selected disabled>Select market</option>
                                                 {activeDepositsData.map((asset, key) => {
-                                                  return <option key={key} value={asset.market}>{asset.market}</option>
+                                                  return <option key={key} value={EventMap[asset.market.toUpperCase()]}>{EventMap[asset.market.toUpperCase()]}</option>
                                                 })}
                                               </select>
                                             </Col>
@@ -2018,8 +2018,8 @@ const HashstackCrypto = (props) => {
                                               <select className="form-select" onChange={handleWithdrawDepositTime}>
                                                 <option selected disabled>Minimum commitment period</option>
                                                 {activeDepositsData.map((asset, key) => {
-                                                  if (asset.market === withdrawDepositSel) {
-                                                    return <option key={key} value={asset.commitment}>{asset.commitment}</option>
+                                                  if (EventMap[asset.market.toUpperCase()] === withdrawDepositSel) {
+                                                    return <option key={key} value={asset.commitment}>{EventMap[asset.commitment]}</option>
                                                   }
                                                 })}
                                               </select>
