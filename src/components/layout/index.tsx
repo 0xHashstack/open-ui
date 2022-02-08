@@ -17,19 +17,19 @@ import { cacheService } from "../../helpers/CacheService";
 import { useSelector, useDispatch } from "react-redux";
 
 //components
-import Header from "./Header.tsx";
-import Footer from "./Footer.tsx";
+import Header from "./Header";
+import Footer from "./Footer";
 
 import { Web3ModalContext } from "../../contexts/Web3ModalProvider";
 
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-toast.configure()
+toast.configure();
 
 const Layout = (props) => {
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
 
   const { connect, disconnect, account } = useContext(Web3ModalContext);
@@ -54,7 +54,7 @@ const Layout = (props) => {
         })
         .catch(err => console.log("Error", err));
     }
-  }, [account])
+  }, [account]);
 
   const handleConnectWallet = useCallback(() => {
     connect();
@@ -67,8 +67,8 @@ const Layout = (props) => {
 
 
   const {
-    topbarTheme, layoutWidth, isPreloader, showRightSidebar
-  } = useSelector(state => ({
+    topbarTheme, layoutWidth, isPreloader
+  } = useSelector((state: any) => ({
     topbarTheme: state.Layout.topbarTheme,
     layoutWidth: state.Layout.layoutWidth,
     isPreloader: state.Layout.isPreloader,
@@ -96,21 +96,22 @@ const Layout = (props) => {
 
   useEffect(() => {
     //init body click event fot toggle rightbar
+    
     document.body.addEventListener("click", hideRightbar, true);
 
     if (isPreloader === true) {
-      document.getElementById("preloader").style.display = "block"
-      document.getElementById("status").style.display = "block"
+      document.getElementById("preloader").style.display = "block";
+      document.getElementById("status").style.display = "block";
 
       setTimeout(function () {
-        document.getElementById("preloader").style.display = "none"
-        document.getElementById("status").style.display = "none"
-      }, 3000)
+        document.getElementById("preloader").style.display = "none";
+        document.getElementById("status").style.display = "none";
+      }, 3000);
     } else {
-      document.getElementById("preloader").style.display = "none"
-      document.getElementById("status").style.display = "none"
+      document.getElementById("preloader").style.display = "none";
+      document.getElementById("status").style.display = "none";
     }
-  }, [isPreloader])
+  }, [isPreloader]);
 
   useEffect(() => {
     if (topbarTheme) {
@@ -124,10 +125,6 @@ const Layout = (props) => {
     }
   }, [dispatch, layoutWidth]);
 
-  const [isMenuOpened, setIsMenuOpened] = useState(false);
-  const openMenu = () => {
-    setIsMenuOpened(!isMenuOpened);
-  }
 
   const handleAccountWhitelist = () => {
     axios.post(`addAccount`,
@@ -220,15 +217,13 @@ const Layout = (props) => {
      else if (account !== null && isWhiteListedAccount) {
       return (
         <div id="layout-wrapper">
-          <Header
-            theme={"Light"}
-            isMenuOpened={isMenuOpened}
-            openLeftMenuCallBack={openMenu}
-          />
+          <Header/>
           <div className="main-content">{props.children}</div>
           <Footer />
         </div>
       )
+    } else {
+      return null;
     }
   }
 

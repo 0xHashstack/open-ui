@@ -9,7 +9,7 @@ import Web3WrapperProvider from "contexts/Web3WrapperProvider";
 import { MoralisProvider } from "react-moralis";
 import { MoralisDappProvider } from "./providers/MoralisDappProvider/MoralisDappProvider";
 import { BrowserRouter } from 'react-router-dom';
-import Layout from './components/layout';
+import Layout from './components/layout/index.tsx';
 import { Provider } from "react-redux";
 import store from "./store";
 import "./assets/scss/theme.scss";
