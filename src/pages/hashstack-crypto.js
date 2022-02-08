@@ -44,6 +44,7 @@ const HashstackCrypto = (props) => {
 
   const [isMenu, setIsMenu] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  // const [transactionDone, setTransactionDone] = useState(false);
   const [activeDepositsData, setActiveDepositsData] = useState([]);
   const [activeLoansData, setActiveLoansData] = useState([]);
   const [activeDepositDropdownData, setActiveDepositDropdownData] = useState([]);
@@ -224,6 +225,7 @@ const HashstackCrypto = (props) => {
 
     const onDeposit = (data) => {
       let amount = BNtoNum(Number(data.amount),DecimalsMap[data.market]);
+      // setTransactionDone(!transactionDone);
       toast.success(`Deposited amount: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
 
@@ -1248,7 +1250,7 @@ const HashstackCrypto = (props) => {
                 </div>
               </th>
               <td>
-                <div className="text-muted">$ {BNtoNum(Number(asset.loanAmount),DecimalsMap[asset.market])}</div>
+                <div className="text-muted">{BNtoNum(Number(asset.loanAmount),DecimalsMap[asset.market])}</div>
               </td>
               <td>
                 <div className="d-flex align-items-center">
@@ -1273,7 +1275,7 @@ const HashstackCrypto = (props) => {
                   {asset.investRate}
                 </h5> */}
                 <div className="text-muted">
-                  ${BNtoNum(Number(asset.collateralAmount), DecimalsMap[asset.market])}
+                  {BNtoNum(Number(asset.collateralAmount), DecimalsMap[asset.market])}
                 </div>
               </td>
               <td>
@@ -1281,7 +1283,7 @@ const HashstackCrypto = (props) => {
                   {asset.loansRate}
                 </h5> */}
                 <div className="text-muted">
-                  ${Number(asset.cdr).toFixed(3)}
+                  {Number(asset.cdr).toFixed(3)}
                 </div>
               </td>
             </tr>
