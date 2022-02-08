@@ -1619,7 +1619,7 @@ const HashstackCrypto = () => {
                           {/* ----------------------- Loan Actions ----------------------- */}
 
                           <div className="mb-4 ">
-                            <Label>Loan actions</Label>
+                            <Label>Loan Actions</Label>
                             <Row>
                               <Col sm="6">
                                 <div className="mb-3">
@@ -1646,7 +1646,7 @@ const HashstackCrypto = () => {
                                           <div className="row mb-4">
                                             <Col sm={12}>
                                               <select className="form-select" onChange={handleLoanOptionChange}>
-                                                <option hidden>Loan market</option>
+                                                <option hidden>Loan Market</option>
                                                 {/* <option value={"BTC"}>BTC</option>
                                                 <option value={"USDC"}>USDC</option> */}
                                                 {activeLoansData.map((asset, key) => {
@@ -1774,7 +1774,7 @@ const HashstackCrypto = () => {
                                         <div className="row mb-4">
                                           <Col sm={12}>
                                             <select className="form-select" onChange={handleLoanOptionChange}>
-                                              <option hidden>Loan market</option>
+                                              <option hidden>Loan Market</option>
                                               {activeLoansData.map((asset, key) => {
                                                   return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
                                               })}
@@ -1869,7 +1869,7 @@ const HashstackCrypto = () => {
                           {/* ------------------- Collateral actions ------------------- */}
 
                           <div className="mb-4">
-                            <Label>Collateral actions</Label>
+                            <Label>Collateral Actions</Label>
                             <Row>
                               <Col sm="6">
                                 <Label className="card-radio-label mb-3">
@@ -1895,7 +1895,7 @@ const HashstackCrypto = () => {
                                         <div className="row mb-4">
                                           <Col sm={12}>
                                             <select className="form-select" onChange={handleLoanOptionChange}>
-                                              <option hidden>Loan market</option>
+                                              <option hidden>Loan Market</option>
                                               {activeLoansData.map((asset, key) => {
                                                   return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
                                               })}
@@ -1905,7 +1905,7 @@ const HashstackCrypto = () => {
                                         <div className="row mb-4">
                                           <Col sm={12}>
                                             <select className="form-select" onChange={handleCollateralOptionChange}>
-                                              <option hidden>Collateral market</option>
+                                              <option hidden>Collateral Market</option>
                                               {activeLoansData.map((asset, key) => {
                                                   return <option key={key} value={EventMap[asset.collateralMarket.toUpperCase()]}>{EventMap[asset.collateralMarket.toUpperCase()]}</option>
                                               })}
@@ -1963,7 +1963,7 @@ const HashstackCrypto = () => {
                                         <div className="row mb-4">
                                           <Col sm={12}>
                                             <select className="form-select" onChange={handleLoanOptionChange}>
-                                              <option hidden>Loan market</option>
+                                              <option hidden>Loan Market</option>
                                               {activeLoansData.map((asset, key) => {
                                                   return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
                                               })}
@@ -1972,7 +1972,7 @@ const HashstackCrypto = () => {
                                         </div>
                                         <div className="row mb-4">
                                           <Col sm={12}>
-                                            <span>Collateral market</span>
+                                            <span>Collateral Market</span>
                                           </Col>
                                         </div>
 
@@ -2030,7 +2030,7 @@ const HashstackCrypto = () => {
                                           <div className="row mb-4">
                                             <Col sm={12}>
                                               <select className="form-select" onChange={handleDepositRequestSelect}>
-                                                <option hidden>Select market</option>
+                                                <option hidden>Select Market</option>
                                                 {activeDepositsData.map((asset, key) => {
                                                   return <option key={key} value={EventMap[asset.market.toUpperCase()]}>{EventMap[asset.market.toUpperCase()]}</option>
                                                 })}
@@ -2040,7 +2040,7 @@ const HashstackCrypto = () => {
                                           <div className="row mb-4">
                                             <Col sm={12}>
                                               <select className="form-select" onChange={handleDepositRequestTime}>
-                                                <option hidden>Minimum commitment period</option>
+                                                <option hidden>Minimum Commitment Period</option>
                                                 {activeDepositsData.filter((asset) => {
                                                   return (EventMap[asset.market.toUpperCase()] === depositRequestSel)
                                                 }).map((asset, key) => {
@@ -2103,7 +2103,7 @@ const HashstackCrypto = () => {
                                           <div className="row mb-4">
                                             <Col sm={12}>
                                               <select className="form-select" onChange={handleWithdrawDepositSelect}>
-                                                <option hidden>Select market</option>
+                                                <option hidden>Select Market</option>
                                                 {activeDepositsData.map((asset, key) => {
                                                   return <option key={key} value={EventMap[asset.market.toUpperCase()]}>{EventMap[asset.market.toUpperCase()]}</option>
                                                 })}
@@ -2113,7 +2113,7 @@ const HashstackCrypto = () => {
                                           <div className="row mb-4">
                                             <Col sm={12}>
                                               <select className="form-select" onChange={handleWithdrawDepositTime}>
-                                                <option hidden>Minimum commitment period</option>
+                                                <option hidden>Minimum Commitment Period</option>
                                                 {activeDepositsData.filter((asset) => {
                                                   return (EventMap[asset.market.toUpperCase()] === withdrawDepositSel)
                                                 }).map((asset, key) => {
@@ -2191,7 +2191,7 @@ const HashstackCrypto = () => {
                             </div>
                             <div className="flex-grow-1">
                               <div>
-                                <h5 className="font-size-14">Register account</h5>
+                                <h5 className="font-size-14">Register Account</h5>
                                 <p className="text-muted">
                                   New common language will be more simple and
                                   regular than the existing.
@@ -2306,8 +2306,8 @@ const HashstackCrypto = () => {
                           <thead>
                             <tr style={{ borderStyle: "hidden" }}>
                               <th scope="col">Markets</th>
-                              <th scope="col">Savings interest</th>
-                              <th scope="col">Borrow interest</th>
+                              <th scope="col">Savings Interest</th>
+                              <th scope="col">Borrow Interest</th>
                               <th scope="col">Deposit</th>
                               <th scope="col" colSpan={2}>Borrow</th>
                             </tr>
@@ -2347,8 +2347,8 @@ const HashstackCrypto = () => {
                       <div className="row justify-content-end" style={{ paddingTop: "12px" }}>
                         <Col sm={3}>
                           <select className="form-select form-select-sm" onChange={(e) => passbookActive(e)}>
-                            <option value={"ActiveLoan"}>Active loans</option>
-                            <option value={"ActiveDeposit"}>Active deposits</option>
+                            <option value={"ActiveLoan"}>Active Loans</option>
+                            <option value={"ActiveDeposit"}>Active Deposits</option>
                             {/* <option value={"InactiveLoan"}>Inactive loans</option>
                             <option value={"InactiveDeposit"}>Inactive deposits</option> */}
                           </select>
@@ -2385,7 +2385,7 @@ const HashstackCrypto = () => {
                                 <th scope="col">Deposit Market</th>
                                 <th scope="col">Commitment</th>
                                 <th scope="col">Amount</th>
-                                <th scope="col" colSpan={2}>Interest earned</th>
+                                <th scope="col" colSpan={2}>Interest Earned</th>
                               </tr>
                             </thead>
                             <tbody>
@@ -2419,7 +2419,7 @@ const HashstackCrypto = () => {
                                     <div className="text-muted">{Number(asset.acquiredYield).toFixed(3)}</div>
                                   </td> 
                                 </tr>
-                              )) : <tr align="center"><td colSpan={5}>No Records found.</td></tr>}
+                              )) : <tr align="center"><td colSpan={5}>No Records Found.</td></tr>}
                             </tbody>
                           </Table>
                         </div>
