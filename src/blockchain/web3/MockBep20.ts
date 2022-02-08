@@ -12,12 +12,12 @@ class MockBep20Wrapper {
     tWBNB: MockBep20;
   
     constructor(wrapperOptions: any) {
-        this.tBTC = new MockBep20(wrapperOptions, "0xfb9736A9CdEf726d7981f84e99776cCd626e9a63");
-        this.tUSDC = new MockBep20(wrapperOptions, "0xB4C8693a397646e9A6518459F9263Aa33a3b65B3");
-        this.tUSDT = new MockBep20(wrapperOptions, "0x085bAB536d4035891a8857f0c59663A02FC411B1");
-        this.tSXP = new MockBep20(wrapperOptions, "0x4DB1A74c801d34F247D7E4D63b50BD74e4c51D6b");
-        this.tCake = new MockBep20(wrapperOptions, "0x23a3da94355DB95563670AC736bAC220fEAC89fa");
-        this.tWBNB = new MockBep20(wrapperOptions, "0x89A1BdA646968710f5EBf8aB3394E673fEE1671D");
+        this.tBTC = new MockBep20(wrapperOptions, "0x7638b42547AB7632281756Bc142D0e3B574F2Ec8");
+        this.tUSDC = new MockBep20(wrapperOptions, "0xbD93b32701b472E318b14b658E2c02d66A67D3Dd");
+        this.tUSDT = new MockBep20(wrapperOptions, "0xe3bb2793391da3d8993cA8E38755E4862A8c04db");
+        this.tSXP = new MockBep20(wrapperOptions, "0x9D5D1FDda31aBf933B8f822A4E858cf3ffA4D467");
+        this.tCake = new MockBep20(wrapperOptions, "0x7c8fE6A1Db9AD6B212A2Ee2AECeF12D51b94c2bB");
+        this.tWBNB = new MockBep20(wrapperOptions, "0x58b70cbdE08EbF44DDc0BC58c1d84632e14a9072");
     }
 
    approve(market: string, value: number, decimal: number) {
