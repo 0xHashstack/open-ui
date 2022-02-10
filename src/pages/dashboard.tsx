@@ -38,7 +38,7 @@ toast.configure({
 });
 
 
-const HashstackCrypto = () => {
+const Dashboard = () => {
 
   const [isLoading, setIsLoading] = useState(true);
   const [activeDepositsData, setActiveDepositsData] = useState([]);
@@ -1127,4 +1127,4 @@ const HashstackCrypto = () => {
   );
 };
 
-export default HashstackCrypto;
+export default Dashboard;
