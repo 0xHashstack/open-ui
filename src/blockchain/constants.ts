@@ -146,3 +146,10 @@ export const CoinClassNames = {
   "BTC": "mdi mdi-bitcoin",
   "BNB": "mdi mdi-drag-variant"
 };
+
+export const MinimumAmount = {
+  "USDT": 100,
+  "USDC": 100,
+  "BTC": 0.1,
+  "BNB": 0.25 
+};
