@@ -25,9 +25,8 @@ const Deposit = (props) => {
 
     const [commitPeriod, setCommitPeriod] = useState();
     const [modal_deposit, setmodal_deposit] = useState(false);
-
+    const [inputVal, setInputVal] = useState(0);
   
-    let inputVal = 0;
   
     const { account } = useContext(Web3ModalContext);
     const { web3Wrapper: wrapper } = useContext(Web3WrapperContext);
@@ -40,6 +39,10 @@ const Deposit = (props) => {
 
     const handleDepositChange = (e) => {
       setCommitPeriod(e.target.value)
+    }
+
+    const handleInputChange = (e) => {
+      setInputVal(Number(e.target.value));
     }
 
     function removeBodyCss() {
@@ -102,7 +105,7 @@ const Deposit = (props) => {
                       className="form-control"
                       id="amount"
                       placeholder="Amount"
-                      onChange={(event) => { inputVal = Number(event.target.value) }}
+                      onChange={handleInputChange}
                     />
                   </Col>
                 </div>

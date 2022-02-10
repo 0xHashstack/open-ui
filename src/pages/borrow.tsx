@@ -27,8 +27,8 @@ const Borrow = (props) => {
     const [collateralMarket, setCollateralMarket] = useState();
     const [modal_borrow, setmodal_borrow] = useState(false);
 
-    let inputVal1 = 0;
-    let inputVal2 = 0;
+    const [loanInputVal, setLoanInputVal] = useState(0);
+    const [collateralInputVal, setCollateralInputVal] = useState(0);
   
     const { account } = useContext(Web3ModalContext);
     const { web3Wrapper: wrapper } = useContext(Web3WrapperContext);
@@ -46,6 +46,14 @@ const Borrow = (props) => {
       setCollateralMarket(e.target.value)
     }
 
+    const handleLoanInputChange = (e) => {
+      setLoanInputVal(Number(e.target.value));
+    }
+
+    const handleCollateralInputChange = (e) => {
+      setCollateralInputVal(Number(e.target.value));
+    }
+
     function removeBodyCss() {
         document.body.classList.add("no_padding");
     }
@@ -57,12 +65,12 @@ const Borrow = (props) => {
 
     const handleBorrow = async () => {
       try {
-        const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[props.assetID], inputVal1, DecimalsMap[props.assetID]);
+        const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[props.assetID], loanInputVal, DecimalsMap[props.assetID]);
         console.log("Approve Transaction sent: ", approveTransactionHash);
         const _commitBorrowPeriod: string | undefined =  commitBorrowPeriod;
         const _collateralMarket: string | undefined =  collateralMarket;
-        await wrapper?.getLoanInstance().loanRequest(SymbolsMap[props.assetID], CommitMap[_commitBorrowPeriod], inputVal1, DecimalsMap[props.assetID],
-        SymbolsMap[_collateralMarket], inputVal2, DecimalsMap[_collateralMarket]);
+        await wrapper?.getLoanInstance().loanRequest(SymbolsMap[props.assetID], CommitMap[_commitBorrowPeriod], loanInputVal, DecimalsMap[props.assetID],
+        SymbolsMap[_collateralMarket], collateralInputVal, DecimalsMap[_collateralMarket]);
       } catch (err) {
         if (err instanceof Error) {
           toast.error(`${GetErrorText(String(err.message))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
@@ -108,7 +116,7 @@ const Borrow = (props) => {
                       className="form-control"
                       id="horizontal-password-Input"
                       placeholder="Amount"
-                      onChange={(event) => { inputVal1 = Number(event.target.value) }}
+                      onChange={handleLoanInputChange}
                     />
                   </Col>
                 </div>
@@ -142,7 +150,7 @@ const Borrow = (props) => {
                       className="form-control"
                       id="horizontal-password-Input"
                       placeholder="Amount"
-                      onChange={(event) => { inputVal2 = Number(event.target.value)}}
+                      onChange={handleCollateralInputChange}
                     />
                   </Col>
                 </div>
