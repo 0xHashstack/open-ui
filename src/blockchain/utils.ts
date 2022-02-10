@@ -42,6 +42,8 @@ export const BNtoNum = (value, decimal = 18) => {
 }
 
 export const NumToBN = (value, decimal = 18) => {
+  const val = new BigNumber(value).shiftedBy(decimal).toString();
+  console.log(val);
   return new BigNumber(value).shiftedBy(decimal).toString();
 }
 
@@ -54,6 +56,9 @@ export const GetErrorText = (err) => {
       console.log(error);
       return err;
     }
+  }
+  else {
+    return 'Oops! Something went wrong.';
   }
 }
 

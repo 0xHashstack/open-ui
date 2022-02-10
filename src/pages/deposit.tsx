@@ -60,8 +60,8 @@ const Deposit = (props) => {
         const _commitPeriod: string | undefined =  commitPeriod;
         await wrapper?.getDepositInstance().depositRequest(SymbolsMap[props.asset], CommitMap[_commitPeriod], inputVal, DecimalsMap[props.asset]);
       } catch (err) {
-        if (err instanceof Error) {
-          toast.error(`${GetErrorText(String(err.message))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
+        if (err instanceof Object) {
+          toast.error(`${GetErrorText(String(err['message']))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
         } else {
           toast.error(`${GetErrorText(String(err))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
         }

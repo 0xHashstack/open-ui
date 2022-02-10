@@ -35,8 +35,8 @@ const Header = () => {
       await wrapper?.getFaucetInstance().getTokens(event.target.textContent);
     } catch (error) {
       console.log(error);
-      if (error instanceof Error) {
-        toast.error(`${GetErrorText(String(error.message))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
+      if (error instanceof Object) {
+        toast.error(`${GetErrorText(String(error['message']))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
       } else {
         toast.error(`${GetErrorText(String(error))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
       }
