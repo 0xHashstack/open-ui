@@ -113,10 +113,10 @@ const HashstackCrypto = () => {
     wrapper?.getDepositInstance().deposit.on(EventMap.DEPOSIT_ADDED, depositAdded);
     wrapper?.getDepositInstance().deposit.on(EventMap.WITHDRAW_DEPOSIT, WithdrawalDeposit);
 
-    wrapper?.getLoanInstance().loanExt.on(EventMap.ADD_COLLATERAL, onCollateralAdded);
-    wrapper?.getLoanInstance().loan.on(EventMap.WITHDRAW_COLLATERAL, onCollateralReleased);
+    wrapper?.getLoanInstance().loan.on(EventMap.ADD_COLLATERAL, onCollateralAdded);
+    // wrapper?.getLoanInstance().loan.on(EventMap.WITHDRAW_COLLATERAL, onCollateralReleased);
 
-    wrapper?.getLoanInstance().loanExt.on(EventMap.WITHDRAW_LOAN, onLoanWithdrawal);
+    wrapper?.getLoanInstance().loan.on(EventMap.WITHDRAW_LOAN, onLoanWithdrawal);
     wrapper?.getLoanInstance().loanExt.on(EventMap.REPAY_LOAN, onLoanRepay);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -321,10 +321,10 @@ const HashstackCrypto = () => {
     toast.success(`Collateral amount added: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
   }
 
-  const onCollateralReleased = (data) => {
-    let amount = BNtoNum(Number(data.amount))
-    toast.success(`Collateral amount released: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
-  }
+  // const onCollateralReleased = (data) => {
+  //   let amount = BNtoNum(Number(data.amount))
+  //   toast.success(`Collateral amount released: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
+  // }
 
   const onLoanWithdrawal = (data) => {
     let amount = BNtoNum(Number(data.amount))
