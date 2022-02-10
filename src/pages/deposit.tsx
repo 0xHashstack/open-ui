@@ -4,7 +4,8 @@ import {
   Button,
   Form,
   Input,
-  Modal
+  Modal,
+  Spinner
 } from "reactstrap";
 
 import {
@@ -26,6 +27,7 @@ const Deposit = (props) => {
     const [commitPeriod, setCommitPeriod] = useState();
     const [modal_deposit, setmodal_deposit] = useState(false);
     const [inputVal, setInputVal] = useState(0);
+    const [isTransactionDone, setIsTransactionDone] = useState(false);
   
   
     const { account } = useContext(Web3ModalContext);
@@ -46,20 +48,23 @@ const Deposit = (props) => {
     }
 
     function removeBodyCss() {
-        document.body.classList.add("no_padding");
-      }
-      function tog_center() {
-        setmodal_deposit(!modal_deposit);
-        removeBodyCss();
-      }
+      document.body.classList.add("no_padding");
+    }
+
+    function tog_center() {
+      setmodal_deposit(!modal_deposit);
+      removeBodyCss();
+    }
 
     const handleDeposit = async () => {
       try {
+        setIsTransactionDone(true);
         const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[props.asset], inputVal, DecimalsMap[props.asset]);
         console.log("Approve Transaction sent: ", approveTransactionHash);
         const _commitPeriod: string | undefined =  commitPeriod;
         await wrapper?.getDepositInstance().depositRequest(SymbolsMap[props.asset], CommitMap[_commitPeriod], inputVal, DecimalsMap[props.asset]);
       } catch (err) {
+        setIsTransactionDone(false);
         if (err instanceof Object) {
           toast.error(`${GetErrorText(String(err['message']))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
         } else {
@@ -69,6 +74,7 @@ const Deposit = (props) => {
     }
 
     const onDeposit = (data) => {
+      setIsTransactionDone(false);
       let amount = BNtoNum(Number(data.amount),DecimalsMap[data.market]);
       toast.success(`Deposited amount: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
@@ -132,10 +138,10 @@ const Deposit = (props) => {
                   <Button
                     color="primary"
                     className="w-md"
-                    disabled={commitPeriod === undefined}
+                    disabled={commitPeriod === undefined || isTransactionDone}
                     onClick={handleDeposit}
                   >
-                    Deposit
+                    {!isTransactionDone ? 'Deposit' : <Spinner>Loading...</Spinner>}
                   </Button>
                 </div>
               </Form>

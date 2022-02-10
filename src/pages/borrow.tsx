@@ -5,7 +5,8 @@ import {
   Button,
   Form,
   Input,
-  Modal
+  Modal,
+  Spinner
 } from "reactstrap";
 import { Web3ModalContext } from '../contexts/Web3ModalProvider';
 import { Web3WrapperContext } from '../contexts/Web3WrapperProvider';
@@ -26,6 +27,7 @@ const Borrow = (props) => {
     const [commitBorrowPeriod, setCommitBorrowPeriod] = useState();
     const [collateralMarket, setCollateralMarket] = useState();
     const [modal_borrow, setmodal_borrow] = useState(false);
+    const [isTransactionDone, setIsTransactionDone] = useState(false);
 
     const [loanInputVal, setLoanInputVal] = useState(0);
     const [collateralInputVal, setCollateralInputVal] = useState(0);
@@ -65,6 +67,7 @@ const Borrow = (props) => {
 
     const handleBorrow = async () => {
       try {
+        setIsTransactionDone(true);
         const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[props.assetID], loanInputVal, DecimalsMap[props.assetID]);
         console.log("Approve Transaction sent: ", approveTransactionHash);
         const _commitBorrowPeriod: string | undefined =  commitBorrowPeriod;
@@ -72,6 +75,7 @@ const Borrow = (props) => {
         await wrapper?.getLoanInstance().loanRequest(SymbolsMap[props.assetID], CommitMap[_commitBorrowPeriod], loanInputVal, DecimalsMap[props.assetID],
         SymbolsMap[_collateralMarket], collateralInputVal, DecimalsMap[_collateralMarket]);
       } catch (err) {
+        setIsTransactionDone(false);
         if (err instanceof Object) {
           toast.error(`${GetErrorText(String(err['message']))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
         } else {
@@ -81,6 +85,7 @@ const Borrow = (props) => {
     }
 
     const onLoanRequested = (data) => {
+      setIsTransactionDone(false);
       let amount = BNtoNum(Number(data.loanAmount), DecimalsMap[data.market]);
       toast.success(`Requested amount: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
@@ -167,10 +172,10 @@ const Borrow = (props) => {
                   <Button
                     color="primary"
                     className="w-md"
-                    disabled={commitBorrowPeriod === undefined}
+                    disabled={commitBorrowPeriod === undefined || isTransactionDone}
                     onClick={handleBorrow}
                   >
-                    Request Loan
+                    {!isTransactionDone ? 'Request Loan' : <Spinner>Loading...</Spinner>}
                   </Button>
                 </div>
               </Form>
