@@ -211,30 +211,6 @@
         "internalType": "bytes32",
         "name": "_commitment",
         "type": "bytes32"
-      }
-    ],
-    "name": "convertYield",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bytes32",
-        "name": "_market",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "bytes32",
-        "name": "_commitment",
-        "type": "bytes32"
       },
       {
         "internalType": "uint256",
@@ -401,11 +377,6 @@
         "internalType": "uint256",
         "name": "_amount",
         "type": "uint256"
-      },
-      {
-        "internalType": "enum IDeposit.SAVINGSTYPE",
-        "name": "_request",
-        "type": "uint8"
       }
     ],
     "name": "withdrawDeposit",
