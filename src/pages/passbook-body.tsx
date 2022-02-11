@@ -26,7 +26,7 @@ const PassbookTBody = (props) => {
                         " font-size-18"
                       }
                     >
-                      <i className={CoinClassNames[EventMap[asset.loanMarket.toUpperCase()]]} />
+                      <i className={CoinClassNames[EventMap[asset.loanMarket.toUpperCase()]] || asset.loanMarket.toUpperCase()} />
                     </span>
                   </div>
                   <span>{EventMap[asset.loanMarket.toUpperCase()]}</span>

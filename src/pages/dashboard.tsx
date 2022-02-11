@@ -1106,7 +1106,7 @@ const Dashboard = () => {
                                             " font-size-18"
                                           }
                                         >
-                                          <i className={CoinClassNames[EventMap[asset.market.toUpperCase()]]} />
+                                          <i className={CoinClassNames[EventMap[asset.market.toUpperCase()]] || asset.market.toUpperCase()} />
                                         </span>
                                       </div>
                                       <span>{EventMap[asset.market.toUpperCase()]}</span>
