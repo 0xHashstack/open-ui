@@ -411,8 +411,6 @@ const Dashboard = () => {
                                             <Col sm={12}>
                                               <select className="form-select" onChange={handleLoanOptionChange}>
                                                 <option hidden>Loan Market</option>
-                                                {/* <option value={"BTC"}>BTC</option>
-                                                <option value={"USDC"}>USDC</option> */}
                                                 {activeLoansData.map((asset, key) => {
                                                   return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
                                                 })}
