@@ -3,7 +3,7 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_contractOwner",
+        "name": "_upgradeAdmin",
         "type": "address"
       },
       {
@@ -22,14 +22,38 @@
   {
     "inputs": [
       {
+        "internalType": "bytes32",
+        "name": "_market",
+        "type": "bytes32"
+      },
+      {
         "internalType": "address",
-        "name": "_reserve",
+        "name": "_address",
         "type": "address"
       }
     ],
-    "name": "setReserveAddress",
+    "name": "addFairPriceAddress",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_market",
+        "type": "bytes32"
+      }
+    ],
+    "name": "getFairPriceAddress",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {

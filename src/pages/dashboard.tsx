@@ -23,7 +23,7 @@ import classnames from "classnames";
 import { Web3ModalContext } from '../contexts/Web3ModalProvider';
 import { Web3WrapperContext } from '../contexts/Web3WrapperProvider';
 import {
-  comit_ONEMONTH, EventMap, CoinClassNames,
+  EventMap, CoinClassNames,
   SymbolsMap, DecimalsMap, CommitMap
 } from '../blockchain/constants';
 import { BNtoNum, GetErrorText } from '../blockchain/utils';
@@ -201,8 +201,14 @@ const Dashboard = () => {
 
   const handleRepay = async () => {
     try {
+      const commit = activeLoansData.filter((asset) => {
+        return EventMap[asset.loanMarket.toUpperCase()] === loanOption;
+      });
       const _loanOption: string | undefined =  loanOption;
-      await wrapper?.getLoanInstance().repayLoan(SymbolsMap[_loanOption], comit_ONEMONTH, inputVal1, DecimalsMap[_loanOption]);
+      const market = SymbolsMap[_loanOption];
+      const decimal = DecimalsMap[_loanOption];
+      const comm = CommitMap[commit[0].commitment];
+      await wrapper?.getLoanInstance().repayLoan(market, comm, inputVal1, decimal);
     } catch (err) {
       if (err instanceof Error) {
         toast.error(`${GetErrorText(String(err.message))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
@@ -217,10 +223,9 @@ const Dashboard = () => {
       const commit = activeLoansData.filter((asset) => {
         return EventMap[asset.loanMarket.toUpperCase()] === loanOption;
       });
-
       const _loanOption: string | undefined =  loanOption;
 
-      await wrapper?.getLoanInstance().permissibleWithdrawal(SymbolsMap[_loanOption], commit[0].commitment, inputVal1, DecimalsMap[_loanOption]);
+      await wrapper?.getLoanInstance().permissibleWithdrawal(SymbolsMap[_loanOption], CommitMap[commit[0].commitment], inputVal1, DecimalsMap[_loanOption]);
     } catch (err) {
       if (err instanceof Error) {
         toast.error(`${GetErrorText(String(err.message))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
@@ -230,11 +235,19 @@ const Dashboard = () => {
     }
   }
 
+  // const onCollateralReleased = (data) => {
+  //   let amount = BNtoNum(Number(data.amount))
+  //   toast.success(`Collateral amount released: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
+  // }
+
   const handleCollateral = async () => {
     try {
+      const commit = activeLoansData.filter((asset) => {
+        return EventMap[asset.loanMarket.toUpperCase()] === loanOption;
+      });
       const _loanOption: string | undefined =  loanOption;
       const _collateralOption: string | undefined =  collateralOption;
-      await wrapper?.getLoanInstance().addCollateral(SymbolsMap[_loanOption], comit_ONEMONTH, SymbolsMap[_collateralOption], inputVal1, DecimalsMap[_loanOption]);
+      await wrapper?.getLoanInstance().addCollateral(SymbolsMap[_loanOption], CommitMap[commit[0].commitment], SymbolsMap[_collateralOption], inputVal1, DecimalsMap[_loanOption]);
     } catch (err) {
       if (err instanceof Error) {
         toast.error(`${GetErrorText(String(err.message))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
@@ -246,8 +259,11 @@ const Dashboard = () => {
 
   const handleWithdrawCollateral = async () => {
     try {
+      const commit = activeLoansData.filter((asset) => {
+        return EventMap[asset.loanMarket.toUpperCase()] === loanOption;
+      });
       const _loanOption: string | undefined =  loanOption;
-      await wrapper?.getLoanInstance().withdrawCollateral(SymbolsMap[_loanOption], comit_ONEMONTH);
+      await wrapper?.getLoanInstance().withdrawCollateral(SymbolsMap[_loanOption], CommitMap[commit[0].commitment]);
     } catch (err) {
       if (err instanceof Error) {
         toast.error(`${GetErrorText(String(err.message))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
@@ -259,9 +275,12 @@ const Dashboard = () => {
 
   const handleSwap = async () => {
     try {
+      const commit = activeLoansData.filter((asset) => {
+        return EventMap[asset.loanMarket.toUpperCase()] === loanOption;
+      });
       const _loanOption: string | undefined =  loanOption;
       const _swapOption: string | undefined =  swapOption;
-      await wrapper?.getLoanInstance().swapLoan(SymbolsMap[_loanOption], comit_ONEMONTH, SymbolsMap[_swapOption]);
+      await wrapper?.getLoanInstance().swapLoan(SymbolsMap[_loanOption], CommitMap[commit[0].commitment], SymbolsMap[_swapOption]);
     } catch (err) {
       if (err instanceof Error) {
         toast.error(`${GetErrorText(String(err.message))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
@@ -273,9 +292,12 @@ const Dashboard = () => {
 
   const handleSwapToLoan = async () => {
     try {
+      const commit = activeLoansData.filter((asset) => {
+        return EventMap[asset.loanMarket.toUpperCase()] === loanOption;
+      });
       const _loanOption: string | undefined =  loanOption;
       const _swapOption: string | undefined =  swapOption;
-      await wrapper?.getLoanInstance().swapToLoan(SymbolsMap[_swapOption], comit_ONEMONTH, SymbolsMap[_loanOption]);
+      await wrapper?.getLoanInstance().swapToLoan(SymbolsMap[_swapOption], CommitMap[commit[0].commitment], SymbolsMap[_loanOption]);
     } catch (err) {
       if (err instanceof Error) {
         toast.error(`${GetErrorText(String(err.message))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});

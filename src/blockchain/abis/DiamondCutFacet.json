@@ -18,6 +18,11 @@
             "internalType": "bytes4[]",
             "name": "functionSelectors",
             "type": "bytes4[]"
+          },
+          {
+            "internalType": "uint8",
+            "name": "facetId",
+            "type": "uint8"
           }
         ],
         "indexed": false,
@@ -59,6 +64,11 @@
             "internalType": "bytes4[]",
             "name": "functionSelectors",
             "type": "bytes4[]"
+          },
+          {
+            "internalType": "uint8",
+            "name": "facetId",
+            "type": "uint8"
           }
         ],
         "internalType": "struct IDiamondCut.FacetCut[]",
