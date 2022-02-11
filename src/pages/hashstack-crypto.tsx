@@ -665,7 +665,7 @@ const HashstackCrypto = () => {
 
       const _loanOption: string | undefined =  loanOption;
 
-      await wrapper?.getLoanInstance().permissibleWithdrawal(SymbolsMap[_loanOption], commit[0].commitment, SymbolsMap[EventMap[commit[0].collateralMarket.toUpperCase()]], inputVal1, DecimalsMap[_loanOption]);
+      await wrapper?.getLoanInstance().permissibleWithdrawal(SymbolsMap[_loanOption], CommitMap[commit[0].commitment], SymbolsMap[EventMap[commit[0].collateralMarket.toUpperCase()]], inputVal1, DecimalsMap[_loanOption]);
     } catch (err) {
       if (err instanceof Error) {
         toast.error(`${GetErrorText(String(err.message))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
@@ -682,9 +682,12 @@ const HashstackCrypto = () => {
 
   const handleCollateral = async () => {
     try {
+      const commit = activeLoansData.filter((asset) => {
+        return EventMap[asset.loanMarket.toUpperCase()] === loanOption;
+      });
       const _loanOption: string | undefined =  loanOption;
       const _collateralOption: string | undefined =  collateralOption;
-      await wrapper?.getLoanInstance().addCollateral(SymbolsMap[_loanOption], comit_ONEMONTH, SymbolsMap[_collateralOption], inputVal1, decimals[0]);
+      await wrapper?.getLoanInstance().addCollateral(SymbolsMap[_loanOption], CommitMap[commit[0].commitment], SymbolsMap[_collateralOption], inputVal1, DecimalsMap[_loanOption]);
     } catch (err) {
       if (err instanceof Error) {
         toast.error(`${GetErrorText(String(err.message))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
@@ -696,8 +699,11 @@ const HashstackCrypto = () => {
 
   const handleWithdrawCollateral = async () => {
     try {
+      const commit = activeLoansData.filter((asset) => {
+        return EventMap[asset.loanMarket.toUpperCase()] === loanOption;
+      });
       const _loanOption: string | undefined =  loanOption;
-      await wrapper?.getLoanInstance().withdrawCollateral(SymbolsMap[_loanOption], comit_ONEMONTH);
+      await wrapper?.getLoanInstance().withdrawCollateral(SymbolsMap[_loanOption], CommitMap[commit[0].commitment]);
     } catch (err) {
       if (err instanceof Error) {
         toast.error(`${GetErrorText(String(err.message))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
@@ -724,9 +730,12 @@ const HashstackCrypto = () => {
 
   const handleSwap = async () => {
     try {
+      const commit = activeLoansData.filter((asset) => {
+        return EventMap[asset.loanMarket.toUpperCase()] === loanOption;
+      });
       const _loanOption: string | undefined =  loanOption;
       const _swapOption: string | undefined =  swapOption;
-      await wrapper?.getLoanInstance().swapLoan(SymbolsMap[_loanOption], comit_ONEMONTH, SymbolsMap[_swapOption]);
+      await wrapper?.getLoanInstance().swapLoan(SymbolsMap[_loanOption], CommitMap[commit[0].commitment], SymbolsMap[_swapOption]);
     } catch (err) {
       if (err instanceof Error) {
         toast.error(`${GetErrorText(String(err.message))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
@@ -738,9 +747,12 @@ const HashstackCrypto = () => {
 
   const handleSwapToLoan = async () => {
     try {
+      const commit = activeLoansData.filter((asset) => {
+        return EventMap[asset.loanMarket.toUpperCase()] === loanOption;
+      });
       const _loanOption: string | undefined =  loanOption;
       const _swapOption: string | undefined =  swapOption;
-      await wrapper?.getLoanInstance().swapToLoan(SymbolsMap[_swapOption], comit_ONEMONTH, SymbolsMap[_loanOption]);
+      await wrapper?.getLoanInstance().swapToLoan(SymbolsMap[_swapOption], CommitMap[commit[0].commitment], SymbolsMap[_loanOption]);
     } catch (err) {
       if (err instanceof Error) {
         toast.error(`${GetErrorText(String(err.message))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
