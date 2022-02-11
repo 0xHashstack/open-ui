@@ -23,7 +23,7 @@ import classnames from "classnames";
 import { Web3ModalContext } from '../contexts/Web3ModalProvider';
 import { Web3WrapperContext } from '../contexts/Web3WrapperProvider';
 import {
-  decimals, comit_ONEMONTH, EventMap, CoinClassNames,
+  comit_ONEMONTH, EventMap, CoinClassNames,
   SymbolsMap, DecimalsMap, CommitMap
 } from '../blockchain/constants';
 import { BNtoNum, GetErrorText } from '../blockchain/utils';
@@ -220,7 +220,7 @@ const Dashboard = () => {
 
       const _loanOption: string | undefined =  loanOption;
 
-      await wrapper?.getLoanInstance().permissibleWithdrawal(SymbolsMap[_loanOption], commit[0].commitment, SymbolsMap[EventMap[commit[0].collateralMarket.toUpperCase()]], inputVal1, DecimalsMap[_loanOption]);
+      await wrapper?.getLoanInstance().permissibleWithdrawal(SymbolsMap[_loanOption], commit[0].commitment, inputVal1, DecimalsMap[_loanOption]);
     } catch (err) {
       if (err instanceof Error) {
         toast.error(`${GetErrorText(String(err.message))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
@@ -234,7 +234,7 @@ const Dashboard = () => {
     try {
       const _loanOption: string | undefined =  loanOption;
       const _collateralOption: string | undefined =  collateralOption;
-      await wrapper?.getLoanInstance().addCollateral(SymbolsMap[_loanOption], comit_ONEMONTH, SymbolsMap[_collateralOption], inputVal1, decimals[0]);
+      await wrapper?.getLoanInstance().addCollateral(SymbolsMap[_loanOption], comit_ONEMONTH, SymbolsMap[_collateralOption], inputVal1, DecimalsMap[_loanOption]);
     } catch (err) {
       if (err instanceof Error) {
         toast.error(`${GetErrorText(String(err.message))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
