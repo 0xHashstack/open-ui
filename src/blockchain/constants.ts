@@ -1,4 +1,4 @@
-export const defaultChainId = 3;
+export const defaultChainId = 56;
 
 export const rpcUrls = {
   56: 'https://bsc-dataseed.binance.org/',
