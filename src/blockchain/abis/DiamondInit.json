@@ -1,6 +1,22 @@
 [
   {
-    "inputs": [],
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "reserveAddr",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "accessRegistry",
+        "type": "address"
+      }
+    ],
     "name": "init",
     "outputs": [],
     "stateMutability": "nonpayable",
