@@ -49,7 +49,7 @@ export const marketAddresses = [
   '0xd35CAc08bc3493cE11316CC27Fc72FB087905C9f', // CAKE
   '0xA6fA7701f57Cb2401F83Ad70CaEbD73d17b9A1c4' // BNB
   
-]
+];
 export const latestPrice = [
   // '0.2886',
   '1',
