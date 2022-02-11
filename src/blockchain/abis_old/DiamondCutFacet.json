@@ -18,11 +18,6 @@
             "internalType": "bytes4[]",
             "name": "functionSelectors",
             "type": "bytes4[]"
-          },
-          {
-            "internalType": "uint8",
-            "name": "facetId",
-            "type": "uint8"
           }
         ],
         "indexed": false,
@@ -47,22 +42,43 @@
     "type": "event"
   },
   {
-    "anonymous": false,
     "inputs": [
       {
-        "indexed": true,
+        "components": [
+          {
+            "internalType": "address",
+            "name": "facetAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "enum IDiamondCut.FacetCutAction",
+            "name": "action",
+            "type": "uint8"
+          },
+          {
+            "internalType": "bytes4[]",
+            "name": "functionSelectors",
+            "type": "bytes4[]"
+          }
+        ],
+        "internalType": "struct IDiamondCut.FacetCut[]",
+        "name": "_diamondCut",
+        "type": "tuple[]"
+      },
+      {
         "internalType": "address",
-        "name": "previousOwner",
+        "name": "_init",
         "type": "address"
       },
       {
-        "indexed": true,
-        "internalType": "address",
-        "name": "newOwner",
-        "type": "address"
+        "internalType": "bytes",
+        "name": "_calldata",
+        "type": "bytes"
       }
     ],
-    "name": "OwnershipTransferred",
-    "type": "event"
+    "name": "diamondCut",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
   }
 ]
