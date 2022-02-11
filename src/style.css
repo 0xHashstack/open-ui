@@ -370,3 +370,7 @@ a {
 .font-face-AvenirNextLTPro {
   font-family: "AvenirNextLTPro";
 }
+
+.non-clickable {
+  pointer-events: none;
+}

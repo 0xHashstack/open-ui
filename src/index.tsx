@@ -2,7 +2,7 @@ import ReactDOM from 'react-dom';
 import * as Sentry from "@sentry/react";
 import { Integrations } from "@sentry/tracing";
 import axios from "axios";
-import HashstackCrypto from './pages/hashstack-crypto';
+import Dashboard from './pages/dashboard';
 import Web3ModalProvider from "contexts/Web3ModalProvider";
 import Web3WrapperProvider from "contexts/Web3WrapperProvider";
 import { MoralisProvider } from "react-moralis";
@@ -32,7 +32,7 @@ ReactDOM.render(
           <Web3ModalProvider>
             <Web3WrapperProvider>
               <Layout>
-                <HashstackCrypto />
+                <Dashboard />
               </Layout>
             </Web3WrapperProvider>
           </Web3ModalProvider>

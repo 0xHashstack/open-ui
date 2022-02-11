@@ -106,7 +106,7 @@ export const comit_TWOWEEKS = "0x636f6d69745f54574f5745454b530000000000000000000
 export const comit_ONEMONTH = "0x636f6d69745f4f4e454d4f4e5448000000000000000000000000000000000000";
 export const comit_THREEMONTHS = "0x636f6d69745f54485245454d4f4e544853000000000000000000000000000000";
 
-export const faucetAddress = "0xcE14C0f2722488a933Ed9f69e9d9d7271fed62E8";
+export const faucetAddress = "0x374D2C00Bab402191F2787F117eb854E354381b8";
 
 export const pancakeSwapTokenAddress = {
   "0x555344432e740000000000000000000000000000000000000000000000000000": "0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d", //USDC
@@ -145,4 +145,11 @@ export const CoinClassNames = {
   "USDC": "mdi mdi-ethereum",
   "BTC": "mdi mdi-bitcoin",
   "BNB": "mdi mdi-drag-variant"
+};
+
+export const MinimumAmount = {
+  "USDT": 100,
+  "USDC": 100,
+  "BTC": 0.1,
+  "BNB": 0.25 
 };
