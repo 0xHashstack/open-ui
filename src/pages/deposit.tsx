@@ -77,7 +77,6 @@ const Deposit = (props) => {
     const onDeposit = (data) => {
       setIsTransactionDone(false);
       const res = data['DepositAdded'] ? data['DepositAdded']['returnValues'] : data['NewDeposit']['returnValues'];
-      debugger;
       let amount = BNtoNum(Number(res.amount),DecimalsMap[res.market]);
       toast.success(`Deposited amount: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
