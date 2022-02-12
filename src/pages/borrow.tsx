@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useContext } from "react";
 
 import {
   Col,
@@ -11,7 +11,6 @@ import {
 import { Web3ModalContext } from '../contexts/Web3ModalProvider';
 import { Web3WrapperContext } from '../contexts/Web3WrapperProvider';
 import {
-  EventMap,
   SymbolsMap, DecimalsMap, BorrowInterestRates, CommitMap
 } from '../blockchain/constants';
 import { BNtoNum, GetErrorText } from '../blockchain/utils';
@@ -35,10 +34,10 @@ const Borrow = (props) => {
     const { account } = useContext(Web3ModalContext);
     const { web3Wrapper: wrapper } = useContext(Web3WrapperContext);
 
-    useEffect(() => {
-      wrapper?.getLoanInstance().loanExt.on(EventMap.REQUEST_LOAN, onLoanRequested);
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    });
+    // useEffect(() => {
+    //   wrapper?.getLoanInstance().loanExt.on(EventMap.REQUEST_LOAN, onLoanRequested);
+    //   // eslint-disable-next-line react-hooks/exhaustive-deps
+    // });
 
     const handleBorrowChange = (e) => {
       setCommitBorrowPeriod(e.target.value)
@@ -72,8 +71,9 @@ const Borrow = (props) => {
         console.log("Approve Transaction sent: ", approveTransactionHash);
         const _commitBorrowPeriod: string | undefined =  commitBorrowPeriod;
         const _collateralMarket: string | undefined =  collateralMarket;
-        await wrapper?.getLoanInstance().loanRequest(SymbolsMap[props.assetID], CommitMap[_commitBorrowPeriod], loanInputVal, DecimalsMap[props.assetID],
+        const tx = await wrapper?.getLoanInstance().loanRequest(SymbolsMap[props.assetID], CommitMap[_commitBorrowPeriod], loanInputVal, DecimalsMap[props.assetID],
         SymbolsMap[_collateralMarket], collateralInputVal, DecimalsMap[_collateralMarket]);
+        onLoanRequested(tx.events);
       } catch (err) {
         setIsTransactionDone(false);
         if (err instanceof Object) {
@@ -86,7 +86,8 @@ const Borrow = (props) => {
 
     const onLoanRequested = (data) => {
       setIsTransactionDone(false);
-      let amount = BNtoNum(Number(data.loanAmount), DecimalsMap[data.market]);
+      const res = data['NewLoan']['returnValues'];
+      let amount = BNtoNum(Number(res.loanAmount), DecimalsMap[res.market]);
       toast.success(`Requested amount: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
 
