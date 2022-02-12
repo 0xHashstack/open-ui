@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext} from "react";
+import { useState, useContext} from "react";
 import {
   Col,
   Button,
@@ -9,7 +9,6 @@ import {
 } from "reactstrap";
 
 import {
-  EventMap,
   SymbolsMap, DecimalsMap, DepositInterestRates, CommitMap, VariableDepositInterestRates
 } from '../blockchain/constants';
 import { Web3ModalContext } from '../contexts/Web3ModalProvider';
@@ -33,11 +32,11 @@ const Deposit = (props) => {
     const { account } = useContext(Web3ModalContext);
     const { web3Wrapper: wrapper } = useContext(Web3WrapperContext);
 
-    useEffect(() => {
-      wrapper?.getDepositInstance().deposit.on(EventMap.NEW_DEPOSIT, onDeposit);
-      wrapper?.getDepositInstance().deposit.on(EventMap.DEPOSIT_ADDED, onDeposit);
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    // useEffect(() => {
+    //   wrapper?.getDepositInstance().deposit.on(EventMap.NEW_DEPOSIT, onDeposit);
+    //   wrapper?.getDepositInstance().deposit.on(EventMap.DEPOSIT_ADDED, onDeposit);
+    //   // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, []);
 
     const handleDepositChange = (e) => {
       setCommitPeriod(e.target.value)
@@ -62,7 +61,9 @@ const Deposit = (props) => {
         const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[props.asset], inputVal, DecimalsMap[props.asset]);
         console.log("Approve Transaction sent: ", approveTransactionHash);
         const _commitPeriod: string | undefined =  commitPeriod;
-        await wrapper?.getDepositInstance().depositRequest(SymbolsMap[props.asset], CommitMap[_commitPeriod], inputVal, DecimalsMap[props.asset]);
+        const tx = await wrapper?.getDepositInstance().depositRequest(SymbolsMap[props.asset], CommitMap[_commitPeriod], inputVal, DecimalsMap[props.asset]);
+        console.log(tx);
+        onDeposit(tx.events);
       } catch (err) {
         setIsTransactionDone(false);
         if (err instanceof Object) {
@@ -75,7 +76,8 @@ const Deposit = (props) => {
 
     const onDeposit = (data) => {
       setIsTransactionDone(false);
-      let amount = BNtoNum(Number(data.amount),DecimalsMap[data.market]);
+      const res = data['DepositAdded'] ? data['DepositAdded']['returnValues'] : data['NewDeposit']['returnValues'];
+      let amount = BNtoNum(Number(res.amount),DecimalsMap[res.market]);
       toast.success(`Deposited amount: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
 
@@ -138,7 +140,7 @@ const Deposit = (props) => {
                   <Button
                     color="primary"
                     className="w-md"
-                    disabled={commitPeriod === undefined || isTransactionDone}
+                    disabled={commitPeriod === undefined || isTransactionDone }
                     onClick={handleDeposit}
                   >
                     {!isTransactionDone ? 'Deposit' : <Spinner>Loading...</Spinner>}
