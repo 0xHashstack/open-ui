@@ -20,8 +20,8 @@ class DepositWrapper {
         return this.deposit.send("depositRequest", {}, market, commitment, NumToBN(amount, decimal));
     }
     
-    withdrawDeposit(market: string, commitment: string, amount: number, savingType: number, decimal: number) {
-        return this.deposit.send("withdrawDeposit", {}, market, commitment, NumToBN(amount, decimal), savingType);
+    withdrawDeposit(market: string, commitment: string, amount: number, decimal: number) {
+        return this.deposit.send("withdrawDeposit", {}, market, commitment, NumToBN(amount, decimal));
     }
 
     convertYeild(market: string, commitment: string) {
