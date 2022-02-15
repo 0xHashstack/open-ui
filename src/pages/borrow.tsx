@@ -34,10 +34,6 @@ const Borrow = (props) => {
     const { account } = useContext(Web3ModalContext);
     const { web3Wrapper: wrapper } = useContext(Web3WrapperContext);
 
-    // useEffect(() => {
-    //   wrapper?.getLoanInstance().loanExt.on(EventMap.REQUEST_LOAN, onLoanRequested);
-    //   // eslint-disable-next-line react-hooks/exhaustive-deps
-    // });
 
     const handleBorrowChange = (e) => {
       setCommitBorrowPeriod(e.target.value)

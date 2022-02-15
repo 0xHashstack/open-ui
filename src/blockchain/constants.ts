@@ -38,7 +38,6 @@ export const symbols = [
 ]
 
 
-// export const markets = ["WONE", "USDT.t", "USDC.t", "BTC.t"];
 export const markets = ["USDT.t", "USDC.t", "BTC.t"];
 export const marketAddresses = [
   // '0xD77B20D7301E6F16291221f50EB37589fdAB3720', // WONE
