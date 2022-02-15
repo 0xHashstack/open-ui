@@ -18,6 +18,7 @@ import {
   TabContent,
   TabPane,
   Label,
+  Spinner
 } from "reactstrap";
 import classnames from "classnames";
 import { Web3ModalContext } from '../contexts/Web3ModalProvider';
@@ -31,7 +32,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import PassbookTBody from "./passbook-body";
 import DashboardTBody from "./dashboard-body";
-import WorkflowInfo from "./workflow-info";
+// import WorkflowInfo from "./workflow-info";
 
 toast.configure({
   autoClose: 4000
@@ -43,7 +44,7 @@ const Dashboard = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [activeDepositsData, setActiveDepositsData] = useState([]);
   const [activeLoansData, setActiveLoansData] = useState([]);
-
+  const [isTransactionDone, setIsTransactionDone] = useState(false);
 
   const [customActiveTab, setCustomActiveTab] = useState("1");
   const [passbookStatus, setPassbookStatus] = useState(false)
@@ -70,7 +71,7 @@ const Dashboard = () => {
 
   let inputVal1 = 0;
 
-  const { account } = useContext(Web3ModalContext);
+  const { connect, disconnect, account } = useContext(Web3ModalContext);
   const { web3Wrapper: wrapper } = useContext(Web3WrapperContext);
 
 
@@ -91,7 +92,7 @@ const Dashboard = () => {
         setIsLoading(false);
         console.log(err);
       })
-  }, [account]);
+  }, [account, passbookStatus]);
 
   useEffect(() => {
     account && axios({
@@ -107,22 +108,7 @@ const Dashboard = () => {
         console.log(err);
       })
 
-  }, [account]);
-
-  // useEffect(() => {
-  //   // wrapper?.getDepositInstance().deposit.on(EventMap.NEW_DEPOSIT, onDeposit);
-  //   // wrapper?.getDepositInstance().deposit.on(EventMap.DEPOSIT_ADDED, depositAdded);
-  //   // wrapper?.getDepositInstance().deposit.on(EventMap.WITHDRAW_DEPOSIT, WithdrawalDeposit);
-
-  //   wrapper?.getLoanInstance().loan.on(EventMap.ADD_COLLATERAL, onCollateralAdded);
-  //   wrapper?.getLoanInstance().loan.on(EventMap.WITHDRAW_COLLATERAL, onCollateralReleased);
-
-  //   // wrapper?.getLoanInstance().loanExt.on(EventMap.REQUEST_LOAN, onLoanRequested);
-
-  //   wrapper?.getLoanInstance().loan.on(EventMap.WITHDRAW_LOAN, onLoanWithdrawal);
-  //   wrapper?.getLoanInstance().loanExt.on(EventMap.REPAY_LOAN, onLoanRepay);
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
+  }, [account, passbookStatus]);
 
   const toggleCustom = tab => {
     if (customActiveTab !== tab) {
@@ -204,6 +190,7 @@ const Dashboard = () => {
 
   const handleRepay = async () => {
     try {
+      setIsTransactionDone(true);
       const commit = activeLoansData.filter((asset) => {
         return EventMap[asset.loanMarket.toUpperCase()] === loanOption;
       });
@@ -211,9 +198,12 @@ const Dashboard = () => {
       const market = SymbolsMap[_loanOption];
       const decimal = DecimalsMap[_loanOption];
       const comm = CommitMap[commit[0].commitment];
+      const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[_loanOption], inputVal1, DecimalsMap[_loanOption]);
+      console.log("Approve Transaction sent: ", approveTransactionHash);
       const tx = await wrapper?.getLoanInstance().repayLoan(market, comm, inputVal1, decimal);
       onLoanRepay(tx.events);
     } catch (err) {
+      setIsTransactionDone(false);
       if (err instanceof Object) {
         toast.error(`${GetErrorText(String(err['message']))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
       } else {
@@ -224,6 +214,7 @@ const Dashboard = () => {
 
   const handleWithdrawLoan = async () => {
     try {
+      setIsTransactionDone(true);
       const commit = activeLoansData.filter((asset) => {
         return EventMap[asset.loanMarket.toUpperCase()] === loanOption;
       });
@@ -232,6 +223,7 @@ const Dashboard = () => {
       const tx = await wrapper?.getLoanInstance().permissibleWithdrawal(SymbolsMap[_loanOption], CommitMap[commit[0].commitment], inputVal1, DecimalsMap[_loanOption]);
       onLoanWithdrawal(tx.events);
     } catch (err) {
+      setIsTransactionDone(false);
       if (err instanceof Object) {
         toast.error(`${GetErrorText(String(err['message']))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
       } else {
@@ -243,14 +235,18 @@ const Dashboard = () => {
 
   const handleCollateral = async () => {
     try {
+      setIsTransactionDone(true);
       const commit = activeLoansData.filter((asset) => {
         return EventMap[asset.loanMarket.toUpperCase()] === loanOption;
       });
       const _loanOption: string | undefined =  loanOption;
       const _collateralOption: string | undefined =  collateralOption;
+      const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[_loanOption], inputVal1, DecimalsMap[_loanOption]);
+      console.log("Approve Transaction sent: ", approveTransactionHash);
       const tx = await wrapper?.getLoanInstance().addCollateral(SymbolsMap[_loanOption], CommitMap[commit[0].commitment], SymbolsMap[_collateralOption], inputVal1, DecimalsMap[_loanOption]);
       onCollateralAdded(tx.events);
     } catch (err) {
+      setIsTransactionDone(false);
       if (err instanceof Object) {
         toast.error(`${GetErrorText(String(err['message']))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
       } else {
@@ -261,6 +257,7 @@ const Dashboard = () => {
 
   const handleWithdrawCollateral = async () => {
     try {
+      setIsTransactionDone(true);
       const commit = activeLoansData.filter((asset) => {
         return EventMap[asset.loanMarket.toUpperCase()] === loanOption;
       });
@@ -268,6 +265,7 @@ const Dashboard = () => {
       const tx = await wrapper?.getLoanInstance().withdrawCollateral(SymbolsMap[_loanOption], CommitMap[commit[0].commitment]);
       onCollateralReleased(tx.events);
     } catch (err) {
+      setIsTransactionDone(false);
       if (err instanceof Object) {
         toast.error(`${GetErrorText(String(err['message']))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
       } else {
@@ -278,14 +276,19 @@ const Dashboard = () => {
 
   const handleSwap = async () => {
     try {
+      setIsTransactionDone(true);
       const commit = activeLoansData.filter((asset) => {
         return EventMap[asset.loanMarket.toUpperCase()] === loanOption;
       });
+
       const _loanOption: string | undefined =  loanOption;
       const _swapOption: string | undefined =  swapOption;
+      const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[_loanOption], BNtoNum(Number(commit[0].loanAmount), DecimalsMap[_loanOption]), DecimalsMap[_loanOption]);
+      console.log("Approve Transaction sent: ", approveTransactionHash);
       const tx = await wrapper?.getLoanInstance().swapLoan(SymbolsMap[_loanOption], CommitMap[commit[0].commitment], SymbolsMap[_swapOption]);
       onSwap(tx.events);
     } catch (err) {
+      setIsTransactionDone(false);
       if (err instanceof Object) {
         toast.error(`${GetErrorText(String(err['message']))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
       } else {
@@ -296,14 +299,19 @@ const Dashboard = () => {
 
   const handleSwapToLoan = async () => {
     try {
+      setIsTransactionDone(true);
       const commit = activeLoansData.filter((asset) => {
         return EventMap[asset.loanMarket.toUpperCase()] === loanOption;
       });
       const _loanOption: string | undefined =  loanOption;
-      const _swapOption: string | undefined =  swapOption;
-      const tx = await wrapper?.getLoanInstance().swapToLoan(SymbolsMap[_swapOption], CommitMap[commit[0].commitment], SymbolsMap[_loanOption]);
+      // const _swapOption: string | undefined =  swapOption;
+      const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[_loanOption], BNtoNum(Number(commit[0].loanAmount), DecimalsMap[_loanOption]), DecimalsMap[_loanOption]);
+      console.log("Approve Transaction sent: ", approveTransactionHash);
+
+      const tx = await wrapper?.getLoanInstance().swapToLoan(CommitMap[commit[0].commitment], SymbolsMap[_loanOption]);
       onSwapToLoan(tx.events);
     } catch (err) {
+      setIsTransactionDone(false);
       if (err instanceof Object) {
         toast.error(`${GetErrorText(String(err['message']))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
       } else {
@@ -314,11 +322,13 @@ const Dashboard = () => {
 
   const handleDepositRequest = async () => {
     try {
+      setIsTransactionDone(true);
       const _depositRequestSel: string | undefined =  depositRequestSel;
       const _depositRequestVal: string | undefined =  depositRequestVal;
       const tx = await wrapper?.getDepositInstance().depositRequest(SymbolsMap[_depositRequestSel.toUpperCase()], CommitMap[_depositRequestVal], inputVal1, DecimalsMap[_depositRequestSel.toUpperCase()]);
       onDeposit(tx.events);
     } catch (err) {
+      setIsTransactionDone(false);
       if (err instanceof Object) {
         toast.error(`${GetErrorText(String(err['message']))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
       } else {
@@ -331,11 +341,14 @@ const Dashboard = () => {
 
   const handleWithdrawDeposit = async () => {
     try {
+      setIsTransactionDone(true);
       const _withdrawDepositSel: string | undefined =  withdrawDepositSel;
       const _withdrawDepositVal: string | undefined =  withdrawDepositVal;
-      const tx = await wrapper?.getDepositInstance().withdrawDeposit(SymbolsMap[_withdrawDepositSel.toUpperCase()], CommitMap[_withdrawDepositVal], inputVal1, DecimalsMap[_withdrawDepositSel.toUpperCase()]);
+      const tx = await wrapper?.getDepositInstance().withdrawDeposit(SymbolsMap[_withdrawDepositSel.toUpperCase()], 
+       CommitMap[_withdrawDepositVal], inputVal1, DecimalsMap[_withdrawDepositSel.toUpperCase()]);
       WithdrawalDeposit(tx.events);
     } catch (err) {
+      setIsTransactionDone(false);
       if (err instanceof Object) {
         toast.error(`${GetErrorText(String(err['message']))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
       } else {
@@ -349,12 +362,14 @@ const Dashboard = () => {
     const res = data['AddCollateral']['returnValues'];
     let amount = BNtoNum(Number(res.amount))
     toast.success(`Collateral amount added: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
+    setIsTransactionDone(false);
   }
 
   const onCollateralReleased = (data) => {
     const res = data['CollateralReleased']['returnValues'];
     let amount = BNtoNum(Number(res.amount))
     toast.success(`Collateral amount released: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
+    setIsTransactionDone(false);
   }
 
 
@@ -362,36 +377,42 @@ const Dashboard = () => {
     const res = data['WithdrawPartialLoan']['returnValues'];
     let amount = BNtoNum(Number(res.amount))
     toast.success(`Loan Withdraw Successfully: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
+    setIsTransactionDone(false);
   }
 
   const onLoanRepay = (data) => {
     const res = data['LoanRepaid']['returnValues'];
     let amount = BNtoNum(Number(res.amount))
     toast.success(`Loan Repaid Successfully: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
+    setIsTransactionDone(false);
   }
 
   const onDeposit = (data) => {
     const res = data['DepositAdded']['returnValues'];
     let amount = BNtoNum(Number(res.amount),DecimalsMap[res.market]);
     toast.success(`Deposited amount: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
+    setIsTransactionDone(false);
   }
 
   const onSwap = (data) => {
     const res = data['MarketSwapped']['returnValues'];
     let amount = BNtoNum(Number(res.amount),DecimalsMap[res.market]);
     toast.success(`Swap Loan successful: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
+    setIsTransactionDone(false);
   }
 
   const onSwapToLoan = (data) => {
     const res = data['MarketSwapped']['returnValues'];
     let amount = BNtoNum(Number(res.amount),DecimalsMap[res.market]);
     toast.success(`Swap to Loan successful: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
+    setIsTransactionDone(false);
   }
 
   const WithdrawalDeposit = (data) => {
     const res = data['Withdrawal']['returnValues'];
     let amount = BNtoNum(Number(res.amount), DecimalsMap[res.market])
     toast.success(`Deposit Withdrawn: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
+    setIsTransactionDone(false);
   }
 
 
@@ -415,11 +436,12 @@ const Dashboard = () => {
           <br />
 
           <Row>
+            {customActiveTab === '2' ? 
             <Col xl="4">
               <Card>
-                {customActiveTab === '2' ?
+                {/* {customActiveTab === '2' ? */}
 
-                  passbookStatus === false ?
+                  { passbookStatus === false ?
                     (
                       /* -------------------------------------- REPAY ----------------------------- */
                       <CardBody>
@@ -481,9 +503,10 @@ const Dashboard = () => {
                                             <Button
                                               color="primary"
                                               className="w-md"
+                                              disabled={isTransactionDone}
                                               onClick={handleRepay}
                                             >
-                                              Repay
+                                              {!isTransactionDone ? 'Repay' : <Spinner>Loading...</Spinner>}
                                             </Button>
                                           </div>
                                         </Form>
@@ -541,9 +564,11 @@ const Dashboard = () => {
                                             <Button
                                               color="primary"
                                               className="w-md"
+                                              disabled={isTransactionDone}
                                               onClick={handleWithdrawLoan}
                                             >
-                                              Withdraw Loan
+                                              
+                                              {!isTransactionDone ? 'Withdraw Loan' : <Spinner>Loading...</Spinner>}
                                             </Button>
                                           </div>
                                         </Form>
@@ -605,9 +630,10 @@ const Dashboard = () => {
                                           <Button
                                             color="primary"
                                             className="w-md"
+                                            disabled={isTransactionDone}
                                             onClick={handleSwap}
                                           >
-                                            Swap Loan
+                                            {!isTransactionDone ? 'Swap Loan' : <Spinner>Loading...</Spinner>}
                                           </Button>
                                         </div>
                                       </Form>
@@ -662,9 +688,11 @@ const Dashboard = () => {
                                           <Button
                                             color="primary"
                                             className="w-md"
+                                            disabled={isTransactionDone}
                                             onClick={handleSwapToLoan}
                                           >
-                                            Swap to Loan
+                                            {!isTransactionDone ? 'Swap to Loan' : <Spinner>Loading...</Spinner>}
+                                            
                                           </Button>
                                         </div>
                                       </Form>
@@ -738,9 +766,11 @@ const Dashboard = () => {
                                           <Button
                                             color="primary"
                                             className="w-md"
+                                            disabled={isTransactionDone}
                                             onClick={handleCollateral}
                                           >
-                                            Add Collateral
+                                            {!isTransactionDone ? 'Add Collateral' : <Spinner>Loading...</Spinner>}
+                                            
                                           </Button>
                                         </div>
                                       </Form>
@@ -790,9 +820,11 @@ const Dashboard = () => {
                                           <Button
                                             color="primary"
                                             className="w-md"
+                                            disabled={isTransactionDone}
                                             onClick={handleWithdrawCollateral}
                                           >
-                                            Withdraw Collateral
+                                            {!isTransactionDone ? 'Withdraw Collateral' : <Spinner>Loading...</Spinner>}
+                                            
                                           </Button>
                                         </div>
                                       </Form>
@@ -876,9 +908,11 @@ const Dashboard = () => {
                                               // type="submit"
                                               color="primary"
                                               className="w-md"
+                                              disabled={isTransactionDone}
                                               onClick={handleDepositRequest}
                                             >
-                                              Add to Deposit
+                                              {!isTransactionDone ? 'Add to Deposit' : <Spinner>Loading...</Spinner>}
+                                              
                                             </Button>
                                           </div>
                                         </Form>
@@ -949,9 +983,11 @@ const Dashboard = () => {
                                               // type="submit"
                                               color="primary"
                                               className="w-md"
+                                              disabled={isTransactionDone}
                                               onClick={handleWithdrawDeposit}
                                             >
-                                              Withdraw Deposit
+                                              {!isTransactionDone ? 'Withdraw Deposit' : <Spinner>Loading...</Spinner>}
+                                              
                                             </Button>
                                           </div>
                                         </Form>
@@ -966,17 +1002,19 @@ const Dashboard = () => {
                       </CardBody>
                     )
 
-                  :
+                //   :
 
-                  /* -------------------------------------- DEPOSIT ----------------------------- */
+                //   /* -------------------------------------- DEPOSIT ----------------------------- */
                   
-                  <WorkflowInfo />
+                //   // <WorkflowInfo />
+                // }
                 }
-
               </Card>
             </Col>
+            : null }
 
-            <Col xl="8">
+
+            <Col xl={customActiveTab === '2' ? "8" : "12" }>
               <Card>
                 <CardBody>
                   <Nav tabs className="nav-tabs-custom">

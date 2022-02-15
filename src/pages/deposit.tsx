@@ -29,14 +29,8 @@ const Deposit = (props) => {
     const [isTransactionDone, setIsTransactionDone] = useState(false);
   
   
-    const { account } = useContext(Web3ModalContext);
+    const { connect, disconnect, account } = useContext(Web3ModalContext);
     const { web3Wrapper: wrapper } = useContext(Web3WrapperContext);
-
-    // useEffect(() => {
-    //   wrapper?.getDepositInstance().deposit.on(EventMap.NEW_DEPOSIT, onDeposit);
-    //   wrapper?.getDepositInstance().deposit.on(EventMap.DEPOSIT_ADDED, onDeposit);
-    //   // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, []);
 
     const handleDepositChange = (e) => {
       setCommitPeriod(e.target.value)
