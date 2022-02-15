@@ -2,7 +2,7 @@ import { createContext, useCallback, useEffect, useState } from 'react';
 import Web3Modal from "web3modal";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import Web3 from 'web3';
-import { useMoralis } from 'react-moralis';
+// import { useMoralis } from 'react-moralis';
 import { createWeb3 } from 'blockchain/utils';
 import Fortmatic from "fortmatic";
 import Portis from "@portis/web3";
@@ -44,7 +44,7 @@ const Web3ModalProvider = (props: any) => {
   const [networkId, setNetworkId] = useState<number | null>(null);
   const [connected, setConnected] = useState<boolean>(false);
 
-  const { authenticate } = useMoralis();
+  // const { authenticate } = useMoralis(); 
   useEffect(() => {
     const providerOptions = {
       walletconnect: {
@@ -155,7 +155,7 @@ const Web3ModalProvider = (props: any) => {
     });
     _provider.on("connect", () => {
       console.log('------');
-      authenticate();
+      // authenticate();
     });
   }, [resetWeb3]);
 
