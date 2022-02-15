@@ -55,12 +55,12 @@ export const fixedSpecial = (num, n) => {
 
 export const BNtoNum = (value, decimal = 18) => {
   const val = new BigNumber(value).shiftedBy(-decimal).toNumber();
-  return fixedSpecial(val,0);
+  return val < 1 ? val.toPrecision(): fixedSpecial(val,0);
 }
 
 export const NumToBN = (value, decimal = 18) => {
   const val = new BigNumber(value).shiftedBy(decimal).toNumber();
-  return fixedSpecial(val,0);
+  return val < 1 ? val.toPrecision(): fixedSpecial(val,0);
 }
 
 export const GetErrorText = (err) => {
