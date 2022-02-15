@@ -36,8 +36,8 @@ class LoanWrapper {
         return this.loanExt.send("loanRequest", {}, market, commitment, loanAmountToSend, collateralMarket, collateralAmountToSend);
     }
 
-    addCollateral(market: string, commitment: string, collateralMarket: string, collateralAmount: number, collateralDecimal: number) {
-        return this.loanExt.send("addCollateral", {}, market, commitment, collateralMarket, NumToBN(collateralAmount, collateralDecimal));
+    addCollateral(market: string, commitment: string,  collateralAmount: number, collateralDecimal: number) {
+        return this.loanExt.send("addCollateral", {}, market, commitment, NumToBN(collateralAmount, collateralDecimal));
     }
 
     liquidation(address: string, id: number) {
