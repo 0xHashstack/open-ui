@@ -1,4 +1,4 @@
-import React, { useState, useContext, useCallback, useEffect } from "react";
+import React, { useState, useContext, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { Col, Modal, Button, Form } from "reactstrap";
 import { Web3ModalContext } from "../../contexts/Web3ModalProvider";
@@ -16,11 +16,6 @@ const Header = () => {
   const { connect, disconnect, account } = useContext(Web3ModalContext);
   const { web3Wrapper: wrapper } = useContext(Web3WrapperContext);
 
-  
-  useEffect(() => {
-    wrapper?.getFaucetInstance().faucet.on("TokensIssued", onSuccessCallback);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const handleConnectWallet = useCallback(() => {
     connect();
@@ -32,7 +27,8 @@ const Header = () => {
 
   async function handleGetToken (event: any) {
     try {
-      await wrapper?.getFaucetInstance().getTokens(event.target.textContent);
+      const tx = await wrapper?.getFaucetInstance().getTokens(event.target.textContent);
+      onSuccessCallback(tx.events);
     } catch (error) {
       console.log(error);
       if (error instanceof Object) {
@@ -86,6 +82,7 @@ const Header = () => {
               </Link>
             </div>
           </div>
+          
 
           <div className="d-flex flex-wrap gap-4">
             <Button
