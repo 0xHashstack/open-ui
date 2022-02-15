@@ -304,11 +304,11 @@ const Dashboard = () => {
         return EventMap[asset.loanMarket.toUpperCase()] === loanOption;
       });
       const _loanOption: string | undefined =  loanOption;
-      const _swapOption: string | undefined =  swapOption;
+      // const _swapOption: string | undefined =  swapOption;
       const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[_loanOption], BNtoNum(Number(commit[0].loanAmount), DecimalsMap[_loanOption]), DecimalsMap[_loanOption]);
       console.log("Approve Transaction sent: ", approveTransactionHash);
 
-      const tx = await wrapper?.getLoanInstance().swapToLoan(SymbolsMap[_swapOption], CommitMap[commit[0].commitment], SymbolsMap[_loanOption]);
+      const tx = await wrapper?.getLoanInstance().swapToLoan(CommitMap[commit[0].commitment], SymbolsMap[_loanOption]);
       onSwapToLoan(tx.events);
     } catch (err) {
       setIsTransactionDone(false);
@@ -344,7 +344,8 @@ const Dashboard = () => {
       setIsTransactionDone(true);
       const _withdrawDepositSel: string | undefined =  withdrawDepositSel;
       const _withdrawDepositVal: string | undefined =  withdrawDepositVal;
-      const tx = await wrapper?.getDepositInstance().withdrawDeposit(SymbolsMap[_withdrawDepositSel.toUpperCase()], CommitMap[_withdrawDepositVal], inputVal1, DecimalsMap[_withdrawDepositSel.toUpperCase()]);
+      const tx = await wrapper?.getDepositInstance().withdrawDeposit(SymbolsMap[_withdrawDepositSel.toUpperCase()], 
+       CommitMap[_withdrawDepositVal], inputVal1, DecimalsMap[_withdrawDepositSel.toUpperCase()]);
       WithdrawalDeposit(tx.events);
     } catch (err) {
       setIsTransactionDone(false);
