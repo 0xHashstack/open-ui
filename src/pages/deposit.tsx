@@ -9,7 +9,7 @@ import {
 } from "reactstrap";
 
 import {
-  SymbolsMap, DecimalsMap, DepositInterestRates, CommitMap, VariableDepositInterestRates
+  SymbolsMap, DecimalsMap, DepositInterestRates, CommitMap, VariableDepositInterestRates, MinimumAmount
 } from '../blockchain/constants';
 import { Web3ModalContext } from '../contexts/Web3ModalProvider';
 import { Web3WrapperContext } from '../contexts/Web3WrapperProvider';
@@ -109,6 +109,7 @@ const Deposit = (props) => {
                       placeholder="Amount"
                       onChange={handleInputChange}
                     />
+                    {inputVal < MinimumAmount[props.asset] && <span style={{color: 'red', fontSize: '11px'}}>* Min amount should be greater than {MinimumAmount[props.asset]}</span>}
                   </Col>
                 </div>
                 <div className="row mb-4">
