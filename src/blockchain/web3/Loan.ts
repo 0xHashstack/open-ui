@@ -52,6 +52,7 @@ class LoanWrapper {
     collateralAmount: number,
     collateralDecimal: number
   ) {
+    debugger
     let loanAmountToSend = NumToBN(loanAmount, loanDecimal)
     let collateralAmountToSend = NumToBN(collateralAmount, collateralDecimal)
     return this.loanExt.send(
