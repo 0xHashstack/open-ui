@@ -15,9 +15,15 @@
       },
       {
         "indexed": true,
-        "internalType": "uint256",
-        "name": "id",
-        "type": "uint256"
+        "internalType": "bytes32",
+        "name": "market",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "commitment",
+        "type": "bytes32"
       },
       {
         "indexed": false,
@@ -28,11 +34,11 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "timestamp",
+        "name": "time",
         "type": "uint256"
       }
     ],
-    "name": "AddCollateral",
+    "name": "Liquidation",
     "type": "event"
   },
   {
@@ -47,7 +53,7 @@
       {
         "indexed": true,
         "internalType": "uint256",
-        "name": "amount",
+        "name": "id",
         "type": "uint256"
       },
       {
@@ -63,7 +69,62 @@
         "type": "uint256"
       }
     ],
-    "name": "CollateralReleased",
+    "name": "LoanRepaid",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes32",
+        "name": "loanMarket",
+        "type": "bytes32"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes32",
+        "name": "commitment",
+        "type": "bytes32"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "loanAmount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes32",
+        "name": "collateralMarket",
+        "type": "bytes32"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "collateralAmount",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "loanId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "time",
+        "type": "uint256"
+      }
+    ],
+    "name": "NewLoan",
     "type": "event"
   },
   {
@@ -86,43 +147,6 @@
     "type": "event"
   },
   {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "account",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "id",
-        "type": "uint256"
-      },
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "bytes32",
-        "name": "market",
-        "type": "bytes32"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "timestamp",
-        "type": "uint256"
-      }
-    ],
-    "name": "WithdrawPartialLoan",
-    "type": "event"
-  },
-  {
     "stateMutability": "payable",
     "type": "fallback"
   },
@@ -132,32 +156,28 @@
         "internalType": "bytes32",
         "name": "_loanMarket",
         "type": "bytes32"
-      },
-      {
-        "internalType": "bytes32",
-        "name": "_commitment",
-        "type": "bytes32"
-      },
+      }
+    ],
+    "name": "avblReservesLoan",
+    "outputs": [
       {
         "internalType": "uint256",
-        "name": "_collateralAmount",
+        "name": "",
         "type": "uint256"
       }
     ],
-    "name": "addCollateral",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "nonpayable",
+    "stateMutability": "view",
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "isPausedLoan",
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_account",
+        "type": "address"
+      }
+    ],
+    "name": "hasLoanAccount",
     "outputs": [
       {
         "internalType": "bool",
@@ -170,30 +190,7 @@
   },
   {
     "inputs": [],
-    "name": "pauseLoan",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bytes32",
-        "name": "_loanMarket",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "bytes32",
-        "name": "_commitment",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "bytes32",
-        "name": "_swapMarket",
-        "type": "bytes32"
-      }
-    ],
-    "name": "swapLoan",
+    "name": "isPausedLoanExt",
     "outputs": [
       {
         "internalType": "bool",
@@ -201,42 +198,16 @@
         "type": "bool"
       }
     ],
-    "stateMutability": "nonpayable",
+    "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
       {
-        "internalType": "bytes32",
-        "name": "_loanMarket",
-        "type": "bytes32"
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
       },
-      {
-        "internalType": "bytes32",
-        "name": "_commitment",
-        "type": "bytes32"
-      }
-    ],
-    "name": "swapToLoan",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "success",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "unpauseLoan",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
       {
         "internalType": "bytes32",
         "name": "_market",
@@ -248,11 +219,11 @@
         "type": "bytes32"
       }
     ],
-    "name": "withdrawCollateral",
+    "name": "liquidation",
     "outputs": [
       {
         "internalType": "bool",
-        "name": "",
+        "name": "success",
         "type": "bool"
       }
     ],
@@ -273,11 +244,21 @@
       },
       {
         "internalType": "uint256",
-        "name": "_amount",
+        "name": "_loanAmount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_collateralMarket",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_collateralAmount",
         "type": "uint256"
       }
     ],
-    "name": "withdrawPartialLoan",
+    "name": "loanRequest",
     "outputs": [
       {
         "internalType": "bool",
@@ -286,6 +267,68 @@
       }
     ],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "pauseLoanExt",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_loanMarket",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_commitment",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_repayAmount",
+        "type": "uint256"
+      }
+    ],
+    "name": "repayLoan",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "unpauseLoanExt",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_loanMarket",
+        "type": "bytes32"
+      }
+    ],
+    "name": "utilisedReservesLoan",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {

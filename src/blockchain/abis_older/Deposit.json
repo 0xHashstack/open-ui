@@ -15,12 +15,18 @@
       },
       {
         "indexed": true,
-        "internalType": "uint256",
-        "name": "id",
-        "type": "uint256"
+        "internalType": "bytes32",
+        "name": "market",
+        "type": "bytes32"
       },
       {
         "indexed": false,
+        "internalType": "bytes32",
+        "name": "commitment",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
         "internalType": "uint256",
         "name": "amount",
         "type": "uint256"
@@ -28,11 +34,17 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "timestamp",
+        "name": "depositId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "time",
         "type": "uint256"
       }
     ],
-    "name": "AddCollateral",
+    "name": "DepositAdded",
     "type": "event"
   },
   {
@@ -46,24 +58,36 @@
       },
       {
         "indexed": true,
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      },
-      {
-        "indexed": true,
         "internalType": "bytes32",
         "name": "market",
         "type": "bytes32"
       },
       {
         "indexed": false,
+        "internalType": "bytes32",
+        "name": "commitment",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
         "internalType": "uint256",
-        "name": "timestamp",
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "depositId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "time",
         "type": "uint256"
       }
     ],
-    "name": "CollateralReleased",
+    "name": "NewDeposit",
     "type": "event"
   },
   {
@@ -96,9 +120,9 @@
       },
       {
         "indexed": true,
-        "internalType": "uint256",
-        "name": "id",
-        "type": "uint256"
+        "internalType": "bytes32",
+        "name": "market",
+        "type": "bytes32"
       },
       {
         "indexed": true,
@@ -109,7 +133,7 @@
       {
         "indexed": false,
         "internalType": "bytes32",
-        "name": "market",
+        "name": "commitment",
         "type": "bytes32"
       },
       {
@@ -119,7 +143,38 @@
         "type": "uint256"
       }
     ],
-    "name": "WithdrawPartialLoan",
+    "name": "Withdrawal",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "market",
+        "type": "bytes32"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes32",
+        "name": "commitment",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "YieldDeposited",
     "type": "event"
   },
   {
@@ -130,7 +185,26 @@
     "inputs": [
       {
         "internalType": "bytes32",
-        "name": "_loanMarket",
+        "name": "_market",
+        "type": "bytes32"
+      }
+    ],
+    "name": "avblReservesDeposit",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_market",
         "type": "bytes32"
       },
       {
@@ -140,11 +214,11 @@
       },
       {
         "internalType": "uint256",
-        "name": "_collateralAmount",
+        "name": "_amount",
         "type": "uint256"
       }
     ],
-    "name": "addCollateral",
+    "name": "depositRequest",
     "outputs": [
       {
         "internalType": "bool",
@@ -156,8 +230,33 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "isPausedLoan",
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_requestId",
+        "type": "uint256"
+      }
+    ],
+    "name": "getFairPriceDeposit",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_account",
+        "type": "address"
+      }
+    ],
+    "name": "hasAccount",
     "outputs": [
       {
         "internalType": "bool",
@@ -166,73 +265,6 @@
       }
     ],
     "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "pauseLoan",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bytes32",
-        "name": "_loanMarket",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "bytes32",
-        "name": "_commitment",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "bytes32",
-        "name": "_swapMarket",
-        "type": "bytes32"
-      }
-    ],
-    "name": "swapLoan",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bytes32",
-        "name": "_loanMarket",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "bytes32",
-        "name": "_commitment",
-        "type": "bytes32"
-      }
-    ],
-    "name": "swapToLoan",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "success",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "unpauseLoan",
-    "outputs": [],
-    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -248,7 +280,7 @@
         "type": "bytes32"
       }
     ],
-    "name": "withdrawCollateral",
+    "name": "hasDeposit",
     "outputs": [
       {
         "internalType": "bool",
@@ -256,6 +288,57 @@
         "type": "bool"
       }
     ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_market",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_commitment",
+        "type": "bytes32"
+      }
+    ],
+    "name": "hasYield",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "isPausedDeposit",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "pauseDeposit",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "unpauseDeposit",
+    "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },
@@ -263,7 +346,26 @@
     "inputs": [
       {
         "internalType": "bytes32",
-        "name": "_loanMarket",
+        "name": "_market",
+        "type": "bytes32"
+      }
+    ],
+    "name": "utilisedReservesDeposit",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_market",
         "type": "bytes32"
       },
       {
@@ -277,7 +379,7 @@
         "type": "uint256"
       }
     ],
-    "name": "withdrawPartialLoan",
+    "name": "withdrawDeposit",
     "outputs": [
       {
         "internalType": "bool",
