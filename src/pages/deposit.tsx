@@ -9,7 +9,7 @@ import {
 } from "reactstrap";
 
 import {
-  SymbolsMap, DecimalsMap, DepositInterestRates, CommitMap, VariableDepositInterestRates
+  SymbolsMap, DecimalsMap, DepositInterestRates, CommitMap, VariableDepositInterestRates, MinimumAmount
 } from '../blockchain/constants';
 import { Web3ModalContext } from '../contexts/Web3ModalProvider';
 import { Web3WrapperContext } from '../contexts/Web3WrapperProvider';
@@ -29,14 +29,8 @@ const Deposit = (props) => {
     const [isTransactionDone, setIsTransactionDone] = useState(false);
   
   
-    const { account } = useContext(Web3ModalContext);
+    const { connect, disconnect, account } = useContext(Web3ModalContext);
     const { web3Wrapper: wrapper } = useContext(Web3WrapperContext);
-
-    // useEffect(() => {
-    //   wrapper?.getDepositInstance().deposit.on(EventMap.NEW_DEPOSIT, onDeposit);
-    //   wrapper?.getDepositInstance().deposit.on(EventMap.DEPOSIT_ADDED, onDeposit);
-    //   // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, []);
 
     const handleDepositChange = (e) => {
       setCommitPeriod(e.target.value)
@@ -115,6 +109,7 @@ const Deposit = (props) => {
                       placeholder="Amount"
                       onChange={handleInputChange}
                     />
+                    {inputVal < MinimumAmount[props.asset] && <span style={{color: 'red', fontSize: '11px'}}>* Min amount should be greater than {MinimumAmount[props.asset]}</span>}
                   </Col>
                 </div>
                 <div className="row mb-4">
