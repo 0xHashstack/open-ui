@@ -1,10 +1,10 @@
-import Contract from './Contract';
-import abi from '../abis/MockBep20.json';
+import Contract from "./Contract"
+import abi from "../abis/BEP20Token.json"
 
 class MockBep20 extends Contract {
   constructor(options, address) {
-    super(options, "MockBep20", abi, address);
+    super(options, "MockBep20", abi, address)
   }
 }
 
-export default MockBep20;
+export default MockBep20
