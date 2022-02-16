@@ -43,7 +43,7 @@
     "outputs": [
       {
         "internalType": "bytes4[]",
-        "name": "_facetFunctionSelectors",
+        "name": "facetFunctionSelectors_",
         "type": "bytes4[]"
       }
     ],

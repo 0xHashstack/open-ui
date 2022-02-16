@@ -1,1 +1,25 @@
-{"abi":[{"type":"function","name":"init","constant":false,"payable":false,"gas":29000000,"inputs":[{"type":"address","name":"account"},{"type":"address","name":"reserveAddr"},{"type":"address","name":"accessRegistry"}],"outputs":[]}],"networks":{"31337":{"address":"0xB7f8BC63BbcaD18155201308C8f3540b07f84F5e"}}}
+[
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "reserveAddr",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "accessRegistry",
+        "type": "address"
+      }
+    ],
+    "name": "init",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]

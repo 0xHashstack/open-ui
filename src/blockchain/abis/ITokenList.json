@@ -1,204 +1,14 @@
 [
   {
-    "inputs": [],
-    "stateMutability": "nonpayable",
-    "type": "constructor"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "bytes32",
-        "name": "_market",
-        "type": "bytes32"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "_decimals",
-        "type": "uint256"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "_marketAddress",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "_timestamp",
-        "type": "uint256"
-      }
-    ],
-    "name": "Market2Added",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "bytes32",
-        "name": "_market",
-        "type": "bytes32"
-      },
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "_timestamp",
-        "type": "uint256"
-      }
-    ],
-    "name": "Market2Removed",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "bytes32",
-        "name": "_market",
-        "type": "bytes32"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "_decimals",
-        "type": "uint256"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "_tokenAddress",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "_timestamp",
-        "type": "uint256"
-      }
-    ],
-    "name": "Market2Updated",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "bytes32",
-        "name": "_market",
-        "type": "bytes32"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "_decimals",
-        "type": "uint256"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "MarketAddress_",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "_timestamp",
-        "type": "uint256"
-      }
-    ],
-    "name": "MarketSupportAdded",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "bytes32",
-        "name": "_market",
-        "type": "bytes32"
-      },
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "_timestamp",
-        "type": "uint256"
-      }
-    ],
-    "name": "MarketSupportRemoved",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "bytes32",
-        "name": "_market",
-        "type": "bytes32"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "_decimals",
-        "type": "uint256"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "MarketAddress_",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "_timestamp",
-        "type": "uint256"
-      }
-    ],
-    "name": "MarketSupportUpdated",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "_pauser",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "bool",
-        "name": "isPaused",
-        "type": "bool"
-      }
-    ],
-    "name": "PauseState",
-    "type": "event"
-  },
-  {
-    "stateMutability": "payable",
-    "type": "fallback"
-  },
-  {
     "inputs": [
       {
         "internalType": "bytes32",
-        "name": "_market",
+        "name": "market_",
         "type": "bytes32"
       },
       {
         "internalType": "uint256",
-        "name": "_decimals",
+        "name": "decimals_",
         "type": "uint256"
       },
       {
@@ -232,7 +42,7 @@
       },
       {
         "internalType": "address",
-        "name": "tokenAddress_",
+        "name": "marketAddress_",
         "type": "address"
       },
       {
@@ -256,7 +66,7 @@
     "inputs": [
       {
         "internalType": "bytes32",
-        "name": "_market",
+        "name": "market_",
         "type": "bytes32"
       }
     ],
@@ -275,7 +85,7 @@
     "inputs": [
       {
         "internalType": "bytes32",
-        "name": "_market",
+        "name": "market_",
         "type": "bytes32"
       }
     ],
@@ -294,7 +104,7 @@
     "inputs": [
       {
         "internalType": "bytes32",
-        "name": "_market",
+        "name": "market_",
         "type": "bytes32"
       }
     ],
@@ -313,7 +123,7 @@
     "inputs": [
       {
         "internalType": "bytes32",
-        "name": "_market",
+        "name": "market_",
         "type": "bytes32"
       }
     ],
@@ -332,7 +142,7 @@
     "inputs": [
       {
         "internalType": "bytes32",
-        "name": "_market",
+        "name": "market_",
         "type": "bytes32"
       }
     ],
@@ -351,7 +161,7 @@
     "inputs": [
       {
         "internalType": "bytes32",
-        "name": "_market",
+        "name": "market_",
         "type": "bytes32"
       }
     ],
@@ -408,7 +218,7 @@
     "inputs": [
       {
         "internalType": "bytes32",
-        "name": "_market",
+        "name": "market_",
         "type": "bytes32"
       }
     ],
@@ -427,7 +237,7 @@
     "inputs": [
       {
         "internalType": "bytes32",
-        "name": "_market",
+        "name": "market_",
         "type": "bytes32"
       }
     ],
@@ -453,12 +263,12 @@
     "inputs": [
       {
         "internalType": "bytes32",
-        "name": "_market",
+        "name": "market_",
         "type": "bytes32"
       },
       {
         "internalType": "uint256",
-        "name": "_decimals",
+        "name": "decimals_",
         "type": "uint256"
       },
       {
@@ -482,12 +292,12 @@
     "inputs": [
       {
         "internalType": "bytes32",
-        "name": "_market",
+        "name": "market_",
         "type": "bytes32"
       },
       {
         "internalType": "uint256",
-        "name": "_decimals",
+        "name": "decimals_",
         "type": "uint256"
       },
       {
@@ -506,9 +316,5 @@
     ],
     "stateMutability": "nonpayable",
     "type": "function"
-  },
-  {
-    "stateMutability": "payable",
-    "type": "receive"
   }
 ]

@@ -1,1 +1,295 @@
-{"abi":[{"type":"constructor","payable":false,"inputs":[]},{"type":"event","anonymous":false,"name":"AddCollateral","inputs":[{"type":"address","name":"account","indexed":true},{"type":"uint256","name":"id","indexed":true},{"type":"uint256","name":"amount","indexed":false},{"type":"uint256","name":"timestamp","indexed":false}]},{"type":"event","anonymous":false,"name":"CollateralReleased","inputs":[{"type":"address","name":"account","indexed":true},{"type":"uint256","name":"amount","indexed":true},{"type":"bytes32","name":"market","indexed":true},{"type":"uint256","name":"timestamp","indexed":false}]},{"type":"event","anonymous":false,"name":"PauseState","inputs":[{"type":"address","name":"_pauser","indexed":true},{"type":"bool","name":"isPaused","indexed":false}]},{"type":"event","anonymous":false,"name":"WithdrawPartialLoan","inputs":[{"type":"address","name":"account","indexed":true},{"type":"uint256","name":"id","indexed":true},{"type":"uint256","name":"amount","indexed":true},{"type":"bytes32","name":"market","indexed":false},{"type":"uint256","name":"timestamp","indexed":false}]},{"type":"function","name":"addCollateral","constant":false,"payable":false,"gas":29000000,"inputs":[{"type":"bytes32","name":"_loanMarket"},{"type":"bytes32","name":"_commitment"},{"type":"uint256","name":"_collateralAmount"}],"outputs":[{"type":"bool"}]},{"type":"function","name":"isPausedLoan","constant":true,"stateMutability":"view","payable":false,"gas":29000000,"inputs":[],"outputs":[{"type":"bool"}]},{"type":"function","name":"pauseLoan","constant":false,"payable":false,"gas":29000000,"inputs":[],"outputs":[]},{"type":"function","name":"swapLoan","constant":false,"payable":false,"gas":29000000,"inputs":[{"type":"bytes32","name":"_loanMarket"},{"type":"bytes32","name":"_commitment"},{"type":"bytes32","name":"_swapMarket"}],"outputs":[{"type":"bool"}]},{"type":"function","name":"swapToLoan","constant":false,"payable":false,"gas":29000000,"inputs":[{"type":"bytes32","name":"_loanMarket"},{"type":"bytes32","name":"_commitment"}],"outputs":[{"type":"bool","name":"success"}]},{"type":"function","name":"unpauseLoan","constant":false,"payable":false,"gas":29000000,"inputs":[],"outputs":[]},{"type":"function","name":"withdrawCollateral","constant":false,"payable":false,"gas":29000000,"inputs":[{"type":"bytes32","name":"_market"},{"type":"bytes32","name":"_commitment"}],"outputs":[{"type":"bool"}]},{"type":"function","name":"withdrawPartialLoan","constant":false,"payable":false,"gas":29000000,"inputs":[{"type":"bytes32","name":"_loanMarket"},{"type":"bytes32","name":"_commitment"},{"type":"uint256","name":"_amount"}],"outputs":[{"type":"bool"}]}],"networks":{"31337":{"address":"0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6"}}}
+[
+  {
+    "inputs": [],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "id",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "timestamp",
+        "type": "uint256"
+      }
+    ],
+    "name": "AddCollateral",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "market",
+        "type": "bytes32"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "timestamp",
+        "type": "uint256"
+      }
+    ],
+    "name": "CollateralReleased",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "_pauser",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "isPaused",
+        "type": "bool"
+      }
+    ],
+    "name": "PauseState",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "id",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes32",
+        "name": "market",
+        "type": "bytes32"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "timestamp",
+        "type": "uint256"
+      }
+    ],
+    "name": "WithdrawPartialLoan",
+    "type": "event"
+  },
+  {
+    "stateMutability": "payable",
+    "type": "fallback"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_loanMarket",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_commitment",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_collateralAmount",
+        "type": "uint256"
+      }
+    ],
+    "name": "addCollateral",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "isPausedLoan",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "pauseLoan",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_loanMarket",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_commitment",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_swapMarket",
+        "type": "bytes32"
+      }
+    ],
+    "name": "swapLoan",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_loanMarket",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_commitment",
+        "type": "bytes32"
+      }
+    ],
+    "name": "swapToLoan",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "success",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "unpauseLoan",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_market",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_commitment",
+        "type": "bytes32"
+      }
+    ],
+    "name": "withdrawCollateral",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "_loanMarket",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_commitment",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "withdrawPartialLoan",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "stateMutability": "payable",
+    "type": "receive"
+  }
+]
