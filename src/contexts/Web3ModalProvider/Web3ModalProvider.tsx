@@ -20,7 +20,7 @@ interface IWeb3ModalContext {
   disconnect: () => void;
   account: string | null;
   chainId: number | null;
-  networkId: number | null;
+  // networkId: number | null;
   connected: boolean;
 }
 
@@ -30,7 +30,7 @@ export const Web3ModalContext = createContext<IWeb3ModalContext>({
   disconnect: () => { },
   account: null,
   chainId: null,
-  networkId: null,
+  // networkId: null,
   connected: false
 });
 
@@ -41,7 +41,7 @@ const Web3ModalProvider = (props: any) => {
   const [web3, setWeb3] = useState<Web3 | null>(null);
   const [account, setAccount] = useState<string | null>(null);
   const [chainId, setChainId] = useState<number | null>(null);
-  const [networkId, setNetworkId] = useState<number | null>(null);
+  // const [networkId, setNetworkId] = useState<number | null>(null);
   const [connected, setConnected] = useState<boolean>(false);
 
   // const { authenticate } = useMoralis();
@@ -121,7 +121,7 @@ const Web3ModalProvider = (props: any) => {
     setWeb3(null);
     setAccount(null);
     setChainId(null);
-    setNetworkId(null);
+    // setNetworkId(null);
     setConnected(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -130,29 +130,35 @@ const Web3ModalProvider = (props: any) => {
     if (!_provider.on)
       return;
 
-    _provider.on("close", () => {
+    _provider.on("disconnect", () => {
       resetWeb3();
     });
+
     _provider.on("accountsChanged", async (accounts: string[]) => {
       setAccount(accounts[0]);
     });
+
     _provider.on("chainChanged", async (chainId: number) => {
       console.log("Chain changed: ", chainId);
-      const networkId = await _web3.eth.net.getId();
-      setChainId(chainId);
-      setNetworkId(networkId);
+      // const networkId = await _web3.eth.net.getId();
+      const _chainId = await _web3.eth.getChainId();
+      setChainId(_chainId);
+      // setNetworkId(networkId);
+
+      if (_chainId != 97)
+      toast.warn(`Please connect to BSC Testnet`, { position: toast.POSITION.BOTTOM_RIGHT, autoClose: 4000, closeOnClick: true });
+      else
+      toast.success("Connected to BSC Testnet", { position: toast.POSITION.BOTTOM_RIGHT, autoClose: 4000, closeOnClick: true });
     
     });
 
-    _provider.on("networkChanged", async (networkId: number) => {
-      const chainId = await _web3.eth.getChainId();
-      setChainId(chainId);
-      setNetworkId(networkId);
-      if (chainId != 97)
-        toast.warn(`Please connect to BSC Testnet`, { position: toast.POSITION.BOTTOM_RIGHT, autoClose: 4000, closeOnClick: true });
-      else
-        toast.success("Connected to BSC Testnet", { position: toast.POSITION.BOTTOM_RIGHT, autoClose: 4000, closeOnClick: true });
-    });
+    // _provider.on("networkChanged", async (networkId: number) => {
+    //   const chainId = await _web3.eth.getChainId();
+    //   setChainId(chainId);
+    //   setNetworkId(networkId);
+
+    // });
+
     _provider.on("connect", () => {
       console.log('------');
       // authenticate();
@@ -176,14 +182,14 @@ const Web3ModalProvider = (props: any) => {
 
     const accounts = await _web3.eth.getAccounts();
     const _account = accounts[0];
-    const _networkId = await _web3.eth.net.getId();
+    // const _networkId = await _web3.eth.net.getId();
     const _chainId = await _web3.eth.getChainId();
     if (_chainId != 97)
       toast.warn(`Please connect to BSC Testnet`, { position: toast.POSITION.BOTTOM_RIGHT, autoClose: 4000, closeOnClick: true});
     else
       toast.success("Connected to BSC Testnet", { position: toast.POSITION.BOTTOM_RIGHT, autoClose: 4000, closeOnClick: true});
     setAccount(_account);
-    setNetworkId(_networkId);
+    // setNetworkId(_networkId);
     setChainId(_chainId);
     setConnected(true);
   }, [web3Modal, subscribeProvider]);
@@ -213,7 +219,7 @@ const Web3ModalProvider = (props: any) => {
         connect,
         disconnect,
         account,
-        networkId,
+        // networkId,
         chainId,
         connected
       }}>
