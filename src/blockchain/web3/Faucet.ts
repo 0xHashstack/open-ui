@@ -1,4 +1,3 @@
-import { faucetAddress } from '../constants';
 import Faucet from '../contracts/Faucet';
 
 class FaucetWrapper {  
@@ -6,7 +5,7 @@ class FaucetWrapper {
     faucet: Faucet;
   
     constructor(wrapperOptions: any) {
-        this.faucet = new Faucet(wrapperOptions, faucetAddress);
+        this.faucet = new Faucet(wrapperOptions, process.env.REACT_APP_FAUCET_ADDRESS);
     }
 
     TokenRequestMap = {
