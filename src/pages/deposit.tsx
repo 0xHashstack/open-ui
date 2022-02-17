@@ -106,10 +106,9 @@ const Deposit = (props) => {
                       type="number"
                       className="form-control"
                       id="amount"
-                      placeholder="Amount"
+                      placeholder={`Min amount should be greater than ${MinimumAmount[props.asset]}`}
                       onChange={handleInputChange}
                     />
-                    {inputVal < MinimumAmount[props.asset] && <span style={{color: 'red', fontSize: '11px'}}>* Min amount should be greater than {MinimumAmount[props.asset]}</span>}
                   </Col>
                 </div>
                 <div className="row mb-4">
