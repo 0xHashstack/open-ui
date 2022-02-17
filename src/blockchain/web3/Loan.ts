@@ -1,89 +1,143 @@
 import Loan from 'blockchain/contracts/Loan';
 import { NumToBN } from '../utils';
-import Loan1 from 'blockchain/contracts/Loan1';
-
+import LoanExt from 'blockchain/contracts/LoanExt';
+// import { pancakeSwapTokenAddress } from 'blockchain/constants';
 class LoanWrapper {
-    
-    //Contract
-    loan: Loan; 
-    loan1: Loan1;
+  //Contract
+  loan: Loan
+  loanExt: LoanExt
 
-    constructor(wrapperOptions: any) {
-        this.loan = new Loan(wrapperOptions, process.env.REACT_APP_DIAMOND_ADDRESS);
-        this.loan1 = new Loan1(wrapperOptions, process.env.REACT_APP_DIAMOND_ADDRESS);
-    }
+  constructor(wrapperOptions: any) {
+    this.loan = new Loan(wrapperOptions, process.env.REACT_APP_DIAMOND_ADDRESS)
+    this.loanExt = new LoanExt(
+      wrapperOptions,
+      process.env.REACT_APP_DIAMOND_ADDRESS
+    )
+  }
 
-    //send transaction methods
-    swapLoan(market: string, commitment: string, swapMarket: string) {
-        return this.loan.send("swapLoan", {}, market, commitment, swapMarket);
-    }
+  //send transaction methods
+  swapLoan(market: string, commitment: string, swapMarket: string) {
+    return this.loan.send("swapLoan", {}, market, commitment, swapMarket)
+  }
 
-    swapToLoan(swapMarket: string, commitment: string, market: string) {
-        return this.loan.send("swapToLoan", {}, swapMarket, commitment, market);
-    }
+  swapToLoan(commitment: string, market: string) {
+    return this.loan.send("swapToLoan", {}, commitment, market)
+  }
 
-    withdrawCollateral(market: string, commitment: string) {
-        return this.loan.send("withdrawCollateral", {}, market, commitment);
-    }
+  withdrawCollateral(market: string, commitment: string) {
+    return this.loan.send("withdrawCollateral", {}, market, commitment)
+  }
 
-    repayLoan(market: string, commitment: string, repayAmount: number, decimal: number) {
-        return this.loan.send("repayLoan", {}, market, commitment, NumToBN(repayAmount, decimal));
-    }
+  repayLoan(
+    market: string,
+    commitment: string,
+    repayAmount: number,
+    decimal: number
+  ) {
+    return this.loanExt.send(
+      "repayLoan",
+      {},
+      market,
+      commitment,
+      NumToBN(repayAmount, decimal)
+    )
+  }
 
-    loanRequest(market: string, commitment: string, loanAmount: number, loanDecimal: number, collateralMarket: string, collateralAmount: number, collateralDecimal: number) {
-        return this.loan1.send("loanRequest", {}, market, commitment, NumToBN(loanAmount, loanDecimal), collateralMarket, NumToBN(collateralAmount, collateralDecimal));
-    }
-    
-    addCollateral(market: string, commitment: string, collateralMarket: string, collateralAmount: number, collateralDecimal: number) {
-        return this.loan1.send("addCollateral", {}, market, commitment, collateralMarket, NumToBN(collateralAmount, collateralDecimal));
-    }
+  loanRequest(
+    market: string,
+    commitment: string,
+    loanAmount: number,
+    loanDecimal: number,
+    collateralMarket: string,
+    collateralAmount: number,
+    collateralDecimal: number
+  ) {
+    debugger
+    let loanAmountToSend = NumToBN(loanAmount, loanDecimal)
+    let collateralAmountToSend = NumToBN(collateralAmount, collateralDecimal)
+    return this.loanExt.send(
+      "loanRequest",
+      {},
+      market,
+      commitment,
+      loanAmountToSend,
+      collateralMarket,
+      collateralAmountToSend
+    )
+  }
 
-    liquidation(address: string, id: number) {
-        return this.loan1.send("liquidation", {}, address, String(id));
-    }
+  addCollateral(
+    market: string,
+    commitment: string,
+    collateralAmount: number,
+    collateralDecimal: number
+  ) {
+    return this.loan.send(
+      "addCollateral",
+      {},
+      market,
+      commitment,
+      NumToBN(collateralAmount, collateralDecimal)
+    )
+  }
 
-    permissibleWithdrawal(market: string, commitment: string, collateralMarket: string, amount: number, decimal: number) {
-        return this.loan1.send("permissibleWithdrawal", market, commitment, collateralMarket, NumToBN(amount, decimal));
-    }
+  liquidation(address: string, market: string, commitment: string) {
+    return this.loanExt.send("liquidation", {}, address, market, commitment)
+  }
 
-    //getter methods
-    hasLoanAccount(address: string) {
-        return this.loan1.call("hasLoanAccount", address);
-    }
+  permissibleWithdrawal(
+    market: string,
+    commitment: string,
+    amount: number,
+    decimal: number
+  ) {
+    const amountTosent = NumToBN(amount, decimal)
 
-    avblReservesLoan(market: string) {
-        return this.loan1.call("avblReservesLoan", market);
-    }
+    return this.loan.send(
+      "withdrawPartialLoan",
+      market,
+      commitment,
+      amountTosent
+    )
+  }
 
-    utilisedReservesLoan(market: string) {
-        return this.loan1.call("utilisedReservesLoan", market);
-    }
+  //getter methods
+  hasLoanAccount(address: string) {
+    return this.loanExt.call("hasLoanAccount", address)
+  }
 
-    isPausedLoan() {
-        return this.loan.call("isPausedLoan");
-    }
+  avblReservesLoan(market: string) {
+    return this.loanExt.call("avblReservesLoan", market)
+  }
 
-    isPausedLoan1() {
-        return this.loan1.call("isPausedLoan1");
-    }
+  utilisedReservesLoan(market: string) {
+    return this.loanExt.call("utilisedReservesLoan", market)
+  }
 
-    //admin operations
-    pauseLoan() {
-        return this.loan.send("pauseLoan", {});
-    }
+  isPausedLoan() {
+    return this.loan.call("isPausedLoan")
+  }
 
-    unpauseLoan() {
-        return this.loan.send("unpauseLoan", {});
-    }
-    
-    pauseLoan1() {
-        return this.loan1.send("pauseLoan1", {});
-    }
+  isPausedLoan1() {
+    return this.loanExt.call("isPausedLoanExt")
+  }
 
-    unpauseLoan1() {
-        return this.loan1.send("unpauseLoan1", {});
-    }
+  //admin operations
+  pauseLoan() {
+    return this.loan.send("pauseLoan", {})
+  }
 
+  unpauseLoan() {
+    return this.loan.send("unpauseLoan", {})
+  }
+
+  pauseLoan1() {
+    return this.loanExt.send("pauseLoanExt", {})
+  }
+
+  unpauseLoan1() {
+    return this.loanExt.send("unpauseLoanExt", {})
+  }
 }
 
 export default LoanWrapper;

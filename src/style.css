@@ -2,6 +2,7 @@ body {
   margin: 0px;
 }
 
+
 .main {
   padding: 1rem 0;
   background: rgb(36, 37, 39);
@@ -351,6 +352,7 @@ a {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
 .ui.grid {
   margin:0;
 }
@@ -367,4 +369,8 @@ a {
 
 .font-face-AvenirNextLTPro {
   font-family: "AvenirNextLTPro";
+}
+
+.non-clickable {
+  pointer-events: none;
 }

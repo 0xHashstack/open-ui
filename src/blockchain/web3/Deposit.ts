@@ -10,29 +10,29 @@ class DepositWrapper {
     }
 
     //send transaction methods
-    createDeposit(market: string, commitment: string, amount: number, decimal: number) {
-        const amountTosent = NumToBN(amount, decimal);
-        console.log(amountTosent);
-        return this.deposit.send("createDeposit", {}, market, commitment, amountTosent);
-    }
+    // createDeposit(market: string, commitment: string, amount: number, decimal: number) {
+    //     const amountTosent = NumToBN(amount, decimal);
+    //     console.log(amountTosent);
+    //     return this.deposit.send("createDeposit", {}, market, commitment, amountTosent);
+    // }
 
-    addToDeposit(market: string, commitment: string, amount: number, decimal: number) {
-        return this.deposit.send("addToDeposit", {}, market, commitment, NumToBN(amount, decimal));
+    depositRequest(market: string, commitment: string, amount: number, decimal: number) {
+        return this.deposit.send("depositRequest", {}, market, commitment, NumToBN(amount, decimal));
     }
     
-    withdrawDeposit(market: string, commitment: string, amount: number, savingType: number, decimal: number) {
-        return this.deposit.send("withdrawDeposit", {}, market, commitment, NumToBN(amount, decimal), savingType);
+    withdrawDeposit(market: string, commitment: string, amount: number, decimal: number) {
+        return this.deposit.send("withdrawDeposit", {}, market, commitment, NumToBN(amount, decimal));
     }
 
-    convertYeild(market: string, commitment: string) {
-        return this.deposit.send("convertYield", {}, market, commitment)
-    }
+    // convertYeild(market: string, commitment: string) {
+    //     return this.deposit.send("convertYield", {}, market, commitment);
+    // }
 
 
     //getter methods
-    savingsBalance(market: string, commitment: string) {
-        return this.deposit.call("savingsBalance", market, commitment)
-    }
+    // savingsBalance(market: string, commitment: string) {
+    //     return this.deposit.call("savingsBalance", market, commitment)
+    // }
 
     hasAccount(address: string) {
         return this.deposit.call("hasAccount", address);

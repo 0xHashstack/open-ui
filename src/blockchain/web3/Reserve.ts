@@ -12,9 +12,9 @@ class ReserveWrapper {
         return this.reserve.send("transferAnyBEP20", {}, address, recipient, NumToBN(value, decimal));
     }
 
-    collateralTransfer(address: string, market: string, commitment: string) {
-        return this.reserve.send("collateralTransfer", {}, address, market, commitment);
-    }
+    // collateralTransfer(address: string, market: string, commitment: string) {
+    //     return this.reserve.send("collateralTransfer", {}, address, market, commitment);
+    // }
 
 
     //getter methods
@@ -26,9 +26,9 @@ class ReserveWrapper {
         return this.reserve.call("marketReserves", market);
     }
 
-    marketUtilisation(market: string) {
-        return this.reserve.call("marketUtilisation", market);
-    }
+    // marketUtilisation(market: string) {
+    //     return this.reserve.call("marketUtilisation", market);
+    // }
 
     isPausedReserve() {
         return this.reserve.call("isPausedReserve");

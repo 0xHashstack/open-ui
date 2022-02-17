@@ -5,8 +5,9 @@ import LiquidatorWrapper from './Liquidator';
 import LoanWrapper from './Loan';
 import OracleOpenWrapper from './OracleOpen';
 import ReserveWrapper from './Reserve';
-import TokenDistributorWrapper from './TokenDistributor';
+import Faucet from './Faucet';
 import TokenList from './TokenList';
+import MockBep20Wrapper from './MockBep20';
 
 export default class Web3Wrapper {
   web3: Web3;
@@ -20,7 +21,8 @@ export default class Web3Wrapper {
   tokenListInstance: any;
   reserveInstance: any;
   oracleOpenInstance: any;
-  tokenDistributorInstance: any;
+  faucetInstance: any;
+  mockBep20Instance: any;
 
   constructor(web3, chainId, account, options = {}) {
 
@@ -84,10 +86,17 @@ export default class Web3Wrapper {
     return this.oracleOpenInstance;
   }
 
-  getTokenDistributorInstance() {
-    if (!this.tokenDistributorInstance) {
-      this.tokenDistributorInstance = new TokenDistributorWrapper(this.wrapperOptions);;
+  getFaucetInstance() {
+    if (!this.faucetInstance) {
+      this.faucetInstance = new Faucet(this.wrapperOptions);
     }
-    return this.tokenDistributorInstance;
+    return this.faucetInstance;
+  }
+
+  getMockBep20Instance() {
+    if(!this.mockBep20Instance) {
+      this.mockBep20Instance = new MockBep20Wrapper(this.wrapperOptions);
+    }
+    return this.mockBep20Instance;
   }
 }

@@ -30,24 +30,51 @@ export const getDefaultWeb3 = () => {
 
 export const getDefaultContractOptions = () => {
   const web3 = getDefaultWeb3();
-  return { 
-    web3, 
-    chainId: defaultChainId, 
-    account: null 
+  return {
+    web3,
+    chainId: defaultChainId,
+    account: null
   };
 }
 
+export const fixedSpecial = (num, n) => {
+  var str = num.toFixed(n);
+  if (str.indexOf('e+') === -1)
+    return str;
+
+  // if number is in scientific notation, pick (b)ase and (p)ower
+  str = str.replace('.', '').split('e+').reduce(function(b, p) {
+    return b + Array(p - b.length + 2).join('0');
+  });
+  
+  if (n > 0)
+    str += '.' + Array(n + 1).join('0');
+  
+  return str;
+}
+
 export const BNtoNum = (value, decimal = 18) => {
-  return new BigNumber(value).shiftedBy(-decimal).toNumber();
+  const val = new BigNumber(value).shiftedBy(-decimal).toNumber();
+  return val < 1 ? val.toPrecision(): fixedSpecial(val,0);
 }
 
 export const NumToBN = (value, decimal = 18) => {
-  return new BigNumber(value).shiftedBy(decimal).toString();
+  const val = new BigNumber(value).shiftedBy(decimal).toNumber();
+  return val < 1 ? val.toPrecision(): fixedSpecial(val,0);
 }
 
 export const GetErrorText = (err) => {
-  if(err) {
-    return JSON.parse(err.split('.')[1]).message || 'Oops! Something went wrong.';
+  if (err) {
+    try {
+      return JSON.parse(err.split('.')[1]).message || 'Oops! Something went wrong.';
+    }
+    catch (error) {
+      console.log(error);
+      return err;
+    }
+  }
+  else {
+    return 'Oops! Something went wrong.';
   }
 }
 
@@ -62,6 +89,6 @@ export const isMarketSupported = async (symbol) => {
   const tokenList = new TokenList(getDefaultContractOptions(), process.env.REACT_APP_DIAMOND_ADDRESS);
   const isSupported = await tokenList.call("isMarketSupported", symbol);
   return {
-    isSupport : isSupported
+    isSupport: isSupported
   }
 }

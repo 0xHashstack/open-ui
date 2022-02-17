@@ -112,13 +112,13 @@ class ComptrollerWeb3Wrapper {
         return this.comptroller.call("getCommitment", index);
     }
     
-    calcAPR(commitment: string, oldLengthAccruedInterest: number, oldTime: number, aggregateInterest: number) {
-        return this.comptroller.call("calcAPR", commitment, String(oldLengthAccruedInterest), String(oldTime), String(aggregateInterest));
-    }
+    // calcAPR(commitment: string, oldLengthAccruedInterest: number, oldTime: number, aggregateInterest: number) {
+    //     return this.comptroller.call("calcAPR", commitment, String(oldLengthAccruedInterest), String(oldTime), String(aggregateInterest));
+    // }
 
-    calcAPY(commitment: string, oldLengthAccruedYield: number, oldTime: number, aggregateYield: number) {
-        return this.comptroller.call("calcAPY", commitment, String(oldLengthAccruedYield), String(oldTime), String(aggregateYield));
-    }
+    // calcAPY(commitment: string, oldLengthAccruedYield: number, oldTime: number, aggregateYield: number) {
+    //     return this.comptroller.call("calcAPY", commitment, String(oldLengthAccruedYield), String(oldTime), String(aggregateYield));
+    // }
 
     getReserveFactor() {
         return this.comptroller.call("getReserveFactor");
