@@ -52,9 +52,8 @@ class LoanWrapper {
     collateralAmount: number,
     collateralDecimal: number
   ) {
-    debugger
-    let loanAmountToSend = NumToBN(loanAmount, loanDecimal)
-    let collateralAmountToSend = NumToBN(collateralAmount, collateralDecimal)
+    const loanAmountToSend = NumToBN(loanAmount, loanDecimal)
+    const collateralAmountToSend = NumToBN(collateralAmount, collateralDecimal)
     return this.loanExt.send(
       "loanRequest",
       {},
