@@ -36,7 +36,6 @@ export const Web3ModalContext = createContext<IWeb3ModalContext>({
 
 
 const Web3ModalProvider = (props: any) => {
-
   const [web3Modal, setWeb3Modal] = useState<Web3Modal | null>(null);
   const [web3, setWeb3] = useState<Web3 | null>(null);
   const [account, setAccount] = useState<string | null>(null);
@@ -105,14 +104,12 @@ const Web3ModalProvider = (props: any) => {
         package: null
       },
     };
-
     const _web3Modal = new Web3Modal({
       network: "mainnet", // optional
       cacheProvider: true, // optional
       providerOptions, // required
       disableInjectedProvider: false, // optional. For MetaMask / Brave / Opera.
     });
-
     setWeb3Modal(_web3Modal);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -168,8 +165,13 @@ const Web3ModalProvider = (props: any) => {
   const connect = useCallback(async () => {
     if (!web3Modal)
       return;
-
-    const _provider = await web3Modal.connect();
+    let _provider;
+    try{
+      _provider = await web3Modal.connect();
+    }catch(e){
+      toast.warn(`Trouble connecting wallet..!! Check if your wallet is unlocked.`, { position: toast.POSITION.BOTTOM_RIGHT, autoClose: 4000, closeOnClick: true});
+      return;
+    }
     // authenticate()
     // if (isAuthenticated) {
     if (_provider === null)
@@ -177,7 +179,6 @@ const Web3ModalProvider = (props: any) => {
 
     const _web3 = createWeb3(_provider);
     setWeb3(_web3);
-
     await subscribeProvider(_provider, _web3);
 
     const accounts = await _web3.eth.getAccounts();
