@@ -42,7 +42,10 @@ const Layout = (props) => {
   useEffect(() => {
     dispatch(changePreloader(true));
     setIsResponse(false);
+<<<<<<< HEAD
     let timer;
+=======
+>>>>>>> fa07ac6f0263c08b087a7b827c62a43c483db218
     if (account) {
       axios.get(`isWhiteListedAccount?address=${account}`)
         .then(res => {
@@ -55,7 +58,11 @@ const Layout = (props) => {
           setIsWhiteListedAccountRequested(Boolean(cacheService.getItem(`${account.toUpperCase()}_IsWhiteListedAccountRequested`)));
           setIsWhiteListedAccount(Boolean(cacheService.getItem(`${account.toUpperCase()}_IsWhiteListedAccount`)));
           
+<<<<<<< HEAD
           timer = setTimeout(() => {dispatch(changePreloader(false));}, 300);
+=======
+          setTimeout(() => {dispatch(changePreloader(false));}, 300);
+>>>>>>> fa07ac6f0263c08b087a7b827c62a43c483db218
           setIsResponse(true);
           setIsTransactionDone(false);
         })
