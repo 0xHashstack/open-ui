@@ -179,7 +179,6 @@ const Web3ModalProvider = (props: any) => {
 
     const _web3 = createWeb3(_provider);
     setWeb3(_web3);
-    console.log(_provider)
     await subscribeProvider(_provider, _web3);
 
     const accounts = await _web3.eth.getAccounts();
