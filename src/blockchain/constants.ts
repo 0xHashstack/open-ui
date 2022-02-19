@@ -5,6 +5,7 @@ export const rpcUrls = {
   1666700000: "https://api.s0.b.hmny.io",
   42: "https://kovan.infura.io/v3/99b8947af7e14278ae235bb21eb81f53",
   3: "https://eth-ropsten.alchemyapi.io/v2/fxrejtNAKunh--Iym4w8DI4mpb4pEEbA",
+  97: "https://nd-400-266-190.p2pify.com/1efac602169fba8d5bf0589315ec436a"
 }
 
 export const networkNames = {
