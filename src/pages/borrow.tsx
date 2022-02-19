@@ -65,7 +65,7 @@ const Borrow = (props) => {
         setIsTransactionDone(true);
         const _commitBorrowPeriod: string | undefined =  commitBorrowPeriod;
         const _collateralMarket: string | undefined =  collateralMarket;
-        const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[_collateralMarket], collateralInputVal, DecimalsMap[props.assetID]);
+        const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[_collateralMarket], collateralInputVal, DecimalsMap[_collateralMarket]);
         console.log("Approve Transaction sent: ", approveTransactionHash);
         const tx = await wrapper?.getLoanInstance().loanRequest(SymbolsMap[props.assetID], CommitMap[_commitBorrowPeriod], loanInputVal, DecimalsMap[props.assetID],
         SymbolsMap[_collateralMarket], collateralInputVal, DecimalsMap[_collateralMarket]);

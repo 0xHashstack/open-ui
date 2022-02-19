@@ -37,13 +37,13 @@ export const getDefaultContractOptions = () => {
   };
 }
 
-export const fixedSpecial = (num, n) => {
+export const fixedSpecial = (num: number, n: number) => {
   var str = num.toFixed(n);
   if (str.indexOf('e+') === -1)
     return str;
 
   // if number is in scientific notation, pick (b)ase and (p)ower
-  str = str.replace('.', '').split('e+').reduce(function(b, p) {
+  str = str.replace('.', '').split('e+').reduce(function(b, p: any) {
     return b + Array(p - b.length + 2).join('0');
   });
   
@@ -53,12 +53,12 @@ export const fixedSpecial = (num, n) => {
   return str;
 }
 
-export const BNtoNum = (value, decimal = 18) => {
+export const BNtoNum = (value: number, decimal: number= 18) => {
   const val = new BigNumber(value).shiftedBy(-decimal).toNumber();
   return val < 1 ? val.toPrecision(): fixedSpecial(val,0);
 }
 
-export const NumToBN = (value, decimal = 18) => {
+export const NumToBN = (value: number, decimal: number= 18) => {
   const val = new BigNumber(value).shiftedBy(decimal).toNumber();
   return val < 1 ? val.toPrecision(): fixedSpecial(val,0);
 }
@@ -78,14 +78,14 @@ export const GetErrorText = (err) => {
   }
 }
 
-export const toFixed = (num, digit) => {
+export const toFixed = (num: number, digit: number) => {
   if (isNaN(num)) return 0;
   var fixed_num = Number(num).toFixed(digit)
   return Number(fixed_num.toString());
 }
 
 
-export const isMarketSupported = async (symbol) => {
+export const isMarketSupported = async (symbol: string) => {
   const tokenList = new TokenList(getDefaultContractOptions(), process.env.REACT_APP_DIAMOND_ADDRESS);
   const isSupported = await tokenList.call("isMarketSupported", symbol);
   return {

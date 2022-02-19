@@ -24,7 +24,7 @@ import classnames from "classnames";
 import { Web3ModalContext } from '../contexts/Web3ModalProvider';
 import { Web3WrapperContext } from '../contexts/Web3WrapperProvider';
 import {
-  EventMap, CoinClassNames,
+  EventMap, CoinClassNames, MinimumAmount,
   SymbolsMap, DecimalsMap, CommitMap
 } from '../blockchain/constants';
 import { BNtoNum, GetErrorText } from '../blockchain/utils';
@@ -897,7 +897,7 @@ const Dashboard = () => {
                                                 type="text"
                                                 className="form-control"
                                                 id="horizontal-password-Input"
-                                                placeholder="Amount"
+                                                placeholder={depositRequestSel ? `Min amount should be greater than ${MinimumAmount[depositRequestSel]}`: 'Amount'}
                                                 onChange={(event) => { inputVal1 = Number(event.target.value) }}
                                               />
                                             </Col>
