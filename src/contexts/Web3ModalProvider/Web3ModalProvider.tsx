@@ -5,7 +5,7 @@ import Web3 from 'web3';
 import { createWeb3, providerOptions } from 'blockchain/utils';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+const BSCChainId = 97;
 interface IWeb3ModalContext {
   web3: Web3 | null;
   connect: () => void;
@@ -50,6 +50,7 @@ const Web3ModalProvider = (props: any) => {
     setChainId(null);
     // setNetworkId(null);
     setConnected(false);
+    setProvider(null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -96,9 +97,11 @@ const Web3ModalProvider = (props: any) => {
   const disconnect = useCallback(
     async function () {
       await web3Modal.clearCachedProvider()
-      // const provider: any = web3.currentProvider;
       if (provider?.disconnect && typeof provider.disconnect === 'function') {
         await provider.disconnect()
+      }
+      if (provider?.close && typeof provider.close === 'function') {
+        await provider.close()
       }
       resetWeb3();
     },
@@ -127,7 +130,7 @@ const Web3ModalProvider = (props: any) => {
     const _account = accounts[0];
     // const _networkId = await _web3.eth.net.getId();
     const _chainId = await _web3.eth.getChainId();
-    if (_chainId != 97) {
+    if (_chainId != BSCChainId ) {
       toast.warn(`Please connect to BSC Testnet`, { position: toast.POSITION.BOTTOM_RIGHT, autoClose: 4000, closeOnClick: true });
       disconnect();
       return;
@@ -145,16 +148,17 @@ const Web3ModalProvider = (props: any) => {
       const handleAccountsChanged = (accounts: string[]) => {
         // eslint-disable-next-line no-console
         console.log('accountsChanged', accounts)
-        setAccount(accounts[0]);
+        chainId === BSCChainId ? setAccount(accounts[0]): setAccount(null);
       }
 
       // https://docs.ethers.io/v5/concepts/best-practices/#best-practices--network-changes
       const handleChainChanged = async (_hexChainId: string) => {
         // window.location.reload()
         setChainId(parseInt(_hexChainId, 16));
-        if (parseInt(_hexChainId, 16) !== 97) {
+        if (parseInt(_hexChainId, 16) !== BSCChainId ) {
           toast.warn(`Please connect to BSC Testnet`, { position: toast.POSITION.BOTTOM_RIGHT, autoClose: 4000, closeOnClick: true });
           setConnected(false);
+          disconnect()
           return;
         }
         toast.success("Connected to BSC Testnet", { position: toast.POSITION.BOTTOM_RIGHT, autoClose: 4000, closeOnClick: true });
