@@ -327,6 +327,8 @@ const Dashboard = () => {
       setIsTransactionDone(true);
       const _depositRequestSel: string | undefined =  depositRequestSel;
       const _depositRequestVal: string | undefined =  depositRequestVal;
+      const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[_depositRequestSel], inputVal1, DecimalsMap[_depositRequestSel]);
+      console.log("Approve Transaction sent: ", approveTransactionHash);
       const tx = await wrapper?.getDepositInstance().depositRequest(SymbolsMap[_depositRequestSel.toUpperCase()], CommitMap[_depositRequestVal], inputVal1, DecimalsMap[_depositRequestSel.toUpperCase()]);
       onDeposit(tx.events);
     } catch (err) {
