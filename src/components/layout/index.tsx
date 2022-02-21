@@ -72,6 +72,7 @@ const Layout = (props) => {
   const handleConnectWallet = useCallback(() => {
     setIsTransactionDone(true);
     connect();
+    setIsTransactionDone(false);
   }, [connect]);
 
   
