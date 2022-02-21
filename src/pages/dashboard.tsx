@@ -47,7 +47,7 @@ const Dashboard = () => {
   const [isTransactionDone, setIsTransactionDone] = useState(false);
 
   const [customActiveTab, setCustomActiveTab] = useState("1");
-  const [passbookStatus, setPassbookStatus] = useState(false)
+  const [passbookStatus, setPassbookStatus] = useState(true)
 
   const [modal_repay_loan, setmodal_repay_loan] = useState(false);
   const [modal_withdraw_loan, setmodal_withdraw_loan] = useState(false);
@@ -93,7 +93,7 @@ const Dashboard = () => {
         setActiveLoansData([]);
         console.log(err);
       })
-  }, [account, passbookStatus]);
+  }, [account, passbookStatus, customActiveTab]);
 
   useEffect(() => {
     account && axios({
@@ -110,7 +110,7 @@ const Dashboard = () => {
         console.log(err);
       })
 
-  }, [account, passbookStatus]);
+  }, [account, passbookStatus, customActiveTab]);
 
   const toggleCustom = tab => {
     if (customActiveTab !== tab) {
@@ -1160,8 +1160,8 @@ const Dashboard = () => {
                       <div className="row justify-content-end" style={{ paddingTop: "12px" }}>
                         <Col sm={3}>
                           <select className="form-select form-select-sm" onChange={(e) => passbookActive(e)}>
-                            <option value={"ActiveLoan"}>Active Loans</option>
                             <option value={"ActiveDeposit"}>Active Deposits</option>
+                            <option value={"ActiveLoan"}>Active Loans</option>
                             {/* <option value={"InactiveLoan"}>Inactive loans</option>
                             <option value={"InactiveDeposit"}>Inactive deposits</option> */}
                           </select>
