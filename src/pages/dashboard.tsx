@@ -424,6 +424,31 @@ const Dashboard = () => {
     }
   }
 
+ const MarketDropdownOptions = (props) => {
+   const _key = props.keyName;
+   const arrayUniqueByKey = [...new Map(props.data.map((item: any) => [item[_key], item])).values()];
+   return (
+     <>
+      { arrayUniqueByKey.map((asset, key) => {
+        return <option key={key} value={EventMap[asset[_key].toUpperCase()]}>{EventMap[asset[_key].toUpperCase()]}</option>
+      })}
+     </>
+   );
+ } 
+
+ const MarketCommitmentOptions = (props) => {
+  const _key = props.keyName;
+  const keys =  props.data.map(item => item[_key])
+  .filter((value, index, self) => self.indexOf(value) === index);
+ 
+  return (
+    <>
+    {keys.map((asset, key) => {
+        return <option key={key} value={asset}>{EventMap[asset]}</option>
+    })}
+    </>
+  );
+} 
 
   return (
     <React.Fragment>
@@ -481,9 +506,10 @@ const Dashboard = () => {
                                             <Col sm={12}>
                                               <select className="form-select" onChange={handleLoanOptionChange}>
                                                 <option hidden>Loan Market</option>
-                                                {activeLoansData.map((asset, key) => {
+                                                {/* {activeLoansData.map((asset, key) => {
                                                   return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
-                                                })}
+                                                })} */}
+                                                <MarketDropdownOptions data={activeLoansData} keyName={"loanMarket"}></MarketDropdownOptions>
                                               </select>
                                             </Col>
                                           </div>
@@ -542,9 +568,10 @@ const Dashboard = () => {
                                             <Col sm={12}>
                                               <select className="form-select" onChange={handleLoanOptionChange}>
                                                 <option hidden>Loan market</option>
-                                                {activeLoansData.map((asset, key) => {
+                                                {/* {activeLoansData.map((asset, key) => {
                                                   return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
-                                                })}
+                                                })} */}
+                                                <MarketDropdownOptions data={activeLoansData} keyName={"loanMarket"}></MarketDropdownOptions>
                                               </select>
                                             </Col>
                                           </div>
@@ -610,9 +637,10 @@ const Dashboard = () => {
                                           <Col sm={12}>
                                             <select className="form-select" onChange={handleLoanOptionChange}>
                                               <option hidden>Loan Market</option>
-                                              {activeLoansData.map((asset, key) => {
+                                              {/* {activeLoansData.map((asset, key) => {
                                                   return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
-                                              })}
+                                              })} */}
+                                              <MarketDropdownOptions data={activeLoansData} keyName={"loanMarket"}></MarketDropdownOptions>
                                             </select>
                                           </Col>
                                         </div>
@@ -677,9 +705,10 @@ const Dashboard = () => {
                                           <Col sm={12}>
                                             <select className="form-select" onChange={handleLoanOptionChange}>
                                               <option hidden>Select Loan</option>
-                                              {activeLoansData.map((asset, key) => {
+                                              {/* {activeLoansData.map((asset, key) => {
                                                   return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
-                                              })}
+                                              })} */}
+                                              <MarketDropdownOptions data={activeLoansData} keyName={"loanMarket"}></MarketDropdownOptions>
                                             </select>
                                           </Col>
                                         </div>
@@ -734,9 +763,10 @@ const Dashboard = () => {
                                           <Col sm={12}>
                                             <select className="form-select" onChange={handleLoanOptionChange}>
                                               <option hidden>Loan Market</option>
-                                              {activeLoansData.map((asset, key) => {
+                                              {/* {activeLoansData.map((asset, key) => {
                                                   return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
-                                              })}
+                                              })} */}
+                                              <MarketDropdownOptions data={activeLoansData} keyName={"loanMarket"}></MarketDropdownOptions>
                                             </select>
                                           </Col>
                                         </div>
@@ -744,9 +774,10 @@ const Dashboard = () => {
                                           <Col sm={12}>
                                             <select className="form-select" onChange={handleCollateralOptionChange}>
                                               <option hidden>Collateral Market</option>
-                                              {activeLoansData.map((asset, key) => {
+                                              {/* {activeLoansData.map((asset, key) => {
                                                   return <option key={key} value={EventMap[asset.collateralMarket.toUpperCase()]}>{EventMap[asset.collateralMarket.toUpperCase()]}</option>
-                                              })}
+                                              })} */}
+                                              <MarketDropdownOptions data={activeLoansData} keyName={"collateralMarket"}></MarketDropdownOptions>
                                             </select>
                                           </Col>
                                         </div>
@@ -804,9 +835,10 @@ const Dashboard = () => {
                                           <Col sm={12}>
                                             <select className="form-select" onChange={handleLoanOptionChange}>
                                               <option hidden>Loan Market</option>
-                                              {activeLoansData.map((asset, key) => {
+                                              {/* {activeLoansData.map((asset, key) => {
                                                   return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
-                                              })}
+                                              })} */}
+                                              <MarketDropdownOptions data={activeLoansData} keyName={"loanMarket"}></MarketDropdownOptions>
                                             </select>
                                           </Col>
                                         </div>
@@ -873,9 +905,10 @@ const Dashboard = () => {
                                             <Col sm={12}>
                                               <select className="form-select" onChange={handleDepositRequestSelect}>
                                                 <option hidden>Select Market</option>
-                                                {activeDepositsData.map((asset, key) => {
+                                                {/* {activeDepositsData.map((asset, key) => {
                                                   return <option key={key} value={EventMap[asset.market.toUpperCase()]}>{EventMap[asset.market.toUpperCase()]}</option>
-                                                })}
+                                                })} */}
+                                                <MarketDropdownOptions data={activeDepositsData} keyName={"market"}></MarketDropdownOptions>
                                               </select>
                                             </Col>
                                           </div>
@@ -883,11 +916,12 @@ const Dashboard = () => {
                                             <Col sm={12}>
                                               <select className="form-select" onChange={handleDepositRequestTime}>
                                                 <option hidden>Minimum Commitment Period</option>
-                                                {activeDepositsData.filter((asset) => {
+                                                {/* {activeDepositsData.filter((asset) => {
                                                   return (EventMap[asset.market.toUpperCase()] === depositRequestSel)
                                                 }).map((asset, key) => {
                                                    return <option key={key} value={asset.commitment}>{EventMap[asset.commitment]}</option>
-                                                })}
+                                                })} */}
+                                                <MarketCommitmentOptions data={activeDepositsData} keyName={"commitment"} selectedValue={depositRequestSel} ></MarketCommitmentOptions>
                                               </select>
                                             </Col>
                                           </div>
@@ -948,9 +982,10 @@ const Dashboard = () => {
                                             <Col sm={12}>
                                               <select className="form-select" onChange={handleWithdrawDepositSelect}>
                                                 <option hidden>Select Market</option>
-                                                {activeDepositsData.map((asset, key) => {
+                                                {/* {activeDepositsData.map((asset, key) => {
                                                   return <option key={key} value={EventMap[asset.market.toUpperCase()]}>{EventMap[asset.market.toUpperCase()]}</option>
-                                                })}
+                                                })} */}
+                                                <MarketDropdownOptions data={activeDepositsData} keyName={"market"}></MarketDropdownOptions>
                                               </select>
                                             </Col>
                                           </div>
@@ -958,11 +993,12 @@ const Dashboard = () => {
                                             <Col sm={12}>
                                               <select className="form-select" onChange={handleWithdrawDepositTime}>
                                                 <option hidden>Minimum Commitment Period</option>
-                                                {activeDepositsData.filter((asset) => {
+                                                {/* {activeDepositsData.filter((asset) => {
                                                   return (EventMap[asset.market.toUpperCase()] === withdrawDepositSel)
                                                 }).map((asset, key) => {
                                                   return <option key={key} value={asset.commitment}>{EventMap[asset.commitment]}</option>
-                                                })}
+                                                })} */}
+                                                <MarketCommitmentOptions data={activeDepositsData} keyName={"commitment"} selectedValue={depositRequestSel} ></MarketCommitmentOptions>
                                               </select>
                                             </Col>
                                           </div>
