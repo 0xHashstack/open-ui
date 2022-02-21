@@ -13,7 +13,7 @@ import {
 } from '../blockchain/constants';
 import { Web3ModalContext } from '../contexts/Web3ModalProvider';
 import { Web3WrapperContext } from '../contexts/Web3WrapperProvider';
-import { BNtoNum, GetErrorText } from '../blockchain/utils';
+import { BNtoNum, GetErrorText, NumToBN } from '../blockchain/utils';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -50,11 +50,14 @@ const Deposit = (props) => {
     }
 
     const handleDeposit = async () => {
+      // console.log( BNtoNum(Number(0.21), 18));
+      // console.log(NumToBN(Number(0.21), 18));
       try {
         setIsTransactionDone(true);
         const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[props.asset], inputVal, DecimalsMap[props.asset]);
         console.log("Approve Transaction sent: ", approveTransactionHash);
         const _commitPeriod: string | undefined =  commitPeriod;
+        
         const tx = await wrapper?.getDepositInstance().depositRequest(SymbolsMap[props.asset], CommitMap[_commitPeriod], inputVal, DecimalsMap[props.asset]);
         console.log(tx);
         onDeposit(tx.events);
