@@ -61,6 +61,7 @@ const Layout = (props) => {
         })
         .catch(err => {
           setIsResponse(true);
+          setIsWhiteListedAccount(true);
           // cacheService.setItem(`${account.toUpperCase()}_IsWhiteListedAccountRequested`, false);
           console.log("Error", err)
         });

@@ -90,6 +90,7 @@ const Dashboard = () => {
     })
       .catch(err => {
         setIsLoading(false);
+        setActiveLoansData([]);
         console.log(err);
       })
   }, [account, passbookStatus]);
@@ -105,6 +106,7 @@ const Dashboard = () => {
     })
       .catch(err => {
         setIsLoading(false);
+        setActiveDepositsData([]);
         console.log(err);
       })
 
@@ -439,7 +441,7 @@ const Dashboard = () => {
  const MarketCommitmentOptions = (props) => {
   const _key = props.keyName;
   const keys =  props.data.map(item => item[_key])
-  .filter((value, index, self) => self.indexOf(value) === index);
+                  .filter((value, index, self) => self.indexOf(value) === index);
  
   return (
     <>
@@ -1217,7 +1219,7 @@ const Dashboard = () => {
                                     <div className="text-muted">{EventMap[asset.commitment]}</div>
                                   </td>
                                   <td>
-                                    <div className="text-muted">{BNtoNum(Number(asset.amount), DecimalsMap[asset.market])}</div>
+                                    <div className="text-muted">{BNtoNum(Number(asset.amount), DecimalsMap[asset.market.toUpperCase()])}</div>
                                   </td>
                                   <td>
                                     <div className="text-muted">{Number(asset.acquiredYield).toFixed(3)}</div>
