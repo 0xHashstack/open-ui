@@ -55,7 +55,7 @@ export const fixedSpecial = (num: number, n: number) => {
 
 export const BNtoNum = (value: number, decimal: number= 18) => {
   const val = new BigNumber(value).shiftedBy(-decimal).toNumber();
-  return value < 1 ? value : fixedSpecial(val,0);
+  return val < 1 ? val.toPrecision(): fixedSpecial(val,0);
 }
 
 export const NumToBN = (value: number, decimal: number= 18) => {
