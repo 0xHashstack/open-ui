@@ -61,6 +61,7 @@ const Layout = (props) => {
         })
         .catch(err => {
           setIsResponse(true);
+          setIsWhiteListedAccount(true);
           // cacheService.setItem(`${account.toUpperCase()}_IsWhiteListedAccountRequested`, false);
           console.log("Error", err)
         });
@@ -71,6 +72,7 @@ const Layout = (props) => {
   const handleConnectWallet = useCallback(() => {
     setIsTransactionDone(true);
     connect();
+    setIsTransactionDone(false);
   }, [connect]);
 
   

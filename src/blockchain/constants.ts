@@ -5,6 +5,7 @@ export const rpcUrls = {
   1666700000: "https://api.s0.b.hmny.io",
   42: "https://kovan.infura.io/v3/99b8947af7e14278ae235bb21eb81f53",
   3: "https://eth-ropsten.alchemyapi.io/v2/fxrejtNAKunh--Iym4w8DI4mpb4pEEbA",
+  97: "https://nd-400-266-190.p2pify.com/1efac602169fba8d5bf0589315ec436a"
 }
 
 export const networkNames = {
@@ -80,16 +81,16 @@ export const BorrowInterestRates = {
 export const decimals = [8, 18, 18, 18]
 
 export const DecimalsMap = {
-  BTC: 8,
+  "BTC": 8,
   "BTC.T": 8,
   "0x4254432e74000000000000000000000000000000000000000000000000000000": 8,
-  USDT: 18,
+  "USDT": 18,
   "USDT.T": 18,
   "0x555344542e740000000000000000000000000000000000000000000000000000": 18,
   "USDC.T": 18,
-  USDC: 18,
+  "USDC": 18,
   "0x555344432e740000000000000000000000000000000000000000000000000000": 18,
-  BNB: 18,
+  "BNB": 18,
   "BNB.T": 18,
   "0x57424e4200000000000000000000000000000000000000000000000000000000": 18,
 }

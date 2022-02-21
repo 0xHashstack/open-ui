@@ -90,14 +90,9 @@ class LoanWrapper {
     amount: number,
     decimal: number
   ) {
-    const amountTosent = NumToBN(amount, decimal)
+    const amountToSent = NumToBN(amount, decimal);
 
-    return this.loan.send(
-      "withdrawPartialLoan",
-      market,
-      commitment,
-      amountTosent
-    )
+    return this.loan.send("withdrawPartialLoan", {}, market, commitment, amountToSent);
   }
 
   //getter methods
