@@ -115,7 +115,7 @@ const Header = () => {
                         outline
                         onClick={handleGetToken}
                       >
-                        Bitcoin
+                        BTC
                       </Button>
                     </Col>
                     <Col sm={3}>
