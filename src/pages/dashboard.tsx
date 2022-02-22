@@ -18,7 +18,8 @@ import {
   TabContent,
   TabPane,
   Label,
-  Spinner
+  Spinner,
+  Tooltip
 } from "reactstrap";
 import classnames from "classnames";
 import { Web3ModalContext } from '../contexts/Web3ModalProvider';
@@ -69,7 +70,7 @@ const Dashboard = () => {
   const [withdrawDepositSel, setWithdrawDepositSel] = useState();
   const [depositRequestVal, setDepositRequestVal] = useState();
   const [withdrawDepositVal, setWithdrawDepositVal] = useState();
-
+  const [tooltipOpen, setTooltipOpen] = useState(false);
   let inputVal1 = 0;
 
   const { connect, disconnect, account } = useContext(Web3ModalContext);
@@ -87,7 +88,7 @@ const Dashboard = () => {
       withCredentials: false
     }).then(res => {
       setIsLoading(false);
-      setActiveLoansData(res.data.data);
+      Array.isArray(res.data.data) ? setActiveLoansData(res.data.data) : setActiveLoansData([]);
     })
       .catch(err => {
         setIsLoading(false);
@@ -103,7 +104,7 @@ const Dashboard = () => {
       withCredentials: false
     }).then(res => {
       setIsLoading(false);
-      setActiveDepositsData(res.data.data);
+      Array.isArray(res.data.data) ? setActiveDepositsData(res.data.data) :  setActiveDepositsData([]);
     })
       .catch(err => {
         setIsLoading(false);
@@ -307,7 +308,6 @@ const Dashboard = () => {
         return EventMap[asset.loanMarket.toUpperCase()] === loanOption;
       });
       const _loanOption: string | undefined =  loanOption;
-      // const _swapOption: string | undefined =  swapOption;
       const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[_loanOption], BNtoNum(Number(commit[0].loanAmount), DecimalsMap[_loanOption]), DecimalsMap[_loanOption]);
       console.log("Approve Transaction sent: ", approveTransactionHash);
 
@@ -429,6 +429,9 @@ const Dashboard = () => {
     }
   }
 
+ const toggle = () => {
+  setTooltipOpen(!tooltipOpen);
+ } 
 //  const MarketDropdownOptions = (props) => {
 //    const _key = props.keyName;
 //    const arrayUniqueByKey = [...new Map(props.data.map((item: any) => [item[_key], item])).values()];
@@ -515,7 +518,6 @@ const Dashboard = () => {
                                                 {[...new Map(activeLoansData.map((item: any) => [item['loanMarket'], item])).values()].map((asset, key) => {
                                                   return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
                                               })}
-                                                {/* <MarketDropdownOptions data={activeLoansData} keyName={"loanMarket"}></MarketDropdownOptions> */}
                                               </select>
                                             </Col>
                                           </div>
@@ -577,7 +579,6 @@ const Dashboard = () => {
                                                 {[...new Map(activeLoansData.map((item: any) => [item['loanMarket'], item])).values()].map((asset, key) => {
                                                   return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
                                               })}
-                                                {/* <MarketDropdownOptions data={activeLoansData} keyName={"loanMarket"}></MarketDropdownOptions> */}
                                               </select>
                                             </Col>
                                           </div>
@@ -624,11 +625,15 @@ const Dashboard = () => {
                                     className="btn-block btn-sm"
                                     color="light"
                                     outline
+                                    id="SwapLoanButton"
                                     onClick={() => {
-                                      tog_swap_loan();
+                                      // tog_swap_loan();
                                     }}
                                   >
                                     Swap Loan
+                                    {/* <Tooltip placement="top" target="SwapLoanButton" autohide={true} isOpen={tooltipOpen} toggle={toggle}>
+                                      This features will be activated this friday.
+                                    </Tooltip> */}
                                   </Button>
                                   <Modal
                                     isOpen={modal_swap_loan}
@@ -646,7 +651,6 @@ const Dashboard = () => {
                                               {[...new Map(activeLoansData.map((item: any) => [item['loanMarket'], item])).values()].map((asset, key) => {
                                                   return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
                                               })}
-                                              {/* <MarketDropdownOptions data={activeLoansData} keyName={"loanMarket"}></MarketDropdownOptions> */}
                                             </select>
                                           </Col>
                                         </div>
@@ -681,12 +685,16 @@ const Dashboard = () => {
                                   <Button
                                     className="btn-block btn-sm"
                                     color="light"
+                                    id="SwapToLoanButton"
                                     outline
                                     onClick={() => {
                                       tog_swap_to_loan();
                                     }}
                                   >
                                     Swap to Loan
+                                    {/* <Tooltip placement="top" target="SwapToLoanButton" autohide={true} isOpen={tooltipOpen} toggle={toggle}>
+                                      This features will be activated this friday.
+                                    </Tooltip> */}
                                   </Button>
                                   <Modal
                                     isOpen={modal_swap_to_loan}
@@ -714,7 +722,6 @@ const Dashboard = () => {
                                               {[...new Map(activeLoansData.map((item: any) => [item['loanMarket'], item])).values()].map((asset, key) => {
                                                   return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
                                               })}
-                                              {/* <MarketDropdownOptions data={activeLoansData} keyName={"loanMarket"}></MarketDropdownOptions> */}
                                             </select>
                                           </Col>
                                         </div>
@@ -772,7 +779,6 @@ const Dashboard = () => {
                                               {[...new Map(activeLoansData.map((item: any) => [item['loanMarket'], item])).values()].map((asset, key) => {
                                                   return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
                                               })}
-                                              {/* <MarketDropdownOptions data={activeLoansData} keyName={"loanMarket"}></MarketDropdownOptions> */}
                                             </select>
                                           </Col>
                                         </div>
@@ -783,7 +789,6 @@ const Dashboard = () => {
                                               {[...new Map(activeLoansData.map((item: any) => [item['collateralMarket'], item])).values()].map((asset, key) => {
                                                   return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
                                               })}
-                                              {/* <MarketDropdownOptions data={activeLoansData} keyName={"collateralMarket"}></MarketDropdownOptions> */}
                                             </select>
                                           </Col>
                                         </div>
@@ -844,7 +849,6 @@ const Dashboard = () => {
                                               {[...new Map(activeLoansData.map((item: any) => [item['loanMarket'], item])).values()].map((asset, key) => {
                                                   return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
                                               })}
-                                              {/* <MarketDropdownOptions data={activeLoansData} keyName={"loanMarket"}></MarketDropdownOptions> */}
                                             </select>
                                           </Col>
                                         </div>
@@ -914,7 +918,6 @@ const Dashboard = () => {
                                                 {[...new Map(activeLoansData.map((item: any) => [item['market'], item])).values()].map((asset, key) => {
                                                   return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
                                               })}
-                                                {/* <MarketDropdownOptions data={activeDepositsData} keyName={"market"}></MarketDropdownOptions> */}
                                               </select>
                                             </Col>
                                           </div>
@@ -932,7 +935,6 @@ const Dashboard = () => {
                                                         .map((asset, key) => {
                                                         return <option key={key} value={asset}>{EventMap[asset]}</option>
                                                     })}
-                                                {/* <MarketCommitmentOptions data={activeDepositsData} keyName={"commitment"} selectedValue={depositRequestSel} ></MarketCommitmentOptions> */}
                                               </select>
                                             </Col>
                                           </div>
@@ -996,7 +998,6 @@ const Dashboard = () => {
                                                 {[...new Map(activeLoansData.map((item: any) => [item['market'], item])).values()].map((asset, key) => {
                                                   return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
                                               })}
-                                                {/* <MarketDropdownOptions data={activeDepositsData} keyName={"market"}></MarketDropdownOptions> */}
                                               </select>
                                             </Col>
                                           </div>
@@ -1009,7 +1010,6 @@ const Dashboard = () => {
                                                         .map((asset, key) => {
                                                         return <option key={key} value={asset}>{EventMap[asset]}</option>
                                                     })}
-                                                {/* <MarketCommitmentOptions data={activeDepositsData} keyName={"commitment"} selectedValue={depositRequestSel} ></MarketCommitmentOptions> */}
                                               </select>
                                             </Col>
                                           </div>
@@ -1052,9 +1052,6 @@ const Dashboard = () => {
                 //   :
 
                 //   /* -------------------------------------- DEPOSIT ----------------------------- */
-                  
-                //   // <WorkflowInfo />
-                // }
                 }
               </Card>
             </Col>
