@@ -9,7 +9,7 @@ const PassbookTBody = (props) => {
     const assets = props.assets;
     if (props.isloading && assets.length === 0) {
       return (<tr align="center"><td colSpan={4}><Spinner>Loading...</Spinner></td></tr>)
-    } else if (assets.length > 0) {
+    } else if (Array.isArray(assets) && assets.length > 0) {
       return (
         <>
           {assets.map((asset, key) => (
