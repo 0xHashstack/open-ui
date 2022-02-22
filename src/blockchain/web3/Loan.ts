@@ -20,8 +20,8 @@ class LoanWrapper {
     return this.loan.send("swapLoan", {}, market, commitment, swapMarket)
   }
 
-  swapToLoan(commitment: string, market: string) {
-    return this.loan.send("swapToLoan", {}, commitment, market)
+  swapToLoan( market: string, commitment: string) {
+    return this.loan.send("swapToLoan", {}, market, commitment)
   }
 
   withdrawCollateral(market: string, commitment: string) {
