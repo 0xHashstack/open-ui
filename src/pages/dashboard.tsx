@@ -32,6 +32,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import PassbookTBody from "./passbook-body";
 import DashboardTBody from "./dashboard-body";
+import Banner from "../components/banner";
 // import WorkflowInfo from "./workflow-info";
 
 toast.configure({
@@ -460,6 +461,7 @@ const Dashboard = () => {
         <MetaTags>
           <title>Hashstack Finance</title>
         </MetaTags>
+        <Banner/>
         <Container fluid>
           <h5>OPEN PROTOCOL</h5>
           <br />
