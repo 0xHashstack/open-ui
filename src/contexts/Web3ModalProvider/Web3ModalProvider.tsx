@@ -1,7 +1,6 @@
 import { createContext, useCallback, useEffect, useState } from 'react';
 import Web3Modal from "web3modal";
 import Web3 from 'web3';
-// import { useMoralis } from 'react-moralis';
 import { createWeb3, providerOptions } from 'blockchain/utils';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -33,6 +32,13 @@ if (typeof window !== 'undefined') {
     network: 'mainnet', // optional
     cacheProvider: true,
     providerOptions, // required
+    theme: {
+      background: "rgb(39, 49, 56)",
+      main: "rgb(199, 199, 199)",
+      secondary: "rgb(136, 136, 136)",
+      border: "rgba(195, 195, 195, 0.14)",
+      hover: "rgb(16, 26, 32)"
+    }
   })
 }
 
@@ -51,48 +57,7 @@ const Web3ModalProvider = (props: any) => {
     // setNetworkId(null);
     setConnected(false);
     setProvider(null);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  // const subscribeProvider = useCallback(async (_provider: any, _web3: Web3) => {
-  //   if (!_provider.on)
-  //     return;
-
-  //   _provider.on("disconnect", () => {
-  //     console.log("disconnect")
-  //     disconnect();
-  //   });
-
-  //   _provider.on("accountsChanged", async (accounts: string[]) => {
-  //     setAccount(accounts[0]);
-  //   });
-
-  //   _provider.on("chainChanged", async (chainId: number) => {
-  //     console.log("Chain changed: ", chainId);
-  //     // const networkId = await _web3.eth.net.getId();
-  //     const _chainId = await _web3.eth.getChainId();
-  //     setChainId(_chainId);
-  //     // setNetworkId(networkId);
-
-  //     if (_chainId != 97)
-  //       toast.warn(`Please connect to BSC Testnet`, { position: toast.POSITION.BOTTOM_RIGHT, autoClose: 4000, closeOnClick: true });
-  //     else
-  //       toast.success("Connected to BSC Testnet", { position: toast.POSITION.BOTTOM_RIGHT, autoClose: 4000, closeOnClick: true });
-
-  //   });
-
-  //   // _provider.on("networkChanged", async (networkId: number) => {
-  //   //   const chainId = await _web3.eth.getChainId();
-  //   //   setChainId(chainId);
-  //   //   setNetworkId(networkId);
-
-  //   // });
-
-  //   _provider.on("connect", () => {
-  //     console.log('------');
-  //     // authenticate();
-  //   });
-  // }, [resetWeb3]);
 
   const disconnect = useCallback(
     async function () {
@@ -114,17 +79,15 @@ const Web3ModalProvider = (props: any) => {
       _provider = await web3Modal.connect();
       setProvider(_provider);
     } catch (e) {
+      if(e === "Modal closed by user") return;
       toast.warn(`Trouble connecting wallet..!! Check if your wallet is unlocked.`, { position: toast.POSITION.BOTTOM_RIGHT, autoClose: 4000, closeOnClick: true });
       return;
     }
-    // authenticate()
-    // if (isAuthenticated) {
     if (_provider === null)
       return;
 
     const _web3 = createWeb3(_provider);
     setWeb3(_web3);
-    // await subscribeProvider(_provider, _web3);
 
     const accounts = await _web3.eth.getAccounts();
     const _account = accounts[0];
@@ -138,8 +101,6 @@ const Web3ModalProvider = (props: any) => {
     setAccount(_account);
     setChainId(_chainId);
     setConnected(true);
-    // toast.success("Connected to BSC Testnet", { position: toast.POSITION.BOTTOM_RIGHT, autoClose: 4000, closeOnClick: true });
-    // setNetworkId(_networkId);
 
   }, [web3Modal]);
 
@@ -151,9 +112,7 @@ const Web3ModalProvider = (props: any) => {
         chainId === BSCChainId ? setAccount(accounts[0]): setAccount(null);
       }
 
-      // https://docs.ethers.io/v5/concepts/best-practices/#best-practices--network-changes
       const handleChainChanged = async (_hexChainId: string) => {
-        // window.location.reload()
         setChainId(parseInt(_hexChainId, 16));
         if (parseInt(_hexChainId, 16) !== BSCChainId ) {
           toast.warn(`Please connect to BSC Testnet`, { position: toast.POSITION.BOTTOM_RIGHT, autoClose: 4000, closeOnClick: true });
@@ -192,18 +151,6 @@ const Web3ModalProvider = (props: any) => {
       connect()
     }
   }, [connect])
-
-  // const disconnect = useCallback(async () => {
-  //   if (web3 && web3.currentProvider) {
-  //     const _provider: any = web3.currentProvider;
-  //     if (_provider.close)
-  //       await _provider.close();
-  //   }
-  //   if (web3Modal) {
-  //     await web3Modal.clearCachedProvider();
-  //   }
-  //   resetWeb3();
-  // }, [web3Modal, web3, resetWeb3])
 
   return (
     <Web3ModalContext.Provider

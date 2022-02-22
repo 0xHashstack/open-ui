@@ -54,7 +54,8 @@ const Layout = (props) => {
           cacheService.setItem(`${account.toUpperCase()}_IsWhiteListedAccountRequested`, Boolean(cacheService.getItem(`${account.toUpperCase()}_IsWhiteListedAccountRequested`)));
           setIsWhiteListedAccountRequested(Boolean(cacheService.getItem(`${account.toUpperCase()}_IsWhiteListedAccountRequested`)));
           setIsWhiteListedAccount(Boolean(cacheService.getItem(`${account.toUpperCase()}_IsWhiteListedAccount`)));
-          
+          setCounter(res.data['waitlist_ct']);
+          cacheService.setItem(`${account.toUpperCase()}_Waitlist_Counter`, res.data['waitlist_ct']);
           timer = setTimeout(() => {dispatch(changePreloader(false));}, 300);
           setIsResponse(true);
           setIsTransactionDone(false);
