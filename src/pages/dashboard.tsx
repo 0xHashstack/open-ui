@@ -310,7 +310,7 @@ const Dashboard = () => {
       const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[_loanOption], BNtoNum(Number(commit[0].loanAmount), DecimalsMap[_loanOption]), DecimalsMap[_loanOption]);
       console.log("Approve Transaction sent: ", approveTransactionHash);
 
-      const tx = await wrapper?.getLoanInstance().swapToLoan(CommitMap[commit[0].commitment], SymbolsMap[_loanOption]);
+      const tx = await wrapper?.getLoanInstance().swapToLoan( SymbolsMap[_loanOption],CommitMap[commit[0].commitment]);
       onSwapToLoan(tx.events);
     } catch (err) {
       setIsTransactionDone(false);
