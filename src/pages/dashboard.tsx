@@ -435,32 +435,6 @@ const Dashboard = () => {
     }
   }
 
-//  const MarketDropdownOptions = (props) => {
-//    const _key = props.keyName;
-//    const arrayUniqueByKey = [...new Map(props.data.map((item: any) => [item[_key], item])).values()];
-//    return (
-//      <>
-//       { arrayUniqueByKey.map((asset, key) => {
-//         return <option key={key} value={EventMap[asset[_key].toUpperCase()]}>{EventMap[asset[_key].toUpperCase()]}</option>
-//       })}
-//      </>
-//    );
-//  } 
-
-//  const MarketCommitmentOptions = (props) => {
-//   const _key = props.keyName;
-//   const keys =  props.data.map(item => item[_key])
-//                   .filter((value, index, self) => self.indexOf(value) === index);
- 
-//   return (
-//     <>
-//     {keys.map((asset, key) => {
-//         return <option key={key} value={asset}>{EventMap[asset]}</option>
-//     })}
-//     </>
-//   );
-// } 
-
   return (
     <React.Fragment>
       <div className="page-content">
