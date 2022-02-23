@@ -69,7 +69,13 @@ const Dashboard = () => {
   const [withdrawDepositSel, setWithdrawDepositSel] = useState();
   const [depositRequestVal, setDepositRequestVal] = useState();
   const [withdrawDepositVal, setWithdrawDepositVal] = useState();
-  const [tooltipOpen, setTooltipOpen] = useState(false);
+
+
+  const [swapLoanTooltipOpen, setSwapLoanTooltipOpen] = useState(false);
+  const [swapToLoanTooltipOpen, setSwapToLoanTooltipOpen] = useState(false);
+  const [addCollateralTooltipOpen, setAddCollateralTooltipOpen] = useState(false);
+  const [withdrawCollateralTooltipOpen, setWithdrawCollateralTooltipOpen] = useState(false);
+
   let inputVal1 = 0;
 
   const { connect, disconnect, account } = useContext(Web3ModalContext);
@@ -427,9 +433,6 @@ const Dashboard = () => {
     }
   }
 
- const toggle = () => {
-  setTooltipOpen(!tooltipOpen);
- } 
 //  const MarketDropdownOptions = (props) => {
 //    const _key = props.keyName;
 //    const arrayUniqueByKey = [...new Map(props.data.map((item: any) => [item[_key], item])).values()];
@@ -629,9 +632,9 @@ const Dashboard = () => {
                                     }}
                                   >
                                     Swap Loan
-                                    {/* <Tooltip placement="top" target="SwapLoanButton" autohide={true} isOpen={tooltipOpen} toggle={toggle}>
+                                    <Tooltip placement="top" target="SwapLoanButton" autohide={true} isOpen={swapLoanTooltipOpen} toggle={() => {setSwapLoanTooltipOpen(!swapLoanTooltipOpen)}}>
                                       This features will be activated this friday.
-                                    </Tooltip> */}
+                                    </Tooltip>
                                   </Button>
                                   <Modal
                                     isOpen={modal_swap_loan}
@@ -687,13 +690,13 @@ const Dashboard = () => {
                                     id="SwapToLoanButton"
                                     outline
                                     onClick={() => {
-                                      tog_swap_to_loan();
+                                      // tog_swap_to_loan();
                                     }}
                                   >
                                     Swap to Loan
-                                    {/* <Tooltip placement="top" target="SwapToLoanButton" autohide={true} isOpen={tooltipOpen} toggle={toggle}>
+                                    <Tooltip placement="top" target="SwapToLoanButton" autohide={true} isOpen={swapToLoanTooltipOpen} toggle={() => {setSwapToLoanTooltipOpen(!swapToLoanTooltipOpen)}}>
                                       This features will be activated this friday.
-                                    </Tooltip> */}
+                                    </Tooltip>
                                   </Button>
                                   <Modal
                                     isOpen={modal_swap_to_loan}
@@ -756,13 +759,17 @@ const Dashboard = () => {
                                   <Button
                                     className="btn-block  btn-sm"
                                     color="light"
+                                    id="AddCollateralButton"
                                     outline
                                     onClick={() => {
-                                      tog_add_collateral();
+                                      // tog_add_collateral();
                                     }}
                                   >
                                     Add Collateral
                                   </Button>
+                                  <Tooltip placement="top" target="AddCollateralButton" autohide={true} isOpen={addCollateralTooltipOpen} toggle={() => {setAddCollateralTooltipOpen(!addCollateralTooltipOpen)}}>
+                                      This features will be activated this friday.
+                                  </Tooltip>
                                   <Modal
                                     isOpen={modal_add_collateral}
                                     toggle={() => {
@@ -828,13 +835,17 @@ const Dashboard = () => {
                                   <Button
                                     className="btn-block btn-sm"
                                     color="light"
+                                    id="WithdrawCollateralButton"
                                     outline
                                     onClick={() => {
-                                      tog_withdraw_collateral();
+                                      // tog_withdraw_collateral();
                                     }}
                                   >
                                     Withdraw Collateral
                                   </Button>
+                                  <Tooltip placement="top" target="WithdrawCollateralButton" autohide={true} isOpen={withdrawCollateralTooltipOpen} toggle={() => {setWithdrawCollateralTooltipOpen(!withdrawCollateralTooltipOpen)}}>
+                                      This features will be activated this friday.
+                                  </Tooltip>
                                   <Modal
                                     isOpen={modal_withdraw_collateral}
                                     toggle={() => {
@@ -851,7 +862,6 @@ const Dashboard = () => {
                                               {[...new Map(activeLoansData.map((item: any) => [item['loanMarket'], item])).values()].map((asset, key) => {
                                                   return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
                                               })}
-                                              {/* <MarketDropdownOptions data={activeLoansData} keyName={"loanMarket"}></MarketDropdownOptions> */}
                                             </select>
                                           </Col>
                                         </div>
