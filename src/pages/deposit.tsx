@@ -60,7 +60,7 @@ const Deposit = (props) => {
         const _commitPeriod: string | undefined =  commitPeriod;
         
         const tx = await wrapper?.getDepositInstance().depositRequest(SymbolsMap[props.asset], CommitMap[_commitPeriod], inputVal, DecimalsMap[props.asset]);
-        await tx.await();
+        await tx.wait();
         console.log(tx);
         onDeposit(tx.events);
       } catch (err) {
