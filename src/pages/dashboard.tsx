@@ -824,7 +824,6 @@ const Dashboard = () => {
                                               {[...new Map(activeLoansData.map((item: any) => [item['loanMarket'], item])).values()].map((asset, key) => {
                                                   return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
                                               })}
-                                              {/* <MarketDropdownOptions data={activeLoansData} keyName={"loanMarket"}></MarketDropdownOptions> */}
                                             </select>
                                           </Col>
                                         </div>
@@ -932,12 +931,6 @@ const Dashboard = () => {
                                               </select>
                                             </Col>
                                         </div>
-                                        <div className="row mb-4">
-                                          <Col sm={12}>
-                                            <span>Collateral Market</span>
-                                          </Col>
-                                        </div>
-
                                         <div className="d-grid gap-2">
                                           <Button
                                             color="primary"
