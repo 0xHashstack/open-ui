@@ -1,3 +1,4 @@
+
 module.exports = {
     verbose: true,
   /*  clearMocks: true,
@@ -11,9 +12,7 @@ module.exports = {
   /*  transform: {
       "^.+\\.(js) ? $": "babel-jest"
   },*/
-    "setupFiles": [
-      "<rootDir>/test/jest.setup.js"
-    ],
+    "setupFiles": ["<rootDir>/test/jest.setup.js"],
     // "moduleNameMapper": {
     //   "@signals(.*)$": "<rootDir>/test/signals$1",
     //   "@clients(.*)$": "<rootDir>/test/clients$1",
