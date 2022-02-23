@@ -34,7 +34,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import PassbookTBody from "./passbook-body";
 import DashboardTBody from "./dashboard-body";
 import Banner from "../components/banner";
-// import WorkflowInfo from "./workflow-info";
 
 toast.configure({
   autoClose: 4000

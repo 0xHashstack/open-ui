@@ -83,7 +83,7 @@ const Borrow = (props) => {
     const onLoanRequested = (data) => {
       setIsTransactionDone(false);
       const res = data['NewLoan']['returnValues'];
-      let amount = BNtoNum(Number(res.loanAmount), DecimalsMap[res.market]);
+      let amount = BNtoNum(Number(res.loanAmount), DecimalsMap[res.loanMarket]);
       toast.success(`Requested amount: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
 
