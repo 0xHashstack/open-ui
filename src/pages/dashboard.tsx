@@ -666,6 +666,21 @@ const Dashboard = () => {
                                           </Col>
                                         </div>
                                         <div className="row mb-4">
+                                            <Col sm={12}>
+                                              <select className="form-select" onChange={handleLoanCommitementChange}>
+                                                <option hidden>Minimum Commitment Period</option>
+                                                    {activeLoansData.filter((asset) => {
+                                                          return (EventMap[asset.loanMarket.toUpperCase()] === loanOption)
+                                                        })
+                                                        .map(item => item['commitment'])
+                                                        .filter((value, index, self) => self.indexOf(value) === index)
+                                                        .map((asset, key) => {
+                                                        return <option key={key} value={asset}>{EventMap[asset]}</option>
+                                                    })}
+                                              </select>
+                                            </Col>
+                                          </div>
+                                        <div className="row mb-4">
                                           <Col sm={12}>
                                             <select className="form-select" onChange={handleSwapOptionChange}>
                                               <option hidden>Swap Market</option>
@@ -733,9 +748,23 @@ const Dashboard = () => {
                                               {[...new Map(activeLoansData.map((item: any) => [item['loanMarket'], item])).values()].map((asset, key) => {
                                                   return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
                                               })}
-                                              {/* <MarketDropdownOptions data={activeLoansData} keyName={"loanMarket"}></MarketDropdownOptions> */}
                                             </select>
                                           </Col>
+                                        </div>
+                                        <div className="row mb-4">
+                                            <Col sm={12}>
+                                              <select className="form-select" onChange={handleLoanCommitementChange}>
+                                                <option hidden>Minimum Commitment Period</option>
+                                                    {activeLoansData.filter((asset) => {
+                                                          return (EventMap[asset.loanMarket.toUpperCase()] === loanOption)
+                                                        })
+                                                        .map(item => item['commitment'])
+                                                        .filter((value, index, self) => self.indexOf(value) === index)
+                                                        .map((asset, key) => {
+                                                        return <option key={key} value={asset}>{EventMap[asset]}</option>
+                                                    })}
+                                              </select>
+                                            </Col>
                                         </div>
 
                                         <div className="d-grid gap-2">
@@ -800,13 +829,27 @@ const Dashboard = () => {
                                           </Col>
                                         </div>
                                         <div className="row mb-4">
+                                            <Col sm={12}>
+                                              <select className="form-select" onChange={handleLoanCommitementChange}>
+                                                <option hidden>Minimum Commitment Period</option>
+                                                    {activeLoansData.filter((asset) => {
+                                                          return (EventMap[asset.loanMarket.toUpperCase()] === loanOption)
+                                                        })
+                                                        .map(item => item['commitment'])
+                                                        .filter((value, index, self) => self.indexOf(value) === index)
+                                                        .map((asset, key) => {
+                                                        return <option key={key} value={asset}>{EventMap[asset]}</option>
+                                                    })}
+                                              </select>
+                                            </Col>
+                                        </div>
+                                        <div className="row mb-4">
                                           <Col sm={12}>
                                             <select className="form-select" onChange={handleCollateralOptionChange}>
                                               <option hidden>Collateral Market</option>
                                               {[...new Map(activeLoansData.map((item: any) => [item['collateralMarket'], item])).values()].map((asset, key) => {
                                                   return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
                                               })}
-                                              {/* <MarketDropdownOptions data={activeLoansData} keyName={"collateralMarket"}></MarketDropdownOptions> */}
                                             </select>
                                           </Col>
                                         </div>
@@ -873,6 +916,21 @@ const Dashboard = () => {
                                               })}
                                             </select>
                                           </Col>
+                                        </div>
+                                        <div className="row mb-4">
+                                            <Col sm={12}>
+                                              <select className="form-select" onChange={handleLoanCommitementChange}>
+                                                <option hidden>Minimum Commitment Period</option>
+                                                    {activeLoansData.filter((asset) => {
+                                                          return (EventMap[asset.loanMarket.toUpperCase()] === loanOption)
+                                                        })
+                                                        .map(item => item['commitment'])
+                                                        .filter((value, index, self) => self.indexOf(value) === index)
+                                                        .map((asset, key) => {
+                                                        return <option key={key} value={asset}>{EventMap[asset]}</option>
+                                                    })}
+                                              </select>
+                                            </Col>
                                         </div>
                                         <div className="row mb-4">
                                           <Col sm={12}>
