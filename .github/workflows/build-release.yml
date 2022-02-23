@@ -2,9 +2,9 @@ name: open-ui build
 
 on:
   push:
-    branches: [ release-v0.1.0 ]
+    branches: [ release ]
   pull_request:
-    branches: [ release-v0.1.0 ]
+    branches: [ release ]
   workflow_dispatch:
 
 jobs:
