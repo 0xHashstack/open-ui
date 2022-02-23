@@ -289,6 +289,7 @@ const Dashboard = () => {
       const commit = activeLoansData.filter((asset) => {
         return EventMap[asset.loanMarket.toUpperCase()] === loanOption;
       });
+
       const _loanOption: string | undefined =  loanOption;
       const _swapOption: string | undefined =  swapOption;
       const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[_loanOption], BNtoNum(Number(commit[0].loanAmount), DecimalsMap[_loanOption]), DecimalsMap[_loanOption]);
@@ -928,8 +929,8 @@ const Dashboard = () => {
                                             <Col sm={12}>
                                               <select className="form-select" onChange={handleDepositRequestSelect}>
                                                 <option hidden>Select Market</option>
-                                                {[...new Map(activeLoansData.map((item: any) => [item['market'], item])).values()].map((asset, key) => {
-                                                  return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
+                                                {[...new Map(activeDepositsData.map((item: any) => [item['market'], item])).values()].map((asset, key) => {
+                                                  return <option key={key} value={EventMap[asset.market.toUpperCase()]}>{EventMap[asset.market.toUpperCase()]}</option>
                                               })}
                                               </select>
                                             </Col>
@@ -943,7 +944,10 @@ const Dashboard = () => {
                                                 }).map((asset, key) => {
                                                    return <option key={key} value={asset.commitment}>{EventMap[asset.commitment]}</option>
                                                 })} */}
-                                                    {activeDepositsData.map(item => item['commitment'])
+                                                    {activeDepositsData.filter((asset) => {
+                                                          return (EventMap[asset.market.toUpperCase()] === depositRequestSel)
+                                                        })
+                                                        .map(item => item['commitment'])
                                                         .filter((value, index, self) => self.indexOf(value) === index)
                                                         .map((asset, key) => {
                                                         return <option key={key} value={asset}>{EventMap[asset]}</option>
@@ -1008,8 +1012,8 @@ const Dashboard = () => {
                                             <Col sm={12}>
                                               <select className="form-select" onChange={handleWithdrawDepositSelect}>
                                                 <option hidden>Select Market</option>
-                                                {[...new Map(activeLoansData.map((item: any) => [item['market'], item])).values()].map((asset, key) => {
-                                                  return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
+                                                {[...new Map(activeDepositsData.map((item: any) => [item['market'], item])).values()].map((asset, key) => {
+                                                  return <option key={key} value={EventMap[asset.market.toUpperCase()]}>{EventMap[asset.market.toUpperCase()]}</option>
                                               })}
                                               </select>
                                             </Col>
@@ -1018,7 +1022,10 @@ const Dashboard = () => {
                                             <Col sm={12}>
                                               <select className="form-select" onChange={handleWithdrawDepositTime}>
                                                 <option hidden>Minimum Commitment Period</option>
-                                                {activeDepositsData.map(item => item['commitment'])
+                                                {activeDepositsData.filter((asset) => {
+                                                          return (EventMap[asset.market.toUpperCase()] === withdrawDepositSel)
+                                                        })
+                                                        .map(item => item['commitment'])
                                                         .filter((value, index, self) => self.indexOf(value) === index)
                                                         .map((asset, key) => {
                                                         return <option key={key} value={asset}>{EventMap[asset]}</option>
