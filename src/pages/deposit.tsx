@@ -55,10 +55,12 @@ const Deposit = (props) => {
       try {
         setIsTransactionDone(true);
         const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[props.asset], inputVal, DecimalsMap[props.asset]);
+        await approveTransactionHash.wait();
         console.log("Approve Transaction sent: ", approveTransactionHash);
         const _commitPeriod: string | undefined =  commitPeriod;
         
         const tx = await wrapper?.getDepositInstance().depositRequest(SymbolsMap[props.asset], CommitMap[_commitPeriod], inputVal, DecimalsMap[props.asset]);
+        await tx.await();
         console.log(tx);
         onDeposit(tx.events);
       } catch (err) {
