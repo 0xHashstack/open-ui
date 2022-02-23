@@ -9,11 +9,11 @@ import {
 } from "reactstrap";
 
 import {
-  SymbolsMap, DecimalsMap, DepositInterestRates, CommitMap, VariableDepositInterestRates
+  SymbolsMap, DecimalsMap, DepositInterestRates, CommitMap, VariableDepositInterestRates, MinimumAmount
 } from '../blockchain/constants';
 import { Web3ModalContext } from '../contexts/Web3ModalProvider';
 import { Web3WrapperContext } from '../contexts/Web3WrapperProvider';
-import { BNtoNum, GetErrorText } from '../blockchain/utils';
+import { BNtoNum, GetErrorText, NumToBN } from '../blockchain/utils';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -29,14 +29,8 @@ const Deposit = (props) => {
     const [isTransactionDone, setIsTransactionDone] = useState(false);
   
   
-    const { account } = useContext(Web3ModalContext);
+    const { connect, disconnect, account } = useContext(Web3ModalContext);
     const { web3Wrapper: wrapper } = useContext(Web3WrapperContext);
-
-    // useEffect(() => {
-    //   wrapper?.getDepositInstance().deposit.on(EventMap.NEW_DEPOSIT, onDeposit);
-    //   wrapper?.getDepositInstance().deposit.on(EventMap.DEPOSIT_ADDED, onDeposit);
-    //   // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, []);
 
     const handleDepositChange = (e) => {
       setCommitPeriod(e.target.value)
@@ -56,11 +50,14 @@ const Deposit = (props) => {
     }
 
     const handleDeposit = async () => {
+      // console.log( BNtoNum(Number(0.21), 18));
+      // console.log(NumToBN(Number(0.21), 18));
       try {
         setIsTransactionDone(true);
         const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[props.asset], inputVal, DecimalsMap[props.asset]);
         console.log("Approve Transaction sent: ", approveTransactionHash);
         const _commitPeriod: string | undefined =  commitPeriod;
+        
         const tx = await wrapper?.getDepositInstance().depositRequest(SymbolsMap[props.asset], CommitMap[_commitPeriod], inputVal, DecimalsMap[props.asset]);
         console.log(tx);
         onDeposit(tx.events);
@@ -112,7 +109,7 @@ const Deposit = (props) => {
                       type="number"
                       className="form-control"
                       id="amount"
-                      placeholder="Amount"
+                      placeholder={`Min amount should be greater than ${MinimumAmount[props.asset]}`}
                       onChange={handleInputChange}
                     />
                   </Col>

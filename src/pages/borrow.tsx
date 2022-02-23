@@ -31,7 +31,7 @@ const Borrow = (props) => {
     const [loanInputVal, setLoanInputVal] = useState(0);
     const [collateralInputVal, setCollateralInputVal] = useState(0);
   
-    const { account } = useContext(Web3ModalContext);
+    const { connect, disconnect, account } = useContext(Web3ModalContext);
     const { web3Wrapper: wrapper } = useContext(Web3WrapperContext);
 
 
@@ -63,10 +63,10 @@ const Borrow = (props) => {
     const handleBorrow = async () => {
       try {
         setIsTransactionDone(true);
-        const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[props.assetID], loanInputVal, DecimalsMap[props.assetID]);
-        console.log("Approve Transaction sent: ", approveTransactionHash);
         const _commitBorrowPeriod: string | undefined =  commitBorrowPeriod;
         const _collateralMarket: string | undefined =  collateralMarket;
+        const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[_collateralMarket], collateralInputVal, DecimalsMap[_collateralMarket]);
+        console.log("Approve Transaction sent: ", approveTransactionHash);
         const tx = await wrapper?.getLoanInstance().loanRequest(SymbolsMap[props.assetID], CommitMap[_commitBorrowPeriod], loanInputVal, DecimalsMap[props.assetID],
         SymbolsMap[_collateralMarket], collateralInputVal, DecimalsMap[_collateralMarket]);
         onLoanRequested(tx.events);
@@ -83,7 +83,7 @@ const Borrow = (props) => {
     const onLoanRequested = (data) => {
       setIsTransactionDone(false);
       const res = data['NewLoan']['returnValues'];
-      let amount = BNtoNum(Number(res.loanAmount), DecimalsMap[res.market]);
+      let amount = BNtoNum(Number(res.loanAmount), DecimalsMap[res.loanMarket]);
       toast.success(`Requested amount: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
 

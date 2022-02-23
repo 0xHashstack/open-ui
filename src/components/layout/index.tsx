@@ -42,6 +42,7 @@ const Layout = (props) => {
   useEffect(() => {
     dispatch(changePreloader(true));
     setIsResponse(false);
+    let timer;
     if (account) {
       axios.get(`isWhiteListedAccount?address=${account}`)
         .then(res => {
@@ -53,22 +54,26 @@ const Layout = (props) => {
           cacheService.setItem(`${account.toUpperCase()}_IsWhiteListedAccountRequested`, Boolean(cacheService.getItem(`${account.toUpperCase()}_IsWhiteListedAccountRequested`)));
           setIsWhiteListedAccountRequested(Boolean(cacheService.getItem(`${account.toUpperCase()}_IsWhiteListedAccountRequested`)));
           setIsWhiteListedAccount(Boolean(cacheService.getItem(`${account.toUpperCase()}_IsWhiteListedAccount`)));
-          
-          setTimeout(() => {dispatch(changePreloader(false));}, 300);
+          setCounter(res.data['waitlist_ct']);
+          cacheService.setItem(`${account.toUpperCase()}_Waitlist_Counter`, res.data['waitlist_ct']);
+          timer = setTimeout(() => {dispatch(changePreloader(false));}, 300);
           setIsResponse(true);
           setIsTransactionDone(false);
         })
         .catch(err => {
           setIsResponse(true);
+          setIsWhiteListedAccount(true);
           // cacheService.setItem(`${account.toUpperCase()}_IsWhiteListedAccountRequested`, false);
           console.log("Error", err)
         });
     }
+    return () => clearTimeout(timer)
   }, [account]);
 
   const handleConnectWallet = useCallback(() => {
     setIsTransactionDone(true);
     connect();
+    setIsTransactionDone(false);
   }, [connect]);
 
   
@@ -109,12 +114,12 @@ const Layout = (props) => {
     //init body click event fot toggle rightbar
     
     document.body.addEventListener("click", hideRightbar, true);
-
+    let timer;
     if (isPreloader === true) {
       document.getElementById("preloader").style.display = "block";
       document.getElementById("status").style.display = "block";
 
-      setTimeout(function () {
+      timer = setTimeout(function () {
         document.getElementById("preloader").style.display = "none";
         document.getElementById("status").style.display = "none";
       }, 3000);
@@ -122,6 +127,7 @@ const Layout = (props) => {
       document.getElementById("preloader").style.display = "none";
       document.getElementById("status").style.display = "none";
     }
+    return () => clearTimeout(timer)
   }, [isPreloader]);
 
   useEffect(() => {
@@ -157,7 +163,7 @@ const Layout = (props) => {
   }
 
   function switchScreens() {
-    if (account === null) {
+    if ( !account ) {
       return (
         <Container>
           <Row style={{ marginTop: '25ch' }}>
@@ -181,7 +187,7 @@ const Layout = (props) => {
           </Row>
         </Container>
       )
-    } else if (account !== null && isResponse && (!isWhiteListedAccount) && (!isWhiteListedAccountRequested)) {
+    } else if (account && isResponse && (!isWhiteListedAccount) && (!isWhiteListedAccountRequested)) {
       return (
         <Container>
           <Row style={{ marginTop: '25ch' }}>
@@ -204,7 +210,7 @@ const Layout = (props) => {
           </Row>
         </Container>
       )
-    } else if (account !== null && (!isWhiteListedAccount) && isWhiteListedAccountRequested) {
+    } else if (account && (!isWhiteListedAccount) && isWhiteListedAccountRequested) {
       return (
         <Container>
           <Row style={{ marginTop: '25ch' }}>
@@ -228,7 +234,7 @@ const Layout = (props) => {
         </Container>
       )
     }
-     else if (account !== null && isWhiteListedAccount) {
+     else if (account && isWhiteListedAccount) {
       return (
         <div id="layout-wrapper">
           <Header/>
