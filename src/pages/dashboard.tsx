@@ -371,14 +371,14 @@ const Dashboard = () => {
 
   const onCollateralAdded = (data) => {
     const res = data['AddCollateral']['returnValues'];
-    let amount = BNtoNum(Number(res.amount))
+    let amount = BNtoNum(Number(res.amount), DecimalsMap[res.loanMarket])
     toast.success(`Collateral amount added: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     setIsTransactionDone(false);
   }
 
   const onCollateralReleased = (data) => {
     const res = data['CollateralReleased']['returnValues'];
-    let amount = BNtoNum(Number(res.amount))
+    let amount = BNtoNum(Number(res.amount), DecimalsMap[res.loanMarket])
     toast.success(`Collateral amount released: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     setIsTransactionDone(false);
   }
@@ -386,14 +386,14 @@ const Dashboard = () => {
 
   const onLoanWithdrawal = (data) => {
     const res = data['WithdrawPartialLoan']['returnValues'];
-    let amount = BNtoNum(Number(res.amount))
+    let amount = BNtoNum(Number(res.amount), DecimalsMap[res.loanMarket])
     toast.success(`Loan Withdraw Successfully: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     setIsTransactionDone(false);
   }
 
   const onLoanRepay = (data) => {
     const res = data['LoanRepaid']['returnValues'];
-    let amount = BNtoNum(Number(res.amount))
+    let amount = BNtoNum(Number(res.amount), DecimalsMap[res.loanMarket])
     toast.success(`Loan Repaid Successfully: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     setIsTransactionDone(false);
   }
@@ -407,14 +407,14 @@ const Dashboard = () => {
 
   const onSwap = (data) => {
     const res = data['MarketSwapped']['returnValues'];
-    let amount = BNtoNum(Number(res.amount),DecimalsMap[res.market]);
+    let amount = BNtoNum(Number(res.amount),DecimalsMap[res.loanMarket]);
     toast.success(`Swap Loan successful: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     setIsTransactionDone(false);
   }
 
   const onSwapToLoan = (data) => {
     const res = data['MarketSwapped']['returnValues'];
-    let amount = BNtoNum(Number(res.amount),DecimalsMap[res.market]);
+    let amount = BNtoNum(Number(res.amount),DecimalsMap[res.loanMarket]);
     toast.success(`Swap to Loan successful: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     setIsTransactionDone(false);
   }
@@ -998,11 +998,6 @@ const Dashboard = () => {
                                             <Col sm={12}>
                                               <select className="form-select" onChange={handleDepositRequestTime}>
                                                 <option hidden>Minimum Commitment Period</option>
-                                                {/* {activeDepositsData.filter((asset) => {
-                                                  return (EventMap[asset.market.toUpperCase()] === depositRequestSel)
-                                                }).map((asset, key) => {
-                                                   return <option key={key} value={asset.commitment}>{EventMap[asset.commitment]}</option>
-                                                })} */}
                                                     {activeDepositsData.filter((asset) => {
                                                           return (EventMap[asset.market.toUpperCase()] === depositRequestSel)
                                                         })
@@ -1028,7 +1023,6 @@ const Dashboard = () => {
 
                                           <div className="d-grid gap-2">
                                             <Button
-                                              // type="submit"
                                               color="primary"
                                               className="w-md"
                                               disabled={isTransactionDone}
@@ -1106,7 +1100,6 @@ const Dashboard = () => {
 
                                           <div className="d-grid gap-2">
                                             <Button
-                                              // type="submit"
                                               color="primary"
                                               className="w-md"
                                               disabled={isTransactionDone}
