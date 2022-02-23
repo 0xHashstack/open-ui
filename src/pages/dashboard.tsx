@@ -1023,7 +1023,7 @@ const Dashboard = () => {
                                               <select className="form-select" onChange={handleWithdrawDepositTime}>
                                                 <option hidden>Minimum Commitment Period</option>
                                                 {activeDepositsData.filter((asset) => {
-                                                          return (EventMap[asset.market.toUpperCase()] === depositRequestSel)
+                                                          return (EventMap[asset.market.toUpperCase()] === withdrawDepositSel)
                                                         })
                                                         .map(item => item['commitment'])
                                                         .filter((value, index, self) => self.indexOf(value) === index)
