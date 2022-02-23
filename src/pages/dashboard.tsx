@@ -61,6 +61,8 @@ const Dashboard = () => {
 
   const [loanOption, setLoanOption] = useState();
   const [swapOption, setSwapOption] = useState();
+  const [loanCommitement, setLoanCommitement] = useState();
+
   const [collateralOption, setCollateralOption] = useState();
   const [depositInterestChange, setDepositInterestChange] = useState("NONE");
   const [borrowInterestChange, setBorrowInterestChange] = useState("NONE");
@@ -71,6 +73,7 @@ const Dashboard = () => {
   const [withdrawDepositVal, setWithdrawDepositVal] = useState();
 
 
+  const [repayLoanTooltipOpen, setRepayLoanTooltipOpen] = useState(false);
   const [swapLoanTooltipOpen, setSwapLoanTooltipOpen] = useState(false);
   const [swapToLoanTooltipOpen, setSwapToLoanTooltipOpen] = useState(false);
   const [addCollateralTooltipOpen, setAddCollateralTooltipOpen] = useState(false);
@@ -166,6 +169,11 @@ const Dashboard = () => {
     setLoanOption(e.target.value)
   }
 
+  const handleLoanCommitementChange = (e) => {
+    setLoanCommitement(e.target.value)
+  }
+
+  
   const handleSwapOptionChange = (e) => {
     setSwapOption(e.target.value)
   }
@@ -200,16 +208,13 @@ const Dashboard = () => {
   const handleRepay = async () => {
     try {
       setIsTransactionDone(true);
-      const commit = activeLoansData.filter((asset) => {
-        return EventMap[asset.loanMarket.toUpperCase()] === loanOption;
-      });
       const _loanOption: string | undefined =  loanOption;
       const market = SymbolsMap[_loanOption];
       const decimal = DecimalsMap[_loanOption];
-      const comm = CommitMap[commit[0].commitment];
+      const _commit: string | undefined = loanCommitement;
       const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[_loanOption], inputVal1, DecimalsMap[_loanOption]);
       console.log("Approve Transaction sent: ", approveTransactionHash);
-      const tx = await wrapper?.getLoanInstance().repayLoan(market, comm, inputVal1, decimal);
+      const tx = await wrapper?.getLoanInstance().repayLoan(market, CommitMap[_commit], inputVal1, decimal);
       onLoanRepay(tx.events);
     } catch (err) {
       setIsTransactionDone(false);
@@ -224,12 +229,10 @@ const Dashboard = () => {
   const handleWithdrawLoan = async () => {
     try {
       setIsTransactionDone(true);
-      const commit = activeLoansData.filter((asset) => {
-        return EventMap[asset.loanMarket.toUpperCase()] === loanOption;
-      });
       const _loanOption: string | undefined =  loanOption;
-
-      const tx = await wrapper?.getLoanInstance().permissibleWithdrawal(SymbolsMap[_loanOption], CommitMap[commit[0].commitment], inputVal1, DecimalsMap[_loanOption]);
+      const _commit: string | undefined = loanCommitement;
+      debugger;
+      const tx = await wrapper?.getLoanInstance().permissibleWithdrawal(SymbolsMap[_loanOption], CommitMap[_commit], inputVal1, DecimalsMap[_loanOption]);
       onLoanWithdrawal(tx.events);
     } catch (err) {
       setIsTransactionDone(false);
@@ -245,14 +248,12 @@ const Dashboard = () => {
   const handleCollateral = async () => {
     try {
       setIsTransactionDone(true);
-      const commit = activeLoansData.filter((asset) => {
-        return EventMap[asset.loanMarket.toUpperCase()] === loanOption;
-      });
       const _loanOption: string | undefined =  loanOption;
       const _collateralOption: string | undefined =  collateralOption;
+      const _commit: string | undefined = loanCommitement;
       const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[_loanOption], inputVal1, DecimalsMap[_loanOption]);
       console.log("Approve Transaction sent: ", approveTransactionHash);
-      const tx = await wrapper?.getLoanInstance().addCollateral(SymbolsMap[_loanOption], CommitMap[commit[0].commitment], inputVal1, DecimalsMap[_loanOption]);
+      const tx = await wrapper?.getLoanInstance().addCollateral(SymbolsMap[_loanOption], CommitMap[_commit], inputVal1, DecimalsMap[_loanOption]);
       onCollateralAdded(tx.events);
     } catch (err) {
       setIsTransactionDone(false);
@@ -267,11 +268,9 @@ const Dashboard = () => {
   const handleWithdrawCollateral = async () => {
     try {
       setIsTransactionDone(true);
-      const commit = activeLoansData.filter((asset) => {
-        return EventMap[asset.loanMarket.toUpperCase()] === loanOption;
-      });
       const _loanOption: string | undefined =  loanOption;
-      const tx = await wrapper?.getLoanInstance().withdrawCollateral(SymbolsMap[_loanOption], CommitMap[commit[0].commitment]);
+      const _commit: string | undefined = loanCommitement;
+      const tx = await wrapper?.getLoanInstance().withdrawCollateral(SymbolsMap[_loanOption], CommitMap[_commit]);
       onCollateralReleased(tx.events);
     } catch (err) {
       setIsTransactionDone(false);
@@ -286,15 +285,16 @@ const Dashboard = () => {
   const handleSwap = async () => {
     try {
       setIsTransactionDone(true);
-      const commit = activeLoansData.filter((asset) => {
-        return EventMap[asset.loanMarket.toUpperCase()] === loanOption;
-      });
+      // const commit = activeLoansData.filter((asset) => {
+      //   return EventMap[asset.loanMarket.toUpperCase()] === loanOption && EventMap[asset.commitment.toUpperCase()] === loanCommitement; 
+      // });
 
       const _loanOption: string | undefined =  loanOption;
       const _swapOption: string | undefined =  swapOption;
-      const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[_loanOption], BNtoNum(Number(commit[0].loanAmount), DecimalsMap[_loanOption]), DecimalsMap[_loanOption]);
-      console.log("Approve Transaction sent: ", approveTransactionHash);
-      const tx = await wrapper?.getLoanInstance().swapLoan(SymbolsMap[_loanOption], CommitMap[commit[0].commitment], SymbolsMap[_swapOption]);
+      const _commit: string | undefined = loanCommitement;
+      // const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[_loanOption], BNtoNum(Number(commit[0].loanAmount), DecimalsMap[_loanOption]), DecimalsMap[_loanOption]);
+      // console.log("Approve Transaction sent: ", approveTransactionHash);
+      const tx = await wrapper?.getLoanInstance().swapLoan(SymbolsMap[_loanOption], CommitMap[_commit], SymbolsMap[_swapOption]);
       onSwap(tx.events);
     } catch (err) {
       setIsTransactionDone(false);
@@ -310,13 +310,14 @@ const Dashboard = () => {
     try {
       setIsTransactionDone(true);
       const commit = activeLoansData.filter((asset) => {
-        return EventMap[asset.loanMarket.toUpperCase()] === loanOption;
+        return EventMap[asset.loanMarket.toUpperCase()] === loanOption && EventMap[asset.commitment.toUpperCase()] === loanCommitement; 
       });
       const _loanOption: string | undefined =  loanOption;
-      const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[_loanOption], BNtoNum(Number(commit[0].loanAmount), DecimalsMap[_loanOption]), DecimalsMap[_loanOption]);
-      console.log("Approve Transaction sent: ", approveTransactionHash);
+      const _commit: string | undefined = loanCommitement;
+      // const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[_loanOption], BNtoNum(Number(commit[0].loanAmount), DecimalsMap[_loanOption]), DecimalsMap[_loanOption]);
+      // console.log("Approve Transaction sent: ", approveTransactionHash);
 
-      const tx = await wrapper?.getLoanInstance().swapToLoan( SymbolsMap[_loanOption],CommitMap[commit[0].commitment]);
+      const tx = await wrapper?.getLoanInstance().swapToLoan( SymbolsMap[_loanOption],CommitMap[_commit]);
       onSwapToLoan(tx.events);
     } catch (err) {
       setIsTransactionDone(false);
@@ -497,12 +498,16 @@ const Dashboard = () => {
                                     <Button
                                       className="btn-block btn-sm"
                                       color="light"
+                                      id="RepayLoanButton"
                                       outline
                                       onClick={() => {
-                                        tog_repay_loan();
+                                        // tog_repay_loan();
                                       }}
                                     >
                                       Repay Loan
+                                      <Tooltip placement="top" target="RepayLoanButton" autohide={true} isOpen={repayLoanTooltipOpen} toggle={() => {setRepayLoanTooltipOpen(!repayLoanTooltipOpen)}}>
+                                      This features will be activated this friday.
+                                    </Tooltip>
                                     </Button>
                                     <Modal
                                       isOpen={modal_repay_loan}
@@ -520,6 +525,21 @@ const Dashboard = () => {
                                                 {[...new Map(activeLoansData.map((item: any) => [item['loanMarket'], item])).values()].map((asset, key) => {
                                                   return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
                                               })}
+                                              </select>
+                                            </Col>
+                                          </div>
+                                          <div className="row mb-4">
+                                            <Col sm={12}>
+                                              <select className="form-select" onChange={handleLoanCommitementChange}>
+                                                <option hidden>Minimum Commitment Period</option>
+                                                    {activeLoansData.filter((asset) => {
+                                                          return (EventMap[asset.loanMarket.toUpperCase()] === loanOption)
+                                                        })
+                                                        .map(item => item['commitment'])
+                                                        .filter((value, index, self) => self.indexOf(value) === index)
+                                                        .map((asset, key) => {
+                                                        return <option key={key} value={asset}>{EventMap[asset]}</option>
+                                                    })}
                                               </select>
                                             </Col>
                                           </div>
@@ -581,6 +601,21 @@ const Dashboard = () => {
                                                 {[...new Map(activeLoansData.map((item: any) => [item['loanMarket'], item])).values()].map((asset, key) => {
                                                   return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
                                               })}
+                                              </select>
+                                            </Col>
+                                          </div>
+                                          <div className="row mb-4">
+                                            <Col sm={12}>
+                                              <select className="form-select" onChange={handleLoanCommitementChange}>
+                                                <option hidden>Minimum Commitment Period</option>
+                                                    {activeLoansData.filter((asset) => {
+                                                          return (EventMap[asset.loanMarket.toUpperCase()] === loanOption)
+                                                        })
+                                                        .map(item => item['commitment'])
+                                                        .filter((value, index, self) => self.indexOf(value) === index)
+                                                        .map((asset, key) => {
+                                                        return <option key={key} value={asset}>{EventMap[asset]}</option>
+                                                    })}
                                               </select>
                                             </Col>
                                           </div>
@@ -653,7 +688,6 @@ const Dashboard = () => {
                                               {[...new Map(activeLoansData.map((item: any) => [item['loanMarket'], item])).values()].map((asset, key) => {
                                                   return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
                                               })}
-                                              {/* <MarketDropdownOptions data={activeLoansData} keyName={"loanMarket"}></MarketDropdownOptions> */}
                                             </select>
                                           </Col>
                                         </div>
