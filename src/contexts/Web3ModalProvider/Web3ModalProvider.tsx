@@ -112,6 +112,7 @@ const Web3ModalProvider = (props: any) => {
     await providerX.send("eth_requestAccounts", [])
     const _accountX = await providerX.getSigner()
     console.log("AccountX: ", _accountX.getAddress())
+    setSigner(_accountX)
     const _account = _accountX.getAddress()
     const _chainId = (await providerX.getNetwork()).chainId
     console.log("ChainIdX: ", _chainId)
