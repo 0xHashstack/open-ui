@@ -1,13 +1,14 @@
-import Deposit from '../contracts/Deposit';
-import { NumToBN } from '../utils';
+import abi from "../abis/Deposit.json";
+import { NumToBN } from "../utils";
+import { ethers } from "ethers";
 
-class DepositWrapper {  
-    // Contracts
-    deposit: Deposit;
-  
-    constructor(wrapperOptions: any) {
-        this.deposit = new Deposit(wrapperOptions, process.env.REACT_APP_DIAMOND_ADDRESS);
-    }
+class DepositWrapper {
+  // Contracts
+  deposit: any
+
+  constructor(signer: any) {
+    this.deposit = new ethers.Contract(process.env.REACT_APP_DIAMOND_ADDRESS, abi, signer)
+  }
 
     //send transaction methods
     // createDeposit(market: string, commitment: string, amount: number, decimal: number) {
@@ -17,11 +18,11 @@ class DepositWrapper {
     // }
 
     depositRequest(market: string, commitment: string, amount: number, decimal: number) {
-        return this.deposit.send("depositRequest", {}, market, commitment, NumToBN(amount, decimal));
+        return this.deposit.depositRequest(market, commitment, NumToBN(amount, decimal));
     }
     
     withdrawDeposit(market: string, commitment: string, amount: number, decimal: number) {
-        return this.deposit.send("withdrawDeposit", {}, market, commitment, NumToBN(amount, decimal));
+        return this.deposit.withdrawDeposit(market, commitment, NumToBN(amount, decimal));
     }
 
     // convertYeild(market: string, commitment: string) {
@@ -35,36 +36,36 @@ class DepositWrapper {
     // }
 
     hasAccount(address: string) {
-        return this.deposit.call("hasAccount", address);
+        return this.deposit.hasAccount(address);
     }
 
     hasYield(market: string, commitment: string) {
-        return this.deposit.call("hasYeild", market, commitment);
+        return this.deposit.hasYeild(market, commitment);
     }
 
     avblReservesDeposit(market: string) {
-        return this.deposit.call("avblReservesDeposit", market);
+        return this.deposit.avblReservesDeposit(market);
     }
 
     utilisedReservesDeposit(market: string) {
-        return this.deposit.call("utilisedReservesDeposit", market);
+        return this.deposit.utilisedReservesDeposit(market);
     }
 
     hasDeposit(market: string, commitment: string) {
-        return this.deposit.call("hasDeposit", market, commitment);
+        return this.deposit.hasDeposit(market, commitment);
     }
 
     isPausedDeposit() {
-        return this.deposit.call("isPausedDeposit");
+        return this.deposit.isPausedDeposit();
     }
 
     //admin operations
     pauseDeposit() {
-        return this.deposit.send("pauseDeposit", {});
+        return this.deposit.pauseDeposit();
     }
 
     unpauseDeposit() {
-        return this.deposit.send("unpauseDeposit", {});
+        return this.deposit.unpauseDeposit();
     }
      
 }
