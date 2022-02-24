@@ -108,6 +108,14 @@ export const OnSuccessCallback = (data, eventName, key, message) => {
   toast.success(`${message}: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
 }
 
+export const OnErrorCallback = (err) => {
+  if (err instanceof Object) {
+    toast.error(`${GetErrorText(String(err['message']))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
+  } else {
+    toast.error(`${GetErrorText(String(err))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
+  }
+}
+
 export const providerOptions = {
   walletconnect: {
     package: WalletConnectProvider,
