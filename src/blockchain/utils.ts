@@ -71,18 +71,27 @@ export const NumToBN = (value: number, decimal: number= 18) => {
 }
 
 export const GetErrorText = (err) => {
-  if (err) {
-    try {
-      return JSON.parse(err.split('.')[1]).message || 'Oops! Something went wrong.';
-    }
-    catch (error) {
-      console.log(error);
-      return err;
-    }
+  // if (err) {
+  //   try {
+  //     return JSON.parse(err.split('.')[1]).message || 'Oops! Something went wrong.';
+  //   }
+  //   catch (error) {
+  //     console.log(error);
+  //     return err;
+  //   }
+  // }
+  // else {
+  //   return 'Oops! Something went wrong.';
+  // }
+  if (typeof(err) == 'string') {
+    return err;
   }
-  else {
-    return 'Oops! Something went wrong.';
-  }
+  else if(err.data)
+    return err.data.message;
+  else if(err.message)
+    return err.message;
+  else
+    return "Oops! Something went wrong."
 }
 
 export const toFixed = (num: number, digit: number) => {
