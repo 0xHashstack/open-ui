@@ -217,12 +217,6 @@ const Dashboard = () => {
       const tx = await wrapper?.getLoanInstance().repayLoan(market, CommitMap[_commit], inputVal1, decimal);
       onSuccessCallback(tx.events, EventMap.REPAY_LOAN, 'loanMarket', 'Loan Repaid Successfully');
     } catch (err) {
-      // setIsTransactionDone(false);
-      // if (err instanceof Object) {
-      //   toast.error(`${GetErrorText(String(err['message']))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
-      // } else {
-      //   toast.error(`${GetErrorText(String(err))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
-      // }
       onErroCallback(err);
     }
   }
@@ -236,12 +230,6 @@ const Dashboard = () => {
       const tx = await wrapper?.getLoanInstance().permissibleWithdrawal(SymbolsMap[_loanOption], CommitMap[_commit], inputVal1, DecimalsMap[_loanOption]);
       onSuccessCallback(tx.events, EventMap.WITHDRAW_LOAN, 'loanMarket', 'Loan Withdraw Successfully');
     } catch (err) {
-      // setIsTransactionDone(false);
-      // if (err instanceof Object) {
-      //   toast.error(`${GetErrorText(String(err['message']))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
-      // } else {
-      //   toast.error(`${GetErrorText(String(err))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
-      // }
       onErroCallback(err);
     }
   }
@@ -258,12 +246,6 @@ const Dashboard = () => {
       const tx = await wrapper?.getLoanInstance().addCollateral(SymbolsMap[_loanOption], CommitMap[_commit], inputVal1, DecimalsMap[_loanOption]);
       onSuccessCallback(tx.events, EventMap.ADD_COLLATERAL, 'loanMarket', 'Collateral amount added');
     } catch (err) {
-      // setIsTransactionDone(false);
-      // if (err instanceof Object) {
-      //   toast.error(`${GetErrorText(String(err['message']))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
-      // } else {
-      //   toast.error(`${GetErrorText(String(err))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
-      // }
       onErroCallback(err);
     }
   }
@@ -276,12 +258,6 @@ const Dashboard = () => {
       const tx = await wrapper?.getLoanInstance().withdrawCollateral(SymbolsMap[_loanOption], CommitMap[_commit]);
       onSuccessCallback(tx.events, EventMap.WITHDRAW_COLLATERAL, 'loanMarket', 'Collateral amount released');
     } catch (err) {
-      // setIsTransactionDone(false);
-      // if (err instanceof Object) {
-      //   toast.error(`${GetErrorText(String(err['message']))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
-      // } else {
-      //   toast.error(`${GetErrorText(String(err))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
-      // }
       onErroCallback(err);
     }
   }
@@ -301,12 +277,6 @@ const Dashboard = () => {
       const tx = await wrapper?.getLoanInstance().swapLoan(SymbolsMap[_loanOption], CommitMap[_commit], SymbolsMap[_swapOption]);
       onSuccessCallback(tx.events, EventMap.SWAP_LOAN, 'loanMarket', 'Swap Loan successful');
     } catch (err) {
-      // setIsTransactionDone(false);
-      // if (err instanceof Object) {
-      //   toast.error(`${GetErrorText(String(err['message']))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
-      // } else {
-      //   toast.error(`${GetErrorText(String(err))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
-      // }
       onErroCallback(err);
     }
   }
@@ -325,12 +295,6 @@ const Dashboard = () => {
       const tx = await wrapper?.getLoanInstance().swapToLoan( SymbolsMap[_loanOption],CommitMap[_commit]);
       onSuccessCallback(tx.events, EventMap.SWAP_TO_LOAN, 'loanMarket', 'Swap to Loan successful');
     } catch (err) {
-      // setIsTransactionDone(false);
-      // if (err instanceof Object) {
-      //   toast.error(`${GetErrorText(String(err['message']))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
-      // } else {
-      //   toast.error(`${GetErrorText(String(err))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
-      // }
       onErroCallback(err);
     }
   }
@@ -345,12 +309,6 @@ const Dashboard = () => {
       const tx = await wrapper?.getDepositInstance().depositRequest(SymbolsMap[_depositRequestSel.toUpperCase()], CommitMap[_depositRequestVal], inputVal1, DecimalsMap[_depositRequestSel.toUpperCase()]);
       onSuccessCallback(tx.events, EventMap.DEPOSIT_ADDED, 'market', 'Deposited amount');
     } catch (err) {
-      // setIsTransactionDone(false);
-      // if (err instanceof Object) {
-      //   toast.error(`${GetErrorText(String(err['message']))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
-      // } else {
-      //   toast.error(`${GetErrorText(String(err))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
-      // }
       onErroCallback(err);
     }
   }
@@ -366,12 +324,6 @@ const Dashboard = () => {
        CommitMap[_withdrawDepositVal], inputVal1, DecimalsMap[_withdrawDepositSel.toUpperCase()]);
       onSuccessCallback(tx.events, EventMap.WITHDRAW_DEPOSIT, 'market', 'Deposit Withdrawn');
     } catch (err) {
-      // setIsTransactionDone(false);
-      // if (err instanceof Object) {
-      //   toast.error(`${GetErrorText(String(err['message']))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
-      // } else {
-      //   toast.error(`${GetErrorText(String(err))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
-      // }
       onErroCallback(err);
     }
   }
