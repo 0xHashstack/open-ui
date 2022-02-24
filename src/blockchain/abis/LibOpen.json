@@ -99,18 +99,6 @@
       },
       {
         "indexed": true,
-        "internalType": "bytes32",
-        "name": "fromMarket",
-        "type": "bytes32"
-      },
-      {
-        "indexed": true,
-        "internalType": "bytes32",
-        "name": "toMarket",
-        "type": "bytes32"
-      },
-      {
-        "indexed": false,
         "internalType": "uint256",
         "name": "currentAmount",
         "type": "uint256"
