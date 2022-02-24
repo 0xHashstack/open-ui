@@ -27,14 +27,11 @@ const Header = () => {
 
   async function handleGetToken (event: any) {
     try {
-      const tx = await wrapper?.getFaucetInstance().getTokens(event.target.textContent);
+      const tx1 = await wrapper?.getFaucetInstance().getTokens(event.target.textContent);
+      const tx = await tx1.wait();
       onSuccessCallback(tx.events);
     } catch (error) {
-      if (error instanceof Object) {
-        toast.error(`${GetErrorText(String(error['message']))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
-      } else {
-        toast.error(`${GetErrorText(String(error))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
-      }
+        toast.error(`${GetErrorText(error)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
       
     }
   }
@@ -42,6 +39,7 @@ const Header = () => {
 
   
   const onSuccessCallback = (data) => {
+    console.log("Data:", data);
     toast.success(`${data.message || 'Tokens Received Successfully.'}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
   };
 
