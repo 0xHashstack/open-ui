@@ -2,7 +2,7 @@ import { createContext, useCallback, useEffect, useState } from "react"
 import Web3Modal from "web3modal"
 import Web3 from "web3"
 import { ethers } from "ethers"
-import { createWeb3, providerOptions } from "blockchain/utils"
+import { providerOptions } from "blockchain/utils"
 import { toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { string } from "prop-types"
@@ -107,15 +107,12 @@ const Web3ModalProvider = (props: any) => {
 
     //============================================================================================================//
     const providerX = new ethers.providers.Web3Provider(_provider)
-    console.log("Provider: ", providerX)
     setWeb3(providerX);
     await providerX.send("eth_requestAccounts", [])
     const _accountX = await providerX.getSigner()
-    console.log("AccountX: ", _accountX.getAddress())
     setSigner(_accountX)
     const _account = _accountX.getAddress()
     const _chainId = (await providerX.getNetwork()).chainId
-    console.log("ChainIdX: ", _chainId)
     //===========================================================================================================//
     if (_chainId != BSCChainId) {
       toast.warn(`Please connect to BSC Testnet`, {

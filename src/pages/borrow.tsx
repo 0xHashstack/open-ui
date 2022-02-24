@@ -85,13 +85,10 @@ const Borrow = (props) => {
       if (e.event == "NewLoan") {
         eventName = e.event
         _amount = e.args.amount.toBigInt()
-        console.log("Event Name: ", eventName)
-        console.log("Amount: ", _amount)
       }
     })
 
     let amount = BNtoNum(_amount)
-    console.log("Final Amount: ", amount)
       setIsTransactionDone(false);
       // const res = data['NewLoan']['returnValues'];
       // let amount = BNtoNum(Number(res.loanAmount), DecimalsMap[res.market]);

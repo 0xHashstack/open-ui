@@ -210,11 +210,7 @@ const Dashboard = () => {
       onLoanRepay(tx.events)
     } catch (err) {
       setIsTransactionDone(false);
-      if (err instanceof Object) {
-        toast.error(`${GetErrorText(String(err['message']))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
-      } else {
-        toast.error(`${GetErrorText(String(err))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
-      }
+        toast.error(`${GetErrorText(err)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
   }
 
@@ -230,12 +226,8 @@ const Dashboard = () => {
       const tx = await tx1.wait()
       onLoanWithdrawal(tx.events);
     } catch (err) {
-      setIsTransactionDone(false);
-      if (err instanceof Object) {
-        toast.error(`${GetErrorText(String(err['message']))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
-      } else {
-        toast.error(`${GetErrorText(String(err))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
-      }
+      setIsTransactionDone(false);      
+        toast.error(`${GetErrorText(err)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
   }
 
@@ -256,11 +248,7 @@ const Dashboard = () => {
       onCollateralAdded(tx.events);
     } catch (err) {
       setIsTransactionDone(false);
-      if (err instanceof Object) {
-        toast.error(`${GetErrorText(String(err['message']))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
-      } else {
-        toast.error(`${GetErrorText(String(err))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
-      }
+        toast.error(`${GetErrorText(err)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
   }
 
@@ -276,11 +264,7 @@ const Dashboard = () => {
       onCollateralReleased(tx.events);
     } catch (err) {
       setIsTransactionDone(false);
-      if (err instanceof Object) {
-        toast.error(`${GetErrorText(String(err['message']))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
-      } else {
-        toast.error(`${GetErrorText(String(err))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
-      }
+        toast.error(`${GetErrorText(err)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
   }
 
@@ -300,11 +284,7 @@ const Dashboard = () => {
       onSwap(tx.events);
     } catch (err) {
       setIsTransactionDone(false);
-      if (err instanceof Object) {
-        toast.error(`${GetErrorText(String(err['message']))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
-      } else {
         toast.error(`${GetErrorText(String(err))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
-      }
     }
   }
 
@@ -324,11 +304,7 @@ const Dashboard = () => {
       onSwapToLoan(tx.events);
     } catch (err) {
       setIsTransactionDone(false);
-      if (err instanceof Object) {
-        toast.error(`${GetErrorText(String(err['message']))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
-      } else {
-        toast.error(`${GetErrorText(String(err))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
-      }
+        toast.error(`${GetErrorText(err)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
   }
 
@@ -345,11 +321,7 @@ const Dashboard = () => {
       onDeposit(tx.events);
     } catch (err) {
       setIsTransactionDone(false);
-      if (err instanceof Object) {
-        toast.error(`${GetErrorText(String(err['message']))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
-      } else {
-        toast.error(`${GetErrorText(String(err))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
-      }
+        toast.error(`${GetErrorText(err)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
   }
 
@@ -366,11 +338,7 @@ const Dashboard = () => {
        WithdrawalDeposit(tx.events);
     } catch (err) {
       setIsTransactionDone(false);
-      if (err instanceof Object) {
-        toast.error(`${GetErrorText(String(err['message']))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
-      } else {
-        toast.error(`${GetErrorText(String(err))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
-      }
+        toast.error(`${GetErrorText(err)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
   }
 
@@ -382,13 +350,11 @@ const Dashboard = () => {
         if (e.event == "AddCollateral") {
           eventName = e.event
           _amount = e.args.amount.toBigInt()
-          console.log("Event Name: ", eventName)
-          console.log("Amount: ", _amount)
         }
       })
       
     let amount = BNtoNum(_amount)
-    console.log("Final Amount: ", amount)
+    
     // const res = data['AddCollateral']['returnValues'];
     // let amount = BNtoNum(Number(res.amount))
     toast.success(`Collateral amount added: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
@@ -402,13 +368,11 @@ const Dashboard = () => {
             if (e.event == "CollateralReleased") {
               eventName = e.event
               _amount = e.args.amount.toBigInt()
-              console.log("Event Name: ", eventName)
-              console.log("Amount: ", _amount)
             }
           })
 
           let amount = BNtoNum(_amount)
-          console.log("Final Amount: ", amount)
+          
     // const res = data['CollateralReleased']['returnValues'];
     // let amount = BNtoNum(Number(res.amount))
     toast.success(`Collateral amount released: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
@@ -423,13 +387,11 @@ const Dashboard = () => {
       if (e.event == "WithdrawPartialLoan") {
           eventName = e.event
           _amount = e.args.amount.toBigInt()
-          console.log("Event Name: ", eventName)
-          console.log("Amount: ", _amount)
       }
     })
 
     let amount = BNtoNum(_amount)
-    console.log("Final Amount: ", amount)
+    
     
     // const res = data['WithdrawPartialLoan']['returnValues'];
     // let amount = BNtoNum(Number(res.amount))
@@ -444,13 +406,11 @@ const Dashboard = () => {
       if (e.event == "LoanRepaid") {
         eventName = e.event
         _amount = e.args.amount.toBigInt()
-        console.log("Event Name: ", eventName)
-        console.log("Amount: ", _amount)
       }
     })
 
     let amount = BNtoNum(_amount)
-    console.log("Final Amount: ", amount)
+    
     // const res = data['LoanRepaid']['returnValues'];
     // let amount = BNtoNum(Number(res.amount))
     toast.success(`Loan Repaid Successfully: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
@@ -464,13 +424,11 @@ const Dashboard = () => {
       if (e.event == "DepositAdded") {
         eventName = e.event
         _amount = e.args.amount.toBigInt()
-        console.log("Event Name: ", eventName)
-        console.log("Amount: ", _amount)
       }
     })
 
     let amount = BNtoNum(_amount)
-    console.log("Final Amount: ", amount)
+    
     // const res = data['DepositAdded']['returnValues'];
     // let amount = BNtoNum(Number(res.amount),DecimalsMap[res.market]);
     toast.success(`Deposited amount: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
@@ -484,13 +442,11 @@ const Dashboard = () => {
       if (e.event == "MarketSwapped") {
         eventName = e.event
         _amount = e.args.amount.toBigInt()
-        console.log("Event Name: ", eventName)
-        console.log("Amount: ", _amount)
       }
     })
 
     let amount = BNtoNum(_amount)
-    console.log("Final Amount: ", amount)
+    
     // const res = data['MarketSwapped']['returnValues'];
     // let amount = BNtoNum(Number(res.amount),DecimalsMap[res.market]);
     toast.success(`Swap Loan successful: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
@@ -504,13 +460,11 @@ const Dashboard = () => {
       if (e.event == "MarketSwapped") {
         eventName = e.event
         _amount = e.args.amount.toBigInt()
-        console.log("Event Name: ", eventName)
-        console.log("Amount: ", _amount)
       }
     })
 
     let amount = BNtoNum(_amount)
-    console.log("Final Amount: ", amount)
+    
     // const res = data['MarketSwapped']['returnValues'];
     // let amount = BNtoNum(Number(res.amount),DecimalsMap[res.market]);
     toast.success(`Swap to Loan successful: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
@@ -524,13 +478,10 @@ const Dashboard = () => {
       if (e.event == "Withdrawal") {
         eventName = e.event
         _amount = e.args.amount.toBigInt()
-        console.log("Event Name: ", eventName)
-        console.log("Amount: ", _amount)
       }
     })
 
     let amount = BNtoNum(_amount)
-    console.log("Final Amount: ", amount)
     // const res = data['Withdrawal']['returnValues'];
     // let amount = BNtoNum(Number(res.amount), DecimalsMap[res.market])
     toast.success(`Deposit Withdrawn: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});

@@ -1,5 +1,3 @@
-import Web3 from 'web3';
-import { defaultChainId, rpcUrls } from './constants';
 import { BigNumber } from "bignumber.js";
 import TokenList from './contracts/TokenList';
 import Fortmatic from "fortmatic";
@@ -11,38 +9,7 @@ import DcentProvider from "dcent-provider";
 import Authereum from "authereum";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 
-export const createWeb3 = (provider) => {
-  var realProvider;
 
-  if (typeof provider === 'string') {
-    if (provider.includes('wss')) {
-      realProvider = new Web3.providers.WebsocketProvider(
-        provider
-      );
-    } else {
-      realProvider = new Web3.providers.HttpProvider(
-        provider
-      );
-    }
-  } else {
-    realProvider = provider;
-  }
-
-  return new Web3(realProvider);
-}
-
-export const getDefaultWeb3 = () => {
-  return createWeb3(rpcUrls[defaultChainId]);
-}
-
-export const getDefaultContractOptions = () => {
-  const web3 = getDefaultWeb3();
-  return {
-    web3,
-    chainId: defaultChainId,
-    account: null
-  };
-}
 
 export const fixedSpecial = (num: number, n: number) => {
   var str = num.toFixed(n);
@@ -101,13 +68,13 @@ export const toFixed = (num: number, digit: number) => {
 }
 
 
-export const isMarketSupported = async (symbol: string) => {
-  const tokenList = new TokenList(getDefaultContractOptions(), process.env.REACT_APP_DIAMOND_ADDRESS);
-  const isSupported = await tokenList.call("isMarketSupported", symbol);
-  return {
-    isSupport: isSupported
-  }
-}
+// export const isMarketSupported = async (symbol: string) => {
+//   const tokenList = new TokenList(getDefaultContractOptions(), process.env.REACT_APP_DIAMOND_ADDRESS);
+//   const isSupported = await tokenList.call("isMarketSupported", symbol);
+//   return {
+//     isSupport: isSupported
+//   }
+// }
 
 export const providerOptions = {
   walletconnect: {
