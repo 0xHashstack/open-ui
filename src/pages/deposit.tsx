@@ -59,9 +59,10 @@ const Deposit = (props) => {
         console.log("Approve Transaction sent: ", approveTransactionHash);
         const _commitPeriod: string | undefined =  commitPeriod;
         
-        const tx = await wrapper?.getDepositInstance().depositRequest(SymbolsMap[props.asset], CommitMap[_commitPeriod], inputVal, DecimalsMap[props.asset]);
-        await tx.wait();
-        console.log(tx);
+        const tx1 = await wrapper?.getDepositInstance().depositRequest(SymbolsMap[props.asset], CommitMap[_commitPeriod], inputVal, DecimalsMap[props.asset]);
+        const tx = await tx1.wait();
+        console.log("Tx: ",tx);
+        console.log("Tx.events: ",tx.events);
         onDeposit(tx.events);
       } catch (err) {
         setIsTransactionDone(false);
@@ -74,9 +75,20 @@ const Deposit = (props) => {
     }
 
     const onDeposit = (data) => {
+      let eventName;
+      let _amount;
+      data.forEach(e => {
+        if ((e.event == "DepositAdded" || e.event == "NewDeposit")) {
+          eventName = e.event
+          _amount = e.args.amount.toBigInt()
+          console.log("Event Name: ", eventName)
+          console.log("Amount: ", _amount)
+        }
+      });
       setIsTransactionDone(false);
-      const res = data['DepositAdded'] ? data['DepositAdded']['returnValues'] : data['NewDeposit']['returnValues'];
-      let amount = BNtoNum(Number(res.amount),DecimalsMap[res.market]);
+      // const res = data['DepositAdded'] ? data['DepositAdded']['returnValues'] : data['NewDeposit']['returnValues'];
+      let amount = BNtoNum(_amount);
+      console.log("Final Amount: ", amount);
       toast.success(`Deposited amount: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
 

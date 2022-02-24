@@ -205,8 +205,9 @@ const Dashboard = () => {
       const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[_loanOption], inputVal1, DecimalsMap[_loanOption]);
       await approveTransactionHash.wait();
       console.log("Approve Transaction sent: ", approveTransactionHash);
-      const tx = await wrapper?.getLoanInstance().repayLoan(market, comm, inputVal1, decimal);
-      onLoanRepay(tx.events);
+      const tx1 = await wrapper?.getLoanInstance().repayLoan(market, comm, inputVal1, decimal);
+      const tx = await tx1.wait(); 
+      onLoanRepay(tx.events)
     } catch (err) {
       setIsTransactionDone(false);
       if (err instanceof Object) {
@@ -225,8 +226,8 @@ const Dashboard = () => {
       });
       const _loanOption: string | undefined =  loanOption;
 
-      const tx = await wrapper?.getLoanInstance().permissibleWithdrawal(SymbolsMap[_loanOption], CommitMap[commit[0].commitment], inputVal1, DecimalsMap[_loanOption]);
-      await tx.wait();
+      const tx1 = await wrapper?.getLoanInstance().permissibleWithdrawal(SymbolsMap[_loanOption], CommitMap[commit[0].commitment], inputVal1, DecimalsMap[_loanOption]);
+      const tx = await tx1.wait()
       onLoanWithdrawal(tx.events);
     } catch (err) {
       setIsTransactionDone(false);
@@ -250,8 +251,8 @@ const Dashboard = () => {
       const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[_loanOption], inputVal1, DecimalsMap[_loanOption]);
       await approveTransactionHash.wait();
       console.log("Approve Transaction sent: ", approveTransactionHash);
-      const tx = await wrapper?.getLoanInstance().addCollateral(SymbolsMap[_loanOption], CommitMap[commit[0].commitment], inputVal1, DecimalsMap[_loanOption]);
-      await tx.wait();
+      const tx1 = await wrapper?.getLoanInstance().addCollateral(SymbolsMap[_loanOption], CommitMap[commit[0].commitment], inputVal1, DecimalsMap[_loanOption]);
+      const tx = await tx1.wait()
       onCollateralAdded(tx.events);
     } catch (err) {
       setIsTransactionDone(false);
@@ -270,8 +271,8 @@ const Dashboard = () => {
         return EventMap[asset.loanMarket.toUpperCase()] === loanOption;
       });
       const _loanOption: string | undefined =  loanOption;
-      const tx = await wrapper?.getLoanInstance().withdrawCollateral(SymbolsMap[_loanOption], CommitMap[commit[0].commitment]);
-      await tx.wait();
+      const tx1 = await wrapper?.getLoanInstance().withdrawCollateral(SymbolsMap[_loanOption], CommitMap[commit[0].commitment]);
+      const tx = await tx1.wait()
       onCollateralReleased(tx.events);
     } catch (err) {
       setIsTransactionDone(false);
@@ -294,8 +295,8 @@ const Dashboard = () => {
       const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[_loanOption], BNtoNum(Number(commit[0].loanAmount), DecimalsMap[_loanOption]), DecimalsMap[_loanOption]);
       await approveTransactionHash.wait();
       console.log("Approve Transaction sent: ", approveTransactionHash);
-      const tx = await wrapper?.getLoanInstance().swapLoan(SymbolsMap[_loanOption], CommitMap[commit[0].commitment], SymbolsMap[_swapOption]);
-      await tx.wait();
+      const tx1 = await wrapper?.getLoanInstance().swapLoan(SymbolsMap[_loanOption], CommitMap[commit[0].commitment], SymbolsMap[_swapOption]);
+      const tx = await tx1.wait()
       onSwap(tx.events);
     } catch (err) {
       setIsTransactionDone(false);
@@ -318,8 +319,8 @@ const Dashboard = () => {
       await approveTransactionHash.wait();
       console.log("Approve Transaction sent: ", approveTransactionHash);
 
-      const tx = await wrapper?.getLoanInstance().swapToLoan( SymbolsMap[_loanOption],CommitMap[commit[0].commitment]);
-      await tx.wait();
+      const tx1 = await wrapper?.getLoanInstance().swapToLoan( SymbolsMap[_loanOption],CommitMap[commit[0].commitment]);
+      const tx = await tx1.wait();
       onSwapToLoan(tx.events);
     } catch (err) {
       setIsTransactionDone(false);
@@ -339,8 +340,8 @@ const Dashboard = () => {
       const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[_depositRequestSel], inputVal1, DecimalsMap[_depositRequestSel]);
       await approveTransactionHash.wait();
       console.log("Approve Transaction sent: ", approveTransactionHash);
-      const tx = await wrapper?.getDepositInstance().depositRequest(SymbolsMap[_depositRequestSel.toUpperCase()], CommitMap[_depositRequestVal], inputVal1, DecimalsMap[_depositRequestSel.toUpperCase()]);
-      await tx.wait();
+      const tx1 = await wrapper?.getDepositInstance().depositRequest(SymbolsMap[_depositRequestSel.toUpperCase()], CommitMap[_depositRequestVal], inputVal1, DecimalsMap[_depositRequestSel.toUpperCase()]);
+      const tx = await tx1.wait();
       onDeposit(tx.events);
     } catch (err) {
       setIsTransactionDone(false);
@@ -359,9 +360,9 @@ const Dashboard = () => {
       setIsTransactionDone(true);
       const _withdrawDepositSel: string | undefined =  withdrawDepositSel;
       const _withdrawDepositVal: string | undefined =  withdrawDepositVal;
-      const tx = await wrapper?.getDepositInstance().withdrawDeposit(SymbolsMap[_withdrawDepositSel.toUpperCase()], 
+      const tx1 = await wrapper?.getDepositInstance().withdrawDeposit(SymbolsMap[_withdrawDepositSel.toUpperCase()], 
        CommitMap[_withdrawDepositVal], inputVal1, DecimalsMap[_withdrawDepositSel.toUpperCase()]);
-      await tx.wait();
+      const tx = await tx1.wait();
        WithdrawalDeposit(tx.events);
     } catch (err) {
       setIsTransactionDone(false);
@@ -375,58 +376,163 @@ const Dashboard = () => {
 
 
   const onCollateralAdded = (data) => {
-    const res = data['AddCollateral']['returnValues'];
-    let amount = BNtoNum(Number(res.amount))
+      let eventName
+      let _amount
+      data.forEach(e => {
+        if (e.event == "AddCollateral") {
+          eventName = e.event
+          _amount = e.args.amount.toBigInt()
+          console.log("Event Name: ", eventName)
+          console.log("Amount: ", _amount)
+        }
+      })
+      
+    let amount = BNtoNum(_amount)
+    console.log("Final Amount: ", amount)
+    // const res = data['AddCollateral']['returnValues'];
+    // let amount = BNtoNum(Number(res.amount))
     toast.success(`Collateral amount added: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     setIsTransactionDone(false);
   }
 
   const onCollateralReleased = (data) => {
-    const res = data['CollateralReleased']['returnValues'];
-    let amount = BNtoNum(Number(res.amount))
+          let eventName
+          let _amount
+          data.forEach(e => {
+            if (e.event == "CollateralReleased") {
+              eventName = e.event
+              _amount = e.args.amount.toBigInt()
+              console.log("Event Name: ", eventName)
+              console.log("Amount: ", _amount)
+            }
+          })
+
+          let amount = BNtoNum(_amount)
+          console.log("Final Amount: ", amount)
+    // const res = data['CollateralReleased']['returnValues'];
+    // let amount = BNtoNum(Number(res.amount))
     toast.success(`Collateral amount released: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     setIsTransactionDone(false);
   }
 
 
   const onLoanWithdrawal = (data) => {
-    const res = data['WithdrawPartialLoan']['returnValues'];
-    let amount = BNtoNum(Number(res.amount))
+    let eventName
+    let _amount
+    data.forEach(e => {
+      if (e.event == "WithdrawPartialLoan") {
+          eventName = e.event
+          _amount = e.args.amount.toBigInt()
+          console.log("Event Name: ", eventName)
+          console.log("Amount: ", _amount)
+      }
+    })
+
+    let amount = BNtoNum(_amount)
+    console.log("Final Amount: ", amount)
+    
+    // const res = data['WithdrawPartialLoan']['returnValues'];
+    // let amount = BNtoNum(Number(res.amount))
     toast.success(`Loan Withdraw Successfully: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     setIsTransactionDone(false);
   }
 
   const onLoanRepay = (data) => {
-    const res = data['LoanRepaid']['returnValues'];
-    let amount = BNtoNum(Number(res.amount))
+    let eventName
+    let _amount
+    data.forEach(e => {
+      if (e.event == "LoanRepaid") {
+        eventName = e.event
+        _amount = e.args.amount.toBigInt()
+        console.log("Event Name: ", eventName)
+        console.log("Amount: ", _amount)
+      }
+    })
+
+    let amount = BNtoNum(_amount)
+    console.log("Final Amount: ", amount)
+    // const res = data['LoanRepaid']['returnValues'];
+    // let amount = BNtoNum(Number(res.amount))
     toast.success(`Loan Repaid Successfully: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     setIsTransactionDone(false);
   }
 
   const onDeposit = (data) => {
-    const res = data['DepositAdded']['returnValues'];
-    let amount = BNtoNum(Number(res.amount),DecimalsMap[res.market]);
+    let eventName
+    let _amount
+    data.forEach(e => {
+      if (e.event == "DepositAdded") {
+        eventName = e.event
+        _amount = e.args.amount.toBigInt()
+        console.log("Event Name: ", eventName)
+        console.log("Amount: ", _amount)
+      }
+    })
+
+    let amount = BNtoNum(_amount)
+    console.log("Final Amount: ", amount)
+    // const res = data['DepositAdded']['returnValues'];
+    // let amount = BNtoNum(Number(res.amount),DecimalsMap[res.market]);
     toast.success(`Deposited amount: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     setIsTransactionDone(false);
   }
 
   const onSwap = (data) => {
-    const res = data['MarketSwapped']['returnValues'];
-    let amount = BNtoNum(Number(res.amount),DecimalsMap[res.market]);
+    let eventName
+    let _amount
+    data.forEach(e => {
+      if (e.event == "MarketSwapped") {
+        eventName = e.event
+        _amount = e.args.amount.toBigInt()
+        console.log("Event Name: ", eventName)
+        console.log("Amount: ", _amount)
+      }
+    })
+
+    let amount = BNtoNum(_amount)
+    console.log("Final Amount: ", amount)
+    // const res = data['MarketSwapped']['returnValues'];
+    // let amount = BNtoNum(Number(res.amount),DecimalsMap[res.market]);
     toast.success(`Swap Loan successful: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     setIsTransactionDone(false);
   }
 
   const onSwapToLoan = (data) => {
-    const res = data['MarketSwapped']['returnValues'];
-    let amount = BNtoNum(Number(res.amount),DecimalsMap[res.market]);
+    let eventName
+    let _amount
+    data.forEach(e => {
+      if (e.event == "MarketSwapped") {
+        eventName = e.event
+        _amount = e.args.amount.toBigInt()
+        console.log("Event Name: ", eventName)
+        console.log("Amount: ", _amount)
+      }
+    })
+
+    let amount = BNtoNum(_amount)
+    console.log("Final Amount: ", amount)
+    // const res = data['MarketSwapped']['returnValues'];
+    // let amount = BNtoNum(Number(res.amount),DecimalsMap[res.market]);
     toast.success(`Swap to Loan successful: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     setIsTransactionDone(false);
   }
 
   const WithdrawalDeposit = (data) => {
-    const res = data['Withdrawal']['returnValues'];
-    let amount = BNtoNum(Number(res.amount), DecimalsMap[res.market])
+    let eventName
+    let _amount
+    data.forEach(e => {
+      if (e.event == "Withdrawal") {
+        eventName = e.event
+        _amount = e.args.amount.toBigInt()
+        console.log("Event Name: ", eventName)
+        console.log("Amount: ", _amount)
+      }
+    })
+
+    let amount = BNtoNum(_amount)
+    console.log("Final Amount: ", amount)
+    // const res = data['Withdrawal']['returnValues'];
+    // let amount = BNtoNum(Number(res.amount), DecimalsMap[res.market])
     toast.success(`Deposit Withdrawn: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     setIsTransactionDone(false);
   }
