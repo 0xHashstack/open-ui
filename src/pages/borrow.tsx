@@ -84,7 +84,7 @@ const Borrow = (props) => {
     data.forEach(e => {
       if (e.event == "NewLoan") {
         eventName = e.event
-        _amount = e.args.amount.toBigInt()
+        _amount = e.args.loanAmount.toBigInt()
       }
     })
 
