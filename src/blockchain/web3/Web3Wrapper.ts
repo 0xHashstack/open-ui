@@ -46,42 +46,42 @@ export default class Web3Wrapper {
 
   getLoanInstance() {
     if (!this.loanInstance) {
-      this.loanInstance = new LoanWrapper(this.wrapperOptions);;
+      this.loanInstance = new LoanWrapper(this.wrapperOptions);
     }
     return this.loanInstance;
   }
 
   getComptrollerInstance() {
     if (!this.comptrollerInstance) {
-      this.comptrollerInstance = new ComptrollerWeb3Wrapper(this.wrapperOptions);;
+      this.comptrollerInstance = new ComptrollerWeb3Wrapper(this.wrapperOptions);
     }
     return this.comptrollerInstance;
   }
 
   getLiquidatorInstance() {
     if (!this.liquidatorInstance) {
-      this.liquidatorInstance = new LiquidatorWrapper(this.wrapperOptions);;
+      this.liquidatorInstance = new LiquidatorWrapper(this.wrapperOptions);
     }
     return this.liquidatorInstance;
   }
 
   getTokenListInstance() {
     if (!this.tokenListInstance) {
-      this.tokenListInstance = new TokenList(this.wrapperOptions);;
+      this.tokenListInstance = new TokenList(this.wrapperOptions);
     }
     return this.tokenListInstance;
   }
 
   getReserveInstance() {
     if (!this.reserveInstance) {
-      this.reserveInstance = new ReserveWrapper(this.wrapperOptions);;
+      this.reserveInstance = new ReserveWrapper(this.wrapperOptions);
     }
     return this.reserveInstance;
   }
 
   getOracleOpen() {
     if (!this.oracleOpenInstance) {
-      this.oracleOpenInstance = new OracleOpenWrapper(this.wrapperOptions);;
+      this.oracleOpenInstance = new OracleOpenWrapper(this.wrapperOptions);
     }
     return this.oracleOpenInstance;
   }
