@@ -34,6 +34,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import PassbookTBody from "./passbook-body";
 import DashboardTBody from "./dashboard-body";
 import Banner from "../components/banner";
+import Liquidation from "./liquidation";
 
 toast.configure({
   autoClose: 4000
@@ -1228,7 +1229,7 @@ const Dashboard = () => {
 
                     <TabPane tabId="3">
                       <div className="row justify-content-end" style={{ paddingTop: "12px" }}>
-                        <p>This section is under construction. Check again in a few days</p>
+                        <Liquidation />
                       </div>
                     </TabPane>
                   </TabContent>
