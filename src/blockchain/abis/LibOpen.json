@@ -83,6 +83,15 @@
         "type": "bool"
       },
       {
+<<<<<<< HEAD
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "currentMarket",
+        "type": "bytes32"
+      },
+      {
+=======
+>>>>>>> 715a83e0907dcc2242328dd7fb14a004018e4012
         "indexed": true,
         "internalType": "bytes32",
         "name": "currentMarket",
@@ -90,6 +99,18 @@
       },
       {
         "indexed": true,
+        "internalType": "bytes32",
+        "name": "fromMarket",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "toMarket",
+        "type": "bytes32"
+      },
+      {
+        "indexed": false,
         "internalType": "uint256",
         "name": "currentAmount",
         "type": "uint256"
