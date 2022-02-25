@@ -1,5 +1,5 @@
 import Web3 from 'web3';
-import { defaultChainId, rpcUrls } from './constants';
+import { defaultChainId, rpcUrls, DecimalsMap } from './constants';
 import { BigNumber } from "bignumber.js";
 import TokenList from './contracts/TokenList';
 import Fortmatic from "fortmatic";
@@ -10,6 +10,8 @@ import BurnerConnectProvider from "@burner-wallet/burner-connect-provider";
 import DcentProvider from "dcent-provider";
 import Authereum from "authereum";
 import WalletConnectProvider from "@walletconnect/web3-provider";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export const createWeb3 = (provider) => {
   var realProvider;
@@ -97,6 +99,20 @@ export const isMarketSupported = async (symbol: string) => {
   const isSupported = await tokenList.call("isMarketSupported", symbol);
   return {
     isSupport: isSupported
+  }
+}
+
+export const OnSuccessCallback = (data, eventName, key, message) => {
+  const res = data[eventName]['returnValues'];
+  let amount = BNtoNum(Number(res.amount), DecimalsMap[res[key]]);
+  toast.success(`${message}: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
+}
+
+export const OnErrorCallback = (err) => {
+  if (err instanceof Object) {
+    toast.error(`${GetErrorText(String(err['message']))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
+  } else {
+    toast.error(`${GetErrorText(String(err))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
   }
 }
 
