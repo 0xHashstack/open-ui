@@ -83,15 +83,6 @@
         "type": "bool"
       },
       {
-<<<<<<< HEAD
-        "indexed": true,
-        "internalType": "bytes32",
-        "name": "currentMarket",
-        "type": "bytes32"
-      },
-      {
-=======
->>>>>>> 715a83e0907dcc2242328dd7fb14a004018e4012
         "indexed": true,
         "internalType": "bytes32",
         "name": "currentMarket",
