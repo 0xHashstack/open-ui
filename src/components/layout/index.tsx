@@ -63,6 +63,7 @@ const Layout = (props) => {
         })
         .catch(err => {
           setIsResponse(true);
+          // setIsWhiteListedAccount(true);
           console.log("Error", err)
         });
     }
@@ -195,14 +196,14 @@ const Layout = (props) => {
                 <h4 className="font-weight-medium">Uh, oh!</h4>
                 <h4 className="font-weight-medium">It appears though you are not whitelisted. You can request for whitelist from below</h4>
                 <div className="mt-3 text-center">
-                <div className="w-layout-grid-s footer-socials-s">
+                {/* <div className="w-layout-grid-s footer-socials-s">
                     <a href="https://twitter.com/0xhashstack" rel="noreferrer" target="_blank" className="w-inline-block-s"><img src="./images/Twitter-Icon-Fill.svg" loading="lazy" alt="" /></a>
                     <a href="https://in.linkedin.com/company/0xhashstack" rel="noreferrer" target="_blank" className="w-inline-block-s"><img src="./images/Linkedin-Icon-Fill.svg" loading="lazy" alt=""/></a>
                     <a href="https://github.com/0xHashstack" rel="noreferrer" target="_blank" className="w-inline-block-s"><img src="./images/github.svg" loading="lazy" alt="" /></a>
                     <a href="http://hashstack.community" rel="noreferrer" target="_blank" className="w-inline-block-s"><img src="./images/discord.svg" loading="lazy" alt="" /></a>
                     <a href="https://hashstack.medium.com/" rel="noreferrer" target="_blank" className="w-inline-block-s"><img src="./images/medium.svg" loading="lazy" alt="" /></a>
                     <a href="https://www.reddit.com/r/Hashstack/" rel="noreferrer" target="_blank" className="w-inline-block-s"><img src="./images/reddit.svg" loading="lazy" alt="" /></a>
-                 </div>
+                 </div> */}
                   <Button
                     color="dark"
                     outline
@@ -211,6 +212,14 @@ const Layout = (props) => {
                   >
                     Request to Whitelist
                   </Button>
+                  <div className="w-layout-grid-s footer-socials-s">
+                    <a href="https://twitter.com/0xhashstack" rel="noreferrer" target="_blank" className="w-inline-block-s"><img src="./images/Twitter-Icon-Fill.svg" loading="lazy" alt="" /></a>
+                    <a href="https://in.linkedin.com/company/0xhashstack" rel="noreferrer" target="_blank" className="w-inline-block-s"><img src="./images/Linkedin-Icon-Fill.svg" loading="lazy" alt=""/></a>
+                    <a href="https://github.com/0xHashstack" rel="noreferrer" target="_blank" className="w-inline-block-s"><img src="./images/github.svg" loading="lazy" alt="" /></a>
+                    <a href="http://hashstack.community" rel="noreferrer" target="_blank" className="w-inline-block-s"><img src="./images/discord.svg" loading="lazy" alt="" /></a>
+                    <a href="https://hashstack.medium.com/" rel="noreferrer" target="_blank" className="w-inline-block-s"><img src="./images/medium.svg" loading="lazy" alt="" /></a>
+                    <a href="https://www.reddit.com/r/Hashstack/" rel="noreferrer" target="_blank" className="w-inline-block-s"><img src="./images/reddit.svg" loading="lazy" alt="" /></a>
+                 </div>
                 </div>
               </div>
             </Col>
@@ -226,14 +235,14 @@ const Layout = (props) => {
                 <h4 className="font-weight-medium">Congratulations! Request sent Successfully.</h4>
                 <h4 className="font-weight-medium">Your account will be whitelisted after {counter || cacheService.getItem(`${account.toUpperCase()}_Waitlist_Counter`)} requests. </h4>
                 <div className="mt-3 text-center">
-                  <div className="w-layout-grid-s footer-socials-s">
+                  {/* <div className="w-layout-grid-s footer-socials-s">
                     <a href="https://twitter.com/0xhashstack" rel="noreferrer" target="_blank" className="w-inline-block-s"><img src="./images/Twitter-Icon-Fill.svg" loading="lazy" alt="" /></a>
                     <a href="https://in.linkedin.com/company/0xhashstack" rel="noreferrer" target="_blank" className="w-inline-block-s"><img src="./images/Linkedin-Icon-Fill.svg" loading="lazy" alt=""/></a>
                     <a href="https://github.com/0xHashstack" rel="noreferrer" target="_blank" className="w-inline-block-s"><img src="./images/github.svg" loading="lazy" alt="" /></a>
                     <a href="http://hashstack.community" rel="noreferrer" target="_blank" className="w-inline-block-s"><img src="./images/discord.svg" loading="lazy" alt="" /></a>
                     <a href="https://hashstack.medium.com/" rel="noreferrer" target="_blank" className="w-inline-block-s"><img src="./images/medium.svg" loading="lazy" alt="" /></a>
                     <a href="https://www.reddit.com/r/Hashstack/" rel="noreferrer" target="_blank" className="w-inline-block-s"><img src="./images/reddit.svg" loading="lazy" alt="" /></a>
-                 </div>
+                 </div> */}
                 <Button
                     color="dark"
                     outline
@@ -242,6 +251,14 @@ const Layout = (props) => {
                   >
                     Disconnect
                   </Button>
+                  <div className="w-layout-grid-s footer-socials-s">
+                    <a href="https://twitter.com/0xhashstack" rel="noreferrer" target="_blank" className="w-inline-block-s"><img src="./images/Twitter-Icon-Fill.svg" loading="lazy" alt="" /></a>
+                    <a href="https://in.linkedin.com/company/0xhashstack" rel="noreferrer" target="_blank" className="w-inline-block-s"><img src="./images/Linkedin-Icon-Fill.svg" loading="lazy" alt=""/></a>
+                    <a href="https://github.com/0xHashstack" rel="noreferrer" target="_blank" className="w-inline-block-s"><img src="./images/github.svg" loading="lazy" alt="" /></a>
+                    <a href="http://hashstack.community" rel="noreferrer" target="_blank" className="w-inline-block-s"><img src="./images/discord.svg" loading="lazy" alt="" /></a>
+                    <a href="https://hashstack.medium.com/" rel="noreferrer" target="_blank" className="w-inline-block-s"><img src="./images/medium.svg" loading="lazy" alt="" /></a>
+                    <a href="https://www.reddit.com/r/Hashstack/" rel="noreferrer" target="_blank" className="w-inline-block-s"><img src="./images/reddit.svg" loading="lazy" alt="" /></a>
+                 </div>
                 </div>
               </div>
             </Col>
