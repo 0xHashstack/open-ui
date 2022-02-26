@@ -33,6 +33,9 @@ const PassbookTBody = (props) => {
                 </div>
               </th>
               <td>
+                <div className="text-muted">{EventMap[asset.commitment]}</div>
+              </td>
+              <td>
                 <div className="text-muted">{BNtoNum(Number(asset.loanAmount),DecimalsMap[EventMap[asset.loanMarket.toUpperCase()]])}</div>
               </td>
               <td>
@@ -61,14 +64,14 @@ const PassbookTBody = (props) => {
                   {BNtoNum(Number(asset.collateralAmount), DecimalsMap[EventMap[asset.collateralMarket.toUpperCase()]])}
                 </div>
               </td>
-              <td>
+              {/* <td> */}
                 {/* <h5 className="font-size-14 mb-1">
                   {asset.loansRate}
                 </h5> */}
-                <div className="text-muted">
+                {/* <div className="text-muted">
                   {Number(asset.cdr).toFixed(3)}
                 </div>
-              </td>
+              </td> */}
             </tr>
           ))}
         </>

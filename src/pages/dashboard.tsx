@@ -1161,10 +1161,11 @@ const Dashboard = () => {
                             <thead>
                               <tr>
                                 <th scope="col">Loan Market</th>
+                                <th scope="col">Commitment</th>
                                 <th scope="col">Amount</th>
                                 <th scope="col">Collateral Market</th>
                                 <th scope="col">Amount</th>
-                                <th scope="col" colSpan={2}>Interest</th>
+                                {/* <th scope="col" colSpan={2}>Interest</th> */}
                               </tr>
                             </thead>
 
@@ -1184,7 +1185,7 @@ const Dashboard = () => {
                                 <th scope="col">Deposit Market</th>
                                 <th scope="col">Commitment</th>
                                 <th scope="col">Amount</th>
-                                <th scope="col" colSpan={2}>Interest Earned</th>
+                                {/* <th scope="col" colSpan={2}>Interest Earned</th> */}
                               </tr>
                             </thead>
                             <tbody>
@@ -1214,9 +1215,9 @@ const Dashboard = () => {
                                   <td>
                                     <div className="text-muted">{BNtoNum(Number(asset.amount), DecimalsMap[asset.market.toUpperCase()])}</div>
                                   </td>
-                                  <td>
+                                  {/* <td>
                                     <div className="text-muted">{Number(asset.acquiredYield).toFixed(3)}</div>
-                                  </td> 
+                                  </td>  */}
                                 </tr>
                               )) : <tr align="center"><td colSpan={5}>No Records Found.</td></tr>}
                             </tbody>
