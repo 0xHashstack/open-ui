@@ -634,7 +634,7 @@ const Dashboard = () => {
                                   >
                                     Swap Loan
                                     <Tooltip placement="top" target="SwapLoanButton" autohide={true} isOpen={swapLoanTooltipOpen} toggle={() => {setSwapLoanTooltipOpen(!swapLoanTooltipOpen)}}>
-                                      This features will be activated this friday.
+                                      This features will be activated on 28th Feb.
                                     </Tooltip>
                                   </Button>
                                   <Modal
@@ -696,7 +696,7 @@ const Dashboard = () => {
                                   >
                                     Swap to Loan
                                     <Tooltip placement="top" target="SwapToLoanButton" autohide={true} isOpen={swapToLoanTooltipOpen} toggle={() => {setSwapToLoanTooltipOpen(!swapToLoanTooltipOpen)}}>
-                                      This features will be activated this friday.
+                                      This features will be activated on 28th Feb.
                                     </Tooltip>
                                   </Button>
                                   <Modal
@@ -769,7 +769,7 @@ const Dashboard = () => {
                                     Add Collateral
                                   </Button>
                                   <Tooltip placement="top" target="AddCollateralButton" autohide={true} isOpen={addCollateralTooltipOpen} toggle={() => {setAddCollateralTooltipOpen(!addCollateralTooltipOpen)}}>
-                                      This features will be activated this friday.
+                                      This features will be activated on 28th Feb.
                                   </Tooltip>
                                   <Modal
                                     isOpen={modal_add_collateral}
@@ -845,7 +845,7 @@ const Dashboard = () => {
                                     Withdraw Collateral
                                   </Button>
                                   <Tooltip placement="top" target="WithdrawCollateralButton" autohide={true} isOpen={withdrawCollateralTooltipOpen} toggle={() => {setWithdrawCollateralTooltipOpen(!withdrawCollateralTooltipOpen)}}>
-                                      This features will be activated this friday.
+                                      This features will be activated on 28th Feb.
                                   </Tooltip>
                                   <Modal
                                     isOpen={modal_withdraw_collateral}
