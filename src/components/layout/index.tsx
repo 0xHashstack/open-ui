@@ -63,6 +63,7 @@ const Layout = (props) => {
         })
         .catch(err => {
           setIsResponse(true);
+          // setIsWhiteListedAccount(true);
           console.log("Error", err)
         });
     }
