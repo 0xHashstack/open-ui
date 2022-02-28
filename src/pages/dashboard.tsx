@@ -475,13 +475,13 @@ const Dashboard = () => {
                                       id="RepayLoanButton"
                                       outline
                                       onClick={() => {
-                                        // tog_repay_loan();
+                                        tog_repay_loan();
                                       }}
                                     >
                                       Repay Loan
-                                      <Tooltip placement="top" target="RepayLoanButton" autohide={true} isOpen={repayLoanTooltipOpen} toggle={() => {setRepayLoanTooltipOpen(!repayLoanTooltipOpen)}}>
+                                      {/* <Tooltip placement="top" target="RepayLoanButton" autohide={true} isOpen={repayLoanTooltipOpen} toggle={() => {setRepayLoanTooltipOpen(!repayLoanTooltipOpen)}}>
                                       This features will be activated this friday.
-                                    </Tooltip>
+                                    </Tooltip> */}
                                     </Button>
                                     <Modal
                                       isOpen={modal_repay_loan}
@@ -638,13 +638,13 @@ const Dashboard = () => {
                                     outline
                                     id="SwapLoanButton"
                                     onClick={() => {
-                                      // tog_swap_loan();
+                                      tog_swap_loan();
                                     }}
                                   >
                                     Swap Loan
-                                    <Tooltip placement="top" target="SwapLoanButton" autohide={true} isOpen={swapLoanTooltipOpen} toggle={() => {setSwapLoanTooltipOpen(!swapLoanTooltipOpen)}}>
+                                    {/* <Tooltip placement="top" target="SwapLoanButton" autohide={true} isOpen={swapLoanTooltipOpen} toggle={() => {setSwapLoanTooltipOpen(!swapLoanTooltipOpen)}}>
                                       This features will be activated On 28th Feb.
-                                    </Tooltip>
+                                    </Tooltip> */}
                                   </Button>
                                   <Modal
                                     isOpen={modal_swap_loan}
@@ -714,13 +714,13 @@ const Dashboard = () => {
                                     id="SwapToLoanButton"
                                     outline
                                     onClick={() => {
-                                      // tog_swap_to_loan();
+                                      tog_swap_to_loan();
                                     }}
                                   >
                                     Swap to Loan
-                                    <Tooltip placement="top" target="SwapToLoanButton" autohide={true} isOpen={swapToLoanTooltipOpen} toggle={() => {setSwapToLoanTooltipOpen(!swapToLoanTooltipOpen)}}>
+                                    {/* <Tooltip placement="top" target="SwapToLoanButton" autohide={true} isOpen={swapToLoanTooltipOpen} toggle={() => {setSwapToLoanTooltipOpen(!swapToLoanTooltipOpen)}}>
                                       This features will be activated On 28th Feb.
-                                    </Tooltip>
+                                    </Tooltip> */}
                                   </Button>
                                   <Modal
                                     isOpen={modal_swap_to_loan}
@@ -800,14 +800,14 @@ const Dashboard = () => {
                                     id="AddCollateralButton"
                                     outline
                                     onClick={() => {
-                                      // tog_add_collateral();
+                                      tog_add_collateral();
                                     }}
                                   >
                                     Add Collateral
                                   </Button>
-                                  <Tooltip placement="top" target="AddCollateralButton" autohide={true} isOpen={addCollateralTooltipOpen} toggle={() => {setAddCollateralTooltipOpen(!addCollateralTooltipOpen)}}>
+                                  {/* <Tooltip placement="top" target="AddCollateralButton" autohide={true} isOpen={addCollateralTooltipOpen} toggle={() => {setAddCollateralTooltipOpen(!addCollateralTooltipOpen)}}>
                                       This features will be activated On 28th Feb.
-                                  </Tooltip>
+                                  </Tooltip> */}
                                   <Modal
                                     isOpen={modal_add_collateral}
                                     toggle={() => {
@@ -889,14 +889,14 @@ const Dashboard = () => {
                                     id="WithdrawCollateralButton"
                                     outline
                                     onClick={() => {
-                                      // tog_withdraw_collateral();
+                                      tog_withdraw_collateral();
                                     }}
                                   >
                                     Withdraw Collateral
                                   </Button>
-                                  <Tooltip placement="top" target="WithdrawCollateralButton" autohide={true} isOpen={withdrawCollateralTooltipOpen} toggle={() => {setWithdrawCollateralTooltipOpen(!withdrawCollateralTooltipOpen)}}>
+                                  {/* <Tooltip placement="top" target="WithdrawCollateralButton" autohide={true} isOpen={withdrawCollateralTooltipOpen} toggle={() => {setWithdrawCollateralTooltipOpen(!withdrawCollateralTooltipOpen)}}>
                                       This features will be activated On 28th Feb.
-                                  </Tooltip>
+                                  </Tooltip> */}
                                   <Modal
                                     isOpen={modal_withdraw_collateral}
                                     toggle={() => {
