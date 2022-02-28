@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Col, Modal, Button, Form } from "reactstrap";
 import { Web3ModalContext } from "../../contexts/Web3ModalProvider";
 import { Web3WrapperContext } from "../../contexts/Web3WrapperProvider";
-import { GetErrorText } from "../../blockchain/utils";
+import { GetErrorText, OnErrorCallback } from "../../blockchain/utils";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -31,8 +31,7 @@ const Header = () => {
       const tx = await tx1.wait();
       onSuccessCallback(tx.events);
     } catch (error) {
-        toast.error(`${GetErrorText(error)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
-      
+      OnErrorCallback(error);      
     }
   }
 
