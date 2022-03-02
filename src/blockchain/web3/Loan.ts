@@ -88,7 +88,7 @@ class LoanWrapper {
     return this.loanExt.unpauseLoanExt()
   }
   getLoans(account: string) {
-    return this.loanExt.call("getLoans", account);
+    return this.loanExt.getLoans(account);
 }
 }
 

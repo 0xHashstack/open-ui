@@ -60,7 +60,7 @@ class DepositWrapper {
     }
 
     getDeposits(account: string) {
-        return this.deposit.call("getDeposits", account);
+        return this.deposit.getDeposits(account);
     }
 
     //admin operations

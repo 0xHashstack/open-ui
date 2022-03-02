@@ -87,9 +87,9 @@ const Dashboard = () => {
 
 
   useEffect(() => {
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 100);
+    // setTimeout(() => {
+    //   setIsLoading(false);
+    // }, 100);
 
     // account && axios({
     //   method: 'get',
@@ -106,7 +106,7 @@ const Dashboard = () => {
     //     setActiveLoansData([]);
     //     console.log(err);
     //   })
-    account && wrapper.getLoanInstance().getLoans(account).then((loans) => {
+    account && wrapper?.getLoanInstance().getLoans(account).then((loans) => {
       onLoansData(loans);
       setIsLoading(false);
     }, err => {
@@ -227,13 +227,15 @@ const Dashboard = () => {
     const deposits = [];
     depositsData.amount.forEach((amount, index) => {
       deposits.push({
-        amount,
+        amount: amount.toString(),
         account,
         commitment: CommitMapReverse[depositsData.commitment[index]],
         market: bytesToString(depositsData.market[index]),
-        acquiredYield: depositsData.savingsInterest[index]
+        // acquiredYield: new BigNumber(depositsData.savingsInterest[index].toString()).div(new BigNumber(10).pow(new BigNumber(18))).toString()
+        acquiredYield: depositsData.savingsInterest[index].toString()
       })
     })
+    // console.log("deposits",deposits)
     setActiveDepositsData(deposits);
   }
 

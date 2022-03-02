@@ -47,7 +47,6 @@ const Layout = (props) => {
     if (account) {
       axios.get(`isWhiteListedAccount?address=${account}`)
         .then(res => {
-          console.log("Axios: ", axios.defaults);
           dispatch(changePreloader(true));
           if (res.data) {
             cacheService.setItem(`${account.toUpperCase()}_IsWhiteListedAccount`, res.data['isWhiteListed']);

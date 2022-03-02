@@ -1,4 +1,4 @@
-import { SymbolsMap } from 'blockchain/constants';
+import { SymbolsMap } from '../constants';
 import abi from "../abis/BEP20Token.json"
 import { NumToBN } from "../utils"
 import { ethers } from "ethers"
