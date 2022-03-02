@@ -1,3 +1,4 @@
+import { defaultChainId, rpcUrls, DecimalsMap } from './constants';
 import { BigNumber } from "bignumber.js";
 import TokenList from './contracts/TokenList';
 import Fortmatic from "fortmatic";

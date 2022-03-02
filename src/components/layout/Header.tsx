@@ -31,8 +31,7 @@ const Header = () => {
       const tx = await tx1.wait();
       onSuccessCallback(tx.events);
     } catch (error) {
-        toast.error(`${GetErrorText(error)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
-      
+      OnErrorCallback(error);      
     }
   }
 

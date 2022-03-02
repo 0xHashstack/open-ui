@@ -104,8 +104,10 @@ const Web3ModalProvider = (props: any) => {
     setEthersInstance(ethersProviderInstance);
     await ethersProviderInstance.send("eth_requestAccounts", [])
     const signer = await ethersProviderInstance.getSigner()
-    setSigner(signer)
-    const _account = signer.getAddress()
+    setSigner(signer);
+    const _account = await signer.getAddress().then((address) => {
+      return address;
+    });
     const _chainId = (await ethersProviderInstance.getNetwork()).chainId
     //===========================================================================================================//
     if (_chainId != BSCChainId) {

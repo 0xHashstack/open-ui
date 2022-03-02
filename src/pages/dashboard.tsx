@@ -274,7 +274,7 @@ const Dashboard = () => {
       const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[_loanOption], inputVal1, DecimalsMap[_loanOption]);
       await approveTransactionHash.wait();
       console.log("Approve Transaction sent: ", approveTransactionHash);
-      const tx1 = await wrapper?.getLoanInstance().repayLoan(market, comm, inputVal1, decimal);
+      const tx1 = await wrapper?.getLoanInstance().repayLoan(market, CommitMap[_commit], inputVal1, decimal);
       const tx = await tx1.wait(); 
       onLoanRepay(tx.events)
     } catch (err) {
@@ -290,8 +290,9 @@ const Dashboard = () => {
         return EventMap[asset.loanMarket.toUpperCase()] === loanOption;
       });
       const _loanOption: string | undefined =  loanOption;
+      const _commit: string | undefined = loanCommitement;
 
-      const tx1 = await wrapper?.getLoanInstance().permissibleWithdrawal(SymbolsMap[_loanOption], CommitMap[commit[0].commitment], inputVal1, DecimalsMap[_loanOption]);
+      const tx1 = await wrapper?.getLoanInstance().permissibleWithdrawal(SymbolsMap[_loanOption], CommitMap[_commit], inputVal1, DecimalsMap[_loanOption]);
       const tx = await tx1.wait()
       onLoanWithdrawal(tx.events);
     } catch (err) {
@@ -310,7 +311,7 @@ const Dashboard = () => {
       const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[_loanOption], inputVal1, DecimalsMap[_loanOption]);
       await approveTransactionHash.wait();
       console.log("Approve Transaction sent: ", approveTransactionHash);
-      const tx1 = await wrapper?.getLoanInstance().addCollateral(SymbolsMap[_loanOption], CommitMap[commit[0].commitment], inputVal1, DecimalsMap[_loanOption]);
+      const tx1 = await wrapper?.getLoanInstance().addCollateral(SymbolsMap[_loanOption], CommitMap[_commit], inputVal1, DecimalsMap[_loanOption]);
       const tx = await tx1.wait()
       onCollateralAdded(tx.events);
     } catch (err) {
@@ -326,7 +327,8 @@ const Dashboard = () => {
         return EventMap[asset.loanMarket.toUpperCase()] === loanOption;
       });
       const _loanOption: string | undefined =  loanOption;
-      const tx1 = await wrapper?.getLoanInstance().withdrawCollateral(SymbolsMap[_loanOption], CommitMap[commit[0].commitment]);
+      const _commit: string | undefined = loanCommitement;
+      const tx1 = await wrapper?.getLoanInstance().withdrawCollateral(SymbolsMap[_loanOption], CommitMap[_commit]);
       const tx = await tx1.wait()
       onCollateralReleased(tx.events);
     } catch (err) {
@@ -343,10 +345,11 @@ const Dashboard = () => {
       });
       const _loanOption: string | undefined =  loanOption;
       const _swapOption: string | undefined =  swapOption;
-      const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[_loanOption], BNtoNum(Number(commit[0].loanAmount), DecimalsMap[_loanOption]), DecimalsMap[_loanOption]);
-      await approveTransactionHash.wait();
-      console.log("Approve Transaction sent: ", approveTransactionHash);
-      const tx1 = await wrapper?.getLoanInstance().swapLoan(SymbolsMap[_loanOption], CommitMap[commit[0].commitment], SymbolsMap[_swapOption]);
+      const _commit: string | undefined = loanCommitement;
+      // const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[_loanOption], BNtoNum(Number(commit[0].loanAmount), DecimalsMap[_loanOption]), DecimalsMap[_loanOption]);
+      // await approveTransactionHash.wait();
+      // console.log("Approve Transaction sent: ", approveTransactionHash);
+      const tx1 = await wrapper?.getLoanInstance().swapLoan(SymbolsMap[_loanOption], CommitMap[_commit], SymbolsMap[_swapOption]);
       const tx = await tx1.wait()
       onSwap(tx.events);
     } catch (err) {
@@ -362,11 +365,12 @@ const Dashboard = () => {
         return EventMap[asset.loanMarket.toUpperCase()] === loanOption && EventMap[asset.commitment.toUpperCase()] === loanCommitement;
       });
       const _loanOption: string | undefined =  loanOption;
-      const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[_loanOption], BNtoNum(Number(commit[0].loanAmount), DecimalsMap[_loanOption]), DecimalsMap[_loanOption]);
-      await approveTransactionHash.wait();
-      console.log("Approve Transaction sent: ", approveTransactionHash);
+      const _commit: string | undefined = loanCommitement;
+      // const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[_loanOption], BNtoNum(Number(commit[0].loanAmount), DecimalsMap[_loanOption]), DecimalsMap[_loanOption]);
+      // await approveTransactionHash.wait();
+      // console.log("Approve Transaction sent: ", approveTransactionHash);
 
-      const tx1 = await wrapper?.getLoanInstance().swapToLoan( SymbolsMap[_loanOption],CommitMap[commit[0].commitment]);
+      const tx1 = await wrapper?.getLoanInstance().swapToLoan( SymbolsMap[_loanOption],CommitMap[_commit]);
       const tx = await tx1.wait();
       onSwapToLoan(tx.events);
     } catch (err) {
