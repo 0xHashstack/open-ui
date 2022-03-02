@@ -27,16 +27,19 @@ const Header = () => {
 
   async function handleGetToken (event: any) {
     try {
-      const tx = await wrapper?.getFaucetInstance().getTokens(event.target.textContent);
+      const tx1 = await wrapper?.getFaucetInstance().getTokens(event.target.textContent);
+      const tx = await tx1.wait();
       onSuccessCallback(tx.events);
     } catch (error) {
-      OnErrorCallback(error);      
+        toast.error(`${GetErrorText(error)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
+      
     }
   }
 
 
   
   const onSuccessCallback = (data) => {
+    console.log("Data:", data);
     toast.success(`${data.message || 'Tokens Received Successfully.'}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
   };
 

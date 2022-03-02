@@ -272,34 +272,31 @@ const Dashboard = () => {
       const decimal = DecimalsMap[_loanOption];
       const _commit: string | undefined = loanCommitement;
       const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[_loanOption], inputVal1, DecimalsMap[_loanOption]);
+      await approveTransactionHash.wait();
       console.log("Approve Transaction sent: ", approveTransactionHash);
-      const tx = await wrapper?.getLoanInstance().repayLoan(market, CommitMap[_commit], inputVal1, decimal);
-      onLoanRepay(tx.events);
+      const tx1 = await wrapper?.getLoanInstance().repayLoan(market, comm, inputVal1, decimal);
+      const tx = await tx1.wait(); 
+      onLoanRepay(tx.events)
     } catch (err) {
       setIsTransactionDone(false);
-      if (err instanceof Object) {
-        toast.error(`${GetErrorText(String(err['message']))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true });
-      } else {
-        toast.error(`${GetErrorText(String(err))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true });
-      }
+        toast.error(`${GetErrorText(err)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
   }
 
   const handleWithdrawLoan = async () => {
     try {
       setIsTransactionDone(true);
-      const _loanOption: string | undefined = loanOption;
-      const _commit: string | undefined = loanCommitement;
-      debugger;
-      const tx = await wrapper?.getLoanInstance().permissibleWithdrawal(SymbolsMap[_loanOption], CommitMap[_commit], inputVal1, DecimalsMap[_loanOption]);
+      const commit = activeLoansData.filter((asset) => {
+        return EventMap[asset.loanMarket.toUpperCase()] === loanOption;
+      });
+      const _loanOption: string | undefined =  loanOption;
+
+      const tx1 = await wrapper?.getLoanInstance().permissibleWithdrawal(SymbolsMap[_loanOption], CommitMap[commit[0].commitment], inputVal1, DecimalsMap[_loanOption]);
+      const tx = await tx1.wait()
       onLoanWithdrawal(tx.events);
     } catch (err) {
-      setIsTransactionDone(false);
-      if (err instanceof Object) {
-        toast.error(`${GetErrorText(String(err['message']))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true });
-      } else {
-        toast.error(`${GetErrorText(String(err))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true });
-      }
+      setIsTransactionDone(false);      
+        toast.error(`${GetErrorText(err)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
   }
 
@@ -311,57 +308,50 @@ const Dashboard = () => {
       const _collateralOption: string | undefined = collateralOption;
       const _commit: string | undefined = loanCommitement;
       const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[_loanOption], inputVal1, DecimalsMap[_loanOption]);
+      await approveTransactionHash.wait();
       console.log("Approve Transaction sent: ", approveTransactionHash);
-      const tx = await wrapper?.getLoanInstance().addCollateral(SymbolsMap[_loanOption], CommitMap[_commit], inputVal1, DecimalsMap[_loanOption]);
+      const tx1 = await wrapper?.getLoanInstance().addCollateral(SymbolsMap[_loanOption], CommitMap[commit[0].commitment], inputVal1, DecimalsMap[_loanOption]);
+      const tx = await tx1.wait()
       onCollateralAdded(tx.events);
     } catch (err) {
       setIsTransactionDone(false);
-      if (err instanceof Object) {
-        toast.error(`${GetErrorText(String(err['message']))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true });
-      } else {
-        toast.error(`${GetErrorText(String(err))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true });
-      }
+        toast.error(`${GetErrorText(err)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
   }
 
   const handleWithdrawCollateral = async () => {
     try {
       setIsTransactionDone(true);
-      const _loanOption: string | undefined = loanOption;
-      const _commit: string | undefined = loanCommitement;
-      const tx = await wrapper?.getLoanInstance().withdrawCollateral(SymbolsMap[_loanOption], CommitMap[_commit]);
+      const commit = activeLoansData.filter((asset) => {
+        return EventMap[asset.loanMarket.toUpperCase()] === loanOption;
+      });
+      const _loanOption: string | undefined =  loanOption;
+      const tx1 = await wrapper?.getLoanInstance().withdrawCollateral(SymbolsMap[_loanOption], CommitMap[commit[0].commitment]);
+      const tx = await tx1.wait()
       onCollateralReleased(tx.events);
     } catch (err) {
       setIsTransactionDone(false);
-      if (err instanceof Object) {
-        toast.error(`${GetErrorText(String(err['message']))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true });
-      } else {
-        toast.error(`${GetErrorText(String(err))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true });
-      }
+        toast.error(`${GetErrorText(err)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
   }
 
   const handleSwap = async () => {
     try {
       setIsTransactionDone(true);
-      // const commit = activeLoansData.filter((asset) => {
-      //   return EventMap[asset.loanMarket.toUpperCase()] === loanOption && EventMap[asset.commitment.toUpperCase()] === loanCommitement; 
-      // });
-
-      const _loanOption: string | undefined = loanOption;
-      const _swapOption: string | undefined = swapOption;
-      const _commit: string | undefined = loanCommitement;
-      // const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[_loanOption], BNtoNum(Number(commit[0].loanAmount), DecimalsMap[_loanOption]), DecimalsMap[_loanOption]);
-      // console.log("Approve Transaction sent: ", approveTransactionHash);
-      const tx = await wrapper?.getLoanInstance().swapLoan(SymbolsMap[_loanOption], CommitMap[_commit], SymbolsMap[_swapOption]);
+      const commit = activeLoansData.filter((asset) => {
+        return EventMap[asset.loanMarket.toUpperCase()] === loanOption;
+      });
+      const _loanOption: string | undefined =  loanOption;
+      const _swapOption: string | undefined =  swapOption;
+      const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[_loanOption], BNtoNum(Number(commit[0].loanAmount), DecimalsMap[_loanOption]), DecimalsMap[_loanOption]);
+      await approveTransactionHash.wait();
+      console.log("Approve Transaction sent: ", approveTransactionHash);
+      const tx1 = await wrapper?.getLoanInstance().swapLoan(SymbolsMap[_loanOption], CommitMap[commit[0].commitment], SymbolsMap[_swapOption]);
+      const tx = await tx1.wait()
       onSwap(tx.events);
     } catch (err) {
       setIsTransactionDone(false);
-      if (err instanceof Object) {
-        toast.error(`${GetErrorText(String(err['message']))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true });
-      } else {
-        toast.error(`${GetErrorText(String(err))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true });
-      }
+        toast.error(`${GetErrorText(String(err))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
   }
 
@@ -371,20 +361,17 @@ const Dashboard = () => {
       const commit = activeLoansData.filter((asset) => {
         return EventMap[asset.loanMarket.toUpperCase()] === loanOption && EventMap[asset.commitment.toUpperCase()] === loanCommitement;
       });
-      const _loanOption: string | undefined = loanOption;
-      const _commit: string | undefined = loanCommitement;
-      // const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[_loanOption], BNtoNum(Number(commit[0].loanAmount), DecimalsMap[_loanOption]), DecimalsMap[_loanOption]);
-      // console.log("Approve Transaction sent: ", approveTransactionHash);
+      const _loanOption: string | undefined =  loanOption;
+      const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[_loanOption], BNtoNum(Number(commit[0].loanAmount), DecimalsMap[_loanOption]), DecimalsMap[_loanOption]);
+      await approveTransactionHash.wait();
+      console.log("Approve Transaction sent: ", approveTransactionHash);
 
-      const tx = await wrapper?.getLoanInstance().swapToLoan(SymbolsMap[_loanOption], CommitMap[_commit]);
+      const tx1 = await wrapper?.getLoanInstance().swapToLoan( SymbolsMap[_loanOption],CommitMap[commit[0].commitment]);
+      const tx = await tx1.wait();
       onSwapToLoan(tx.events);
     } catch (err) {
       setIsTransactionDone(false);
-      if (err instanceof Object) {
-        toast.error(`${GetErrorText(String(err['message']))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true });
-      } else {
-        toast.error(`${GetErrorText(String(err))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true });
-      }
+        toast.error(`${GetErrorText(err)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
   }
 
@@ -394,16 +381,14 @@ const Dashboard = () => {
       const _depositRequestSel: string | undefined = depositRequestSel;
       const _depositRequestVal: string | undefined = depositRequestVal;
       const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[_depositRequestSel], inputVal1, DecimalsMap[_depositRequestSel]);
+      await approveTransactionHash.wait();
       console.log("Approve Transaction sent: ", approveTransactionHash);
-      const tx = await wrapper?.getDepositInstance().depositRequest(SymbolsMap[_depositRequestSel.toUpperCase()], CommitMap[_depositRequestVal], inputVal1, DecimalsMap[_depositRequestSel.toUpperCase()]);
+      const tx1 = await wrapper?.getDepositInstance().depositRequest(SymbolsMap[_depositRequestSel.toUpperCase()], CommitMap[_depositRequestVal], inputVal1, DecimalsMap[_depositRequestSel.toUpperCase()]);
+      const tx = await tx1.wait();
       onDeposit(tx.events);
     } catch (err) {
       setIsTransactionDone(false);
-      if (err instanceof Object) {
-        toast.error(`${GetErrorText(String(err['message']))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true });
-      } else {
-        toast.error(`${GetErrorText(String(err))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true });
-      }
+        toast.error(`${GetErrorText(err)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
   }
 
@@ -412,76 +397,161 @@ const Dashboard = () => {
   const handleWithdrawDeposit = async () => {
     try {
       setIsTransactionDone(true);
-      const _withdrawDepositSel: string | undefined = withdrawDepositSel;
-      const _withdrawDepositVal: string | undefined = withdrawDepositVal;
-      const tx = await wrapper?.getDepositInstance().withdrawDeposit(SymbolsMap[_withdrawDepositSel.toUpperCase()],
-        CommitMap[_withdrawDepositVal], inputVal1, DecimalsMap[_withdrawDepositSel.toUpperCase()]);
-      WithdrawalDeposit(tx.events);
+      const _withdrawDepositSel: string | undefined =  withdrawDepositSel;
+      const _withdrawDepositVal: string | undefined =  withdrawDepositVal;
+      const tx1 = await wrapper?.getDepositInstance().withdrawDeposit(SymbolsMap[_withdrawDepositSel.toUpperCase()], 
+       CommitMap[_withdrawDepositVal], inputVal1, DecimalsMap[_withdrawDepositSel.toUpperCase()]);
+      const tx = await tx1.wait();
+       WithdrawalDeposit(tx.events);
     } catch (err) {
       setIsTransactionDone(false);
-      if (err instanceof Object) {
-        toast.error(`${GetErrorText(String(err['message']))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true });
-      } else {
-        toast.error(`${GetErrorText(String(err))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true });
-      }
+        toast.error(`${GetErrorText(err)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
   }
 
 
   const onCollateralAdded = (data) => {
-    const res = data['AddCollateral']['returnValues'];
-    let amount = BNtoNum(Number(res.amount), DecimalsMap[res.loanMarket])
-    toast.success(`Collateral amount added: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true });
+      let eventName
+      let _amount
+      data.forEach(e => {
+        if (e.event == "AddCollateral") {
+          eventName = e.event
+          _amount = e.args.amount.toBigInt()
+        }
+      })
+      
+    let amount = BNtoNum(_amount)
+    
+    // const res = data['AddCollateral']['returnValues'];
+    // let amount = BNtoNum(Number(res.amount))
+    toast.success(`Collateral amount added: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     setIsTransactionDone(false);
   }
 
   const onCollateralReleased = (data) => {
-    const res = data['CollateralReleased']['returnValues'];
-    let amount = BNtoNum(Number(res.amount), DecimalsMap[res.loanMarket])
-    toast.success(`Collateral amount released: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true });
+          let eventName
+          let _amount
+          data.forEach(e => {
+            if (e.event == "CollateralReleased") {
+              eventName = e.event
+              _amount = e.args.amount.toBigInt()
+            }
+          })
+
+          let amount = BNtoNum(_amount)
+          
+    // const res = data['CollateralReleased']['returnValues'];
+    // let amount = BNtoNum(Number(res.amount))
+    toast.success(`Collateral amount released: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     setIsTransactionDone(false);
   }
 
 
   const onLoanWithdrawal = (data) => {
-    const res = data['WithdrawPartialLoan']['returnValues'];
-    let amount = BNtoNum(Number(res.amount), DecimalsMap[res.loanMarket])
-    toast.success(`Loan Withdraw Successfully: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true });
+    let eventName
+    let _amount
+    data.forEach(e => {
+      if (e.event == "WithdrawPartialLoan") {
+          eventName = e.event
+          _amount = e.args.amount.toBigInt()
+      }
+    })
+
+    let amount = BNtoNum(_amount)
+    
+    
+    // const res = data['WithdrawPartialLoan']['returnValues'];
+    // let amount = BNtoNum(Number(res.amount))
+    toast.success(`Loan Withdraw Successfully: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     setIsTransactionDone(false);
   }
 
   const onLoanRepay = (data) => {
-    const res = data['LoanRepaid']['returnValues'];
-    let amount = BNtoNum(Number(res.amount), DecimalsMap[res.loanMarket])
-    toast.success(`Loan Repaid Successfully: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true });
+    let eventName
+    let _amount
+    data.forEach(e => {
+      if (e.event == "LoanRepaid") {
+        eventName = e.event
+        _amount = e.args.amount.toBigInt()
+      }
+    })
+
+    let amount = BNtoNum(_amount)
+    
+    // const res = data['LoanRepaid']['returnValues'];
+    // let amount = BNtoNum(Number(res.amount))
+    toast.success(`Loan Repaid Successfully: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     setIsTransactionDone(false);
   }
 
   const onDeposit = (data) => {
-    const res = data['DepositAdded']['returnValues'];
-    let amount = BNtoNum(Number(res.amount), DecimalsMap[res.market]);
-    toast.success(`Deposited amount: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true });
+    let eventName
+    let _amount
+    data.forEach(e => {
+      if (e.event == "DepositAdded") {
+        eventName = e.event
+        _amount = e.args.amount.toBigInt()
+      }
+    })
+
+    let amount = BNtoNum(_amount)
+    
+    // const res = data['DepositAdded']['returnValues'];
+    // let amount = BNtoNum(Number(res.amount),DecimalsMap[res.market]);
+    toast.success(`Deposited amount: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     setIsTransactionDone(false);
   }
 
   const onSwap = (data) => {
-    const res = data['MarketSwapped']['returnValues'];
-    let amount = BNtoNum(Number(res.amount), DecimalsMap[res.loanMarket]);
-    toast.success(`Swap Loan successful: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true });
+    let eventName
+    let _amount
+    data.forEach(e => {
+      if (e.event == "MarketSwapped") {
+        eventName = e.event
+        _amount = e.args.amount.toBigInt()
+      }
+    })
+
+    let amount = BNtoNum(_amount)
+    
+    // const res = data['MarketSwapped']['returnValues'];
+    // let amount = BNtoNum(Number(res.amount),DecimalsMap[res.market]);
+    toast.success(`Swap Loan successful: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     setIsTransactionDone(false);
   }
 
   const onSwapToLoan = (data) => {
-    const res = data['MarketSwapped']['returnValues'];
-    let amount = BNtoNum(Number(res.amount), DecimalsMap[res.loanMarket]);
-    toast.success(`Swap to Loan successful: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true });
+    let eventName
+    let _amount
+    data.forEach(e => {
+      if (e.event == "MarketSwapped") {
+        eventName = e.event
+        _amount = e.args.amount.toBigInt()
+      }
+    })
+
+    let amount = BNtoNum(_amount)
+    
+    // const res = data['MarketSwapped']['returnValues'];
+    // let amount = BNtoNum(Number(res.amount),DecimalsMap[res.market]);
+    toast.success(`Swap to Loan successful: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     setIsTransactionDone(false);
   }
 
   const WithdrawalDeposit = (data) => {
-    const res = data['Withdrawal']['returnValues'];
-    let amount = BNtoNum(Number(res.amount), DecimalsMap[res.market])
-    toast.success(`Deposit Withdrawn: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true });
+    let eventName
+    let _amount
+    data.forEach(e => {
+      if (e.event == "Withdrawal") {
+        eventName = e.event
+        _amount = e.args.amount.toBigInt()
+      }
+    })
+
+    let amount = BNtoNum(_amount)
+    // const res = data['Withdrawal']['returnValues'];
+    // let amount = BNtoNum(Number(res.amount), DecimalsMap[res.market])
+    toast.success(`Deposit Withdrawn: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     setIsTransactionDone(false);
   }
 
