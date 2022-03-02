@@ -33,10 +33,10 @@ const PassbookTBody = (props) => {
                 </div>
               </th>
               <td>
-                <div className="text-muted">{EventMap[asset.commitment]}</div>
+                <div className="text-muted">{BNtoNum(Number(asset.loanAmount),DecimalsMap[EventMap[asset.loanMarket.toUpperCase()]])}</div>
               </td>
               <td>
-                <div className="text-muted">{BNtoNum(Number(asset.loanAmount),DecimalsMap[EventMap[asset.loanMarket.toUpperCase()]])}</div>
+                <div className="text-muted">{EventMap[asset.commitment]}</div>
               </td>
               <td>
                 <div className="d-flex align-items-center">
