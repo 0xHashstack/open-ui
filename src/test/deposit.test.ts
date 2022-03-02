@@ -1,19 +1,17 @@
-import PrivateKeyProvider from "truffle-privatekey-provider"
+import HDWalletProvider from "@truffle/hdwallet-provider";
 import { providers } from "ethers"
 import Web3Wrapper from "../blockchain/web3/Web3Wrapper"
 import { assert } from "chai"
 import { BNtoNum } from "../blockchain/utils"
-import ethers from "ethers";
 
 describe("Tests", () => {
   let provider, ethersInstance, signer, web3Wrapper;
 
   beforeEach(async ()=>{
-    // provider = new
-    provider = new PrivateKeyProvider(
-      "d631de5b7e9cf451135896c833187c8b4dc230bf47756a9a2ca4ffccc161175e", // Wallet private Key
-      "https://nd-400-266-190.p2pify.com/1efac602169fba8d5bf0589315ec436a" // RPC URL
-    )
+    provider = new HDWalletProvider({
+      privateKeys: ["d631de5b7e9cf451135896c833187c8b4dc230bf47756a9a2ca4ffccc161175e"],
+      providerOrUrl: "https://nd-400-266-190.p2pify.com/1efac602169fba8d5bf0589315ec436a"
+    });
     ethersInstance = new providers.Web3Provider(provider)
     // await ethersInstance.send("eth_requestAccounts", [])
     signer = await ethersInstance.getSigner()
@@ -22,7 +20,7 @@ describe("Tests", () => {
   
   it("Get Tokens", async () => {
     try{
-      const tx1 = await web3Wrapper?.getFaucetInstance().getTokens("USDT");
+      const tx1 = await web3Wrapper?.getFaucetInstance().getTokens("BTC");
       const tx = await tx1.wait()
       let eventName
       tx.events.forEach(e => {
@@ -34,7 +32,7 @@ describe("Tests", () => {
     }catch(e){
       console.log(e)
     }
-  })
+  }, 30000)
 
   // describe("New Deposit", () => {
   //   it("USDT Deposit", async () => {

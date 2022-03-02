@@ -59,7 +59,6 @@
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^2.0.4",
     "squarelink": "^1.1.4",
-    "truffle-privatekey-provider": "*",
     "ts-jest": "26.5.6",
     "ts-node": "^10.5.0",
     "typescript": "^4.5.2",
@@ -147,6 +146,7 @@
     "react-error-overlay": "6.0.9"
   },
   "devDependencies": {
+    "@truffle/hdwallet-provider": "^2.0.3",
     "babel-eslint": "^10.1.0",
     "eslint-config-standard-react": "^9.2.0",
     "eslint-plugin-eslint-plugin": "^4.1.0",
