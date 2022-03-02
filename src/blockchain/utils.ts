@@ -12,6 +12,7 @@ import Authereum from "authereum";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { utils } from "ethers";
 
 export const createWeb3 = (provider) => {
   var realProvider;
@@ -114,6 +115,10 @@ export const OnErrorCallback = (err) => {
   } else {
     toast.error(`${GetErrorText(String(err))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
   }
+}
+
+export const bytesToString = (bytes) =>{
+  return utils.parseBytes32String(bytes);
 }
 
 export const providerOptions = {

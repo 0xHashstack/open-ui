@@ -132,6 +132,9 @@ class LoanWrapper {
   unpauseLoan1() {
     return this.loanExt.send("unpauseLoanExt", {})
   }
+  getLoans(account: string) {
+    return this.loanExt.call("getLoans", account);
+}
 }
 
 export default LoanWrapper;

@@ -58,6 +58,10 @@ class DepositWrapper {
         return this.deposit.call("isPausedDeposit");
     }
 
+    getDeposits(account: string) {
+        return this.deposit.call("getDeposits", account);
+    }
+
     //admin operations
     pauseDeposit() {
         return this.deposit.send("pauseDeposit", {});
