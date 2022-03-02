@@ -7,7 +7,7 @@ class DepositWrapper {
   deposit: any
 
   constructor(signer: any) {
-    this.deposit = new ethers.Contract(process.env.REACT_APP_DIAMOND_ADDRESS, abi, signer)
+    this.deposit = new ethers.Contract(process.env.REACT_APP_DIAMOND_ADDRESS, JSON.stringify(abi), signer)
   }
 
     //send transaction methods
