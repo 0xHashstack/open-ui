@@ -5,7 +5,12 @@ import { assert } from "chai"
 import { BNtoNum } from "../blockchain/utils"
 
 describe("Tests", () => {
-  let provider, ethersInstance, signer, web3Wrapper;
+  let 
+    provider, 
+    ethersInstance, 
+    signer, 
+    web3Wrapper,
+    testTimeOut = 30000;
 
   beforeEach(async ()=>{
     provider = new HDWalletProvider({
@@ -20,7 +25,7 @@ describe("Tests", () => {
   
   it("Get Tokens", async () => {
     try{
-      const tx1 = await web3Wrapper?.getFaucetInstance().getTokens("BTC");
+      const tx1 = await web3Wrapper?.getFaucetInstance().getTokens("USDT");
       const tx = await tx1.wait()
       let eventName
       tx.events.forEach(e => {
@@ -29,74 +34,75 @@ describe("Tests", () => {
         }
       })
       assert.equal(eventName, "TokensIssued")
-    }catch(e){
-      console.log(e)
+    }catch(e: any){
+      assert.equal(e.error.message,"execution reverted: ERROR: Active timelock")
     }
-  }, 30000)
+  }, testTimeOut)
 
-  // describe("New Deposit", () => {
-  //   it("USDT Deposit", async () => {
-  //   const approveTransactionHash = await web3Wrapper
-  //     ?.getMockBep20Instance()
-  //     .approve("0x555344542e740000000000000000000000000000000000000000000000000000",
-  //         200,
-  //         18
-  //       )
-  //   await approveTransactionHash.wait()
-  //     const tx1 = await web3Wrapper
-  //       ?.getDepositInstance()
-  //       .depositRequest(
-  //         "0x555344542e740000000000000000000000000000000000000000000000000000",
-  //         "0x636f6d69745f4e4f4e4500000000000000000000000000000000000000000000",
-  //         200,
-  //         18
-  //       )
-  //     const tx = await tx1.wait()
+  describe("New Deposit", () => {
+    it("USDT Deposit", async () => {
+    const approveTransactionHash = await web3Wrapper
+      ?.getMockBep20Instance()
+      .approve("0x555344542e740000000000000000000000000000000000000000000000000000",
+          200,
+          18
+        )
+    await approveTransactionHash.wait()
+      const tx1 = await web3Wrapper
+        ?.getDepositInstance()
+        .depositRequest(
+          "0x555344542e740000000000000000000000000000000000000000000000000000",
+          "0x636f6d69745f4e4f4e4500000000000000000000000000000000000000000000",
+          200,
+          18
+        )
+      const tx = await tx1.wait()
 
-  //     let eventName
-  //     let _amount
-  //     tx.events.forEach(e => {
-  //       if (e.event == "NewDeposit") {
-  //         eventName = e.event
-  //         _amount = e.args.amount.toBigInt()
-  //       }
-  //     })
-  //     _amount = BNtoNum(_amount, 18)
-  //     assert.equal(eventName, "NewDeposit", "Event Name Correct")
-  //     assert.equal(_amount, 200, "Amount Correct")
-  //   })      
-  // })
-  // describe("Add to Deposit", () => {
-  //   it("USDT Deposit", async () => {
-  //     const approveTransactionHash = await web3Wrapper
-  //       ?.getMockBep20Instance()
-  //       .approve(
-  //         "0x555344542e740000000000000000000000000000000000000000000000000000",
-  //         200,
-  //         18
-  //       )
-  //     await approveTransactionHash.wait()
-  //     const tx1 = await web3Wrapper
-  //       ?.getDepositInstance()
-  //       .depositRequest(
-  //         "0x555344542e740000000000000000000000000000000000000000000000000000",
-  //         "0x636f6d69745f4e4f4e4500000000000000000000000000000000000000000000",
-  //         200,
-  //         18
-  //       )
-  //     const tx = await tx1.wait()
+      let eventName
+      let _amount
+      tx.events.forEach(e => {
+        console.log(e)
+        if (e.event == "NewDeposit") {
+          eventName = e.event
+          _amount = e.args.amount.toBigInt()
+        }
+      })
+      _amount = BNtoNum(_amount, 18)
+      assert.equal(eventName, "NewDeposit", "Event Name Correct")
+      assert.equal(_amount, 200, "Amount Correct")
+    },testTimeOut)      
+  })
+  describe("Add to Deposit", () => {
+    it("USDT Deposit", async () => {
+      const approveTransactionHash = await web3Wrapper
+        ?.getMockBep20Instance()
+        .approve(
+          "0x555344542e740000000000000000000000000000000000000000000000000000",
+          200,
+          18
+        )
+      await approveTransactionHash.wait()
+      const tx1 = await web3Wrapper
+        ?.getDepositInstance()
+        .depositRequest(
+          "0x555344542e740000000000000000000000000000000000000000000000000000",
+          "0x636f6d69745f4e4f4e4500000000000000000000000000000000000000000000",
+          200,
+          18
+        )
+      const tx = await tx1.wait()
 
-  //     let eventName
-  //     let _amount
-  //     tx.events.forEach(e => {
-  //       if (e.event == "DepositAdded") {
-  //         eventName = e.event
-  //         _amount = e.args.amount.toBigInt()
-  //       }
-  //     })
-  //     _amount = BNtoNum(_amount, 18)
-  //     assert.equal(eventName, "DepositAdded", "Event Name Correct")
-  //     assert.equal(_amount, 200, "Amount Correct")
-  //   })
-  // })
+      let eventName
+      let _amount
+      tx.events.forEach(e => {
+        if (e.event == "DepositAdded") {
+          eventName = e.event
+          _amount = e.args.amount.toBigInt()
+        }
+      })
+      _amount = BNtoNum(_amount, 18)
+      assert.equal(eventName, "DepositAdded", "Event Name Correct")
+      assert.equal(_amount, 200, "Amount Correct")
+    },testTimeOut)
+  })
 })
