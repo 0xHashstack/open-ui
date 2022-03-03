@@ -34,7 +34,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import PassbookTBody from "./passbook-body";
 import DashboardTBody from "./dashboard-body";
 import Banner from "../components/banner";
-import { BigNumber } from "bignumber.js";
+import { BigNumber } from "ethers";
 
 toast.configure({
   autoClose: 4000
@@ -223,19 +223,28 @@ const Dashboard = () => {
     setWithdrawDepositVal(e.target.value)
   }
 
-  const onDepositData = (depositsData) => {
+  const onDepositData = async (depositsData) => {
     const deposits = [];
-    depositsData.amount.forEach((amount, index) => {
+    for(let i =0; i <depositsData.amount.length; i++ ){
       deposits.push({
-        amount: amount.toString(),
+        amount: depositsData.amount[i].toString(),
         account,
-        commitment: CommitMapReverse[depositsData.commitment[index]],
-        market: bytesToString(depositsData.market[index]),
-        // acquiredYield: new BigNumber(depositsData.savingsInterest[index].toString()).div(new BigNumber(10).pow(new BigNumber(18))).toString()
-        acquiredYield: depositsData.savingsInterest[index].toString()
+        commitment: CommitMapReverse[depositsData.commitment[i]],
+        market: bytesToString(depositsData.market[i]),
+        // acquiredYield: new BigNumber(depositsData.savingsInterest[i].toString()).div(new BigNumber(10).pow(new BigNumber(18))).toString()
+        acquiredYield: (await wrapper.getDepositInstance().getDepositInterest(account, i +1 )).toString()
       })
-    })
-    // console.log("deposits",deposits)
+    }
+    // depositsData.amount.forEach((amount, index) => {
+    //   deposits.push({
+    //     amount: amount.toString(),
+    //     account,
+    //     commitment: CommitMapReverse[depositsData.commitment[index]],
+    //     market: bytesToString(depositsData.market[index]),
+    //     // acquiredYield: new BigNumber(depositsData.savingsInterest[index].toString()).div(new BigNumber(10).pow(new BigNumber(18))).toString()
+    //     acquiredYield: depositsData.savingsInterest[index].toString()
+    //   })
+    // })
     setActiveDepositsData(deposits);
   }
 
@@ -243,7 +252,7 @@ const Dashboard = () => {
     const loans = [];
     loansData.collateralAmount.forEach((collateralAmount, index) => {
       let debtCategory;
-      let cdr = new BigNumber(collateralAmount).div(new BigNumber(loansData.loanAmount[index])).toNumber();
+      let cdr = BigNumber.from(collateralAmount).div(BigNumber.from(loansData.loanAmount[index])).toNumber();
       if (cdr >= 1) {
         debtCategory = 1;
       } else if (cdr >= 0.5 && cdr < 1) {
@@ -348,15 +357,19 @@ const Dashboard = () => {
       const _loanOption: string | undefined =  loanOption;
       const _swapOption: string | undefined =  swapOption;
       const _commit: string | undefined = loanCommitement;
-      // const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[_loanOption], BNtoNum(Number(commit[0].loanAmount), DecimalsMap[_loanOption]), DecimalsMap[_loanOption]);
-      // await approveTransactionHash.wait();
-      // console.log("Approve Transaction sent: ", approveTransactionHash);
+      const allowance = await wrapper?.getMockBep20Instance().allowance(SymbolsMap[_loanOption],account);
+      const isApprovedAlready = BigNumber.from(`${commit[0].loanAmount}`).lte(BigNumber.from(allowance));
+      if(!isApprovedAlready){
+        const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[_loanOption], BNtoNum(Number(commit[0].loanAmount), DecimalsMap[_loanOption]), DecimalsMap[_loanOption]);
+        console.log("Approve Transaction sent: ", approveTransactionHash);
+        await approveTransactionHash.wait();
+      }
       const tx1 = await wrapper?.getLoanInstance().swapLoan(SymbolsMap[_loanOption], CommitMap[_commit], SymbolsMap[_swapOption]);
       const tx = await tx1.wait()
       onSwap(tx.events);
     } catch (err) {
       setIsTransactionDone(false);
-        toast.error(`${GetErrorText(String(err))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
+      toast.error(`${GetErrorText(err)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
   }
 

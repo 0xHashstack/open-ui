@@ -39,7 +39,24 @@ class MockBep20Wrapper {
                 break;
        }
    }
-     
+   allowance(market: string, owner: string) {
+    switch (market) {
+        case SymbolsMap.BTC:
+            return this.tBTC.allowance(owner, process.env.REACT_APP_DIAMOND_ADDRESS);
+        case SymbolsMap.USDC:
+            return this.tUSDC.allowance(owner, process.env.REACT_APP_DIAMOND_ADDRESS);
+        case SymbolsMap.USDT:
+            return this.tUSDT.allowance(owner, process.env.REACT_APP_DIAMOND_ADDRESS);
+        case SymbolsMap.SXP:
+            return this.tSXP.allowance(owner, process.env.REACT_APP_DIAMOND_ADDRESS);
+        case SymbolsMap.CAKE:
+            return this.tCake.allowance(owner, process.env.REACT_APP_DIAMOND_ADDRESS);
+        case SymbolsMap.BNB:
+            return this.tWBNB.allowance(owner, process.env.REACT_APP_DIAMOND_ADDRESS);
+        default:
+            break;
+   }
+}
 }
 
 export default MockBep20Wrapper;

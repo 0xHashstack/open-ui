@@ -86,6 +86,7 @@ const Web3ModalProvider = (props: any) => {
       _provider = await web3Modal.connect()
       setProvider(_provider)
     } catch (e) {
+      disconnect()
       if (e === "Modal closed by user") return
       toast.warn(
         `Trouble connecting wallet..!! Check if your wallet is unlocked.`,

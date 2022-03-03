@@ -71,6 +71,10 @@ class DepositWrapper {
     unpauseDeposit() {
         return this.deposit.unpauseDeposit();
     }
+
+    getDepositInterest(account, id){
+        return this.deposit.getDepositInterest(account, id);
+    }
      
 }
 
