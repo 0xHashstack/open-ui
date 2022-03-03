@@ -87,9 +87,9 @@ const Dashboard = () => {
 
 
   useEffect(() => {
-    // setTimeout(() => {
-    //   setIsLoading(false);
-    // }, 100);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 100);
 
     // account && axios({
     //   method: 'get',
