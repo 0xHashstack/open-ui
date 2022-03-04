@@ -90,22 +90,6 @@ const Dashboard = () => {
     setTimeout(() => {
       setIsLoading(false);
     }, 100);
-
-    // account && axios({
-    //   method: 'get',
-    //   url: `getLoansByAccount?account=${account}`,
-    //   withCredentials: false
-    // }).then(res => {
-    //   setIsLoading(false);
-    //   console.log("loans-api", res.data.data);
-      
-    //   Array.isArray(res.data.data) ? setActiveLoansData(res.data.data) : setActiveLoansData([]);
-    // })
-    //   .catch(err => {
-    //     setIsLoading(false);
-    //     setActiveLoansData([]);
-    //     console.log(err);
-    //   })
     account && wrapper?.getLoanInstance().getLoans(account).then((loans) => {
       onLoansData(loans);
       setIsLoading(false);
@@ -117,20 +101,6 @@ const Dashboard = () => {
   }, [account, passbookStatus, customActiveTab]);
 
   useEffect(() => {
-    // account && axios({
-    //   method: 'get',
-    //   url: `getDepositsByAccount?account=${account}`,
-    //   withCredentials: false
-    // }).then(res => {
-    //   setIsLoading(false);
-    //   console.log(res.data.data)
-    //   Array.isArray(res.data.data) ? setActiveDepositsData(res.data.data) :  setActiveDepositsData([]);
-    // })
-    //   .catch(err => {
-    //     setIsLoading(false);
-    //     setActiveDepositsData([]);
-    //     console.log(err);
-    //   })
     account && wrapper?.getDepositInstance().getDeposits(account).then((deposits) => {
       onDepositData(deposits);
       setIsLoading(false);
@@ -235,20 +205,11 @@ const Dashboard = () => {
         acquiredYield: (await wrapper.getDepositInstance().getDepositInterest(account, i +1 )).toString()
       })
     }
-    // depositsData.amount.forEach((amount, index) => {
-    //   deposits.push({
-    //     amount: amount.toString(),
-    //     account,
-    //     commitment: CommitMapReverse[depositsData.commitment[index]],
-    //     market: bytesToString(depositsData.market[index]),
-    //     // acquiredYield: new BigNumber(depositsData.savingsInterest[index].toString()).div(new BigNumber(10).pow(new BigNumber(18))).toString()
-    //     acquiredYield: depositsData.savingsInterest[index].toString()
-    //   })
-    // })
     setActiveDepositsData(deposits);
   }
 
   const onLoansData = loansData => {
+    console.log("loansData",loansData)
     const loans = [];
     loansData.collateralAmount.forEach((collateralAmount, index) => {
       let debtCategory;
@@ -270,7 +231,7 @@ const Dashboard = () => {
         isSwapped: loansData.isSwapped[index],
         loanAmount: Number(loansData.loanAmount[index]),
         loanId: index + 1,
-        loanMarket: bytesToString(loansData.loanMarket[index])
+        loanMarket: bytesToString(loansData.loanMarket[index]),
       })
     })
     setActiveLoansData(loans)
@@ -357,13 +318,14 @@ const Dashboard = () => {
       const _loanOption: string | undefined =  loanOption;
       const _swapOption: string | undefined =  swapOption;
       const _commit: string | undefined = loanCommitement;
-      const allowance = await wrapper?.getMockBep20Instance().allowance(SymbolsMap[_loanOption],account);
-      const isApprovedAlready = BigNumber.from(`${commit[0].loanAmount}`).lte(BigNumber.from(allowance));
-      if(!isApprovedAlready){
-        const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[_loanOption], BNtoNum(Number(commit[0].loanAmount), DecimalsMap[_loanOption]), DecimalsMap[_loanOption]);
-        console.log("Approve Transaction sent: ", approveTransactionHash);
-        await approveTransactionHash.wait();
-      }
+      // const allowance = await wrapper?.getMockBep20Instance().allowance(SymbolsMap[_loanOption],account);
+      // const isApprovedAlready = BigNumber.from(`${commit[0].loanAmount}`).lte(BigNumber.from(allowance));
+      // if(!isApprovedAlready){
+        
+      // }
+      const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[_loanOption], BNtoNum(Number(commit[0].loanAmount), DecimalsMap[_loanOption]), DecimalsMap[_loanOption]);
+      console.log("Approve Transaction sent: ", approveTransactionHash);
+      await approveTransactionHash.wait();
       const tx1 = await wrapper?.getLoanInstance().swapLoan(SymbolsMap[_loanOption], CommitMap[_commit], SymbolsMap[_swapOption]);
       const tx = await tx1.wait()
       onSwap(tx.events);
@@ -526,8 +488,9 @@ const Dashboard = () => {
     let _amount
     data.forEach(e => {
       if (e.event == "MarketSwapped") {
+        console.log("MarketSwapped",e)
         eventName = e.event
-        _amount = e.args.amount.toBigInt()
+        _amount = e.args.currentAmount.toBigInt()
       }
     })
 
@@ -535,7 +498,7 @@ const Dashboard = () => {
     
     // const res = data['MarketSwapped']['returnValues'];
     // let amount = BNtoNum(Number(res.amount),DecimalsMap[res.market]);
-    toast.success(`Swap Loan successful: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
+    toast.success(`Swap Loan successful${amount ? ": " + amount: ""}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     setIsTransactionDone(false);
   }
 
@@ -623,7 +586,7 @@ const Dashboard = () => {
                                       id="RepayLoanButton"
                                       outline
                                       onClick={() => {
-                                        // tog_repay_loan();
+                                        tog_repay_loan();
                                       }}
                                     >
                                       Repay Loan
@@ -786,7 +749,7 @@ const Dashboard = () => {
                                     outline
                                     id="SwapLoanButton"
                                     onClick={() => {
-                                      // tog_swap_loan();
+                                      tog_swap_loan();
                                     }}
                                   >
                                     Swap Loan
@@ -862,7 +825,7 @@ const Dashboard = () => {
                                     id="SwapToLoanButton"
                                     outline
                                     onClick={() => {
-                                      // tog_swap_to_loan();
+                                      tog_swap_to_loan();
                                     }}
                                   >
                                     Swap to Loan
@@ -893,7 +856,7 @@ const Dashboard = () => {
                                           <Col sm={12}>
                                             <select className="form-select" onChange={handleLoanOptionChange}>
                                               <option hidden>Select Loan</option>
-                                              {[...new Map(activeLoansData.map((item: any) => [item['loanMarket'], item])).values()].map((asset, key) => {
+                                              {[...new Map(activeLoansData.filter((asset: any)=>asset.isSwapped).map((item: any) => [item['loanMarket'], item])).values()].map((asset, key) => {
                                                 return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
                                               })}
                                             </select>
@@ -948,7 +911,7 @@ const Dashboard = () => {
                                     id="AddCollateralButton"
                                     outline
                                     onClick={() => {
-                                      // tog_add_collateral();
+                                      tog_add_collateral();
                                     }}
                                   >
                                     Add Collateral
@@ -1037,7 +1000,7 @@ const Dashboard = () => {
                                     id="WithdrawCollateralButton"
                                     outline
                                     onClick={() => {
-                                      // tog_withdraw_collateral();
+                                      tog_withdraw_collateral();
                                     }}
                                   >
                                     Withdraw Collateral
