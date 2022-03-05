@@ -4,7 +4,7 @@ import { BigNumber } from "bignumber.js";
 import TokenList from './contracts/TokenList';
 import Fortmatic from "fortmatic";
 import Portis from "@portis/web3";
-import MewConnect from "@myetherwallet/mewconnect-web-client";
+// import MewConnect from "@myetherwallet/mewconnect-web-client";
 import { Bitski } from "bitski";
 import BurnerConnectProvider from "@burner-wallet/burner-connect-provider";
 import DcentProvider from "dcent-provider";
@@ -153,12 +153,12 @@ export const providerOptions = {
       id: "012948c7-78bb-49cc-9c8e-01115f7fb160" // required
     }
   },
-  mewconnect: {
-    package: MewConnect, // required
-    options: {
-      infuraId: "" // required
-    }
-  },
+  // mewconnect: {
+  //   package: MewConnect, // required
+  //   options: {
+  //     infuraId: "" // required
+  //   }
+  // },
   bitski: {
     package: Bitski, // required
     options: {
