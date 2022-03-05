@@ -26,14 +26,15 @@ import { Web3ModalContext } from '../contexts/Web3ModalProvider';
 import { Web3WrapperContext } from '../contexts/Web3WrapperProvider';
 import {
   EventMap, CoinClassNames, MinimumAmount,
-  SymbolsMap, DecimalsMap, CommitMap
+  SymbolsMap, DecimalsMap, CommitMap, CommitMapReverse
 } from '../blockchain/constants';
-import { BNtoNum, GetErrorText } from '../blockchain/utils';
+import { BNtoNum, GetErrorText, bytesToString, NumToBN } from '../blockchain/utils';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import PassbookTBody from "./passbook-body";
 import DashboardTBody from "./dashboard-body";
 import Banner from "../components/banner";
+import { BigNumber } from "ethers";
 
 toast.configure({
   autoClose: 4000
@@ -89,37 +90,25 @@ const Dashboard = () => {
     setTimeout(() => {
       setIsLoading(false);
     }, 100);
-
-    account && axios({
-      method: 'get',
-      url: `getLoansByAccount?account=${account}`,
-      withCredentials: false
-    }).then(res => {
+    account && wrapper?.getLoanInstance().getLoans(account).then((loans) => {
+      onLoansData(loans);
       setIsLoading(false);
-      Array.isArray(res.data.data) ? setActiveLoansData(res.data.data) : setActiveLoansData([]);
-    })
-      .catch(err => {
-        setIsLoading(false);
-        setActiveLoansData([]);
-        console.log(err);
-      })
+    }, err => {
+      setIsLoading(false);
+      setActiveDepositsData([]);
+      console.log(err);
+    });
   }, [account, passbookStatus, customActiveTab]);
 
   useEffect(() => {
-    account && axios({
-      method: 'get',
-      url: `getDepositsByAccount?account=${account}`,
-      withCredentials: false
-    }).then(res => {
+    account && wrapper?.getDepositInstance().getDeposits(account).then((deposits) => {
+      onDepositData(deposits);
       setIsLoading(false);
-      Array.isArray(res.data.data) ? setActiveDepositsData(res.data.data) :  setActiveDepositsData([]);
-    })
-      .catch(err => {
-        setIsLoading(false);
-        setActiveDepositsData([]);
-        console.log(err);
-      })
-
+    }, err => {
+      setIsLoading(false);
+      setActiveDepositsData([]);
+      console.log(err);
+    });
   }, [account, passbookStatus, customActiveTab]);
 
   const toggleCustom = tab => {
@@ -173,7 +162,7 @@ const Dashboard = () => {
     setLoanCommitement(e.target.value)
   }
 
-  
+
   const handleSwapOptionChange = (e) => {
     setSwapOption(e.target.value)
   }
@@ -204,11 +193,53 @@ const Dashboard = () => {
     setWithdrawDepositVal(e.target.value)
   }
 
+  const onDepositData = async (depositsData) => {
+    const deposits = [];
+    for(let i =0; i <depositsData.amount.length; i++ ){
+      deposits.push({
+        amount: depositsData.amount[i].toString(),
+        account,
+        commitment: CommitMapReverse[depositsData.commitment[i]],
+        market: bytesToString(depositsData.market[i]),
+        // acquiredYield: new BigNumber(depositsData.savingsInterest[i].toString()).div(new BigNumber(10).pow(new BigNumber(18))).toString()
+        acquiredYield: (await wrapper.getDepositInstance().getDepositInterest(account, i +1 )).toString()
+      })
+    }
+    setActiveDepositsData(deposits);
+  }
 
+  const onLoansData = loansData => {
+    console.log("loansData",loansData)
+    const loans = [];
+    loansData.collateralAmount.forEach((collateralAmount, index) => {
+      let debtCategory;
+      let cdr = BigNumber.from(collateralAmount).div(BigNumber.from(loansData.loanAmount[index])).toNumber();
+      if (cdr >= 1) {
+        debtCategory = 1;
+      } else if (cdr >= 0.5 && cdr < 1) {
+        debtCategory = 2;
+      } else if (cdr >= 0.333 && cdr < 0.5) {
+        debtCategory = 3;
+      }
+      loans.push({
+        account,
+        cdr,
+        collateralAmount: Number(collateralAmount),
+        collateralMarket: bytesToString(loansData.collateralMarket[index]),
+        commitment: CommitMapReverse[(loansData.loanCommitment[index])],
+        debtCategory,
+        isSwapped: loansData.isSwapped[index],
+        loanAmount: Number(loansData.loanAmount[index]),
+        loanId: index + 1,
+        loanMarket: bytesToString(loansData.loanMarket[index]),
+      })
+    })
+    setActiveLoansData(loans)
+  }
   const handleRepay = async () => {
     try {
       setIsTransactionDone(true);
-      const _loanOption: string | undefined =  loanOption;
+      const _loanOption: string | undefined = loanOption;
       const market = SymbolsMap[_loanOption];
       const decimal = DecimalsMap[_loanOption];
       const _commit: string | undefined = loanCommitement;
@@ -217,33 +248,32 @@ const Dashboard = () => {
       });
       const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[commit[0].collateralMarket.toUpperCase()],
         BNtoNum(Number(commit[0].collateralAmount), DecimalsMap[commit[0].collateralMarket.toUpperCase()]), DecimalsMap[commit[0].collateralMarket.toUpperCase()]);
+      await approveTransactionHash.wait();
       console.log("Approve Transaction sent: ", approveTransactionHash);
-      const tx = await wrapper?.getLoanInstance().repayLoan(market, CommitMap[_commit], inputVal1, decimal);
-      onLoanRepay(tx.events);
+      const tx1 = await wrapper?.getLoanInstance().repayLoan(market, CommitMap[_commit], inputVal1, decimal);
+      const tx = await tx1.wait(); 
+      onLoanRepay(tx.events)
     } catch (err) {
       setIsTransactionDone(false);
-      if (err instanceof Object) {
-        toast.error(`${GetErrorText(String(err['message']))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
-      } else {
-        toast.error(`${GetErrorText(String(err))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
-      }
+        toast.error(`${GetErrorText(err)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
   }
 
   const handleWithdrawLoan = async () => {
     try {
       setIsTransactionDone(true);
+      const commit = activeLoansData.filter((asset) => {
+        return EventMap[asset.loanMarket.toUpperCase()] === loanOption;
+      });
       const _loanOption: string | undefined =  loanOption;
       const _commit: string | undefined = loanCommitement;
-      const tx = await wrapper?.getLoanInstance().permissibleWithdrawal(SymbolsMap[_loanOption], CommitMap[_commit], inputVal1, DecimalsMap[_loanOption]);
+
+      const tx1 = await wrapper?.getLoanInstance().permissibleWithdrawal(SymbolsMap[_loanOption], CommitMap[_commit], inputVal1, DecimalsMap[_loanOption]);
+      const tx = await tx1.wait()
       onLoanWithdrawal(tx.events);
     } catch (err) {
-      setIsTransactionDone(false);
-      if (err instanceof Object) {
-        toast.error(`${GetErrorText(String(err['message']))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
-      } else {
-        toast.error(`${GetErrorText(String(err))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
-      }
+      setIsTransactionDone(false);      
+        toast.error(`${GetErrorText(err)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
   }
 
@@ -251,61 +281,61 @@ const Dashboard = () => {
   const handleCollateral = async () => {
     try {
       setIsTransactionDone(true);
-      const _loanOption: string | undefined =  loanOption;
-      const _collateralOption: string | undefined =  collateralOption;
+      const _loanOption: string | undefined = loanOption;
+      const _collateralOption: string | undefined = collateralOption;
       const _commit: string | undefined = loanCommitement;
       const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[_loanOption], inputVal1, DecimalsMap[_loanOption]);
+      await approveTransactionHash.wait();
       console.log("Approve Transaction sent: ", approveTransactionHash);
-      const tx = await wrapper?.getLoanInstance().addCollateral(SymbolsMap[_loanOption], CommitMap[_commit], inputVal1, DecimalsMap[_loanOption]);
+      const tx1 = await wrapper?.getLoanInstance().addCollateral(SymbolsMap[_loanOption], CommitMap[_commit], inputVal1, DecimalsMap[_loanOption]);
+      const tx = await tx1.wait()
       onCollateralAdded(tx.events);
     } catch (err) {
       setIsTransactionDone(false);
-      if (err instanceof Object) {
-        toast.error(`${GetErrorText(String(err['message']))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
-      } else {
-        toast.error(`${GetErrorText(String(err))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
-      }
+        toast.error(`${GetErrorText(err)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
   }
 
   const handleWithdrawCollateral = async () => {
     try {
       setIsTransactionDone(true);
+      const commit = activeLoansData.filter((asset) => {
+        return EventMap[asset.loanMarket.toUpperCase()] === loanOption;
+      });
       const _loanOption: string | undefined =  loanOption;
       const _commit: string | undefined = loanCommitement;
-      const tx = await wrapper?.getLoanInstance().withdrawCollateral(SymbolsMap[_loanOption], CommitMap[_commit]);
+      const tx1 = await wrapper?.getLoanInstance().withdrawCollateral(SymbolsMap[_loanOption], CommitMap[_commit]);
+      const tx = await tx1.wait()
       onCollateralReleased(tx.events);
     } catch (err) {
       setIsTransactionDone(false);
-      if (err instanceof Object) {
-        toast.error(`${GetErrorText(String(err['message']))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
-      } else {
-        toast.error(`${GetErrorText(String(err))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
-      }
+        toast.error(`${GetErrorText(err)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
   }
 
   const handleSwap = async () => {
     try {
       setIsTransactionDone(true);
-      // const commit = activeLoansData.filter((asset) => {
-      //   return EventMap[asset.loanMarket.toUpperCase()] === loanOption && EventMap[asset.commitment.toUpperCase()] === loanCommitement; 
-      // });
-
+      const commit = activeLoansData.filter((asset) => {
+        return EventMap[asset.loanMarket.toUpperCase()] === loanOption;
+      });
       const _loanOption: string | undefined =  loanOption;
       const _swapOption: string | undefined =  swapOption;
       const _commit: string | undefined = loanCommitement;
-      // const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[_loanOption], BNtoNum(Number(commit[0].loanAmount), DecimalsMap[_loanOption]), DecimalsMap[_loanOption]);
-      // console.log("Approve Transaction sent: ", approveTransactionHash);
-      const tx = await wrapper?.getLoanInstance().swapLoan(SymbolsMap[_loanOption], CommitMap[_commit], SymbolsMap[_swapOption]);
+      // const allowance = await wrapper?.getMockBep20Instance().allowance(SymbolsMap[_loanOption],account);
+      // const isApprovedAlready = BigNumber.from(`${commit[0].loanAmount}`).lte(BigNumber.from(allowance));
+      // if(!isApprovedAlready){
+        
+      // }
+      const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[_loanOption], BNtoNum(Number(commit[0].loanAmount), DecimalsMap[_loanOption]), DecimalsMap[_loanOption]);
+      console.log("Approve Transaction sent: ", approveTransactionHash);
+      await approveTransactionHash.wait();
+      const tx1 = await wrapper?.getLoanInstance().swapLoan(SymbolsMap[_loanOption], CommitMap[_commit], SymbolsMap[_swapOption]);
+      const tx = await tx1.wait()
       onSwap(tx.events);
     } catch (err) {
       setIsTransactionDone(false);
-      if (err instanceof Object) {
-        toast.error(`${GetErrorText(String(err['message']))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
-      } else {
-        toast.error(`${GetErrorText(String(err))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
-      }
+      toast.error(`${GetErrorText(err)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
   }
 
@@ -313,41 +343,37 @@ const Dashboard = () => {
     try {
       setIsTransactionDone(true);
       const commit = activeLoansData.filter((asset) => {
-        return EventMap[asset.loanMarket.toUpperCase()] === loanOption && EventMap[asset.commitment.toUpperCase()] === loanCommitement; 
+        return EventMap[asset.loanMarket.toUpperCase()] === loanOption && EventMap[asset.commitment.toUpperCase()] === loanCommitement;
       });
       const _loanOption: string | undefined =  loanOption;
       const _commit: string | undefined = loanCommitement;
       // const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[_loanOption], BNtoNum(Number(commit[0].loanAmount), DecimalsMap[_loanOption]), DecimalsMap[_loanOption]);
+      // await approveTransactionHash.wait();
       // console.log("Approve Transaction sent: ", approveTransactionHash);
 
-      const tx = await wrapper?.getLoanInstance().swapToLoan( SymbolsMap[_loanOption],CommitMap[_commit]);
+      const tx1 = await wrapper?.getLoanInstance().swapToLoan( SymbolsMap[_loanOption],CommitMap[_commit]);
+      const tx = await tx1.wait();
       onSwapToLoan(tx.events);
     } catch (err) {
       setIsTransactionDone(false);
-      if (err instanceof Object) {
-        toast.error(`${GetErrorText(String(err['message']))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
-      } else {
-        toast.error(`${GetErrorText(String(err))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
-      }
+        toast.error(`${GetErrorText(err)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
   }
 
   const handleDepositRequest = async () => {
     try {
       setIsTransactionDone(true);
-      const _depositRequestSel: string | undefined =  depositRequestSel;
-      const _depositRequestVal: string | undefined =  depositRequestVal;
+      const _depositRequestSel: string | undefined = depositRequestSel;
+      const _depositRequestVal: string | undefined = depositRequestVal;
       const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[_depositRequestSel], inputVal1, DecimalsMap[_depositRequestSel]);
+      await approveTransactionHash.wait();
       console.log("Approve Transaction sent: ", approveTransactionHash);
-      const tx = await wrapper?.getDepositInstance().depositRequest(SymbolsMap[_depositRequestSel.toUpperCase()], CommitMap[_depositRequestVal], inputVal1, DecimalsMap[_depositRequestSel.toUpperCase()]);
+      const tx1 = await wrapper?.getDepositInstance().depositRequest(SymbolsMap[_depositRequestSel.toUpperCase()], CommitMap[_depositRequestVal], inputVal1, DecimalsMap[_depositRequestSel.toUpperCase()]);
+      const tx = await tx1.wait();
       onDeposit(tx.events);
     } catch (err) {
       setIsTransactionDone(false);
-      if (err instanceof Object) {
-        toast.error(`${GetErrorText(String(err['message']))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
-      } else {
-        toast.error(`${GetErrorText(String(err))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
-      }
+        toast.error(`${GetErrorText(err)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
   }
 
@@ -358,73 +384,159 @@ const Dashboard = () => {
       setIsTransactionDone(true);
       const _withdrawDepositSel: string | undefined =  withdrawDepositSel;
       const _withdrawDepositVal: string | undefined =  withdrawDepositVal;
-      const tx = await wrapper?.getDepositInstance().withdrawDeposit(SymbolsMap[_withdrawDepositSel.toUpperCase()], 
+      const tx1 = await wrapper?.getDepositInstance().withdrawDeposit(SymbolsMap[_withdrawDepositSel.toUpperCase()], 
        CommitMap[_withdrawDepositVal], inputVal1, DecimalsMap[_withdrawDepositSel.toUpperCase()]);
-      WithdrawalDeposit(tx.events);
+      const tx = await tx1.wait();
+       WithdrawalDeposit(tx.events);
     } catch (err) {
       setIsTransactionDone(false);
-      if (err instanceof Object) {
-        toast.error(`${GetErrorText(String(err['message']))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
-      } else {
-        toast.error(`${GetErrorText(String(err))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
-      }
+        toast.error(`${GetErrorText(err)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
   }
 
 
   const onCollateralAdded = (data) => {
-    const res = data['AddCollateral']['returnValues'];
-    let amount = BNtoNum(Number(res.amount), DecimalsMap[res.loanMarket])
+      let eventName
+      let _amount
+      data.forEach(e => {
+        if (e.event == "AddCollateral") {
+          eventName = e.event
+          _amount = e.args.amount.toBigInt()
+        }
+      })
+      
+    let amount = BNtoNum(_amount)
+    
+    // const res = data['AddCollateral']['returnValues'];
+    // let amount = BNtoNum(Number(res.amount))
     toast.success(`Collateral amount added: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     setIsTransactionDone(false);
   }
 
   const onCollateralReleased = (data) => {
-    const res = data['CollateralReleased']['returnValues'];
-    let amount = BNtoNum(Number(res.amount), DecimalsMap[res.loanMarket])
+          let eventName
+          let _amount
+          data.forEach(e => {
+            if (e.event == "CollateralReleased") {
+              eventName = e.event
+              _amount = e.args.amount.toBigInt()
+            }
+          })
+
+          let amount = BNtoNum(_amount)
+          
+    // const res = data['CollateralReleased']['returnValues'];
+    // let amount = BNtoNum(Number(res.amount))
     toast.success(`Collateral amount released: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     setIsTransactionDone(false);
   }
 
 
   const onLoanWithdrawal = (data) => {
-    const res = data['WithdrawPartialLoan']['returnValues'];
-    let amount = BNtoNum(Number(res.amount), DecimalsMap[res.loanMarket])
+    let eventName
+    let _amount
+    data.forEach(e => {
+      if (e.event == "WithdrawPartialLoan") {
+          eventName = e.event
+          _amount = e.args.amount.toBigInt()
+      }
+    })
+
+    let amount = BNtoNum(_amount)
+    
+    
+    // const res = data['WithdrawPartialLoan']['returnValues'];
+    // let amount = BNtoNum(Number(res.amount))
     toast.success(`Loan Withdraw Successfully: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     setIsTransactionDone(false);
   }
 
   const onLoanRepay = (data) => {
-    const res = data['LoanRepaid']['returnValues'];
-    let amount = BNtoNum(Number(res.amount), DecimalsMap[res.loanMarket])
+    let eventName
+    let _amount
+    data.forEach(e => {
+      if (e.event == "LoanRepaid") {
+        eventName = e.event
+        _amount = e.args.amount.toBigInt()
+      }
+    })
+
+    let amount = BNtoNum(_amount)
+    
+    // const res = data['LoanRepaid']['returnValues'];
+    // let amount = BNtoNum(Number(res.amount))
     toast.success(`Loan Repaid Successfully: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     setIsTransactionDone(false);
   }
 
   const onDeposit = (data) => {
-    const res = data['DepositAdded']['returnValues'];
-    let amount = BNtoNum(Number(res.amount),DecimalsMap[res.market]);
+    let eventName
+    let _amount
+    data.forEach(e => {
+      if (e.event == "DepositAdded") {
+        eventName = e.event
+        _amount = e.args.amount.toBigInt()
+      }
+    })
+
+    let amount = BNtoNum(_amount)
+    
+    // const res = data['DepositAdded']['returnValues'];
+    // let amount = BNtoNum(Number(res.amount),DecimalsMap[res.market]);
     toast.success(`Deposited amount: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     setIsTransactionDone(false);
   }
 
   const onSwap = (data) => {
-    const res = data['MarketSwapped']['returnValues'];
-    let amount = BNtoNum(Number(res.amount),DecimalsMap[res.loanMarket]);
-    toast.success(`Swap Loan successful: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
+    let eventName
+    let _amount
+    data.forEach(e => {
+      if (e.event == "MarketSwapped") {
+        console.log("MarketSwapped",e)
+        eventName = e.event
+        _amount = e.args.currentAmount.toBigInt()
+      }
+    })
+
+    let amount = BNtoNum(_amount)
+    
+    // const res = data['MarketSwapped']['returnValues'];
+    // let amount = BNtoNum(Number(res.amount),DecimalsMap[res.market]);
+    toast.success(`Swap Loan successful${amount ? ": " + amount: ""}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     setIsTransactionDone(false);
   }
 
   const onSwapToLoan = (data) => {
-    const res = data['MarketSwapped']['returnValues'];
-    let amount = BNtoNum(Number(res.amount),DecimalsMap[res.loanMarket]);
+    let eventName
+    let _amount
+    data.forEach(e => {
+      if (e.event == "MarketSwapped") {
+        eventName = e.event
+        _amount = e.args.amount.toBigInt()
+      }
+    })
+
+    let amount = BNtoNum(_amount)
+    
+    // const res = data['MarketSwapped']['returnValues'];
+    // let amount = BNtoNum(Number(res.amount),DecimalsMap[res.market]);
     toast.success(`Swap to Loan successful: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     setIsTransactionDone(false);
   }
 
   const WithdrawalDeposit = (data) => {
-    const res = data['Withdrawal']['returnValues'];
-    let amount = BNtoNum(Number(res.amount), DecimalsMap[res.market])
+    let eventName
+    let _amount
+    data.forEach(e => {
+      if (e.event == "Withdrawal") {
+        eventName = e.event
+        _amount = e.args.amount.toBigInt()
+      }
+    })
+
+    let amount = BNtoNum(_amount)
+    // const res = data['Withdrawal']['returnValues'];
+    // let amount = BNtoNum(Number(res.amount), DecimalsMap[res.market])
     toast.success(`Deposit Withdrawn: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     setIsTransactionDone(false);
   }
@@ -444,18 +556,18 @@ const Dashboard = () => {
         <MetaTags>
           <title>Hashstack Finance</title>
         </MetaTags>
-        <Banner/>
+        <Banner />
         <Container fluid>
           <h5>OPEN PROTOCOL</h5>
           <br />
 
           <Row>
-            {customActiveTab === '2' ? 
-            <Col xl="4">
-              <Card>
-                {/* {customActiveTab === '2' ? */}
+            {customActiveTab === '2' ?
+              <Col xl="4">
+                <Card>
+                  {/* {customActiveTab === '2' ? */}
 
-                  { passbookStatus === false ?
+                  {passbookStatus === false ?
                     (
                       /* -------------------------------------- REPAY ----------------------------- */
                       <CardBody>
@@ -501,7 +613,7 @@ const Dashboard = () => {
                                                 <option hidden>Loan Market</option>
                                                 {[...new Map(activeLoansData.map((item: any) => [item['loanMarket'], item])).values()].map((asset, key) => {
                                                   return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
-                                              })}
+                                                })}
                                               </select>
                                             </Col>
                                           </div>
@@ -509,14 +621,14 @@ const Dashboard = () => {
                                             <Col sm={12}>
                                               <select className="form-select" onChange={handleLoanCommitementChange}>
                                                 <option hidden>Minimum Commitment Period</option>
-                                                    {activeLoansData.filter((asset) => {
-                                                          return (EventMap[asset.loanMarket.toUpperCase()] === loanOption)
-                                                        })
-                                                        .map(item => item['commitment'])
-                                                        .filter((value, index, self) => self.indexOf(value) === index)
-                                                        .map((asset, key) => {
-                                                        return <option key={key} value={asset}>{EventMap[asset]}</option>
-                                                    })}
+                                                {activeLoansData.filter((asset) => {
+                                                  return (EventMap[asset.loanMarket.toUpperCase()] === loanOption)
+                                                })
+                                                  .map(item => item['commitment'])
+                                                  .filter((value, index, self) => self.indexOf(value) === index)
+                                                  .map((asset, key) => {
+                                                    return <option key={key} value={asset}>{EventMap[asset]}</option>
+                                                  })}
                                               </select>
                                             </Col>
                                           </div>
@@ -577,7 +689,7 @@ const Dashboard = () => {
                                                 <option hidden>Loan market</option>
                                                 {[...new Map(activeLoansData.map((item: any) => [item['loanMarket'], item])).values()].map((asset, key) => {
                                                   return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
-                                              })}
+                                                })}
                                               </select>
                                             </Col>
                                           </div>
@@ -585,14 +697,14 @@ const Dashboard = () => {
                                             <Col sm={12}>
                                               <select className="form-select" onChange={handleLoanCommitementChange}>
                                                 <option hidden>Minimum Commitment Period</option>
-                                                    {activeLoansData.filter((asset) => {
-                                                          return (EventMap[asset.loanMarket.toUpperCase()] === loanOption)
-                                                        })
-                                                        .map(item => item['commitment'])
-                                                        .filter((value, index, self) => self.indexOf(value) === index)
-                                                        .map((asset, key) => {
-                                                        return <option key={key} value={asset}>{EventMap[asset]}</option>
-                                                    })}
+                                                {activeLoansData.filter((asset) => {
+                                                  return (EventMap[asset.loanMarket.toUpperCase()] === loanOption)
+                                                })
+                                                  .map(item => item['commitment'])
+                                                  .filter((value, index, self) => self.indexOf(value) === index)
+                                                  .map((asset, key) => {
+                                                    return <option key={key} value={asset}>{EventMap[asset]}</option>
+                                                  })}
                                               </select>
                                             </Col>
                                           </div>
@@ -615,7 +727,7 @@ const Dashboard = () => {
                                               disabled={isTransactionDone}
                                               onClick={handleWithdrawLoan}
                                             >
-                                              
+
                                               {!isTransactionDone ? 'Withdraw Loan' : <Spinner>Loading...</Spinner>}
                                             </Button>
                                           </div>
@@ -663,26 +775,26 @@ const Dashboard = () => {
                                             <select className="form-select" onChange={handleLoanOptionChange}>
                                               <option hidden>Loan Market</option>
                                               {[...new Map(activeLoansData.map((item: any) => [item['loanMarket'], item])).values()].map((asset, key) => {
-                                                  return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
+                                                return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
                                               })}
                                             </select>
                                           </Col>
                                         </div>
                                         <div className="row mb-4">
-                                            <Col sm={12}>
-                                              <select className="form-select" onChange={handleLoanCommitementChange}>
-                                                <option hidden>Minimum Commitment Period</option>
-                                                    {activeLoansData.filter((asset) => {
-                                                          return (EventMap[asset.loanMarket.toUpperCase()] === loanOption)
-                                                        })
-                                                        .map(item => item['commitment'])
-                                                        .filter((value, index, self) => self.indexOf(value) === index)
-                                                        .map((asset, key) => {
-                                                        return <option key={key} value={asset}>{EventMap[asset]}</option>
-                                                    })}
-                                              </select>
-                                            </Col>
-                                          </div>
+                                          <Col sm={12}>
+                                            <select className="form-select" onChange={handleLoanCommitementChange}>
+                                              <option hidden>Minimum Commitment Period</option>
+                                              {activeLoansData.filter((asset) => {
+                                                return (EventMap[asset.loanMarket.toUpperCase()] === loanOption)
+                                              })
+                                                .map(item => item['commitment'])
+                                                .filter((value, index, self) => self.indexOf(value) === index)
+                                                .map((asset, key) => {
+                                                  return <option key={key} value={asset}>{EventMap[asset]}</option>
+                                                })}
+                                            </select>
+                                          </Col>
+                                        </div>
                                         <div className="row mb-4">
                                           <Col sm={12}>
                                             <select className="form-select" onChange={handleSwapOptionChange}>
@@ -748,26 +860,26 @@ const Dashboard = () => {
                                           <Col sm={12}>
                                             <select className="form-select" onChange={handleLoanOptionChange}>
                                               <option hidden>Select Loan</option>
-                                              {[...new Map(activeLoansData.map((item: any) => [item['loanMarket'], item])).values()].map((asset, key) => {
-                                                  return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
+                                              {[...new Map(activeLoansData.filter((asset: any)=>asset.isSwapped).map((item: any) => [item['loanMarket'], item])).values()].map((asset, key) => {
+                                                return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
                                               })}
                                             </select>
                                           </Col>
                                         </div>
                                         <div className="row mb-4">
-                                            <Col sm={12}>
-                                              <select className="form-select" onChange={handleLoanCommitementChange}>
-                                                <option hidden>Minimum Commitment Period</option>
-                                                    {activeLoansData.filter((asset) => {
-                                                          return (EventMap[asset.loanMarket.toUpperCase()] === loanOption)
-                                                        })
-                                                        .map(item => item['commitment'])
-                                                        .filter((value, index, self) => self.indexOf(value) === index)
-                                                        .map((asset, key) => {
-                                                        return <option key={key} value={asset}>{EventMap[asset]}</option>
-                                                    })}
-                                              </select>
-                                            </Col>
+                                          <Col sm={12}>
+                                            <select className="form-select" onChange={handleLoanCommitementChange}>
+                                              <option hidden>Minimum Commitment Period</option>
+                                              {activeLoansData.filter((asset) => {
+                                                return (EventMap[asset.loanMarket.toUpperCase()] === loanOption)
+                                              })
+                                                .map(item => item['commitment'])
+                                                .filter((value, index, self) => self.indexOf(value) === index)
+                                                .map((asset, key) => {
+                                                  return <option key={key} value={asset}>{EventMap[asset]}</option>
+                                                })}
+                                            </select>
+                                          </Col>
                                         </div>
 
                                         <div className="d-grid gap-2">
@@ -778,7 +890,7 @@ const Dashboard = () => {
                                             onClick={handleSwapToLoan}
                                           >
                                             {!isTransactionDone ? 'Swap to Loan' : <Spinner>Loading...</Spinner>}
-                                            
+
                                           </Button>
                                         </div>
                                       </Form>
@@ -825,32 +937,32 @@ const Dashboard = () => {
                                             <select className="form-select" onChange={handleLoanOptionChange}>
                                               <option hidden>Loan Market</option>
                                               {[...new Map(activeLoansData.map((item: any) => [item['loanMarket'], item])).values()].map((asset, key) => {
-                                                  return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
+                                                return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
                                               })}
                                             </select>
                                           </Col>
                                         </div>
                                         <div className="row mb-4">
-                                            <Col sm={12}>
-                                              <select className="form-select" onChange={handleLoanCommitementChange}>
-                                                <option hidden>Minimum Commitment Period</option>
-                                                    {activeLoansData.filter((asset) => {
-                                                          return (EventMap[asset.loanMarket.toUpperCase()] === loanOption)
-                                                        })
-                                                        .map(item => item['commitment'])
-                                                        .filter((value, index, self) => self.indexOf(value) === index)
-                                                        .map((asset, key) => {
-                                                        return <option key={key} value={asset}>{EventMap[asset]}</option>
-                                                    })}
-                                              </select>
-                                            </Col>
+                                          <Col sm={12}>
+                                            <select className="form-select" onChange={handleLoanCommitementChange}>
+                                              <option hidden>Minimum Commitment Period</option>
+                                              {activeLoansData.filter((asset) => {
+                                                return (EventMap[asset.loanMarket.toUpperCase()] === loanOption)
+                                              })
+                                                .map(item => item['commitment'])
+                                                .filter((value, index, self) => self.indexOf(value) === index)
+                                                .map((asset, key) => {
+                                                  return <option key={key} value={asset}>{EventMap[asset]}</option>
+                                                })}
+                                            </select>
+                                          </Col>
                                         </div>
                                         <div className="row mb-4">
                                           <Col sm={12}>
                                             <select className="form-select" onChange={handleCollateralOptionChange}>
                                               <option hidden>Collateral Market</option>
                                               {[...new Map(activeLoansData.map((item: any) => [item['collateralMarket'], item])).values()].map((asset, key) => {
-                                                  return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
+                                                return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
                                               })}
                                             </select>
                                           </Col>
@@ -875,7 +987,7 @@ const Dashboard = () => {
                                             onClick={handleCollateral}
                                           >
                                             {!isTransactionDone ? 'Add Collateral' : <Spinner>Loading...</Spinner>}
-                                            
+
                                           </Button>
                                         </div>
                                       </Form>
@@ -914,25 +1026,25 @@ const Dashboard = () => {
                                             <select className="form-select" onChange={handleLoanOptionChange}>
                                               <option hidden>Loan Market</option>
                                               {[...new Map(activeLoansData.map((item: any) => [item['loanMarket'], item])).values()].map((asset, key) => {
-                                                  return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
+                                                return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
                                               })}
                                             </select>
                                           </Col>
                                         </div>
                                         <div className="row mb-4">
-                                            <Col sm={12}>
-                                              <select className="form-select" onChange={handleLoanCommitementChange}>
-                                                <option hidden>Minimum Commitment Period</option>
-                                                    {activeLoansData.filter((asset) => {
-                                                          return (EventMap[asset.loanMarket.toUpperCase()] === loanOption)
-                                                        })
-                                                        .map(item => item['commitment'])
-                                                        .filter((value, index, self) => self.indexOf(value) === index)
-                                                        .map((asset, key) => {
-                                                        return <option key={key} value={asset}>{EventMap[asset]}</option>
-                                                    })}
-                                              </select>
-                                            </Col>
+                                          <Col sm={12}>
+                                            <select className="form-select" onChange={handleLoanCommitementChange}>
+                                              <option hidden>Minimum Commitment Period</option>
+                                              {activeLoansData.filter((asset) => {
+                                                return (EventMap[asset.loanMarket.toUpperCase()] === loanOption)
+                                              })
+                                                .map(item => item['commitment'])
+                                                .filter((value, index, self) => self.indexOf(value) === index)
+                                                .map((asset, key) => {
+                                                  return <option key={key} value={asset}>{EventMap[asset]}</option>
+                                                })}
+                                            </select>
+                                          </Col>
                                         </div>
                                         <div className="d-grid gap-2">
                                           <Button
@@ -942,7 +1054,7 @@ const Dashboard = () => {
                                             onClick={handleWithdrawCollateral}
                                           >
                                             {!isTransactionDone ? 'Withdraw Collateral' : <Spinner>Loading...</Spinner>}
-                                            
+
                                           </Button>
                                         </div>
                                       </Form>
@@ -993,7 +1105,7 @@ const Dashboard = () => {
                                                 <option hidden>Select Market</option>
                                                 {[...new Map(activeDepositsData.map((item: any) => [item['market'], item])).values()].map((asset, key) => {
                                                   return <option key={key} value={EventMap[asset.market.toUpperCase()]}>{EventMap[asset.market.toUpperCase()]}</option>
-                                              })}
+                                                })}
                                               </select>
                                             </Col>
                                           </div>
@@ -1001,14 +1113,14 @@ const Dashboard = () => {
                                             <Col sm={12}>
                                               <select className="form-select" onChange={handleDepositRequestTime}>
                                                 <option hidden>Minimum Commitment Period</option>
-                                                    {activeDepositsData.filter((asset) => {
-                                                          return (EventMap[asset.market.toUpperCase()] === depositRequestSel)
-                                                        })
-                                                        .map(item => item['commitment'])
-                                                        .filter((value, index, self) => self.indexOf(value) === index)
-                                                        .map((asset, key) => {
-                                                        return <option key={key} value={asset}>{EventMap[asset]}</option>
-                                                    })}
+                                                {activeDepositsData.filter((asset) => {
+                                                  return (EventMap[asset.market.toUpperCase()] === depositRequestSel)
+                                                })
+                                                  .map(item => item['commitment'])
+                                                  .filter((value, index, self) => self.indexOf(value) === index)
+                                                  .map((asset, key) => {
+                                                    return <option key={key} value={asset}>{EventMap[asset]}</option>
+                                                  })}
                                               </select>
                                             </Col>
                                           </div>
@@ -1018,7 +1130,7 @@ const Dashboard = () => {
                                                 type="text"
                                                 className="form-control"
                                                 id="horizontal-password-Input"
-                                                placeholder={depositRequestSel ? `Min amount should be greater than ${MinimumAmount[depositRequestSel]}`: 'Amount'}
+                                                placeholder={depositRequestSel ? `Min amount should be greater than ${MinimumAmount[depositRequestSel]}` : 'Amount'}
                                                 onChange={(event) => { inputVal1 = Number(event.target.value) }}
                                               />
                                             </Col>
@@ -1032,7 +1144,7 @@ const Dashboard = () => {
                                               onClick={handleDepositRequest}
                                             >
                                               {!isTransactionDone ? 'Add to Deposit' : <Spinner>Loading...</Spinner>}
-                                              
+
                                             </Button>
                                           </div>
                                         </Form>
@@ -1070,7 +1182,7 @@ const Dashboard = () => {
                                                 <option hidden>Select Market</option>
                                                 {[...new Map(activeDepositsData.map((item: any) => [item['market'], item])).values()].map((asset, key) => {
                                                   return <option key={key} value={EventMap[asset.market.toUpperCase()]}>{EventMap[asset.market.toUpperCase()]}</option>
-                                              })}
+                                                })}
                                               </select>
                                             </Col>
                                           </div>
@@ -1079,13 +1191,13 @@ const Dashboard = () => {
                                               <select className="form-select" onChange={handleWithdrawDepositTime}>
                                                 <option hidden>Minimum Commitment Period</option>
                                                 {activeDepositsData.filter((asset) => {
-                                                          return (EventMap[asset.market.toUpperCase()] === withdrawDepositSel)
-                                                        })
-                                                        .map(item => item['commitment'])
-                                                        .filter((value, index, self) => self.indexOf(value) === index)
-                                                        .map((asset, key) => {
-                                                        return <option key={key} value={asset}>{EventMap[asset]}</option>
-                                                    })}
+                                                  return (EventMap[asset.market.toUpperCase()] === withdrawDepositSel)
+                                                })
+                                                  .map(item => item['commitment'])
+                                                  .filter((value, index, self) => self.indexOf(value) === index)
+                                                  .map((asset, key) => {
+                                                    return <option key={key} value={asset}>{EventMap[asset]}</option>
+                                                  })}
                                               </select>
                                             </Col>
                                           </div>
@@ -1109,7 +1221,7 @@ const Dashboard = () => {
                                               onClick={handleWithdrawDeposit}
                                             >
                                               {!isTransactionDone ? 'Withdraw Deposit' : <Spinner>Loading...</Spinner>}
-                                              
+
                                             </Button>
                                           </div>
                                         </Form>
@@ -1124,16 +1236,16 @@ const Dashboard = () => {
                       </CardBody>
                     )
 
-                //   :
+                    //   :
 
-                //   /* -------------------------------------- DEPOSIT ----------------------------- */
-                }
-              </Card>
-            </Col>
-            : null }
+                    //   /* -------------------------------------- DEPOSIT ----------------------------- */
+                  }
+                </Card>
+              </Col>
+              : null}
 
 
-            <Col xl={customActiveTab === '2' ? "8" : "12" }>
+            <Col xl={customActiveTab === '2' ? "8" : "12"}>
               <Card>
                 <CardBody>
                   <Nav tabs className="nav-tabs-custom">
@@ -1222,7 +1334,7 @@ const Dashboard = () => {
                           </thead>
                           <tbody>
                             <DashboardTBody isloading={isLoading} depositInterestChange={depositInterestChange}
-                             borrowInterestChange={borrowInterestChange}></DashboardTBody>
+                              borrowInterestChange={borrowInterestChange}></DashboardTBody>
                           </tbody>
                         </Table>
                       </div>

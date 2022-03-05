@@ -20,6 +20,7 @@ Sentry.init({
 
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
+console.log("API: ",process.env.REACT_APP_API_URL)
 
 ReactDOM.render(
   <Provider store={store}>

@@ -1,4 +1,3 @@
-import Web3 from 'web3';
 import { defaultChainId, rpcUrls, DecimalsMap } from './constants';
 import { BigNumber } from "bignumber.js";
 import TokenList from './contracts/TokenList';
@@ -11,40 +10,10 @@ import DcentProvider from "dcent-provider";
 import Authereum from "authereum";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+// import 'react-toastify/dist/ReactToastify.css';
+import { utils } from "ethers";
+// import TokenList from './contracts/TokenList';
 
-export const createWeb3 = (provider) => {
-  var realProvider;
-
-  if (typeof provider === 'string') {
-    if (provider.includes('wss')) {
-      realProvider = new Web3.providers.WebsocketProvider(
-        provider
-      );
-    } else {
-      realProvider = new Web3.providers.HttpProvider(
-        provider
-      );
-    }
-  } else {
-    realProvider = provider;
-  }
-
-  return new Web3(realProvider);
-}
-
-export const getDefaultWeb3 = () => {
-  return createWeb3(rpcUrls[defaultChainId]);
-}
-
-export const getDefaultContractOptions = () => {
-  const web3 = getDefaultWeb3();
-  return {
-    web3,
-    chainId: defaultChainId,
-    account: null
-  };
-}
 
 export const fixedSpecial = (num: number, n: number) => {
   var str = num.toFixed(n);
@@ -73,18 +42,27 @@ export const NumToBN = (value: number, decimal: number= 18) => {
 }
 
 export const GetErrorText = (err) => {
-  if (err) {
-    try {
-      return JSON.parse(err.split('.')[1]).message || 'Oops! Something went wrong.';
-    }
-    catch (error) {
-      console.log(error);
-      return err;
-    }
+  // if (err) {
+  //   try {
+  //     return JSON.parse(err.split('.')[1]).message || 'Oops! Something went wrong.';
+  //   }
+  //   catch (error) {
+  //     console.log(error);
+  //     return err;
+  //   }
+  // }
+  // else {
+  //   return 'Oops! Something went wrong.';
+  // }
+  if (typeof(err) == 'string') {
+    return err;
   }
-  else {
-    return 'Oops! Something went wrong.';
-  }
+  else if(err.data)
+    return err.data.message;
+  else if(err.message)
+    return err.message;
+  else
+    return "Oops! Something went wrong."
 }
 
 export const toFixed = (num: number, digit: number) => {
@@ -94,13 +72,13 @@ export const toFixed = (num: number, digit: number) => {
 }
 
 
-export const isMarketSupported = async (symbol: string) => {
-  const tokenList = new TokenList(getDefaultContractOptions(), process.env.REACT_APP_DIAMOND_ADDRESS);
-  const isSupported = await tokenList.call("isMarketSupported", symbol);
-  return {
-    isSupport: isSupported
-  }
-}
+// export const isMarketSupported = async (symbol: string) => {
+//   const tokenList = new TokenList(getDefaultContractOptions(), process.env.REACT_APP_DIAMOND_ADDRESS);
+//   const isSupported = await tokenList.call("isMarketSupported", symbol);
+//   return {
+//     isSupport: isSupported
+//   }
+// }
 
 export const OnSuccessCallback = (data, eventName, key, message) => {
   const res = data[eventName]['returnValues'];
@@ -175,3 +153,7 @@ export const providerOptions = {
     package: null
   },
 };
+export const bytesToString = (bytes) =>{
+  return utils.parseBytes32String(bytes);
+}
+
