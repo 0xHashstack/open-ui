@@ -88,7 +88,7 @@ const Borrow = (props) => {
       }
     })
 
-    let amount = BNtoNum(_amount)
+    let amount = BNtoNum(_amount, 8)
       setIsTransactionDone(false);
       // const res = data['NewLoan']['returnValues'];
       // let amount = BNtoNum(Number(res.loanAmount), DecimalsMap[res.market]);
