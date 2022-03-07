@@ -78,7 +78,6 @@ export const BorrowInterestRates = {
 }
 
 // export const decimals = [18,18,18,8];
-export const decimals = [8, 18, 18, 18]
 
 export const DecimalsMap = {
   "BTC": 8,
