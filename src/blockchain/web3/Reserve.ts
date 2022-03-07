@@ -1,48 +1,47 @@
-import Reserve from '../contracts/Reserve';
-import { NumToBN } from '../utils';
+import { ethers } from "ethers"
+import abi from "../abis/Reserve.json"
+import { NumToBN } from "../utils"
 
 class ReserveWrapper {
-    reserve: Reserve
+  reserve: any
 
-    constructor(wrapperOptions: any) {
-        this.reserve = new Reserve(wrapperOptions, process.env.REACT_APP_DIAMOND_ADDRESS);
-    }
+  constructor(signer: any) {
+    this.reserve = new ethers.Contract(process.env.REACT_APP_DIAMOND_ADDRESS, abi, signer)
+  }
 
-    transferAnyBEP20(address: string, recipient: string, value: number, decimal: number) {
-        return this.reserve.send("transferAnyBEP20", {}, address, recipient, NumToBN(value, decimal));
-    }
+  transferAnyBEP20(address: string, recipient: string, value: number, decimal: number) {
+    return this.reserve.transferAnyBEP20(address, recipient, NumToBN(value, decimal))
+  }
 
-    // collateralTransfer(address: string, market: string, commitment: string) {
-    //     return this.reserve.send("collateralTransfer", {}, address, market, commitment);
-    // }
+  // collateralTransfer(address: string, market: string, commitment: string) {
+  //     return this.reserve.send("collateralTransfer", {}, address, market, commitment);
+  // }
 
+  //getter methods
+  avblMarketReserves(market: string) {
+    return this.reserve.avblMarketReserves(market)
+  }
 
-    //getter methods
-    avblMarketReserves(market: string) {
-        return this.reserve.call("avblMarketReserves", market);
-    }
+  marketReserves(market: string) {
+    return this.reserve.marketReserves(market)
+  }
 
-    marketReserves(market: string) {
-        return this.reserve.call("marketReserves", market);
-    }
+  // marketUtilisation(market: string) {
+  //     return this.reserve.call("marketUtilisation", market);
+  // }
 
-    // marketUtilisation(market: string) {
-    //     return this.reserve.call("marketUtilisation", market);
-    // }
+  isPausedReserve() {
+    return this.reserve.isPausedReserve()
+  }
 
-    isPausedReserve() {
-        return this.reserve.call("isPausedReserve");
-    }
+  //admin operations
+  pauseReserve() {
+    return this.reserve.pauseReserve()
+  }
 
-    //admin operations
-    pauseReserve() {
-        return this.reserve.send("pauseReserve", {});
-    }
-
-    unpauseReserve() {
-        return this.reserve.send("unpauseReserve", {});
-    }
-
+  unpauseReserve() {
+    return this.reserve.unpauseReserve()
+  }
 }
 
-export default ReserveWrapper;
+export default ReserveWrapper

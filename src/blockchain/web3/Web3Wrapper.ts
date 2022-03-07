@@ -1,4 +1,3 @@
-import Web3 from 'web3';
 import ComptrollerWeb3Wrapper from './Comptroller';
 import DepositWrapper from './Deposit';
 import LiquidatorWrapper from './Liquidator';
@@ -10,10 +9,7 @@ import TokenList from './TokenList';
 import MockBep20Wrapper from './MockBep20';
 
 export default class Web3Wrapper {
-  web3: Web3;
-  chainId: number;
-  account: string;
-  wrapperOptions: any;
+  signer: any;
   depositInstance: any;
   loanInstance: any;
   comptrollerInstance: any;
@@ -24,21 +20,13 @@ export default class Web3Wrapper {
   faucetInstance: any;
   mockBep20Instance: any;
 
-  constructor(web3, chainId, account, options = {}) {
-
-    this.web3 = web3;
-    this.chainId = chainId;
-    this.account = account;
-
-    this.wrapperOptions = {
-      web3, chainId, account,
-      ...options
-    }
+  constructor(_signer: any) {
+    this.signer = _signer;
   }
 
   getDepositInstance() {
     if (!this.depositInstance) {
-      this.depositInstance = new DepositWrapper(this.wrapperOptions);
+      this.depositInstance = new DepositWrapper(this.signer);
     }
     return this.depositInstance;
 
@@ -46,56 +34,56 @@ export default class Web3Wrapper {
 
   getLoanInstance() {
     if (!this.loanInstance) {
-      this.loanInstance = new LoanWrapper(this.wrapperOptions);
+      this.loanInstance = new LoanWrapper(this.signer);
     }
     return this.loanInstance;
   }
 
   getComptrollerInstance() {
     if (!this.comptrollerInstance) {
-      this.comptrollerInstance = new ComptrollerWeb3Wrapper(this.wrapperOptions);
+      this.comptrollerInstance = new ComptrollerWeb3Wrapper(this.signer);
     }
     return this.comptrollerInstance;
   }
 
   getLiquidatorInstance() {
     if (!this.liquidatorInstance) {
-      this.liquidatorInstance = new LiquidatorWrapper(this.wrapperOptions);
+      this.liquidatorInstance = new LiquidatorWrapper(this.signer);
     }
     return this.liquidatorInstance;
   }
 
   getTokenListInstance() {
     if (!this.tokenListInstance) {
-      this.tokenListInstance = new TokenList(this.wrapperOptions);
+      this.tokenListInstance = new TokenList(this.signer);
     }
     return this.tokenListInstance;
   }
 
   getReserveInstance() {
     if (!this.reserveInstance) {
-      this.reserveInstance = new ReserveWrapper(this.wrapperOptions);
+      this.reserveInstance = new ReserveWrapper(this.signer);
     }
     return this.reserveInstance;
   }
 
   getOracleOpen() {
     if (!this.oracleOpenInstance) {
-      this.oracleOpenInstance = new OracleOpenWrapper(this.wrapperOptions);
+      this.oracleOpenInstance = new OracleOpenWrapper(this.signer);
     }
     return this.oracleOpenInstance;
   }
 
   getFaucetInstance() {
     if (!this.faucetInstance) {
-      this.faucetInstance = new Faucet(this.wrapperOptions);
+      this.faucetInstance = new Faucet(this.signer);
     }
     return this.faucetInstance;
   }
 
   getMockBep20Instance() {
     if(!this.mockBep20Instance) {
-      this.mockBep20Instance = new MockBep20Wrapper(this.wrapperOptions);
+      this.mockBep20Instance = new MockBep20Wrapper(this.signer);
     }
     return this.mockBep20Instance;
   }
