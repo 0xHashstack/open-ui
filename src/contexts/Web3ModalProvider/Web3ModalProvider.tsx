@@ -61,7 +61,7 @@ const Web3ModalProvider = (props: any) => {
     setAccount(null)
     setChainId(null)
     setEthersInstance(null)
-    // setNetworkId(null);
+    setSigner(null);
     setConnected(false)
     setProvider(null)
   }, [])
@@ -69,12 +69,6 @@ const Web3ModalProvider = (props: any) => {
   const disconnect = useCallback(
     async function () {
       await web3Modal.clearCachedProvider()
-      if (provider?.disconnect && typeof provider.disconnect === "function") {
-        await provider.disconnect()
-      }
-      if (provider?.close && typeof provider.close === "function") {
-        await provider.close()
-      }
       resetWeb3()
     },
     [web3Modal, ethersInstance, resetWeb3]
@@ -103,7 +97,7 @@ const Web3ModalProvider = (props: any) => {
     //============================================================================================================//
     const ethersProviderInstance = new ethers.providers.Web3Provider(_provider)
     setEthersInstance(ethersProviderInstance);
-    await ethersProviderInstance.send("eth_requestAccounts", [])
+    // await ethersProviderInstance.send("eth_requestAccounts", [])
     const signer = await ethersProviderInstance.getSigner()
     setSigner(signer);
     const _account = await signer.getAddress().then((address) => {
