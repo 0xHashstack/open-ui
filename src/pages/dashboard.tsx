@@ -209,7 +209,6 @@ const Dashboard = () => {
   }
 
   const onLoansData = loansData => {
-    console.log("loansData",loansData)
     const loans = [];
     loansData.collateralAmount.forEach((collateralAmount, index) => {
       let debtCategory;
@@ -405,7 +404,7 @@ const Dashboard = () => {
         }
       })
       
-    let amount = BNtoNum(_amount)
+    let amount = BNtoNum(_amount, 8)
     
     // const res = data['AddCollateral']['returnValues'];
     // let amount = BNtoNum(Number(res.amount))
@@ -423,7 +422,7 @@ const Dashboard = () => {
             }
           })
 
-          let amount = BNtoNum(_amount)
+          let amount = BNtoNum(_amount, 8)
           
     // const res = data['CollateralReleased']['returnValues'];
     // let amount = BNtoNum(Number(res.amount))
@@ -442,7 +441,7 @@ const Dashboard = () => {
       }
     })
 
-    let amount = BNtoNum(_amount)
+    let amount = BNtoNum(_amount, 8)
     
     
     // const res = data['WithdrawPartialLoan']['returnValues'];
@@ -461,7 +460,7 @@ const Dashboard = () => {
       }
     })
 
-    let amount = BNtoNum(_amount)
+    let amount = BNtoNum(_amount, 8)
     
     // const res = data['LoanRepaid']['returnValues'];
     // let amount = BNtoNum(Number(res.amount))
@@ -479,7 +478,7 @@ const Dashboard = () => {
       }
     })
 
-    let amount = BNtoNum(_amount)
+    let amount = BNtoNum(_amount, 8)
     
     // const res = data['DepositAdded']['returnValues'];
     // let amount = BNtoNum(Number(res.amount),DecimalsMap[res.market]);
@@ -498,7 +497,7 @@ const Dashboard = () => {
       }
     })
 
-    let amount = BNtoNum(_amount)
+    let amount = BNtoNum(_amount, 8)
     
     // const res = data['MarketSwapped']['returnValues'];
     // let amount = BNtoNum(Number(res.amount),DecimalsMap[res.market]);
@@ -516,7 +515,7 @@ const Dashboard = () => {
       }
     })
 
-    let amount = BNtoNum(_amount)
+    let amount = BNtoNum(_amount, 8)
     
     // const res = data['MarketSwapped']['returnValues'];
     // let amount = BNtoNum(Number(res.amount),DecimalsMap[res.market]);
@@ -534,7 +533,7 @@ const Dashboard = () => {
       }
     })
 
-    let amount = BNtoNum(_amount)
+    let amount = BNtoNum(_amount, 8)
     // const res = data['Withdrawal']['returnValues'];
     // let amount = BNtoNum(Number(res.amount), DecimalsMap[res.market])
     toast.success(`Deposit Withdrawn: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});

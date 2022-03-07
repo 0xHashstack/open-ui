@@ -93,6 +93,8 @@ export const DecimalsMap = {
   "BNB": 8,
   "BNB.T": 8,
   "0x57424e4200000000000000000000000000000000000000000000000000000000": 8,
+  "WBNB": 8,
+  "WBNB.T": 8,
 }
 
 export const CommitMap = {
@@ -151,11 +153,13 @@ export const EventMap = {
   "USDT.T": "USDT",
   "BTC.T": "BTC",
   "BNB.T": "BNB",
+  "WBNB.T": "BNB",
 
   USDC: "USDC",
   USDT: "USDT",
   BTC: "BTC",
   BNB: "BNB",
+  WBNB: "BNB",
 
   NONE: "None",
   TWOWEEKS: "Two Weeks",
@@ -168,10 +172,12 @@ export const CoinClassNames = {
   USDC: "mdi mdi-ethereum",
   BTC: "mdi mdi-bitcoin",
   BNB: "mdi mdi-drag-variant",
+  WBNB: "mdi mdi-drag-variant",
   "USDT.T": "mdi mdi-litecoin",
   "USDC.T": "mdi mdi-ethereum",
   "BTC.T": "mdi mdi-bitcoin",
   "BNB.T": "mdi mdi-drag-variant",
+  "WBNB.T": "mdi mdi-drag-variant",
 }
 
 export const MinimumAmount = {
