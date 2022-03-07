@@ -555,7 +555,7 @@ const Dashboard = () => {
         <MetaTags>
           <title>Hashstack Finance</title>
         </MetaTags>
-        <Banner />
+        {/* <Banner /> */}
         <Container fluid>
           <h5>OPEN PROTOCOL</h5>
           <br />
