@@ -87,16 +87,16 @@ const Layout = (props) => {
   }))
 
   //hides right sidebar on body click
-  const hideRightbar = (event) => {
-    var rightbar = document.getElementById("right-bar");
-    //if clicked in inside right bar, then do nothing
-    if (rightbar && rightbar.contains(event.target)) {
-      return;
-    } else {
-      //if clicked in outside of rightbar then fire action for hide rightbar
-      dispatch(showRightSidebarAction(false));
-    }
-  };
+  // const hideRightbar = (event) => {
+  //   var rightbar = document.getElementById("right-bar");
+  //   //if clicked in inside right bar, then do nothing
+  //   if (rightbar && rightbar.contains(event.target)) {
+  //     return;
+  //   } else {
+  //     //if clicked in outside of rightbar then fire action for hide rightbar
+  //     dispatch(showRightSidebarAction(false));
+  //   }
+  // };
 
   /*
   layout settings
@@ -108,7 +108,7 @@ const Layout = (props) => {
   useEffect(() => {
     //init body click event fot toggle rightbar
     
-    document.body.addEventListener("click", hideRightbar, true);
+    // document.body.addEventListener("click", hideRightbar, true);
     let timer;
     if (isPreloader === true) {
       document.getElementById("preloader").style.display = "block";
@@ -131,11 +131,11 @@ const Layout = (props) => {
     }
   }, [dispatch, topbarTheme]);
 
-  useEffect(() => {
-    if (layoutWidth) {
-      dispatch(changeLayoutWidth(layoutWidth));
-    }
-  }, [dispatch, layoutWidth]);
+  // useEffect(() => {
+  //   if (layoutWidth) {
+  //     dispatch(changeLayoutWidth(layoutWidth));
+  //   }
+  // }, [dispatch, layoutWidth]);
 
 
   const handleAccountWhitelist = () => {

@@ -1,6 +1,5 @@
-import { defaultChainId, rpcUrls, DecimalsMap } from './constants';
+import { DecimalsMap } from './constants';
 import { BigNumber } from "bignumber.js";
-import TokenList from './contracts/TokenList';
 import Fortmatic from "fortmatic";
 import Portis from "@portis/web3";
 // import MewConnect from "@myetherwallet/mewconnect-web-client";
@@ -71,14 +70,6 @@ export const toFixed = (num: number, digit: number) => {
   return Number(fixed_num.toString());
 }
 
-
-// export const isMarketSupported = async (symbol: string) => {
-//   const tokenList = new TokenList(getDefaultContractOptions(), process.env.REACT_APP_DIAMOND_ADDRESS);
-//   const isSupported = await tokenList.call("isMarketSupported", symbol);
-//   return {
-//     isSupport: isSupported
-//   }
-// }
 
 export const OnSuccessCallback = (data, eventName, key, message) => {
   const res = data[eventName]['returnValues'];
