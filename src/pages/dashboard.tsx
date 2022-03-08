@@ -244,8 +244,7 @@ const Dashboard = () => {
       const commit = activeLoansData.filter((asset) => {
         return (EventMap[asset.loanMarket.toUpperCase()] === _loanOption && asset.commitment.toUpperCase() === _commit); 
       });
-      const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[commit[0].collateralMarket.toUpperCase()],
-        BNtoNum(Number(commit[0].collateralAmount), DecimalsMap[commit[0].collateralMarket.toUpperCase()]), DecimalsMap[commit[0].collateralMarket.toUpperCase()]);
+      const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(market,inputVal1, decimal);
       await approveTransactionHash.wait();
       console.log("Approve Transaction sent: ", approveTransactionHash);
       const tx1 = await wrapper?.getLoanInstance().repayLoan(market, CommitMap[_commit], inputVal1, decimal);
