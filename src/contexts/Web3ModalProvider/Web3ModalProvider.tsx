@@ -69,7 +69,13 @@ const Web3ModalProvider = (props: any) => {
   const disconnect = useCallback(
     async function () {
       await web3Modal.clearCachedProvider()
-      resetWeb3()
+      if (provider?.disconnect && typeof provider.disconnect === 'function') {
+        await provider.disconnect()
+      }
+      if (provider?.close && typeof provider.close === 'function') {
+        await provider.close()
+      }
+      resetWeb3();
     },
     [web3Modal, ethersInstance, resetWeb3]
   )
@@ -146,10 +152,11 @@ const Web3ModalProvider = (props: any) => {
         })
       }
 
-      const handleDisconnect = (error: { code: number; message: string }) => {
+      const handleDisconnect = async (error: { code: number; message: string }) => {
         // eslint-disable-next-line no-console
         console.log("disconnect", error.message)
-        disconnect()
+        await web3Modal.clearCachedProvider()
+        resetWeb3();
       }
 
       provider.on("accountsChanged", handleAccountsChanged)
