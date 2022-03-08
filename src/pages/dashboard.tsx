@@ -18,8 +18,7 @@ import {
   TabContent,
   TabPane,
   Label,
-  Spinner,
-  Tooltip
+  Spinner
 } from "reactstrap";
 import classnames from "classnames";
 import { Web3ModalContext } from '../contexts/Web3ModalProvider';
@@ -28,12 +27,11 @@ import {
   EventMap, CoinClassNames, MinimumAmount,
   SymbolsMap, DecimalsMap, CommitMap, CommitMapReverse
 } from '../blockchain/constants';
-import { BNtoNum, GetErrorText, bytesToString, NumToBN } from '../blockchain/utils';
+import { BNtoNum, GetErrorText, bytesToString } from '../blockchain/utils';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import PassbookTBody from "./passbook-body";
 import DashboardTBody from "./dashboard-body";
-import Banner from "../components/banner";
 import { BigNumber } from "ethers";
 
 toast.configure({
@@ -235,6 +233,7 @@ const Dashboard = () => {
     })
     setActiveLoansData(loans)
   }
+
   const handleRepay = async () => {
     try {
       setIsTransactionDone(true);
