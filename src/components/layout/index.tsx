@@ -146,10 +146,14 @@ const Layout = (props) => {
       })
       .then(res => {
         if (res.data) {
+<<<<<<< HEAD
           // cacheService.setItem(`${account.toUpperCase()}_IsWhiteListedAccountRequested`, true);
           // cacheService.setItem(`${account.toUpperCase()}_IsWhiteListedAccount`, res.data.data['whiteListed']);
           setCounter(res.data.data['waitlist_ct']);
           // cacheService.setItem(`${account.toUpperCase()}_Waitlist_Counter`, res.data.data['waitlist_ct']);
+=======
+          setCounter(res.data.data['waitlist_ct']);
+>>>>>>> ae9fc7135723413e64bbe6ddd25cbb337f5848ba
           setIsWhiteListedAccountRequested(true);
           setIsWhiteListedAccount(res.data.data['whiteListed']);
         }
