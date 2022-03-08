@@ -8216,7 +8216,7 @@ ethereumjs-vm@^2.1.0, ethereumjs-vm@^2.3.4, ethereumjs-vm@^2.6.0:
     rustbn.js "~0.2.0"
     safe-buffer "^5.1.1"
 
-ethereumjs-wallet@^1.0.0, ethereumjs-wallet@^1.0.1:
+ethereumjs-wallet@^1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/ethereumjs-wallet/-/ethereumjs-wallet-1.0.2.tgz#2c000504b4c71e8f3782dabe1113d192522e99b6"
   integrity sha512-CCWV4RESJgRdHIvFciVQFnCHfqyhXWchTPlkfp28Qc53ufs+doi5I/cV2+xeK9+qEo25XCWfP9MiL+WEPAZfdA==
@@ -16479,14 +16479,6 @@ trim-right@^1.0.1:
   dependencies:
     glob "^7.1.2"
 
-truffle-privatekey-provider@*:
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/truffle-privatekey-provider/-/truffle-privatekey-provider-1.5.0.tgz#a4ba8e63ea44d8da7f8a92b6633e0b38a85a5fa1"
-  integrity sha512-Ir0WVXiJsg0M7U6qttPzDB57qEqprpwmBINHAHXOt4AmI1YO0I+LoMHO96rCdoG3N4ZwNc5NWgHw5qDz8qxy9A==
-  dependencies:
-    ethereumjs-wallet "^1.0.0"
-    web3-provider-engine "^15.0.12"
-
 tryer@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/tryer/-/tryer-1.0.1.tgz#f2c85406800b9b0f74c9f7465b81eaad241252f8"
@@ -17110,10 +17102,8 @@ watchpack@^1.7.4:
   resolved "https://registry.yarnpkg.com/watchpack/-/watchpack-1.7.5.tgz#1267e6c55e0b9b5be44c2023aed5437a2c26c453"
   integrity sha512-9P3MWk6SrKjHsGkLT2KHXdQ/9SNkyoJbabxnKOoJepsvJjJG8uYTR3yTPxPQvNDI3w4Nz1xnE0TLHK4RIVe/MQ==
   dependencies:
-    chokidar "^3.4.1"
     graceful-fs "^4.1.2"
     neo-async "^2.5.0"
-    watchpack-chokidar2 "^2.0.1"
   optionalDependencies:
     chokidar "^3.4.1"
     watchpack-chokidar2 "^2.0.1"
@@ -17381,7 +17371,7 @@ web3-provider-engine@16.0.3:
     xhr "^2.2.0"
     xtend "^4.0.1"
 
-web3-provider-engine@^15.0.12, web3-provider-engine@^15.0.7:
+web3-provider-engine@^15.0.7:
   version "15.0.12"
   resolved "https://registry.yarnpkg.com/web3-provider-engine/-/web3-provider-engine-15.0.12.tgz#24d7f2f6fb6de856824c7306291018c4fc543ac3"
   integrity sha512-/OfhQalKPND1iB5ggvGuYF0+SIb2Qj5OFTrT2VrZWP79UhMTdP7T+L2FtblmRdCeOetoAzZHdBaIwLOZsmIX+w==
