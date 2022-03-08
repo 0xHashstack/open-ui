@@ -235,6 +235,7 @@ const Dashboard = () => {
     })
     setActiveLoansData(loans)
   }
+  
   const handleRepay = async () => {
     try {
       setIsTransactionDone(true);
