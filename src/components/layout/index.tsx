@@ -12,7 +12,6 @@ import {
   changePreloader
 } from "../../store/actions";
 
-import { cacheService } from "../../helpers/CacheService";
 //redux
 import { useSelector, useDispatch } from "react-redux";
 
@@ -48,15 +47,11 @@ const Layout = (props) => {
       axios.get(`isWhiteListedAccount?address=${account}`)
         .then(res => {
           dispatch(changePreloader(true));
-          // if (res.data) {
-          //   cacheService.setItem(`${account.toUpperCase()}_IsWhiteListedAccount`, res.data['isWhiteListed']);
-          // }
+
           dispatch(changePreloader(true));
-          // cacheService.setItem(`${account.toUpperCase()}_IsWhiteListedAccountRequested`, res.data['whitelist_Requested']);
           setIsWhiteListedAccountRequested(res.data['whitelist_Requested']);
           setIsWhiteListedAccount(res.data['isWhiteListed']);
           setCounter(res.data['waitlist_ct']);
-          // cacheService.setItem(`${account.toUpperCase()}_Waitlist_Counter`, res.data['waitlist_ct']);
           timer = setTimeout(() => {dispatch(changePreloader(false));}, 300);
           setIsResponse(true);
           setIsTransactionDone(false);
@@ -151,15 +146,12 @@ const Layout = (props) => {
       })
       .then(res => {
         if (res.data) {
-          // cacheService.setItem(`${account.toUpperCase()}_IsWhiteListedAccountRequested`, true);
-          // cacheService.setItem(`${account.toUpperCase()}_IsWhiteListedAccount`, res.data.data['whiteListed']);
           setCounter(res.data.data['waitlist_ct']);
-          // cacheService.setItem(`${account.toUpperCase()}_Waitlist_Counter`, res.data.data['waitlist_ct']);
           setIsWhiteListedAccountRequested(true);
           setIsWhiteListedAccount(res.data.data['whiteListed']);
         }
       })
-      .catch(err => {console.log("Error", err); cacheService.setItem(`${account.toUpperCase()}_IsWhiteListedAccountRequested`, false);})
+      .catch(err => {console.log("Error", err);})
   }
 
   function switchScreens() {
