@@ -529,7 +529,7 @@ const Dashboard = () => {
     let eventName
     let _amount
     data.forEach(e => {
-      if (e.event == "Withdrawal") {
+      if (e.event == "DepositWithdrawal") {
         eventName = e.event
         _amount = e.args.amount.toBigInt()
       }
