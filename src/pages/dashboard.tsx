@@ -324,9 +324,6 @@ const Dashboard = () => {
       // if(!isApprovedAlready){
         
       // }
-      const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[_loanOption], BNtoNum(Number(commit[0].loanAmount), DecimalsMap[_loanOption]), DecimalsMap[_loanOption]);
-      console.log("Approve Transaction sent: ", approveTransactionHash);
-      await approveTransactionHash.wait();
       const tx1 = await wrapper?.getLoanInstance().swapLoan(SymbolsMap[_loanOption], CommitMap[_commit], SymbolsMap[_swapOption]);
       const tx = await tx1.wait()
       onSwap(tx.events);
@@ -509,7 +506,7 @@ const Dashboard = () => {
     data.forEach(e => {
       if (e.event == "MarketSwapped") {
         eventName = e.event
-        _amount = e.args.amount.toBigInt()
+        _amount = e.args.currentAmount.toBigInt()
       }
     })
 
