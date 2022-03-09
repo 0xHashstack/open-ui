@@ -1,11 +1,13 @@
 export const defaultChainId = 3
 
 export const rpcUrls = {
-  56: "https://bsc-dataseed.binance.org/",
+  56: "http://127.0.0.1:8545/",
   1666700000: "https://api.s0.b.hmny.io",
   42: "https://kovan.infura.io/v3/99b8947af7e14278ae235bb21eb81f53",
   3: "https://eth-ropsten.alchemyapi.io/v2/fxrejtNAKunh--Iym4w8DI4mpb4pEEbA",
-  97: "https://nd-400-266-190.p2pify.com/1efac602169fba8d5bf0589315ec436a"
+  97: "http://127.0.0.1:8545/",
+  1337: "http://127.0.0.1:8545/",
+  31337: "http://127.0.0.1:8545/"
 };
 
 export const networkNames = {
