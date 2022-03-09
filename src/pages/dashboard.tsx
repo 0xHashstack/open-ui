@@ -1361,11 +1361,14 @@ const Dashboard = () => {
                           <Table className="table table-nowrap align-middle mb-0">
                             <thead>
                               <tr>
-                                <th scope="col">Loan Market</th>
-                                <th scope="col">Loan Amount</th>
+                                <th scope="col">Borrow Market</th>
+                                <th scope="col">Borrow Amount</th>
                                 <th scope="col">Commitment</th>
                                 <th scope="col">Collateral Market</th>
                                 <th scope="col">Collateral Amount</th>
+                                <th scope="col">Swap Status</th>
+                                <th scope="col">Borrow Market(Current)</th>
+                                <th scope="col">Borrow Amount(Current)</th>
                                 {/* <th scope="col" colSpan={2}>Interest</th> */}
                               </tr>
                             </thead>

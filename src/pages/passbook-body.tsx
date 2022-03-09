@@ -64,6 +64,30 @@ const PassbookTBody = (props) => {
                   {BNtoNum(Number(asset.collateralAmount), DecimalsMap[EventMap[asset.collateralMarket.toUpperCase()]])}
                 </div>
               </td>
+              <td>
+                <div className="text-muted">{asset.isSwapped ? 'Yes' : 'No'}</div>
+              </td>
+              <td>
+              <div className="d-flex align-items-center">
+                  <div className="avatar-xs me-3">
+                    <span
+                      className={
+                        "avatar-title rounded-circle bg-soft bg-" +
+                        asset.color +
+                        " text-" +
+                        asset.color +
+                        " font-size-18"
+                      }
+                    >
+                      <i className={CoinClassNames[EventMap[asset.currentLoanMarket.toUpperCase()]]} />
+                    </span>
+                  </div>
+                  <span>{EventMap[asset.currentLoanMarket.toUpperCase()]}</span>
+                </div>
+              </td>
+              <td>
+                <div className="text-muted">{BNtoNum(Number(asset.currentLoanAmount),DecimalsMap[EventMap[asset.currentLoanMarket.toUpperCase()]])}</div>
+              </td>
               {/* <td> */}
                 {/* <h5 className="font-size-14 mb-1">
                   {asset.loansRate}
