@@ -193,14 +193,14 @@ const Dashboard = () => {
 
   const onDepositData = async (depositsData) => {
     const deposits = [];
-    for(let i =0; i <depositsData.amount.length; i++ ){
+    for (let i = 0; i < depositsData.amount.length; i++) {
       deposits.push({
         amount: depositsData.amount[i].toString(),
         account,
         commitment: CommitMapReverse[depositsData.commitment[i]],
         market: bytesToString(depositsData.market[i]),
         // acquiredYield: new BigNumber(depositsData.savingsInterest[i].toString()).div(new BigNumber(10).pow(new BigNumber(18))).toString()
-        acquiredYield: (await wrapper.getDepositInstance().getDepositInterest(account, i +1 )).toString()
+        acquiredYield: (await wrapper.getDepositInstance().getDepositInterest(account, i + 1)).toString()
       })
     }
     setActiveDepositsData(deposits);
@@ -219,18 +219,22 @@ const Dashboard = () => {
         debtCategory = 3;
       }
       loans.push({
+        loanMarket: bytesToString(loansData.loanMarket[index]), // 1 Loan Market
+        loanAmount: Number(loansData.loanAmount[index]), // 2 Amount
+        commitment: CommitMapReverse[(loansData.loanCommitment[index])], // 3  Commitment
+        collateralMarket: bytesToString(loansData.collateralMarket[index]), // 4 Collateral Market
+        collateralAmount: Number(collateralAmount), // 5 Collateral Amount
         account,
         cdr,
-        collateralAmount: Number(collateralAmount),
-        collateralMarket: bytesToString(loansData.collateralMarket[index]),
-        commitment: CommitMapReverse[(loansData.loanCommitment[index])],
         debtCategory,
-        isSwapped: loansData.isSwapped[index],
-        loanAmount: Number(loansData.loanAmount[index]),
         loanId: index + 1,
-        loanMarket: bytesToString(loansData.loanMarket[index]),
+        isSwapped: loansData.isSwapped[index], // Swap status
+        currentLoanMarket: bytesToString(loansData.loanStateCurrentMarket[index]), // Borrow market(current)
+        currentLoanAmount: BNtoNum(loansData.loanStateCurrentAmount[index].toBigInt(), 8), // Borrow amount(current)
+        collateralYield: BNtoNum(BigNumber.from(loansData.collateralYield[index] || "0").toNumber(), 8)  // Collateral yield
       })
     })
+    // Borrow interest -- #Todo ( To be added after intrest issue resolved )
     setActiveLoansData(loans)
   }
 
@@ -242,17 +246,17 @@ const Dashboard = () => {
       const decimal = DecimalsMap[_loanOption];
       const _commit: string | undefined = loanCommitement;
       const commit = activeLoansData.filter((asset) => {
-        return (EventMap[asset.loanMarket.toUpperCase()] === _loanOption && asset.commitment.toUpperCase() === _commit); 
+        return (EventMap[asset.loanMarket.toUpperCase()] === _loanOption && asset.commitment.toUpperCase() === _commit);
       });
-      const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(market,inputVal1, decimal);
+      const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(market, inputVal1, decimal);
       await approveTransactionHash.wait();
       console.log("Approve Transaction sent: ", approveTransactionHash);
       const tx1 = await wrapper?.getLoanInstance().repayLoan(market, CommitMap[_commit], inputVal1, decimal);
-      const tx = await tx1.wait(); 
+      const tx = await tx1.wait();
       onLoanRepay(tx.events)
     } catch (err) {
       setIsTransactionDone(false);
-        toast.error(`${GetErrorText(err)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
+      toast.error(`${GetErrorText(err)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true });
     }
   }
 
@@ -262,15 +266,15 @@ const Dashboard = () => {
       const commit = activeLoansData.filter((asset) => {
         return EventMap[asset.loanMarket.toUpperCase()] === loanOption;
       });
-      const _loanOption: string | undefined =  loanOption;
+      const _loanOption: string | undefined = loanOption;
       const _commit: string | undefined = loanCommitement;
 
       const tx1 = await wrapper?.getLoanInstance().permissibleWithdrawal(SymbolsMap[_loanOption], CommitMap[_commit], inputVal1, DecimalsMap[_loanOption]);
       const tx = await tx1.wait()
       onLoanWithdrawal(tx.events);
     } catch (err) {
-      setIsTransactionDone(false);      
-        toast.error(`${GetErrorText(err)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
+      setIsTransactionDone(false);
+      toast.error(`${GetErrorText(err)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true });
     }
   }
 
@@ -289,7 +293,7 @@ const Dashboard = () => {
       onCollateralAdded(tx.events);
     } catch (err) {
       setIsTransactionDone(false);
-        toast.error(`${GetErrorText(err)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
+      toast.error(`${GetErrorText(err)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true });
     }
   }
 
@@ -299,14 +303,14 @@ const Dashboard = () => {
       const commit = activeLoansData.filter((asset) => {
         return EventMap[asset.loanMarket.toUpperCase()] === loanOption;
       });
-      const _loanOption: string | undefined =  loanOption;
+      const _loanOption: string | undefined = loanOption;
       const _commit: string | undefined = loanCommitement;
       const tx1 = await wrapper?.getLoanInstance().withdrawCollateral(SymbolsMap[_loanOption], CommitMap[_commit]);
       const tx = await tx1.wait()
       onCollateralReleased(tx.events);
     } catch (err) {
       setIsTransactionDone(false);
-        toast.error(`${GetErrorText(err)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
+      toast.error(`${GetErrorText(err)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true });
     }
   }
 
@@ -316,13 +320,13 @@ const Dashboard = () => {
       const commit = activeLoansData.filter((asset) => {
         return EventMap[asset.loanMarket.toUpperCase()] === loanOption;
       });
-      const _loanOption: string | undefined =  loanOption;
-      const _swapOption: string | undefined =  swapOption;
+      const _loanOption: string | undefined = loanOption;
+      const _swapOption: string | undefined = swapOption;
       const _commit: string | undefined = loanCommitement;
       // const allowance = await wrapper?.getMockBep20Instance().allowance(SymbolsMap[_loanOption],account);
       // const isApprovedAlready = BigNumber.from(`${commit[0].loanAmount}`).lte(BigNumber.from(allowance));
       // if(!isApprovedAlready){
-        
+
       // }
       const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[_loanOption], BNtoNum(Number(commit[0].loanAmount), DecimalsMap[_loanOption]), DecimalsMap[_loanOption]);
       console.log("Approve Transaction sent: ", approveTransactionHash);
@@ -332,7 +336,7 @@ const Dashboard = () => {
       onSwap(tx.events);
     } catch (err) {
       setIsTransactionDone(false);
-      toast.error(`${GetErrorText(err)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
+      toast.error(`${GetErrorText(err)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true });
     }
   }
 
@@ -342,18 +346,18 @@ const Dashboard = () => {
       const commit = activeLoansData.filter((asset) => {
         return EventMap[asset.loanMarket.toUpperCase()] === loanOption && EventMap[asset.commitment.toUpperCase()] === loanCommitement;
       });
-      const _loanOption: string | undefined =  loanOption;
+      const _loanOption: string | undefined = loanOption;
       const _commit: string | undefined = loanCommitement;
       // const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[_loanOption], BNtoNum(Number(commit[0].loanAmount), DecimalsMap[_loanOption]), DecimalsMap[_loanOption]);
       // await approveTransactionHash.wait();
       // console.log("Approve Transaction sent: ", approveTransactionHash);
 
-      const tx1 = await wrapper?.getLoanInstance().swapToLoan( SymbolsMap[_loanOption],CommitMap[_commit]);
+      const tx1 = await wrapper?.getLoanInstance().swapToLoan(SymbolsMap[_loanOption], CommitMap[_commit]);
       const tx = await tx1.wait();
       onSwapToLoan(tx.events);
     } catch (err) {
       setIsTransactionDone(false);
-        toast.error(`${GetErrorText(err)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
+      toast.error(`${GetErrorText(err)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true });
     }
   }
 
@@ -370,7 +374,7 @@ const Dashboard = () => {
       onDeposit(tx.events);
     } catch (err) {
       setIsTransactionDone(false);
-        toast.error(`${GetErrorText(err)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
+      toast.error(`${GetErrorText(err)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true });
     }
   }
 
@@ -379,52 +383,52 @@ const Dashboard = () => {
   const handleWithdrawDeposit = async () => {
     try {
       setIsTransactionDone(true);
-      const _withdrawDepositSel: string | undefined =  withdrawDepositSel;
-      const _withdrawDepositVal: string | undefined =  withdrawDepositVal;
-      const tx1 = await wrapper?.getDepositInstance().withdrawDeposit(SymbolsMap[_withdrawDepositSel.toUpperCase()], 
-       CommitMap[_withdrawDepositVal], inputVal1, DecimalsMap[_withdrawDepositSel.toUpperCase()]);
+      const _withdrawDepositSel: string | undefined = withdrawDepositSel;
+      const _withdrawDepositVal: string | undefined = withdrawDepositVal;
+      const tx1 = await wrapper?.getDepositInstance().withdrawDeposit(SymbolsMap[_withdrawDepositSel.toUpperCase()],
+        CommitMap[_withdrawDepositVal], inputVal1, DecimalsMap[_withdrawDepositSel.toUpperCase()]);
       const tx = await tx1.wait();
-       WithdrawalDeposit(tx.events);
+      WithdrawalDeposit(tx.events);
     } catch (err) {
       setIsTransactionDone(false);
-        toast.error(`${GetErrorText(err)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
+      toast.error(`${GetErrorText(err)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true });
     }
   }
 
 
   const onCollateralAdded = (data) => {
-      let eventName
-      let _amount
-      data.forEach(e => {
-        if (e.event == "AddCollateral") {
-          eventName = e.event
-          _amount = e.args.amount.toBigInt()
-        }
-      })
-      
+    let eventName
+    let _amount
+    data.forEach(e => {
+      if (e.event == "AddCollateral") {
+        eventName = e.event
+        _amount = e.args.amount.toBigInt()
+      }
+    })
+
     let amount = BNtoNum(_amount, 8)
-    
+
     // const res = data['AddCollateral']['returnValues'];
     // let amount = BNtoNum(Number(res.amount))
-    toast.success(`Collateral amount added: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
+    toast.success(`Collateral amount added: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true });
     setIsTransactionDone(false);
   }
 
   const onCollateralReleased = (data) => {
-          let eventName
-          let _amount
-          data.forEach(e => {
-            if (e.event == "CollateralReleased") {
-              eventName = e.event
-              _amount = e.args.amount.toBigInt()
-            }
-          })
+    let eventName
+    let _amount
+    data.forEach(e => {
+      if (e.event == "CollateralReleased") {
+        eventName = e.event
+        _amount = e.args.amount.toBigInt()
+      }
+    })
 
-          let amount = BNtoNum(_amount, 8)
-          
+    let amount = BNtoNum(_amount, 8)
+
     // const res = data['CollateralReleased']['returnValues'];
     // let amount = BNtoNum(Number(res.amount))
-    toast.success(`Collateral amount released: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
+    toast.success(`Collateral amount released: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true });
     setIsTransactionDone(false);
   }
 
@@ -434,17 +438,17 @@ const Dashboard = () => {
     let _amount
     data.forEach(e => {
       if (e.event == "WithdrawPartialLoan") {
-          eventName = e.event
-          _amount = e.args.amount.toBigInt()
+        eventName = e.event
+        _amount = e.args.amount.toBigInt()
       }
     })
 
     let amount = BNtoNum(_amount, 8)
-    
-    
+
+
     // const res = data['WithdrawPartialLoan']['returnValues'];
     // let amount = BNtoNum(Number(res.amount))
-    toast.success(`Loan Withdraw Successfully: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
+    toast.success(`Loan Withdraw Successfully: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true });
     setIsTransactionDone(false);
   }
 
@@ -459,10 +463,10 @@ const Dashboard = () => {
     })
 
     let amount = BNtoNum(_amount, 8)
-    
+
     // const res = data['LoanRepaid']['returnValues'];
     // let amount = BNtoNum(Number(res.amount))
-    toast.success(`Loan Repaid Successfully: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
+    toast.success(`Loan Repaid Successfully: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true });
     setIsTransactionDone(false);
   }
 
@@ -477,10 +481,10 @@ const Dashboard = () => {
     })
 
     let amount = BNtoNum(_amount, 8)
-    
+
     // const res = data['DepositAdded']['returnValues'];
     // let amount = BNtoNum(Number(res.amount),DecimalsMap[res.market]);
-    toast.success(`Deposited amount: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
+    toast.success(`Deposited amount: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true });
     setIsTransactionDone(false);
   }
 
@@ -489,17 +493,17 @@ const Dashboard = () => {
     let _amount
     data.forEach(e => {
       if (e.event == "MarketSwapped") {
-        console.log("MarketSwapped",e)
+        console.log("MarketSwapped", e)
         eventName = e.event
         _amount = e.args.currentAmount.toBigInt()
       }
     })
 
     let amount = BNtoNum(_amount, 8)
-    
+
     // const res = data['MarketSwapped']['returnValues'];
     // let amount = BNtoNum(Number(res.amount),DecimalsMap[res.market]);
-    toast.success(`Swap Loan successful${amount ? ": " + amount: ""}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
+    toast.success(`Swap Loan successful${amount ? ": " + amount : ""}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true });
     setIsTransactionDone(false);
   }
 
@@ -514,10 +518,10 @@ const Dashboard = () => {
     })
 
     let amount = BNtoNum(_amount, 8)
-    
+
     // const res = data['MarketSwapped']['returnValues'];
     // let amount = BNtoNum(Number(res.amount),DecimalsMap[res.market]);
-    toast.success(`Swap to Loan successful: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
+    toast.success(`Swap to Loan successful: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true });
     setIsTransactionDone(false);
   }
 
@@ -525,7 +529,7 @@ const Dashboard = () => {
     let eventName
     let _amount
     data.forEach(e => {
-      if (e.event == "Withdrawal") {
+      if (e.event == "DepositWithdrawal") {
         eventName = e.event
         _amount = e.args.amount.toBigInt()
       }
@@ -534,7 +538,7 @@ const Dashboard = () => {
     let amount = BNtoNum(_amount, 8)
     // const res = data['Withdrawal']['returnValues'];
     // let amount = BNtoNum(Number(res.amount), DecimalsMap[res.market])
-    toast.success(`Deposit Withdrawn: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
+    toast.success(`Deposit Withdrawn: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true });
     setIsTransactionDone(false);
   }
 
@@ -1357,11 +1361,14 @@ const Dashboard = () => {
                           <Table className="table table-nowrap align-middle mb-0">
                             <thead>
                               <tr>
-                                <th scope="col">Loan Market</th>
-                                <th scope="col">Amount</th>
+                                <th scope="col">Borrow Market</th>
+                                <th scope="col">Borrow Amount</th>
                                 <th scope="col">Commitment</th>
                                 <th scope="col">Collateral Market</th>
-                                <th scope="col">Amount</th>
+                                <th scope="col">Collateral Amount</th>
+                                <th scope="col">Swap Status</th>
+                                <th scope="col">Borrow Market(Current)</th>
+                                <th scope="col">Borrow Amount(Current)</th>
                                 {/* <th scope="col" colSpan={2}>Interest</th> */}
                               </tr>
                             </thead>
