@@ -78,7 +78,9 @@ const Dashboard = () => {
   const [addCollateralTooltipOpen, setAddCollateralTooltipOpen] = useState(false);
   const [withdrawCollateralTooltipOpen, setWithdrawCollateralTooltipOpen] = useState(false);
 
-  let inputVal1 = 0;
+  const [inputVal1, setInputVal1] = useState(0);
+
+  // let inputVal1 = 0;
 
   const { connect, disconnect, account } = useContext(Web3ModalContext);
   const { web3Wrapper: wrapper } = useContext(Web3WrapperContext);
@@ -115,6 +117,7 @@ const Dashboard = () => {
     }
   };
   function removeBodyCss() {
+    setInputVal1(0);
     document.body.classList.add("no_padding");
   }
 
@@ -640,7 +643,7 @@ const Dashboard = () => {
                                                 className="form-control"
                                                 id="horizontal-password-Input"
                                                 placeholder="Amount"
-                                                onChange={(event) => { inputVal1 = Number(event.target.value) }}
+                                                onChange={(event) => { setInputVal1(Number(event.target.value)) }}
                                               />
                                             </Col>
                                           </div>
@@ -649,7 +652,7 @@ const Dashboard = () => {
                                             <Button
                                               color="primary"
                                               className="w-md"
-                                              disabled={isTransactionDone}
+                                              disabled={isTransactionDone || inputVal1 === 0}
                                               onClick={handleRepay}
                                             >
                                               {!isTransactionDone ? 'Repay' : <Spinner>Loading...</Spinner>}
@@ -716,7 +719,7 @@ const Dashboard = () => {
                                                 className="form-control"
                                                 id="horizontal-password-Input"
                                                 placeholder="Amount"
-                                                onChange={(event) => { inputVal1 = Number(event.target.value) }}
+                                                onChange={(event) => { setInputVal1(Number(event.target.value)) }}
                                               />
                                             </Col>
                                           </div>
@@ -725,7 +728,7 @@ const Dashboard = () => {
                                             <Button
                                               color="primary"
                                               className="w-md"
-                                              disabled={isTransactionDone}
+                                              disabled={isTransactionDone || inputVal1 === 0}
                                               onClick={handleWithdrawLoan}
                                             >
 
@@ -975,7 +978,7 @@ const Dashboard = () => {
                                               className="form-control"
                                               id="horizontal-password-Input"
                                               placeholder="Amount"
-                                              onChange={(event) => { inputVal1 = Number(event.target.value) }}
+                                              onChange={(event) => { setInputVal1(Number(event.target.value)) }}
                                             />
                                           </Col>
                                         </div>
@@ -984,7 +987,7 @@ const Dashboard = () => {
                                           <Button
                                             color="primary"
                                             className="w-md"
-                                            disabled={isTransactionDone}
+                                            disabled={isTransactionDone || inputVal1 === 0}
                                             onClick={handleCollateral}
                                           >
                                             {!isTransactionDone ? 'Add Collateral' : <Spinner>Loading...</Spinner>}
@@ -1132,7 +1135,7 @@ const Dashboard = () => {
                                                 className="form-control"
                                                 id="horizontal-password-Input"
                                                 placeholder={depositRequestSel ? `Min amount should be greater than ${MinimumAmount[depositRequestSel]}` : 'Amount'}
-                                                onChange={(event) => { inputVal1 = Number(event.target.value) }}
+                                                onChange={(event) => { setInputVal1(Number(event.target.value)) }}
                                               />
                                             </Col>
                                           </div>
@@ -1141,7 +1144,7 @@ const Dashboard = () => {
                                             <Button
                                               color="primary"
                                               className="w-md"
-                                              disabled={isTransactionDone}
+                                              disabled={isTransactionDone || inputVal1 === 0}
                                               onClick={handleDepositRequest}
                                             >
                                               {!isTransactionDone ? 'Add to Deposit' : <Spinner>Loading...</Spinner>}
@@ -1209,7 +1212,7 @@ const Dashboard = () => {
                                                 className="form-control"
                                                 id="horizontal-password-Input"
                                                 placeholder="Amount"
-                                                onChange={(event) => { inputVal1 = Number(event.target.value) }}
+                                                onChange={(event) => { setInputVal1(Number(event.target.value)) }}
                                               />
                                             </Col>
                                           </div>
@@ -1218,7 +1221,7 @@ const Dashboard = () => {
                                             <Button
                                               color="primary"
                                               className="w-md"
-                                              disabled={isTransactionDone}
+                                              disabled={isTransactionDone || inputVal1 === 0}
                                               onClick={handleWithdrawDeposit}
                                             >
                                               {!isTransactionDone ? 'Withdraw Deposit' : <Spinner>Loading...</Spinner>}
