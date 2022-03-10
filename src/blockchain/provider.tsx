@@ -12,7 +12,7 @@ export const providerOptions = {
       package: WalletConnectProvider,
       options: {
         rpc: {
-          56: 'http://127.0.0.1:8545/'
+          56: 'https://bsc-dataseed1.binance.org'
         },
         chainId: 56
       }
@@ -20,7 +20,7 @@ export const providerOptions = {
     dcentwallet: {
       package: DcentProvider, // required
       options: {
-        rpcUrl: "http://127.0.0.1:8545/" // required
+        rpcUrl: "https://bsc-dataseed.binance.org/" // required
       }
     },
     fortmatic: {

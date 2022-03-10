@@ -6,7 +6,11 @@ import { providerOptions } from "blockchain/provider"
 import { toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 // import { string } from "prop-types"
-const BSCChainId = 31337
+let BSCChainId = 97
+if (process.env.NODE_ENV === "development") {
+  BSCChainId = 1337
+}
+
 interface IWeb3ModalContext {
   ethersInstance: any | null;
   // web3: any | null;
@@ -110,17 +114,16 @@ const Web3ModalProvider = (props: any) => {
       return address;
     });
     const _chainId = (await ethersProviderInstance.getNetwork()).chainId
-    console.log("chain idd----", _chainId);
     //===========================================================================================================//
-    // if (_chainId != BSCChainId) {
-    //   toast.warn(`Please connect to BSC Testnet`, {
-    //     position: toast.POSITION.BOTTOM_RIGHT,
-    //     autoClose: 4000,
-    //     closeOnClick: true,
-    //   })
-    //   disconnect()
-    //   return
-    // }
+    if (_chainId != BSCChainId) {
+      toast.warn(`Please connect to BSC Testnet`, {
+        position: toast.POSITION.BOTTOM_RIGHT,
+        autoClose: 4000,
+        closeOnClick: true,
+      })
+      disconnect()
+      return
+    }
     setAccount(String(_account))
     setChainId(_chainId)
     setConnected(true)
@@ -131,21 +134,21 @@ const Web3ModalProvider = (props: any) => {
       const handleAccountsChanged = (accounts: string[]) => {
         // eslint-disable-next-line no-console
         console.log("accountsChanged", accounts)
-        setAccount(accounts[0])
+        chainId === BSCChainId ? setAccount(accounts[0]) : setAccount(null)
       }
 
       const handleChainChanged = async (_hexChainId: string) => {
         setChainId(parseInt(_hexChainId, 16))
-        // if (parseInt(_hexChainId, 16) !== BSCChainId) {
-        //   toast.warn(`Please connect to BSC Testnet`, {
-        //     position: toast.POSITION.BOTTOM_RIGHT,
-        //     autoClose: 4000,
-        //     closeOnClick: true,
-        //   })
-        //   setConnected(false)
-        //   disconnect()
-        //   return
-        // }
+        if (parseInt(_hexChainId, 16) !== BSCChainId) {
+          toast.warn(`Please connect to BSC Testnet`, {
+            position: toast.POSITION.BOTTOM_RIGHT,
+            autoClose: 4000,
+            closeOnClick: true,
+          })
+          setConnected(false)
+          disconnect()
+          return
+        }
         toast.success("Connected to BSC Testnet", {
           position: toast.POSITION.BOTTOM_RIGHT,
           autoClose: 4000,
