@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import MetaTags from "react-meta-tags";
-import axios from "axios";
+// import axios from "axios";
 import {
   Container,
   Row,
@@ -212,15 +212,19 @@ const Dashboard = () => {
   const onLoansData = loansData => {
     const loans = [];
     loansData.collateralAmount.forEach((collateralAmount, index) => {
-      let debtCategory;
-      let cdr = BigNumber.from(collateralAmount).div(BigNumber.from(loansData.loanAmount[index])).toNumber();
-      if (cdr >= 1) {
-        debtCategory = 1;
-      } else if (cdr >= 0.5 && cdr < 1) {
-        debtCategory = 2;
-      } else if (cdr >= 0.333 && cdr < 0.5) {
-        debtCategory = 3;
-      }
+      let debtCategory, cdr;
+      try {
+        console.log(BigNumber.from(collateralAmount).toNumber());
+        console.log(BigNumber.from(loansData.loanAmount[index]).toNumber());
+        cdr = (BigNumber.from(collateralAmount)).div(BigNumber.from(loansData.loanAmount[index])).toNumber();
+        if (cdr >= 1) {
+          debtCategory = 1;
+        } else if (cdr >= 0.5 && cdr < 1) {
+          debtCategory = 2;
+        } else if (cdr >= 0.333 && cdr < 0.5) {
+          debtCategory = 3;
+        }
+      } catch {}
       loans.push({
         loanMarket: bytesToString(loansData.loanMarket[index]), // 1 Loan Market
         loanAmount: Number(loansData.loanAmount[index]), // 2 Amount
@@ -232,8 +236,8 @@ const Dashboard = () => {
         debtCategory,
         loanId: index + 1,
         isSwapped: loansData.isSwapped[index], // Swap status
-        currentLoanMarket: bytesToString(loansData.loanCurrentMarket[index]), // Borrow market(current)
-        currentLoanAmount: BNtoNum(loansData.loanCurrentAmount[index].toBigInt(), 8), // Borrow amount(current)
+        currentLoanMarket: bytesToString(loansData.loanStateCurrentMarket[index]), // Borrow market(current)
+        currentLoanAmount: BNtoNum(loansData.loanStateCurrentAmount[index].toBigInt(), 8), // Borrow amount(current)
         collateralYield: BNtoNum(BigNumber.from(loansData.collateralYield[index] || "0").toNumber(), 8)  // Collateral yield
       })
     })
