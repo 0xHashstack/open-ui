@@ -6,13 +6,16 @@ import { BNtoNum } from '../blockchain/utils';
 
 
 const PassbookTBody = (props) => {
-    const assets = props.assets;
+    const assets = props.assets.filter(asset => {
+      return asset.state === 0;
+    });
     if (props.isloading && assets.length === 0) {
       return (<tr align="center"><td colSpan={4}><Spinner>Loading...</Spinner></td></tr>)
     } else if (Array.isArray(assets) && assets.length > 0) {
       return (
         <>
-          {assets.map((asset, key) => (
+          {assets
+          .map((asset, key) => (
             <tr key={key}>
               <th scope="row">
                 <div className="d-flex align-items-center">

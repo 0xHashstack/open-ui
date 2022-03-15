@@ -236,10 +236,11 @@ const Dashboard = () => {
         debtCategory,
         loanId: index + 1,
         isSwapped: loansData.isSwapped[index], // Swap status
-        currentLoanMarket: bytesToString(loansData.loanStateCurrentMarket[index]), // Borrow market(current)
-        currentLoanAmount: BNtoNum(loansData.loanStateCurrentAmount[index].toBigInt(), 8), // Borrow amount(current)
+        state: loansData.state[index], // Swap status
+        currentLoanMarket: bytesToString(loansData.loanCurrentMarket[index]), // Borrow market(current)
+        currentLoanAmount: BNtoNum(loansData.loanCurrentAmount[index].toBigInt(), 8), // Borrow amount(current)
         collateralYield: BNtoNum(BigNumber.from(loansData.collateralYield[index] || "0").toNumber(), 8)  // Collateral yield
-      })
+      });
     })
     // Borrow interest -- #Todo ( To be added after intrest issue resolved )
     setActiveLoansData(loans)
