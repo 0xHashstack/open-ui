@@ -236,7 +236,7 @@ const Dashboard = () => {
         isSwapped: loansData.isSwapped[index], // Swap status
         state: loansData.state[index], // Swap status
         currentLoanMarket: bytesToString(loansData.loanCurrentMarket[index]), // Borrow market(current)
-        currentLoanAmount: BNtoNum(loansData.loanCurrentAmount[index].toBigInt()), // Borrow amount(current)
+        currentLoanAmount: Number(loansData.loanCurrentAmount[index]), // Borrow amount(current)
         collateralYield: BNtoNum(BigNumber.from(loansData.collateralYield[index] || "0").toNumber())  // Collateral yield
       });
     })
