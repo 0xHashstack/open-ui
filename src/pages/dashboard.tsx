@@ -44,6 +44,7 @@ const Dashboard = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [activeDepositsData, setActiveDepositsData] = useState([]);
   const [activeLoansData, setActiveLoansData] = useState([]);
+  const [closedLoansData, setClosedLoansData] = useState([]);
   const [isTransactionDone, setIsTransactionDone] = useState(false);
 
   const [customActiveTab, setCustomActiveTab] = useState("1");
@@ -243,7 +244,12 @@ const Dashboard = () => {
       });
     })
     // Borrow interest -- #Todo ( To be added after intrest issue resolved )
-    setActiveLoansData(loans)
+    setActiveLoansData(loans.filter(asset => {
+      return asset.state === 0;
+    }));
+    setClosedLoansData(loans.filter(asset => {
+      return asset.state === 1;
+    }));
   }
 
   const handleRepay = async () => {
@@ -534,8 +540,8 @@ const Dashboard = () => {
   }
 
   const WithdrawalDeposit = (data) => {
-    let eventName
-    let _amount
+    let eventName;
+    let _amount;
     data.forEach(e => {
       if (e.event == "DepositWithdrawal") {
         eventName = e.event
