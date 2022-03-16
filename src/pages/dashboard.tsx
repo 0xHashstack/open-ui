@@ -81,7 +81,6 @@ const Dashboard = () => {
 
   const [inputVal1, setInputVal1] = useState(0);
 
-  // let inputVal1 = 0;
 
   const { connect, disconnect, account } = useContext(Web3ModalContext);
   const { web3Wrapper: wrapper } = useContext(Web3WrapperContext);
@@ -215,8 +214,6 @@ const Dashboard = () => {
     loansData.collateralAmount.forEach((collateralAmount, index) => {
       let debtCategory, cdr;
       try {
-        console.log(BigNumber.from(collateralAmount).toNumber());
-        console.log(BigNumber.from(loansData.loanAmount[index]).toNumber());
         cdr = (BigNumber.from(collateralAmount)).div(BigNumber.from(loansData.loanAmount[index])).toNumber();
         if (cdr >= 1) {
           debtCategory = 1;

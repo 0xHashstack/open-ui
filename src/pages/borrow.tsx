@@ -16,12 +16,13 @@ import {
 import { BNtoNum, GetErrorText } from '../blockchain/utils';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import React from "react";
 
 toast.configure({
   autoClose: 4000
 });
 
-const Borrow = (props) => {
+let Borrow = (props) => {
 
     const [commitBorrowPeriod, setCommitBorrowPeriod] = useState();
     const [collateralMarket, setCollateralMarket] = useState();
@@ -90,8 +91,6 @@ const Borrow = (props) => {
 
     let amount = BNtoNum(_amount, 8)
       setIsTransactionDone(false);
-      // const res = data['NewLoan']['returnValues'];
-      // let amount = BNtoNum(Number(res.loanAmount), DecimalsMap[res.market]);
       toast.success(`Requested amount: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
 
@@ -192,4 +191,4 @@ const Borrow = (props) => {
   }
 
 
-  export default Borrow;
+  export default Borrow = React.memo(Borrow);

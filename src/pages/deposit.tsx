@@ -14,12 +14,13 @@ import { Web3WrapperContext } from "../contexts/Web3WrapperProvider"
 import { BNtoNum, GetErrorText, NumToBN } from "../blockchain/utils"
 import { toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
+import React from "react"
 
 toast.configure({
   autoClose: 4000,
 })
 
-const Deposit = props => {
+let Deposit = props => {
   const [commitPeriod, setCommitPeriod] = useState()
   const [modal_deposit, setmodal_deposit] = useState(false)
   const [inputVal, setInputVal] = useState(0)
@@ -186,4 +187,4 @@ const Deposit = props => {
   )
 }
 
-export default Deposit
+export default Deposit = React.memo(Deposit);

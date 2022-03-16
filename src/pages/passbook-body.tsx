@@ -1,3 +1,4 @@
+import React from "react";
 import { Spinner } from "reactstrap";
 import {
   EventMap, CoinClassNames
@@ -5,7 +6,7 @@ import {
 import { BNtoNum } from '../blockchain/utils';
 
 
-const PassbookTBody = (props) => {
+let PassbookTBody = (props) => {
     const assets = props.assets.filter(asset => {
       return asset.state === 0;
     });
@@ -108,4 +109,4 @@ const PassbookTBody = (props) => {
     }
   }
 
-  export default PassbookTBody;
+  export default PassbookTBody = React.memo(PassbookTBody);
