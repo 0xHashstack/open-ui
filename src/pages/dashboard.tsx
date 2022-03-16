@@ -357,9 +357,6 @@ const Dashboard = () => {
       });
       const _loanOption: string | undefined = loanOption;
       const _commit: string | undefined = loanCommitement;
-      // const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[_loanOption], BNtoNum(Number(commit[0].loanAmount), DecimalsMap[_loanOption]), DecimalsMap[_loanOption]);
-      // await approveTransactionHash.wait();
-      // console.log("Approve Transaction sent: ", approveTransactionHash);
 
       const tx1 = await wrapper?.getLoanInstance().swapToLoan(SymbolsMap[_loanOption], CommitMap[_commit]);
       const tx = await tx1.wait();
@@ -416,9 +413,6 @@ const Dashboard = () => {
     })
 
     let amount = BNtoNum(_amount)
-
-    // const res = data['AddCollateral']['returnValues'];
-    // let amount = BNtoNum(Number(res.amount))
     toast.success(`Collateral amount added: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true });
     setIsTransactionDone(false);
   }
@@ -435,8 +429,6 @@ const Dashboard = () => {
 
     let amount = BNtoNum(_amount)
 
-    // const res = data['CollateralReleased']['returnValues'];
-    // let amount = BNtoNum(Number(res.amount))
     toast.success(`Collateral amount released: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true });
     setIsTransactionDone(false);
   }
@@ -454,9 +446,6 @@ const Dashboard = () => {
 
     let amount = BNtoNum(_amount)
 
-
-    // const res = data['WithdrawPartialLoan']['returnValues'];
-    // let amount = BNtoNum(Number(res.amount))
     toast.success(`Loan Withdraw Successfully: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true });
     setIsTransactionDone(false);
   }
@@ -473,8 +462,6 @@ const Dashboard = () => {
 
     let amount = BNtoNum(_amount)
 
-    // const res = data['LoanRepaid']['returnValues'];
-    // let amount = BNtoNum(Number(res.amount))
     toast.success(`Loan Repaid Successfully: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true });
     setIsTransactionDone(false);
   }
@@ -491,8 +478,6 @@ const Dashboard = () => {
 
     let amount = BNtoNum(_amount)
 
-    // const res = data['DepositAdded']['returnValues'];
-    // let amount = BNtoNum(Number(res.amount),DecimalsMap[res.market]);
     toast.success(`Deposited amount: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true });
     setIsTransactionDone(false);
   }
@@ -510,8 +495,6 @@ const Dashboard = () => {
 
     let amount = BNtoNum(_amount)
 
-    // const res = data['MarketSwapped']['returnValues'];
-    // let amount = BNtoNum(Number(res.amount),DecimalsMap[res.market]);
     toast.success(`Swap Loan successful${amount ? ": " + amount : ""}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true });
     setIsTransactionDone(false);
   }
@@ -528,8 +511,6 @@ const Dashboard = () => {
 
     let amount = BNtoNum(_amount)
 
-    // const res = data['MarketSwapped']['returnValues'];
-    // let amount = BNtoNum(Number(res.amount),DecimalsMap[res.market]);
     toast.success(`Swap to Loan successful: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true });
     setIsTransactionDone(false);
   }
@@ -545,8 +526,6 @@ const Dashboard = () => {
     })
 
     let amount = BNtoNum(_amount)
-    // const res = data['Withdrawal']['returnValues'];
-    // let amount = BNtoNum(Number(res.amount), DecimalsMap[res.market])
     toast.success(`Deposit Withdrawn: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true });
     setIsTransactionDone(false);
   }
