@@ -239,8 +239,8 @@ const Dashboard = () => {
         isSwapped: loansData.isSwapped[index], // Swap status
         state: loansData.state[index], // Swap status
         currentLoanMarket: bytesToString(loansData.loanCurrentMarket[index]), // Borrow market(current)
-        currentLoanAmount: BNtoNum(loansData.loanCurrentAmount[index].toBigInt(), 8), // Borrow amount(current)
-        collateralYield: BNtoNum(BigNumber.from(loansData.collateralYield[index] || "0").toNumber(), 8)  // Collateral yield
+        currentLoanAmount: BNtoNum(loansData.loanCurrentAmount[index].toBigInt()), // Borrow amount(current)
+        collateralYield: BNtoNum(BigNumber.from(loansData.collateralYield[index] || "0").toNumber())  // Collateral yield
       });
     })
     // Borrow interest -- #Todo ( To be added after intrest issue resolved )
@@ -337,12 +337,7 @@ const Dashboard = () => {
       const _loanOption: string | undefined = loanOption;
       const _swapOption: string | undefined = swapOption;
       const _commit: string | undefined = loanCommitement;
-      // const allowance = await wrapper?.getMockBep20Instance().allowance(SymbolsMap[_loanOption],account);
-      // const isApprovedAlready = BigNumber.from(`${commit[0].loanAmount}`).lte(BigNumber.from(allowance));
-      // if(!isApprovedAlready){
-
-      // }
-      const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[_loanOption], BNtoNum(Number(commit[0].loanAmount), DecimalsMap[_loanOption]), DecimalsMap[_loanOption]);
+      const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[_loanOption], BNtoNum(Number(commit[0].loanAmount)), DecimalsMap[_loanOption]);
       console.log("Approve Transaction sent: ", approveTransactionHash);
       await approveTransactionHash.wait();
       const tx1 = await wrapper?.getLoanInstance().swapLoan(SymbolsMap[_loanOption], CommitMap[_commit], SymbolsMap[_swapOption]);
@@ -420,7 +415,7 @@ const Dashboard = () => {
       }
     })
 
-    let amount = BNtoNum(_amount, 8)
+    let amount = BNtoNum(_amount)
 
     // const res = data['AddCollateral']['returnValues'];
     // let amount = BNtoNum(Number(res.amount))
@@ -438,7 +433,7 @@ const Dashboard = () => {
       }
     })
 
-    let amount = BNtoNum(_amount, 8)
+    let amount = BNtoNum(_amount)
 
     // const res = data['CollateralReleased']['returnValues'];
     // let amount = BNtoNum(Number(res.amount))
@@ -457,7 +452,7 @@ const Dashboard = () => {
       }
     })
 
-    let amount = BNtoNum(_amount, 8)
+    let amount = BNtoNum(_amount)
 
 
     // const res = data['WithdrawPartialLoan']['returnValues'];
@@ -476,7 +471,7 @@ const Dashboard = () => {
       }
     })
 
-    let amount = BNtoNum(_amount, 8)
+    let amount = BNtoNum(_amount)
 
     // const res = data['LoanRepaid']['returnValues'];
     // let amount = BNtoNum(Number(res.amount))
@@ -494,7 +489,7 @@ const Dashboard = () => {
       }
     })
 
-    let amount = BNtoNum(_amount, 8)
+    let amount = BNtoNum(_amount)
 
     // const res = data['DepositAdded']['returnValues'];
     // let amount = BNtoNum(Number(res.amount),DecimalsMap[res.market]);
@@ -513,7 +508,7 @@ const Dashboard = () => {
       }
     })
 
-    let amount = BNtoNum(_amount, 8)
+    let amount = BNtoNum(_amount)
 
     // const res = data['MarketSwapped']['returnValues'];
     // let amount = BNtoNum(Number(res.amount),DecimalsMap[res.market]);
@@ -531,7 +526,7 @@ const Dashboard = () => {
       }
     })
 
-    let amount = BNtoNum(_amount, 8)
+    let amount = BNtoNum(_amount)
 
     // const res = data['MarketSwapped']['returnValues'];
     // let amount = BNtoNum(Number(res.amount),DecimalsMap[res.market]);
@@ -549,7 +544,7 @@ const Dashboard = () => {
       }
     })
 
-    let amount = BNtoNum(_amount, 8)
+    let amount = BNtoNum(_amount)
     // const res = data['Withdrawal']['returnValues'];
     // let amount = BNtoNum(Number(res.amount), DecimalsMap[res.market])
     toast.success(`Deposit Withdrawn: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true });
@@ -789,7 +784,10 @@ const Dashboard = () => {
                                           <Col sm={12}>
                                             <select className="form-select" onChange={handleLoanOptionChange}>
                                               <option hidden>Loan Market</option>
-                                              {[...new Map(activeLoansData.map((item: any) => [item['loanMarket'], item])).values()].map((asset, key) => {
+                                              {[...new Map(activeLoansData.filter((asset) => {
+                                                return !asset.isSwapped;
+                                              })
+                                              .map((item: any) => [item['loanMarket'], item])).values()].map((asset, key) => {
                                                 return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
                                               })}
                                             </select>
@@ -800,7 +798,7 @@ const Dashboard = () => {
                                             <select className="form-select" onChange={handleLoanCommitementChange}>
                                               <option hidden>Minimum Commitment Period</option>
                                               {activeLoansData.filter((asset) => {
-                                                return (EventMap[asset.loanMarket.toUpperCase()] === loanOption)
+                                                return (EventMap[asset.loanMarket.toUpperCase()] === loanOption) && !asset.isSwapped;
                                               })
                                                 .map(item => item['commitment'])
                                                 .filter((value, index, self) => self.indexOf(value) === index)
@@ -886,7 +884,7 @@ const Dashboard = () => {
                                             <select className="form-select" onChange={handleLoanCommitementChange}>
                                               <option hidden>Minimum Commitment Period</option>
                                               {activeLoansData.filter((asset) => {
-                                                return (EventMap[asset.loanMarket.toUpperCase()] === loanOption)
+                                                return (EventMap[asset.loanMarket.toUpperCase()] === loanOption) && asset.isSwapped
                                               })
                                                 .map(item => item['commitment'])
                                                 .filter((value, index, self) => self.indexOf(value) === index)
@@ -1431,7 +1429,7 @@ const Dashboard = () => {
                                     <div className="text-muted">{EventMap[asset.commitment]}</div>
                                   </td>
                                   <td>
-                                    <div className="text-muted">{BNtoNum(Number(asset.amount), DecimalsMap[asset.market.toUpperCase()])}</div>
+                                    <div className="text-muted">{BNtoNum(Number(asset.amount))}</div>
                                   </td>
                                   {/* <td>
                                     <div className="text-muted">{Number(asset.acquiredYield).toFixed(3)}</div>

@@ -1,6 +1,6 @@
 import { Spinner } from "reactstrap";
 import {
-  EventMap, CoinClassNames, DecimalsMap
+  EventMap, CoinClassNames
 } from '../blockchain/constants';
 import { BNtoNum } from '../blockchain/utils';
 
@@ -36,7 +36,7 @@ const PassbookTBody = (props) => {
                 </div>
               </th>
               <td>
-                <div className="text-muted">{BNtoNum(Number(asset.loanAmount),DecimalsMap[EventMap[asset.loanMarket.toUpperCase()]])}</div>
+                <div className="text-muted">{BNtoNum(Number(asset.loanAmount))}</div>
               </td>
               <td>
                 <div className="text-muted">{EventMap[asset.commitment]}</div>
@@ -64,7 +64,7 @@ const PassbookTBody = (props) => {
                   {asset.investRate}
                 </h5> */}
                 <div className="text-muted">
-                  {BNtoNum(Number(asset.collateralAmount), DecimalsMap[EventMap[asset.collateralMarket.toUpperCase()]])}
+                  {BNtoNum(Number(asset.collateralAmount))}
                 </div>
               </td>
               <td>
@@ -89,7 +89,7 @@ const PassbookTBody = (props) => {
                 </div>
               </td>
               <td>
-                <div className="text-muted">{BNtoNum(Number(asset.currentLoanAmount),DecimalsMap[EventMap[asset.currentLoanMarket.toUpperCase()]])}</div>
+                <div className="text-muted">{BNtoNum(Number(asset.currentLoanAmount))}</div>
               </td>
               {/* <td> */}
                 {/* <h5 className="font-size-14 mb-1">
