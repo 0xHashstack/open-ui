@@ -1,50 +1,18 @@
-import Web3 from 'web3';
-import { defaultChainId, rpcUrls, DecimalsMap } from './constants';
+import { DecimalsMap } from './constants';
 import { BigNumber } from "bignumber.js";
-import TokenList from './contracts/TokenList';
 import Fortmatic from "fortmatic";
 import Portis from "@portis/web3";
-import MewConnect from "@myetherwallet/mewconnect-web-client";
+// import MewConnect from "@myetherwallet/mewconnect-web-client";
 import { Bitski } from "bitski";
 import BurnerConnectProvider from "@burner-wallet/burner-connect-provider";
 import DcentProvider from "dcent-provider";
 import Authereum from "authereum";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+// import 'react-toastify/dist/ReactToastify.css';
+import { utils } from "ethers";
+// import TokenList from './contracts/TokenList';
 
-export const createWeb3 = (provider) => {
-  var realProvider;
-
-  if (typeof provider === 'string') {
-    if (provider.includes('wss')) {
-      realProvider = new Web3.providers.WebsocketProvider(
-        provider
-      );
-    } else {
-      realProvider = new Web3.providers.HttpProvider(
-        provider
-      );
-    }
-  } else {
-    realProvider = provider;
-  }
-
-  return new Web3(realProvider);
-}
-
-export const getDefaultWeb3 = () => {
-  return createWeb3(rpcUrls[defaultChainId]);
-}
-
-export const getDefaultContractOptions = () => {
-  const web3 = getDefaultWeb3();
-  return {
-    web3,
-    chainId: defaultChainId,
-    account: null
-  };
-}
 
 export const fixedSpecial = (num: number, n: number) => {
   var str = num.toFixed(n);
@@ -62,29 +30,38 @@ export const fixedSpecial = (num: number, n: number) => {
   return str;
 }
 
-export const BNtoNum = (value: number, decimal: number= 18) => {
+export const BNtoNum = (value: number, decimal: number= 8) => {
   const val = new BigNumber(value).shiftedBy(-decimal).toNumber();
   return val < 1 ? val.toPrecision(): fixedSpecial(val,0);
 }
 
-export const NumToBN = (value: number, decimal: number= 18) => {
+export const NumToBN = (value: number, decimal: number= 8) => {
   const val = new BigNumber(value).shiftedBy(decimal).toNumber();
   return val < 1 ? val.toPrecision(): fixedSpecial(val,0);
 }
 
 export const GetErrorText = (err) => {
-  if (err) {
-    try {
-      return JSON.parse(err.split('.')[1]).message || 'Oops! Something went wrong.';
-    }
-    catch (error) {
-      console.log(error);
-      return err;
-    }
+  // if (err) {
+  //   try {
+  //     return JSON.parse(err.split('.')[1]).message || 'Oops! Something went wrong.';
+  //   }
+  //   catch (error) {
+  //     console.log(error);
+  //     return err;
+  //   }
+  // }
+  // else {
+  //   return 'Oops! Something went wrong.';
+  // }
+  if (typeof(err) == 'string') {
+    return err;
   }
-  else {
-    return 'Oops! Something went wrong.';
-  }
+  else if(err.data)
+    return err.data.message;
+  else if(err.message)
+    return err.message;
+  else
+    return "Oops! Something went wrong."
 }
 
 export const toFixed = (num: number, digit: number) => {
@@ -93,14 +70,6 @@ export const toFixed = (num: number, digit: number) => {
   return Number(fixed_num.toString());
 }
 
-
-export const isMarketSupported = async (symbol: string) => {
-  const tokenList = new TokenList(getDefaultContractOptions(), process.env.REACT_APP_DIAMOND_ADDRESS);
-  const isSupported = await tokenList.call("isMarketSupported", symbol);
-  return {
-    isSupport: isSupported
-  }
-}
 
 export const OnSuccessCallback = (data, eventName, key, message) => {
   const res = data[eventName]['returnValues'];
@@ -153,12 +122,12 @@ export const providerOptions = {
       id: "012948c7-78bb-49cc-9c8e-01115f7fb160" // required
     }
   },
-  mewconnect: {
-    package: MewConnect, // required
-    options: {
-      infuraId: "" // required
-    }
-  },
+  // mewconnect: {
+  //   package: MewConnect, // required
+  //   options: {
+  //     infuraId: "" // required
+  //   }
+  // },
   bitski: {
     package: Bitski, // required
     options: {
@@ -175,3 +144,7 @@ export const providerOptions = {
     package: null
   },
 };
+export const bytesToString = (bytes) =>{
+  return utils.parseBytes32String(bytes);
+}
+

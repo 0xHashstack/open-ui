@@ -1,9 +1,9 @@
 import React, { useState, useContext, useCallback } from "react";
 import { Link } from "react-router-dom";
-import { Col, Modal, Button, Form } from "reactstrap";
+import { Col, Modal, Button, Form, Spinner } from "reactstrap";
 import { Web3ModalContext } from "../../contexts/Web3ModalProvider";
 import { Web3WrapperContext } from "../../contexts/Web3WrapperProvider";
-import { GetErrorText, OnErrorCallback } from "../../blockchain/utils";
+import { GetErrorText, BNtoNum } from "../../blockchain/utils";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -12,9 +12,12 @@ toast.configure({ autoClose: 4000 });
 
 const Header = () => {
   const [get_token, setGet_token] = useState(false);
+  const [isTransactionDone, setIsTransactionDone] = useState(false);
+  const [currentProcessingToken, setCurrentProcessingToken] = useState(null);
 
   const { connect, disconnect, account } = useContext(Web3ModalContext);
   const { web3Wrapper: wrapper } = useContext(Web3WrapperContext);
+
 
 
   const handleConnectWallet = useCallback(() => {
@@ -27,17 +30,31 @@ const Header = () => {
 
   async function handleGetToken (event: any) {
     try {
-      const tx = await wrapper?.getFaucetInstance().getTokens(event.target.textContent);
+      setIsTransactionDone(true);
+      setCurrentProcessingToken(event.target.textContent);
+      const tx1 = await wrapper?.getFaucetInstance().getTokens(event.target.textContent);
+      const tx = await tx1.wait();
       onSuccessCallback(tx.events);
     } catch (error) {
-      OnErrorCallback(error);      
+      setIsTransactionDone(false);
+      setCurrentProcessingToken(null);
+      toast.error(`${GetErrorText(error)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});     
     }
   }
 
 
   
   const onSuccessCallback = (data) => {
-    toast.success(`${data.message || 'Tokens Received Successfully.'}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
+    setIsTransactionDone(false);
+    setCurrentProcessingToken(null);
+    let _amount;
+    data.forEach(e => {
+      if (e.event == "TokensIssued") {
+        _amount = e.args.amount.toBigInt()
+      }
+    })
+    const amount = BNtoNum(_amount, 8)
+    toast.success(`${amount} tokens Received Successfully.`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
   };
 
   function removeBodyCss() {
@@ -77,7 +94,7 @@ const Header = () => {
             </div>
           </div>
           
-
+        
           <div className="d-flex flex-wrap gap-4">
             <Button
               color="light"
@@ -110,7 +127,7 @@ const Header = () => {
                         outline
                         onClick={handleGetToken}
                       >
-                        BTC
+                        {isTransactionDone && currentProcessingToken === 'BTC' ? <Spinner>Loading...</Spinner> : "BTC" }
                       </Button>
                     </Col>
                     <Col sm={3}>
@@ -120,7 +137,7 @@ const Header = () => {
                         outline
                         onClick={handleGetToken}
                       >
-                        BNB
+                        {isTransactionDone && currentProcessingToken === 'BNB' ? <Spinner>Loading...</Spinner> : "BNB" }
                       </Button>
                     </Col>
                     <Col sm={3}>
@@ -130,7 +147,7 @@ const Header = () => {
                         outline
                         onClick={handleGetToken}
                       >
-                        USDC
+                        {isTransactionDone && currentProcessingToken === 'USDC' ? <Spinner>Loading...</Spinner> : "USDC" }
                       </Button>
                     </Col>
                     <Col sm={3}>
@@ -140,7 +157,7 @@ const Header = () => {
                         outline
                         onClick={handleGetToken}
                       >
-                        USDT
+                        {isTransactionDone && currentProcessingToken === 'USDT' ? <Spinner>Loading...</Spinner> : "USDT" }
                       </Button>
                     </Col>
                   </div>

@@ -12,13 +12,13 @@ export const Web3WrapperContext = createContext<IWeb3WrapperContext>({
 
 const Web3WrapperProvider = (props: any) => {
 
-  const { web3, chainId, account, connect, disconnect } = useContext(Web3ModalContext);
+  const { ethersInstance, signer, chainId, account, connect, disconnect } = useContext(Web3ModalContext);
   const [web3Wrapper, setWeb3Wrapper] = useState<Web3Wrapper | null>(null);
 
   useEffect(() => {
-    if (web3 && chainId && account) {
+    if (ethersInstance && chainId && account) {
       try {
-        const _web3Wrapper = new Web3Wrapper(web3, chainId, account);
+        const _web3Wrapper = new Web3Wrapper(signer);
         setWeb3Wrapper(_web3Wrapper);
       }
       catch(e) {
@@ -28,7 +28,7 @@ const Web3WrapperProvider = (props: any) => {
     else {
       setWeb3Wrapper(null);
     }
-  }, [web3, chainId, account]);
+  }, [ethersInstance, chainId, account]);
 
   return (
     <Web3WrapperContext.Provider 

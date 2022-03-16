@@ -1,11 +1,12 @@
-import OracleOpen from '../contracts/OracleOpen';
+import { ethers } from 'ethers';
+import abi from "../abis/OracleOpen.json"
 
 class OracleOpenWrapper {
 
-    oracleOpen: OracleOpen
+    oracleOpen: any
 
-    constructor(wrapperOptions) {
-        this.oracleOpen = new OracleOpen(wrapperOptions, process.env.REACT_APP_DIAMOND_ADDRESS);
+    constructor(signer) {
+        this.oracleOpen = new ethers.Contract(process.env.REACT_APP_DIAMOND_ADDRESS, abi, signer);
     }
 
     // liquidationTrigger(address: string, loanId: number) {
@@ -13,25 +14,25 @@ class OracleOpenWrapper {
     // }
 
     setFairPrice(requestId: number, fairPrice: number, market: string, amount: number) {
-        return this.oracleOpen.send("setFairPrice", {}, requestId, fairPrice, market, amount);
+        return this.oracleOpen.setFairPrice(requestId, fairPrice, market, amount);
     }
     
     //getter method
     getLatestPrice(market: string) {
-        return this.oracleOpen.call("getLatestPrice", market);
+        return this.oracleOpen.getLatestPrice(market);
     }
 
     isPausedOracle() {
-        return this.oracleOpen.call("isPausedOracle");
+        return this.oracleOpen.isPausedOracle();
     }
 
     //admin operation
     pauseOracle() {
-        return this.oracleOpen.send("pauseOracle", {});
+        return this.oracleOpen.pauseOracle();
     }
 
     unpauseOracle() {
-        return this.oracleOpen.send("unpauseOracle", {});
+        return this.oracleOpen.unpauseOracle();
     }
 
 }

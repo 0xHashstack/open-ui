@@ -1,44 +1,62 @@
-import { SymbolsMap } from 'blockchain/constants';
-import MockBep20 from '../contracts/MockBep20';
-import { NumToBN } from '../utils';
+import { SymbolsMap } from '../constants';
+import abi from "../abis/BEP20Token.json"
+import { NumToBN } from "../utils"
+import { ethers } from "ethers"
 
 class MockBep20Wrapper {  
     // Contracts
-    tBTC: MockBep20;
-    tUSDC: MockBep20;
-    tUSDT: MockBep20;
-    tSXP: MockBep20;
-    tCake: MockBep20;
-    tWBNB: MockBep20;
+    tBTC: any;
+    tUSDC: any;
+    tUSDT: any;
+    tSXP: any;
+    tCake: any;
+    tWBNB: any;
   
-    constructor(wrapperOptions: any) {
-        this.tBTC = new MockBep20(wrapperOptions, process.env.REACT_APP_T_BTC_ADDRESS);
-        this.tUSDC = new MockBep20(wrapperOptions, process.env.REACT_APP_T_USDC_ADDRESS);
-        this.tUSDT = new MockBep20(wrapperOptions, process.env.REACT_APP_T_USDT_ADDRESS);
-        this.tSXP = new MockBep20(wrapperOptions, process.env.REACT_APP_T_SXP_ADDRESS);
-        this.tCake = new MockBep20(wrapperOptions, process.env.REACT_APP_T_CAKE_ADDRESS);
-        this.tWBNB = new MockBep20(wrapperOptions, process.env.REACT_APP_T_WBNB_ADDRESS);
+    constructor(signer: any) {
+        this.tBTC = new ethers.Contract(process.env.REACT_APP_T_BTC_ADDRESS, abi, signer);
+        this.tUSDC = new ethers.Contract(process.env.REACT_APP_T_USDC_ADDRESS, abi, signer);
+        this.tUSDT = new ethers.Contract(process.env.REACT_APP_T_USDT_ADDRESS, abi, signer);
+        this.tSXP = new ethers.Contract(process.env.REACT_APP_T_SXP_ADDRESS, abi, signer);
+        this.tCake = new ethers.Contract(process.env.REACT_APP_T_CAKE_ADDRESS, abi, signer);
+        this.tWBNB = new ethers.Contract(process.env.REACT_APP_T_WBNB_ADDRESS, abi, signer);
     }
 
    approve(market: string, value: number, decimal: number) {
         switch (market) {
             case SymbolsMap.BTC:
-                return this.tBTC.send("approve", {}, process.env.REACT_APP_DIAMOND_ADDRESS, NumToBN(value, decimal));
+                return this.tBTC.approve(process.env.REACT_APP_DIAMOND_ADDRESS, NumToBN(value, decimal));
             case SymbolsMap.USDC:
-                return this.tUSDC.send("approve", {}, process.env.REACT_APP_DIAMOND_ADDRESS, NumToBN(value, decimal));
+                return this.tUSDC.approve(process.env.REACT_APP_DIAMOND_ADDRESS, NumToBN(value, decimal));
             case SymbolsMap.USDT:
-                return this.tUSDT.send("approve", {}, process.env.REACT_APP_DIAMOND_ADDRESS, NumToBN(value, decimal));
+                return this.tUSDT.approve(process.env.REACT_APP_DIAMOND_ADDRESS, NumToBN(value, decimal));
             case SymbolsMap.SXP:
-                return this.tSXP.send("approve", {}, process.env.REACT_APP_DIAMOND_ADDRESS, NumToBN(value, decimal));
+                return this.tSXP.approve(process.env.REACT_APP_DIAMOND_ADDRESS, NumToBN(value, decimal));
             case SymbolsMap.CAKE:
-                return this.tCake.send("approve", {}, process.env.REACT_APP_DIAMOND_ADDRESS, NumToBN(value, decimal));
+                return this.tCake.approve(process.env.REACT_APP_DIAMOND_ADDRESS, NumToBN(value, decimal));
             case SymbolsMap.BNB:
-                return this.tWBNB.send("approve", {}, process.env.REACT_APP_DIAMOND_ADDRESS, NumToBN(value, decimal));
+                return this.tWBNB.approve(process.env.REACT_APP_DIAMOND_ADDRESS, NumToBN(value, decimal));
             default:
                 break;
        }
    }
-     
+   allowance(market: string, owner: string) {
+    switch (market) {
+        case SymbolsMap.BTC:
+            return this.tBTC.allowance(owner, process.env.REACT_APP_DIAMOND_ADDRESS);
+        case SymbolsMap.USDC:
+            return this.tUSDC.allowance(owner, process.env.REACT_APP_DIAMOND_ADDRESS);
+        case SymbolsMap.USDT:
+            return this.tUSDT.allowance(owner, process.env.REACT_APP_DIAMOND_ADDRESS);
+        case SymbolsMap.SXP:
+            return this.tSXP.allowance(owner, process.env.REACT_APP_DIAMOND_ADDRESS);
+        case SymbolsMap.CAKE:
+            return this.tCake.allowance(owner, process.env.REACT_APP_DIAMOND_ADDRESS);
+        case SymbolsMap.BNB:
+            return this.tWBNB.allowance(owner, process.env.REACT_APP_DIAMOND_ADDRESS);
+        default:
+            break;
+   }
+}
 }
 
 export default MockBep20Wrapper;

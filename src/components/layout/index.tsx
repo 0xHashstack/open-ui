@@ -12,7 +12,6 @@ import {
   changePreloader
 } from "../../store/actions";
 
-import { cacheService } from "../../helpers/CacheService";
 //redux
 import { useSelector, useDispatch } from "react-redux";
 
@@ -48,15 +47,11 @@ const Layout = (props) => {
       axios.get(`isWhiteListedAccount?address=${account}`)
         .then(res => {
           dispatch(changePreloader(true));
-          if (res.data) {
-            cacheService.setItem(`${account.toUpperCase()}_IsWhiteListedAccount`, res.data['isWhiteListed']);
-          }
+
           dispatch(changePreloader(true));
-          cacheService.setItem(`${account.toUpperCase()}_IsWhiteListedAccountRequested`, Boolean(cacheService.getItem(`${account.toUpperCase()}_IsWhiteListedAccountRequested`)));
-          setIsWhiteListedAccountRequested(Boolean(cacheService.getItem(`${account.toUpperCase()}_IsWhiteListedAccountRequested`)));
-          setIsWhiteListedAccount(Boolean(cacheService.getItem(`${account.toUpperCase()}_IsWhiteListedAccount`)));
+          setIsWhiteListedAccountRequested(res.data['whitelist_Requested']);
+          setIsWhiteListedAccount(res.data['isWhiteListed']);
           setCounter(res.data['waitlist_ct']);
-          cacheService.setItem(`${account.toUpperCase()}_Waitlist_Counter`, res.data['waitlist_ct']);
           timer = setTimeout(() => {dispatch(changePreloader(false));}, 300);
           setIsResponse(true);
           setIsTransactionDone(false);
@@ -92,16 +87,16 @@ const Layout = (props) => {
   }))
 
   //hides right sidebar on body click
-  const hideRightbar = (event) => {
-    var rightbar = document.getElementById("right-bar");
-    //if clicked in inside right bar, then do nothing
-    if (rightbar && rightbar.contains(event.target)) {
-      return;
-    } else {
-      //if clicked in outside of rightbar then fire action for hide rightbar
-      dispatch(showRightSidebarAction(false));
-    }
-  };
+  // const hideRightbar = (event) => {
+  //   var rightbar = document.getElementById("right-bar");
+  //   //if clicked in inside right bar, then do nothing
+  //   if (rightbar && rightbar.contains(event.target)) {
+  //     return;
+  //   } else {
+  //     //if clicked in outside of rightbar then fire action for hide rightbar
+  //     dispatch(showRightSidebarAction(false));
+  //   }
+  // };
 
   /*
   layout settings
@@ -113,7 +108,7 @@ const Layout = (props) => {
   useEffect(() => {
     //init body click event fot toggle rightbar
     
-    document.body.addEventListener("click", hideRightbar, true);
+    // document.body.addEventListener("click", hideRightbar, true);
     let timer;
     if (isPreloader === true) {
       document.getElementById("preloader").style.display = "block";
@@ -136,11 +131,11 @@ const Layout = (props) => {
     }
   }, [dispatch, topbarTheme]);
 
-  useEffect(() => {
-    if (layoutWidth) {
-      dispatch(changeLayoutWidth(layoutWidth));
-    }
-  }, [dispatch, layoutWidth]);
+  // useEffect(() => {
+  //   if (layoutWidth) {
+  //     dispatch(changeLayoutWidth(layoutWidth));
+  //   }
+  // }, [dispatch, layoutWidth]);
 
 
   const handleAccountWhitelist = () => {
@@ -151,15 +146,12 @@ const Layout = (props) => {
       })
       .then(res => {
         if (res.data) {
-          cacheService.setItem(`${account.toUpperCase()}_IsWhiteListedAccountRequested`, true);
-          cacheService.setItem(`${account.toUpperCase()}_IsWhiteListedAccount`, res.data.data['whiteListed']);
           setCounter(res.data.data['waitlist_ct']);
-          cacheService.setItem(`${account.toUpperCase()}_Waitlist_Counter`, res.data.data['waitlist_ct']);
           setIsWhiteListedAccountRequested(true);
           setIsWhiteListedAccount(res.data.data['whiteListed']);
         }
       })
-      .catch(err => {console.log("Error", err); cacheService.setItem(`${account.toUpperCase()}_IsWhiteListedAccountRequested`, false);})
+      .catch(err => {console.log("Error", err);})
   }
 
   function switchScreens() {
@@ -196,14 +188,6 @@ const Layout = (props) => {
                 <h4 className="font-weight-medium">Uh, oh!</h4>
                 <h4 className="font-weight-medium">It appears though you are not whitelisted. You can request for whitelist from below</h4>
                 <div className="mt-3 text-center">
-                {/* <div className="w-layout-grid-s footer-socials-s">
-                    <a href="https://twitter.com/0xhashstack" rel="noreferrer" target="_blank" className="w-inline-block-s"><img src="./images/Twitter-Icon-Fill.svg" loading="lazy" alt="" /></a>
-                    <a href="https://in.linkedin.com/company/0xhashstack" rel="noreferrer" target="_blank" className="w-inline-block-s"><img src="./images/Linkedin-Icon-Fill.svg" loading="lazy" alt=""/></a>
-                    <a href="https://github.com/0xHashstack" rel="noreferrer" target="_blank" className="w-inline-block-s"><img src="./images/github.svg" loading="lazy" alt="" /></a>
-                    <a href="http://hashstack.community" rel="noreferrer" target="_blank" className="w-inline-block-s"><img src="./images/discord.svg" loading="lazy" alt="" /></a>
-                    <a href="https://hashstack.medium.com/" rel="noreferrer" target="_blank" className="w-inline-block-s"><img src="./images/medium.svg" loading="lazy" alt="" /></a>
-                    <a href="https://www.reddit.com/r/Hashstack/" rel="noreferrer" target="_blank" className="w-inline-block-s"><img src="./images/reddit.svg" loading="lazy" alt="" /></a>
-                 </div> */}
                   <Button
                     color="dark"
                     outline
@@ -233,16 +217,8 @@ const Layout = (props) => {
             <Col lg="12">
               <div className="text-center mb-5">
                 <h4 className="font-weight-medium">Congratulations! Request sent Successfully.</h4>
-                <h4 className="font-weight-medium">Your account will be whitelisted after {counter || cacheService.getItem(`${account.toUpperCase()}_Waitlist_Counter`)} requests. </h4>
+                <h4 className="font-weight-medium">Your account will be whitelisted after {counter} requests. </h4>
                 <div className="mt-3 text-center">
-                  {/* <div className="w-layout-grid-s footer-socials-s">
-                    <a href="https://twitter.com/0xhashstack" rel="noreferrer" target="_blank" className="w-inline-block-s"><img src="./images/Twitter-Icon-Fill.svg" loading="lazy" alt="" /></a>
-                    <a href="https://in.linkedin.com/company/0xhashstack" rel="noreferrer" target="_blank" className="w-inline-block-s"><img src="./images/Linkedin-Icon-Fill.svg" loading="lazy" alt=""/></a>
-                    <a href="https://github.com/0xHashstack" rel="noreferrer" target="_blank" className="w-inline-block-s"><img src="./images/github.svg" loading="lazy" alt="" /></a>
-                    <a href="http://hashstack.community" rel="noreferrer" target="_blank" className="w-inline-block-s"><img src="./images/discord.svg" loading="lazy" alt="" /></a>
-                    <a href="https://hashstack.medium.com/" rel="noreferrer" target="_blank" className="w-inline-block-s"><img src="./images/medium.svg" loading="lazy" alt="" /></a>
-                    <a href="https://www.reddit.com/r/Hashstack/" rel="noreferrer" target="_blank" className="w-inline-block-s"><img src="./images/reddit.svg" loading="lazy" alt="" /></a>
-                 </div> */}
                 <Button
                     color="dark"
                     outline

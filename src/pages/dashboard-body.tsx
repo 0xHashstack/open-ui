@@ -1,10 +1,11 @@
+import React from "react";
 import { Spinner } from "reactstrap";
 import { DepositInterestRates, BorrowInterestRates
 } from '../blockchain/constants';
 import Borrow from "./borrow";
 import Deposit from "./deposit";
 
-const DashboardTBody = (props) => {
+let DashboardTBody = (props) => {
 
     if (props.isloading) {
       return (<tr align="center"><td colSpan={6}><Spinner>Loading...</Spinner></td></tr>)
@@ -150,4 +151,4 @@ const DashboardTBody = (props) => {
     }
   }
 
-  export default DashboardTBody;
+  export default DashboardTBody = React.memo(DashboardTBody);

@@ -1,32 +1,31 @@
-import Liquidator from '../contracts/Liquidator';
-import { NumToBN } from '../utils';
+import abi from "../abis/Liquidator.json"
+import { NumToBN } from "../utils"
+import { ethers } from "ethers"
 
 class LiquidatorWrapper {
+  liquidator: any
 
-    liquidator: Liquidator
+  constructor(signer: any) {
+    this.liquidator = new ethers.Contract(process.env.REACT_APP_DIAMOND_ADDRESS, abi, signer)
+  }
 
-    constructor(wrapperOptions: any) {
-        this.liquidator = new Liquidator(wrapperOptions, process.env.REACT_APP_DIAMOND_ADDRESS);
-    }
+  swap(fromMarket: string, toMarket: string, fromAmount: number, decimal: number, mode: number) {
+    return this.liquidator.swap(fromMarket, toMarket, NumToBN(fromAmount, decimal), String(mode))
+  }
 
-    swap(fromMarket: string, toMarket: string, fromAmount: number, decimal: number, mode: number) {
-        return this.liquidator.send("swap", {}, fromMarket, toMarket, NumToBN(fromAmount, decimal), String(mode));
-    }
+  //getter methods
+  isPausedLiquidator() {
+    return this.liquidator.isPausedLiquidator()
+  }
 
-    //getter methods
-    isPausedLiquidator() {
-        return this.liquidator.call("isPausedLiquidator");
-    }
+  //admin operation
+  pauseLiquidator() {
+    return this.liquidator.pauseLiquidator()
+  }
 
-    //admin operation
-    pauseLiquidator() {
-        return this.liquidator.send("pauseLiquidator", {});
-    }
-
-    unpauseLiquidator() {
-        return this.liquidator.send("unpauseLiquidator", {});
-    }
-
+  unpauseLiquidator() {
+    return this.liquidator.unpauseLiquidator()
+  }
 }
 
-export default LiquidatorWrapper;
+export default LiquidatorWrapper
