@@ -15,7 +15,7 @@ import { utils } from "ethers";
 
 
 export const fixedSpecial = (num: number, n: number) => {
-  var str = num.toFixed(n);
+  var str = num.toPrecision();
   if (str.indexOf('e+') === -1)
     return str;
 
@@ -31,6 +31,7 @@ export const fixedSpecial = (num: number, n: number) => {
 }
 
 export const BNtoNum = (value: number, decimal: number= 8) => {
+  debugger;
   const val = new BigNumber(value).shiftedBy(-decimal).toNumber();
   return val < 1 ? val.toPrecision(): fixedSpecial(val,0);
 }
