@@ -159,6 +159,8 @@ export const EventMap = {
   BTC: "BTC",
   BNB: "BNB",
   WBNB: "BNB",
+  CAKE: "CAKE",
+  SXP: "SXP",
 
   NONE: "None",
   TWOWEEKS: "Two Weeks",
@@ -177,6 +179,7 @@ export const CoinClassNames = {
   "BTC.T": "mdi mdi-bitcoin",
   "BNB.T": "mdi mdi-drag-variant",
   "WBNB.T": "mdi mdi-drag-variant",
+  CAKE: "mdi mdi-cake"
 }
 
 export const MinimumAmount = {
