@@ -7,11 +7,9 @@ import { BNtoNum } from '../blockchain/utils';
 
 
 let PassbookTBody = (props) => {
-    const assets = props.assets.filter(asset => {
-      return asset.state === 0;
-    });
+    const assets = props.assets;
     if (props.isloading && assets.length === 0) {
-      return (<tr align="center"><td colSpan={4}><Spinner>Loading...</Spinner></td></tr>)
+      return (<tr align="center"><td colSpan={6}><Spinner>Loading...</Spinner></td></tr>)
     } else if (Array.isArray(assets) && assets.length > 0) {
       return (
         <>
@@ -105,7 +103,7 @@ let PassbookTBody = (props) => {
         </>
       );
     } else {
-      return (<><tr align="center"><td colSpan={5}>No Records found.</td></tr></>);
+      return (<><tr align="center"><td colSpan={7}>No Records found.</td></tr></>);
     }
   }
 

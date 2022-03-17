@@ -48,7 +48,7 @@ const Dashboard = () => {
   const [isTransactionDone, setIsTransactionDone] = useState(false);
 
   const [customActiveTab, setCustomActiveTab] = useState("1");
-  const [passbookStatus, setPassbookStatus] = useState(true)
+  const [passbookStatus, setPassbookStatus] = useState("ActiveDeposit")
 
   const [modal_repay_loan, setmodal_repay_loan] = useState(false);
   const [modal_withdraw_loan, setmodal_withdraw_loan] = useState(false);
@@ -334,9 +334,9 @@ const Dashboard = () => {
       const _loanOption: string | undefined = loanOption;
       const _swapOption: string | undefined = swapOption;
       const _commit: string | undefined = loanCommitement;
-      const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[_loanOption], BNtoNum(Number(commit[0].loanAmount)), DecimalsMap[_loanOption]);
-      console.log("Approve Transaction sent: ", approveTransactionHash);
-      await approveTransactionHash.wait();
+      // const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[_loanOption], BNtoNum(Number(commit[0].loanAmount)), DecimalsMap[_loanOption]);
+      // console.log("Approve Transaction sent: ", approveTransactionHash);
+      // await approveTransactionHash.wait();
       const tx1 = await wrapper?.getLoanInstance().swapLoan(SymbolsMap[_loanOption], CommitMap[_commit], SymbolsMap[_swapOption]);
       const tx = await tx1.wait()
       onSwap(tx.events);
@@ -529,10 +529,795 @@ const Dashboard = () => {
 
 
   const passbookActive = (e) => {
-    if (e.target.value === "ActiveDeposit") {
-      setPassbookStatus(true)
-    } else {
-      setPassbookStatus(false)
+    setPassbookStatus(e.target.value);
+  }
+
+  const getPassbookActionScreen = (passbookStatus) => {
+    switch(passbookStatus) {
+      case "ActiveLoan": return (    (
+        <CardBody>
+          <form>
+            {/* ----------------------- Loan Actions ----------------------- */}
+  
+            <div className="mb-4 ">
+              <Label>Loan Actions</Label>
+              <Row>
+                <Col sm="6">
+                  <div className="mb-3">
+                    <label className="card-radio-label mb-2">
+                      <Button
+                        className="btn-block btn-sm"
+                        color="light"
+                        id="RepayLoanButton"
+                        outline
+                        onClick={() => {
+                          tog_repay_loan();
+                        }}
+                      >
+                        Repay Loan
+                        {/* <Tooltip placement="top" target="RepayLoanButton" autohide={true} isOpen={repayLoanTooltipOpen} toggle={() => {setRepayLoanTooltipOpen(!repayLoanTooltipOpen)}}>
+                        This features will be activated this friday.
+                      </Tooltip> */}
+                      </Button>
+                      <Modal
+                        isOpen={modal_repay_loan}
+                        toggle={() => {
+                          tog_repay_loan();
+                        }}
+                        centered
+                      >
+                        <div className="modal-body">
+                          <Form>
+                            <div className="row mb-4">
+                              <Col sm={12}>
+                                <select className="form-select" onChange={handleLoanOptionChange}>
+                                  <option hidden>Loan Market</option>
+                                  {[...new Map(activeLoansData.map((item: any) => [item['loanMarket'], item])).values()].map((asset, key) => {
+                                    return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
+                                  })}
+                                </select>
+                              </Col>
+                            </div>
+                            <div className="row mb-4">
+                              <Col sm={12}>
+                                <select className="form-select" onChange={handleLoanCommitementChange}>
+                                  <option hidden>Minimum Commitment Period</option>
+                                  {activeLoansData.filter((asset) => {
+                                    return (EventMap[asset.loanMarket.toUpperCase()] === loanOption)
+                                  })
+                                    .map(item => item['commitment'])
+                                    .filter((value, index, self) => self.indexOf(value) === index)
+                                    .map((asset, key) => {
+                                      return <option key={key} value={asset}>{EventMap[asset]}</option>
+                                    })}
+                                </select>
+                              </Col>
+                            </div>
+                            <div className="row mb-4">
+                              <Col sm={12}>
+                                <Input
+                                  type="text"
+                                  className="form-control"
+                                  id="horizontal-password-Input"
+                                  placeholder="Amount"
+                                  onChange={(event) => { setInputVal1(Number(event.target.value)) }}
+                                />
+                              </Col>
+                            </div>
+  
+                            <div className="d-grid gap-2">
+                              <Button
+                                color="primary"
+                                className="w-md"
+                                disabled={isTransactionDone || inputVal1 === 0}
+                                onClick={handleRepay}
+                              >
+                                {!isTransactionDone ? 'Repay' : <Spinner>Loading...</Spinner>}
+                              </Button>
+                            </div>
+                          </Form>
+                        </div>
+                      </Modal>
+                    </label>
+                  </div>
+                </Col>
+  
+                <Col sm="6">
+                  <div className="mb-3">
+                    <Label className="card-radio-label mb-2">
+                      <Button
+                        className="btn-block btn-sm"
+                        color="light"
+                        outline
+                        onClick={() => {
+                          tog_withdraw_loan();
+                        }}
+                      >
+                        Withdraw Loan
+                      </Button>
+                      <Modal
+                        isOpen={modal_withdraw_loan}
+                        toggle={() => {
+                          tog_withdraw_loan();
+                        }}
+                        centered
+                      >
+                        <div className="modal-body">
+                          <Form>
+                            <div className="row mb-4">
+                              <Col sm={12}>
+                                <select className="form-select" onChange={handleLoanOptionChange}>
+                                  <option hidden>Loan market</option>
+                                  {[...new Map(activeLoansData.map((item: any) => [item['loanMarket'], item])).values()].map((asset, key) => {
+                                    return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
+                                  })}
+                                </select>
+                              </Col>
+                            </div>
+                            <div className="row mb-4">
+                              <Col sm={12}>
+                                <select className="form-select" onChange={handleLoanCommitementChange}>
+                                  <option hidden>Minimum Commitment Period</option>
+                                  {activeLoansData.filter((asset) => {
+                                    return (EventMap[asset.loanMarket.toUpperCase()] === loanOption)
+                                  })
+                                    .map(item => item['commitment'])
+                                    .filter((value, index, self) => self.indexOf(value) === index)
+                                    .map((asset, key) => {
+                                      return <option key={key} value={asset}>{EventMap[asset]}</option>
+                                    })}
+                                </select>
+                              </Col>
+                            </div>
+                            <div className="row mb-4">
+                              <Col sm={12}>
+                                <Input
+                                  type="text"
+                                  className="form-control"
+                                  id="horizontal-password-Input"
+                                  placeholder="Amount"
+                                  onChange={(event) => { setInputVal1(Number(event.target.value)) }}
+                                />
+                              </Col>
+                            </div>
+  
+                            <div className="d-grid gap-2">
+                              <Button
+                                color="primary"
+                                className="w-md"
+                                disabled={isTransactionDone || inputVal1 === 0}
+                                onClick={handleWithdrawLoan}
+                              >
+  
+                                {!isTransactionDone ? 'Withdraw Loan' : <Spinner>Loading...</Spinner>}
+                              </Button>
+                            </div>
+                          </Form>
+                        </div>
+                      </Modal>
+                    </Label>
+                  </div>
+                </Col>
+              </Row>
+            </div>
+  
+            {/* --------------------------- Swap -------------------------- */}
+  
+            <div className="mb-4">
+              <Label>Swap</Label>
+              <Row>
+                <Col sm="6">
+                  <Label className="card-radio-label mb-3">
+                    <Button
+                      className="btn-block btn-sm"
+                      color="light"
+                      outline
+                      id="SwapLoanButton"
+                      onClick={() => {
+                        tog_swap_loan();
+                      }}
+                    >
+                      Swap Loan
+                      {/* <Tooltip placement="top" target="SwapLoanButton" autohide={true} isOpen={swapLoanTooltipOpen} toggle={() => {setSwapLoanTooltipOpen(!swapLoanTooltipOpen)}}>
+                        This features will be activated On 28th Feb.
+                      </Tooltip> */}
+                    </Button>
+                    <Modal
+                      isOpen={modal_swap_loan}
+                      toggle={() => {
+                        tog_swap_loan();
+                      }}
+                      centered
+                    >
+                      <div className="modal-body">
+                        <Form>
+                          <div className="row mb-4">
+                            <Col sm={12}>
+                              <select className="form-select" onChange={handleLoanOptionChange}>
+                                <option hidden>Loan Market</option>
+                                {[...new Map(activeLoansData.filter((asset) => {
+                                  return !asset.isSwapped;
+                                })
+                                .map((item: any) => [item['loanMarket'], item])).values()].map((asset, key) => {
+                                  return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
+                                })}
+                              </select>
+                            </Col>
+                          </div>
+                          <div className="row mb-4">
+                            <Col sm={12}>
+                              <select className="form-select" onChange={handleLoanCommitementChange}>
+                                <option hidden>Minimum Commitment Period</option>
+                                {activeLoansData.filter((asset) => {
+                                  return (EventMap[asset.loanMarket.toUpperCase()] === loanOption) && !asset.isSwapped;
+                                })
+                                  .map(item => item['commitment'])
+                                  .filter((value, index, self) => self.indexOf(value) === index)
+                                  .map((asset, key) => {
+                                    return <option key={key} value={asset}>{EventMap[asset]}</option>
+                                  })}
+                              </select>
+                            </Col>
+                          </div>
+                          <div className="row mb-4">
+                            <Col sm={12}>
+                              <select className="form-select" onChange={handleSwapOptionChange}>
+                                <option hidden>Swap Market</option>
+                                <option value={"SXP"}>SXP</option>
+                                <option value={"CAKE"}>CAKE</option>
+                              </select>
+                            </Col>
+                          </div>
+  
+                          <div className="d-grid gap-2">
+                            <Button
+                              color="primary"
+                              className="w-md"
+                              disabled={isTransactionDone}
+                              onClick={handleSwap}
+                            >
+                              {!isTransactionDone ? 'Swap Loan' : <Spinner>Loading...</Spinner>}
+                            </Button>
+                          </div>
+                        </Form>
+                      </div>
+                    </Modal>
+                  </Label>
+                </Col>
+  
+                <Col sm="6">
+                  <Label className="card-radio-label mb-3">
+                    <Button
+                      className="btn-block btn-sm"
+                      color="light"
+                      id="SwapToLoanButton"
+                      outline
+                      onClick={() => {
+                        tog_swap_to_loan();
+                      }}
+                    >
+                      Swap to Loan
+                      {/* <Tooltip placement="top" target="SwapToLoanButton" autohide={true} isOpen={swapToLoanTooltipOpen} toggle={() => {setSwapToLoanTooltipOpen(!swapToLoanTooltipOpen)}}>
+                        This features will be activated On 28th Feb.
+                      </Tooltip> */}
+                    </Button>
+                    <Modal
+                      isOpen={modal_swap_to_loan}
+                      toggle={() => {
+                        tog_swap_to_loan();
+                      }}
+                      centered
+                    >
+                      <div className="modal-body">
+                        <Form>
+                          <div className="row mb-4">
+                            <Col sm={12}>
+                              <select className="form-select" onChange={handleSwapOptionChange}>
+                                <option hidden>Select Market to Swap</option>
+                                <option value={"SXP"}>SXP</option>
+                                <option value={"CAKE"}>CAKE</option>
+                              </select>
+                            </Col>
+                          </div>
+  
+                          <div className="row mb-4">
+                            <Col sm={12}>
+                              <select className="form-select" onChange={handleLoanOptionChange}>
+                                <option hidden>Select Loan</option>
+                                {[...new Map(activeLoansData.filter((asset: any)=>asset.isSwapped).map((item: any) => [item['loanMarket'], item])).values()].map((asset, key) => {
+                                  return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
+                                })}
+                              </select>
+                            </Col>
+                          </div>
+                          <div className="row mb-4">
+                            <Col sm={12}>
+                              <select className="form-select" onChange={handleLoanCommitementChange}>
+                                <option hidden>Minimum Commitment Period</option>
+                                {activeLoansData.filter((asset) => {
+                                  return (EventMap[asset.loanMarket.toUpperCase()] === loanOption) && asset.isSwapped
+                                })
+                                  .map(item => item['commitment'])
+                                  .filter((value, index, self) => self.indexOf(value) === index)
+                                  .map((asset, key) => {
+                                    return <option key={key} value={asset}>{EventMap[asset]}</option>
+                                  })}
+                              </select>
+                            </Col>
+                          </div>
+  
+                          <div className="d-grid gap-2">
+                            <Button
+                              color="primary"
+                              className="w-md"
+                              disabled={isTransactionDone}
+                              onClick={handleSwapToLoan}
+                            >
+                              {!isTransactionDone ? 'Swap to Loan' : <Spinner>Loading...</Spinner>}
+  
+                            </Button>
+                          </div>
+                        </Form>
+                      </div>
+                    </Modal>
+                  </Label>
+                </Col>
+  
+              </Row>
+            </div>
+  
+            {/* ------------------- Collateral actions ------------------- */}
+  
+            <div className="mb-4">
+              <Label>Collateral Actions</Label>
+              <Row>
+                <Col sm="6">
+                  <Label className="card-radio-label mb-3">
+                    <Button
+                      className="btn-block  btn-sm"
+                      color="light"
+                      id="AddCollateralButton"
+                      outline
+                      onClick={() => {
+                        tog_add_collateral();
+                      }}
+                    >
+                      Add Collateral
+                    </Button>
+                    {/* <Tooltip placement="top" target="AddCollateralButton" autohide={true} isOpen={addCollateralTooltipOpen} toggle={() => {setAddCollateralTooltipOpen(!addCollateralTooltipOpen)}}>
+                        This features will be activated On 28th Feb.
+                    </Tooltip> */}
+                    <Modal
+                      isOpen={modal_add_collateral}
+                      toggle={() => {
+                        tog_add_collateral();
+                      }}
+                      centered
+                    >
+                      <div className="modal-body">
+                        <Form>
+                          <div className="row mb-4">
+                            <Col sm={12}>
+                              <select className="form-select" onChange={handleLoanOptionChange}>
+                                <option hidden>Loan Market</option>
+                                {[...new Map(activeLoansData.map((item: any) => [item['loanMarket'], item])).values()].map((asset, key) => {
+                                  return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
+                                })}
+                              </select>
+                            </Col>
+                          </div>
+                          <div className="row mb-4">
+                            <Col sm={12}>
+                              <select className="form-select" onChange={handleLoanCommitementChange}>
+                                <option hidden>Minimum Commitment Period</option>
+                                {activeLoansData.filter((asset) => {
+                                  return (EventMap[asset.loanMarket.toUpperCase()] === loanOption)
+                                })
+                                  .map(item => item['commitment'])
+                                  .filter((value, index, self) => self.indexOf(value) === index)
+                                  .map((asset, key) => {
+                                    return <option key={key} value={asset}>{EventMap[asset]}</option>
+                                  })}
+                              </select>
+                            </Col>
+                          </div>
+                          <div className="row mb-4">
+                            <Col sm={12}>
+                              <select className="form-select" onChange={handleCollateralOptionChange}>
+                                <option hidden>Collateral Market</option>
+                                {[...new Map(activeLoansData.map((item: any) => [item['collateralMarket'], item])).values()].map((asset, key) => {
+                                  return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
+                                })}
+                              </select>
+                            </Col>
+                          </div>
+                          <div className="row mb-4">
+                            <Col sm={12}>
+                              <Input
+                                type="text"
+                                className="form-control"
+                                id="horizontal-password-Input"
+                                placeholder="Amount"
+                                onChange={(event) => { setInputVal1(Number(event.target.value)) }}
+                              />
+                            </Col>
+                          </div>
+  
+                          <div className="d-grid gap-2">
+                            <Button
+                              color="primary"
+                              className="w-md"
+                              disabled={isTransactionDone || inputVal1 === 0}
+                              onClick={handleCollateral}
+                            >
+                              {!isTransactionDone ? 'Add Collateral' : <Spinner>Loading...</Spinner>}
+  
+                            </Button>
+                          </div>
+                        </Form>
+                      </div>
+                    </Modal>
+                  </Label>
+                </Col>
+              </Row>
+            </div>
+  
+          </form>
+        </CardBody>
+      ));
+      break;
+
+      case "ActiveDeposit": return (    (
+        /* -------------------------------------- Active Deposit ----------------------------- */
+        <CardBody>
+          <form>
+          <Label>Deposit Actions</Label>
+            <div className="mb-4 ">
+              <Row>
+                <Col sm="6">
+                  <div className="mb-3">
+                    <label className="card-radio-label mb-2">
+                      <Button
+                        className="btn-block btn-sm"
+                        color="light"
+                        outline
+                        onClick={() => {
+                          tog_add_active_deposit();
+                        }}
+                      >
+                        Add to Deposit
+                      </Button>
+                      <Modal
+                        isOpen={modal_add_active_deposit}
+                        toggle={() => {
+                          tog_add_active_deposit();
+                        }}
+                        centered
+                      >
+                        <div className="modal-body">
+                          <Form>
+                            <div className="row mb-4">
+                              <Col sm={12}>
+                                <select className="form-select" onChange={handleDepositRequestSelect}>
+                                  <option hidden>Select Market</option>
+                                  {[...new Map(activeDepositsData.map((item: any) => [item['market'], item])).values()].map((asset, key) => {
+                                    return <option key={key} value={EventMap[asset.market.toUpperCase()]}>{EventMap[asset.market.toUpperCase()]}</option>
+                                  })}
+                                </select>
+                              </Col>
+                            </div>
+                            <div className="row mb-4">
+                              <Col sm={12}>
+                                <select className="form-select" onChange={handleDepositRequestTime}>
+                                  <option hidden>Minimum Commitment Period</option>
+                                  {activeDepositsData.filter((asset) => {
+                                    return (EventMap[asset.market.toUpperCase()] === depositRequestSel)
+                                  })
+                                    .map(item => item['commitment'])
+                                    .filter((value, index, self) => self.indexOf(value) === index)
+                                    .map((asset, key) => {
+                                      return <option key={key} value={asset}>{EventMap[asset]}</option>
+                                    })}
+                                </select>
+                              </Col>
+                            </div>
+                            <div className="row mb-4">
+                              <Col sm={12}>
+                                <Input
+                                  type="text"
+                                  className="form-control"
+                                  id="horizontal-password-Input"
+                                  placeholder={depositRequestSel ? `Min amount should be greater than ${MinimumAmount[depositRequestSel]}` : 'Amount'}
+                                  onChange={(event) => { setInputVal1(Number(event.target.value)) }}
+                                />
+                              </Col>
+                            </div>
+  
+                            <div className="d-grid gap-2">
+                              <Button
+                                color="primary"
+                                className="w-md"
+                                disabled={isTransactionDone || inputVal1 === 0}
+                                onClick={handleDepositRequest}
+                              >
+                                {!isTransactionDone ? 'Add to Deposit' : <Spinner>Loading...</Spinner>}
+  
+                              </Button>
+                            </div>
+                          </Form>
+                        </div>
+                      </Modal>
+                    </label>
+                  </div>
+                </Col>
+  
+                <Col sm="6">
+                  <div className="mb-3">
+                    <Label className="card-radio-label mb-2">
+                      <Button
+                        className="btn-block btn-sm"
+                        color="light"
+                        outline
+                        onClick={() => {
+                          tog_withdraw_active_deposit();
+                        }}
+                      >
+                        Withdraw Deposit
+                      </Button>
+                      <Modal
+                        isOpen={modal_withdraw_active_deposit}
+                        toggle={() => {
+                          tog_withdraw_active_deposit();
+                        }}
+                        centered
+                      >
+                        <div className="modal-body">
+                          <Form>
+                            <div className="row mb-4">
+                              <Col sm={12}>
+                                <select className="form-select" onChange={handleWithdrawDepositSelect}>
+                                  <option hidden>Select Market</option>
+                                  {[...new Map(activeDepositsData.map((item: any) => [item['market'], item])).values()].map((asset, key) => {
+                                    return <option key={key} value={EventMap[asset.market.toUpperCase()]}>{EventMap[asset.market.toUpperCase()]}</option>
+                                  })}
+                                </select>
+                              </Col>
+                            </div>
+                            <div className="row mb-4">
+                              <Col sm={12}>
+                                <select className="form-select" onChange={handleWithdrawDepositTime}>
+                                  <option hidden>Minimum Commitment Period</option>
+                                  {activeDepositsData.filter((asset) => {
+                                    return (EventMap[asset.market.toUpperCase()] === withdrawDepositSel)
+                                  })
+                                    .map(item => item['commitment'])
+                                    .filter((value, index, self) => self.indexOf(value) === index)
+                                    .map((asset, key) => {
+                                      return <option key={key} value={asset}>{EventMap[asset]}</option>
+                                    })}
+                                </select>
+                              </Col>
+                            </div>
+                            <div className="row mb-4">
+                              <Col sm={12}>
+                                <Input
+                                  type="text"
+                                  className="form-control"
+                                  id="horizontal-password-Input"
+                                  placeholder="Amount"
+                                  onChange={(event) => { setInputVal1(Number(event.target.value)) }}
+                                />
+                              </Col>
+                            </div>
+  
+                            <div className="d-grid gap-2">
+                              <Button
+                                color="primary"
+                                className="w-md"
+                                disabled={isTransactionDone || inputVal1 === 0}
+                                onClick={handleWithdrawDeposit}
+                              >
+                                {!isTransactionDone ? 'Withdraw Deposit' : <Spinner>Loading...</Spinner>}
+  
+                              </Button>
+                            </div>
+                          </Form>
+                        </div>
+                      </Modal>
+                    </Label>
+                  </div>
+                </Col>
+              </Row>
+            </div>
+          </form>
+        </CardBody>
+      ));
+      break;
+
+      case "RepaidLoan": return (    (
+
+        <CardBody>
+          <form>
+            {/* ------------------- Collateral actions ------------------- */}
+  
+            <div className="mb-4">
+              <Label>Collateral Actions</Label>
+              <Row>
+                <Col sm="6">
+                  <Label className="card-radio-label mb-3">
+                    <Button
+                      className="btn-block btn-sm"
+                      color="light"
+                      id="WithdrawCollateralButton"
+                      outline
+                      onClick={() => {
+                        tog_withdraw_collateral();
+                      }}
+                    >
+                      Withdraw Collateral
+                    </Button>
+                    {/* <Tooltip placement="top" target="WithdrawCollateralButton" autohide={true} isOpen={withdrawCollateralTooltipOpen} toggle={() => {setWithdrawCollateralTooltipOpen(!withdrawCollateralTooltipOpen)}}>
+                        This features will be activated On 28th Feb.
+                    </Tooltip> */}
+                    <Modal
+                      isOpen={modal_withdraw_collateral}
+                      toggle={() => {
+                        tog_withdraw_collateral();
+                      }}
+                      centered
+                    >
+                      <div className="modal-body">
+                        <Form>
+                          <div className="row mb-4">
+                            <Col sm={12}>
+                              <select className="form-select" onChange={handleLoanOptionChange}>
+                                <option hidden>Loan Market</option>
+                                {[...new Map(closedLoansData.map((item: any) => [item['loanMarket'], item])).values()].map((asset, key) => {
+                                  return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
+                                })}
+                              </select>
+                            </Col>
+                          </div>
+                          <div className="row mb-4">
+                            <Col sm={12}>
+                              <select className="form-select" onChange={handleLoanCommitementChange}>
+                                <option hidden>Minimum Commitment Period</option>
+                                {closedLoansData.filter((asset) => {
+                                  return (EventMap[asset.loanMarket.toUpperCase()] === loanOption)
+                                })
+                                  .map(item => item['commitment'])
+                                  .filter((value, index, self) => self.indexOf(value) === index)
+                                  .map((asset, key) => {
+                                    return <option key={key} value={asset}>{EventMap[asset]}</option>
+                                  })}
+                              </select>
+                            </Col>
+                          </div>
+                          <div className="d-grid gap-2">
+                            <Button
+                              color="primary"
+                              className="w-md"
+                              disabled={isTransactionDone}
+                              onClick={handleWithdrawCollateral}
+                            >
+                              {!isTransactionDone ? 'Withdraw Collateral' : <Spinner>Loading...</Spinner>}
+  
+                            </Button>
+                          </div>
+                        </Form>
+                      </div>
+                    </Modal>
+                  </Label>
+                </Col>
+              </Row>
+            </div>
+  
+          </form>
+        </CardBody>
+      ));
+      break;
+      default:
+        return null;                            
+    }
+  }
+
+  const getPassbookTable = (passbookStatus) => {
+    switch(passbookStatus) {
+      case "ActiveDeposit": return ( // Active Deposits
+        <div className="table-responsive">
+          <Table className="table table-nowrap align-middle mb-0">
+            <thead>
+              <tr>
+                <th scope="col">Deposit Market</th>
+                <th scope="col">Commitment</th>
+                <th scope="col">Amount</th>
+                {/* <th scope="col" colSpan={2}>Interest Earned</th> */}
+              </tr>
+            </thead>
+            <tbody>
+              {Array.isArray(activeDepositsData) && activeDepositsData.length > 0 ? activeDepositsData.map((asset, key) => (
+                <tr key={key}>
+                  <th scope="row">
+                    <div className="d-flex align-items-center">
+                      <div className="avatar-xs me-3">
+                        <span
+                          className={
+                            "avatar-title rounded-circle bg-soft bg-" +
+                            asset.color +
+                            " text-" +
+                            asset.color +
+                            " font-size-18"
+                          }
+                        >
+                          <i className={CoinClassNames[EventMap[asset.market.toUpperCase()]] || asset.market.toUpperCase()} />
+                        </span>
+                      </div>
+                      <span>{EventMap[asset.market.toUpperCase()]}</span>
+                    </div>
+                  </th>
+                  <td>
+                    <div className="text-muted">{EventMap[asset.commitment]}</div>
+                  </td>
+                  <td>
+                    <div className="text-muted">{BNtoNum(Number(asset.amount))}</div>
+                  </td>
+                  {/* <td>
+                    <div className="text-muted">{Number(asset.acquiredYield).toFixed(3)}</div>
+                  </td>  */}
+                </tr>
+              )) : <tr align="center"><td colSpan={5}>No Records Found.</td></tr>}
+            </tbody>
+          </Table>
+        </div>);
+      break;
+
+      case "ActiveLoan": return (<div className="table-responsive">
+      <Table className="table table-nowrap align-middle mb-0">
+        <thead>
+          <tr>
+            <th scope="col">Borrow Market</th>
+            <th scope="col">Borrow Amount</th>
+            <th scope="col">Commitment</th>
+            <th scope="col">Collateral Market</th>
+            <th scope="col">Collateral Amount</th>
+            <th scope="col">Swap Status</th>
+            <th scope="col">Borrow Market(Current)</th>
+            <th scope="col">Borrow Amount(Current)</th>
+            {/* <th scope="col" colSpan={2}>Interest</th> */}
+          </tr>
+        </thead>
+
+        <tbody>
+          <PassbookTBody isloading={isLoading} assets={activeLoansData}></PassbookTBody>
+        </tbody>
+      </Table>
+    </div>);
+      break;
+
+      case "RepaidLoan": return (<div className="table-responsive">
+      <Table className="table table-nowrap align-middle mb-0">
+        <thead>
+          <tr>
+            <th scope="col">Borrow Market</th>
+            <th scope="col">Borrow Amount</th>
+            <th scope="col">Commitment</th>
+            <th scope="col">Collateral Market</th>
+            <th scope="col">Collateral Amount</th>
+            <th scope="col">Swap Status</th>
+            <th scope="col">Borrow Market(Current)</th>
+            <th scope="col">Borrow Amount(Current)</th>
+            {/* <th scope="col" colSpan={2}>Interest</th> */}
+          </tr>
+        </thead>
+
+        <tbody>
+          <PassbookTBody isloading={isLoading} assets={closedLoansData}></PassbookTBody>
+        </tbody>
+      </Table>
+    </div>);
+      break;
+
+      default: return null;
     }
   }
 
@@ -550,692 +1335,17 @@ const Dashboard = () => {
           <Row>
             {customActiveTab === '2' ?
               <Col xl="4">
-                <Card>
+                <Card style={{height: "29rem"}}>
                   {/* {customActiveTab === '2' ? */}
 
-                  {passbookStatus === false ?
-                    (
-                      /* -------------------------------------- REPAY ----------------------------- */
-                      <CardBody>
-                        <form>
-                          <div className="mb-4 me-3">
-                            <h4 className="card-title mb-4">Repay</h4>
-                          </div>
-
-                          {/* ----------------------- Loan Actions ----------------------- */}
-
-                          <div className="mb-4 ">
-                            <Label>Loan Actions</Label>
-                            <Row>
-                              <Col sm="6">
-                                <div className="mb-3">
-                                  <label className="card-radio-label mb-2">
-                                    <Button
-                                      className="btn-block btn-sm"
-                                      color="light"
-                                      id="RepayLoanButton"
-                                      outline
-                                      onClick={() => {
-                                        tog_repay_loan();
-                                      }}
-                                    >
-                                      Repay Loan
-                                      {/* <Tooltip placement="top" target="RepayLoanButton" autohide={true} isOpen={repayLoanTooltipOpen} toggle={() => {setRepayLoanTooltipOpen(!repayLoanTooltipOpen)}}>
-                                      This features will be activated this friday.
-                                    </Tooltip> */}
-                                    </Button>
-                                    <Modal
-                                      isOpen={modal_repay_loan}
-                                      toggle={() => {
-                                        tog_repay_loan();
-                                      }}
-                                      centered
-                                    >
-                                      <div className="modal-body">
-                                        <Form>
-                                          <div className="row mb-4">
-                                            <Col sm={12}>
-                                              <select className="form-select" onChange={handleLoanOptionChange}>
-                                                <option hidden>Loan Market</option>
-                                                {[...new Map(activeLoansData.map((item: any) => [item['loanMarket'], item])).values()].map((asset, key) => {
-                                                  return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
-                                                })}
-                                              </select>
-                                            </Col>
-                                          </div>
-                                          <div className="row mb-4">
-                                            <Col sm={12}>
-                                              <select className="form-select" onChange={handleLoanCommitementChange}>
-                                                <option hidden>Minimum Commitment Period</option>
-                                                {activeLoansData.filter((asset) => {
-                                                  return (EventMap[asset.loanMarket.toUpperCase()] === loanOption)
-                                                })
-                                                  .map(item => item['commitment'])
-                                                  .filter((value, index, self) => self.indexOf(value) === index)
-                                                  .map((asset, key) => {
-                                                    return <option key={key} value={asset}>{EventMap[asset]}</option>
-                                                  })}
-                                              </select>
-                                            </Col>
-                                          </div>
-                                          <div className="row mb-4">
-                                            <Col sm={12}>
-                                              <Input
-                                                type="text"
-                                                className="form-control"
-                                                id="horizontal-password-Input"
-                                                placeholder="Amount"
-                                                onChange={(event) => { setInputVal1(Number(event.target.value)) }}
-                                              />
-                                            </Col>
-                                          </div>
-
-                                          <div className="d-grid gap-2">
-                                            <Button
-                                              color="primary"
-                                              className="w-md"
-                                              disabled={isTransactionDone || inputVal1 === 0}
-                                              onClick={handleRepay}
-                                            >
-                                              {!isTransactionDone ? 'Repay' : <Spinner>Loading...</Spinner>}
-                                            </Button>
-                                          </div>
-                                        </Form>
-                                      </div>
-                                    </Modal>
-                                  </label>
-                                </div>
-                              </Col>
-
-                              <Col sm="6">
-                                <div className="mb-3">
-                                  <Label className="card-radio-label mb-2">
-                                    <Button
-                                      className="btn-block btn-sm"
-                                      color="light"
-                                      outline
-                                      onClick={() => {
-                                        tog_withdraw_loan();
-                                      }}
-                                    >
-                                      Withdraw Loan
-                                    </Button>
-                                    <Modal
-                                      isOpen={modal_withdraw_loan}
-                                      toggle={() => {
-                                        tog_withdraw_loan();
-                                      }}
-                                      centered
-                                    >
-                                      <div className="modal-body">
-                                        <Form>
-                                          <div className="row mb-4">
-                                            <Col sm={12}>
-                                              <select className="form-select" onChange={handleLoanOptionChange}>
-                                                <option hidden>Loan market</option>
-                                                {[...new Map(activeLoansData.map((item: any) => [item['loanMarket'], item])).values()].map((asset, key) => {
-                                                  return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
-                                                })}
-                                              </select>
-                                            </Col>
-                                          </div>
-                                          <div className="row mb-4">
-                                            <Col sm={12}>
-                                              <select className="form-select" onChange={handleLoanCommitementChange}>
-                                                <option hidden>Minimum Commitment Period</option>
-                                                {activeLoansData.filter((asset) => {
-                                                  return (EventMap[asset.loanMarket.toUpperCase()] === loanOption)
-                                                })
-                                                  .map(item => item['commitment'])
-                                                  .filter((value, index, self) => self.indexOf(value) === index)
-                                                  .map((asset, key) => {
-                                                    return <option key={key} value={asset}>{EventMap[asset]}</option>
-                                                  })}
-                                              </select>
-                                            </Col>
-                                          </div>
-                                          <div className="row mb-4">
-                                            <Col sm={12}>
-                                              <Input
-                                                type="text"
-                                                className="form-control"
-                                                id="horizontal-password-Input"
-                                                placeholder="Amount"
-                                                onChange={(event) => { setInputVal1(Number(event.target.value)) }}
-                                              />
-                                            </Col>
-                                          </div>
-
-                                          <div className="d-grid gap-2">
-                                            <Button
-                                              color="primary"
-                                              className="w-md"
-                                              disabled={isTransactionDone || inputVal1 === 0}
-                                              onClick={handleWithdrawLoan}
-                                            >
-
-                                              {!isTransactionDone ? 'Withdraw Loan' : <Spinner>Loading...</Spinner>}
-                                            </Button>
-                                          </div>
-                                        </Form>
-                                      </div>
-                                    </Modal>
-                                  </Label>
-                                </div>
-                              </Col>
-                            </Row>
-                          </div>
-
-                          {/* --------------------------- Swap -------------------------- */}
-
-                          <div className="mb-4">
-                            <Label>Swap</Label>
-                            <Row>
-                              <Col sm="6">
-                                <Label className="card-radio-label mb-3">
-                                  <Button
-                                    className="btn-block btn-sm"
-                                    color="light"
-                                    outline
-                                    id="SwapLoanButton"
-                                    onClick={() => {
-                                      tog_swap_loan();
-                                    }}
-                                  >
-                                    Swap Loan
-                                    {/* <Tooltip placement="top" target="SwapLoanButton" autohide={true} isOpen={swapLoanTooltipOpen} toggle={() => {setSwapLoanTooltipOpen(!swapLoanTooltipOpen)}}>
-                                      This features will be activated On 28th Feb.
-                                    </Tooltip> */}
-                                  </Button>
-                                  <Modal
-                                    isOpen={modal_swap_loan}
-                                    toggle={() => {
-                                      tog_swap_loan();
-                                    }}
-                                    centered
-                                  >
-                                    <div className="modal-body">
-                                      <Form>
-                                        <div className="row mb-4">
-                                          <Col sm={12}>
-                                            <select className="form-select" onChange={handleLoanOptionChange}>
-                                              <option hidden>Loan Market</option>
-                                              {[...new Map(activeLoansData.filter((asset) => {
-                                                return !asset.isSwapped;
-                                              })
-                                              .map((item: any) => [item['loanMarket'], item])).values()].map((asset, key) => {
-                                                return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
-                                              })}
-                                            </select>
-                                          </Col>
-                                        </div>
-                                        <div className="row mb-4">
-                                          <Col sm={12}>
-                                            <select className="form-select" onChange={handleLoanCommitementChange}>
-                                              <option hidden>Minimum Commitment Period</option>
-                                              {activeLoansData.filter((asset) => {
-                                                return (EventMap[asset.loanMarket.toUpperCase()] === loanOption) && !asset.isSwapped;
-                                              })
-                                                .map(item => item['commitment'])
-                                                .filter((value, index, self) => self.indexOf(value) === index)
-                                                .map((asset, key) => {
-                                                  return <option key={key} value={asset}>{EventMap[asset]}</option>
-                                                })}
-                                            </select>
-                                          </Col>
-                                        </div>
-                                        <div className="row mb-4">
-                                          <Col sm={12}>
-                                            <select className="form-select" onChange={handleSwapOptionChange}>
-                                              <option hidden>Swap Market</option>
-                                              <option value={"SXP"}>SXP</option>
-                                              <option value={"CAKE"}>CAKE</option>
-                                            </select>
-                                          </Col>
-                                        </div>
-
-                                        <div className="d-grid gap-2">
-                                          <Button
-                                            color="primary"
-                                            className="w-md"
-                                            disabled={isTransactionDone}
-                                            onClick={handleSwap}
-                                          >
-                                            {!isTransactionDone ? 'Swap Loan' : <Spinner>Loading...</Spinner>}
-                                          </Button>
-                                        </div>
-                                      </Form>
-                                    </div>
-                                  </Modal>
-                                </Label>
-                              </Col>
-
-                              <Col sm="6">
-                                <Label className="card-radio-label mb-3">
-                                  <Button
-                                    className="btn-block btn-sm"
-                                    color="light"
-                                    id="SwapToLoanButton"
-                                    outline
-                                    onClick={() => {
-                                      tog_swap_to_loan();
-                                    }}
-                                  >
-                                    Swap to Loan
-                                    {/* <Tooltip placement="top" target="SwapToLoanButton" autohide={true} isOpen={swapToLoanTooltipOpen} toggle={() => {setSwapToLoanTooltipOpen(!swapToLoanTooltipOpen)}}>
-                                      This features will be activated On 28th Feb.
-                                    </Tooltip> */}
-                                  </Button>
-                                  <Modal
-                                    isOpen={modal_swap_to_loan}
-                                    toggle={() => {
-                                      tog_swap_to_loan();
-                                    }}
-                                    centered
-                                  >
-                                    <div className="modal-body">
-                                      <Form>
-                                        <div className="row mb-4">
-                                          <Col sm={12}>
-                                            <select className="form-select" onChange={handleSwapOptionChange}>
-                                              <option hidden>Select Market to Swap</option>
-                                              <option value={"SXP"}>SXP</option>
-                                              <option value={"CAKE"}>CAKE</option>
-                                            </select>
-                                          </Col>
-                                        </div>
-
-                                        <div className="row mb-4">
-                                          <Col sm={12}>
-                                            <select className="form-select" onChange={handleLoanOptionChange}>
-                                              <option hidden>Select Loan</option>
-                                              {[...new Map(activeLoansData.filter((asset: any)=>asset.isSwapped).map((item: any) => [item['loanMarket'], item])).values()].map((asset, key) => {
-                                                return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
-                                              })}
-                                            </select>
-                                          </Col>
-                                        </div>
-                                        <div className="row mb-4">
-                                          <Col sm={12}>
-                                            <select className="form-select" onChange={handleLoanCommitementChange}>
-                                              <option hidden>Minimum Commitment Period</option>
-                                              {activeLoansData.filter((asset) => {
-                                                return (EventMap[asset.loanMarket.toUpperCase()] === loanOption) && asset.isSwapped
-                                              })
-                                                .map(item => item['commitment'])
-                                                .filter((value, index, self) => self.indexOf(value) === index)
-                                                .map((asset, key) => {
-                                                  return <option key={key} value={asset}>{EventMap[asset]}</option>
-                                                })}
-                                            </select>
-                                          </Col>
-                                        </div>
-
-                                        <div className="d-grid gap-2">
-                                          <Button
-                                            color="primary"
-                                            className="w-md"
-                                            disabled={isTransactionDone}
-                                            onClick={handleSwapToLoan}
-                                          >
-                                            {!isTransactionDone ? 'Swap to Loan' : <Spinner>Loading...</Spinner>}
-
-                                          </Button>
-                                        </div>
-                                      </Form>
-                                    </div>
-                                  </Modal>
-                                </Label>
-                              </Col>
-
-                            </Row>
-                          </div>
-
-                          {/* ------------------- Collateral actions ------------------- */}
-
-                          <div className="mb-4">
-                            <Label>Collateral Actions</Label>
-                            <Row>
-                              <Col sm="6">
-                                <Label className="card-radio-label mb-3">
-                                  <Button
-                                    className="btn-block  btn-sm"
-                                    color="light"
-                                    id="AddCollateralButton"
-                                    outline
-                                    onClick={() => {
-                                      tog_add_collateral();
-                                    }}
-                                  >
-                                    Add Collateral
-                                  </Button>
-                                  {/* <Tooltip placement="top" target="AddCollateralButton" autohide={true} isOpen={addCollateralTooltipOpen} toggle={() => {setAddCollateralTooltipOpen(!addCollateralTooltipOpen)}}>
-                                      This features will be activated On 28th Feb.
-                                  </Tooltip> */}
-                                  <Modal
-                                    isOpen={modal_add_collateral}
-                                    toggle={() => {
-                                      tog_add_collateral();
-                                    }}
-                                    centered
-                                  >
-                                    <div className="modal-body">
-                                      <Form>
-                                        <div className="row mb-4">
-                                          <Col sm={12}>
-                                            <select className="form-select" onChange={handleLoanOptionChange}>
-                                              <option hidden>Loan Market</option>
-                                              {[...new Map(activeLoansData.map((item: any) => [item['loanMarket'], item])).values()].map((asset, key) => {
-                                                return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
-                                              })}
-                                            </select>
-                                          </Col>
-                                        </div>
-                                        <div className="row mb-4">
-                                          <Col sm={12}>
-                                            <select className="form-select" onChange={handleLoanCommitementChange}>
-                                              <option hidden>Minimum Commitment Period</option>
-                                              {activeLoansData.filter((asset) => {
-                                                return (EventMap[asset.loanMarket.toUpperCase()] === loanOption)
-                                              })
-                                                .map(item => item['commitment'])
-                                                .filter((value, index, self) => self.indexOf(value) === index)
-                                                .map((asset, key) => {
-                                                  return <option key={key} value={asset}>{EventMap[asset]}</option>
-                                                })}
-                                            </select>
-                                          </Col>
-                                        </div>
-                                        <div className="row mb-4">
-                                          <Col sm={12}>
-                                            <select className="form-select" onChange={handleCollateralOptionChange}>
-                                              <option hidden>Collateral Market</option>
-                                              {[...new Map(activeLoansData.map((item: any) => [item['collateralMarket'], item])).values()].map((asset, key) => {
-                                                return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
-                                              })}
-                                            </select>
-                                          </Col>
-                                        </div>
-                                        <div className="row mb-4">
-                                          <Col sm={12}>
-                                            <Input
-                                              type="text"
-                                              className="form-control"
-                                              id="horizontal-password-Input"
-                                              placeholder="Amount"
-                                              onChange={(event) => { setInputVal1(Number(event.target.value)) }}
-                                            />
-                                          </Col>
-                                        </div>
-
-                                        <div className="d-grid gap-2">
-                                          <Button
-                                            color="primary"
-                                            className="w-md"
-                                            disabled={isTransactionDone || inputVal1 === 0}
-                                            onClick={handleCollateral}
-                                          >
-                                            {!isTransactionDone ? 'Add Collateral' : <Spinner>Loading...</Spinner>}
-
-                                          </Button>
-                                        </div>
-                                      </Form>
-                                    </div>
-                                  </Modal>
-                                </Label>
-                              </Col>
-
-                              <Col sm="6">
-                                <Label className="card-radio-label mb-3">
-                                  <Button
-                                    className="btn-block btn-sm"
-                                    color="light"
-                                    id="WithdrawCollateralButton"
-                                    outline
-                                    onClick={() => {
-                                      tog_withdraw_collateral();
-                                    }}
-                                  >
-                                    Withdraw Collateral
-                                  </Button>
-                                  {/* <Tooltip placement="top" target="WithdrawCollateralButton" autohide={true} isOpen={withdrawCollateralTooltipOpen} toggle={() => {setWithdrawCollateralTooltipOpen(!withdrawCollateralTooltipOpen)}}>
-                                      This features will be activated On 28th Feb.
-                                  </Tooltip> */}
-                                  <Modal
-                                    isOpen={modal_withdraw_collateral}
-                                    toggle={() => {
-                                      tog_withdraw_collateral();
-                                    }}
-                                    centered
-                                  >
-                                    <div className="modal-body">
-                                      <Form>
-                                        <div className="row mb-4">
-                                          <Col sm={12}>
-                                            <select className="form-select" onChange={handleLoanOptionChange}>
-                                              <option hidden>Loan Market</option>
-                                              {[...new Map(activeLoansData.map((item: any) => [item['loanMarket'], item])).values()].map((asset, key) => {
-                                                return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
-                                              })}
-                                            </select>
-                                          </Col>
-                                        </div>
-                                        <div className="row mb-4">
-                                          <Col sm={12}>
-                                            <select className="form-select" onChange={handleLoanCommitementChange}>
-                                              <option hidden>Minimum Commitment Period</option>
-                                              {activeLoansData.filter((asset) => {
-                                                return (EventMap[asset.loanMarket.toUpperCase()] === loanOption)
-                                              })
-                                                .map(item => item['commitment'])
-                                                .filter((value, index, self) => self.indexOf(value) === index)
-                                                .map((asset, key) => {
-                                                  return <option key={key} value={asset}>{EventMap[asset]}</option>
-                                                })}
-                                            </select>
-                                          </Col>
-                                        </div>
-                                        <div className="d-grid gap-2">
-                                          <Button
-                                            color="primary"
-                                            className="w-md"
-                                            disabled={isTransactionDone}
-                                            onClick={handleWithdrawCollateral}
-                                          >
-                                            {!isTransactionDone ? 'Withdraw Collateral' : <Spinner>Loading...</Spinner>}
-
-                                          </Button>
-                                        </div>
-                                      </Form>
-                                    </div>
-                                  </Modal>
-                                </Label>
-                              </Col>
-                            </Row>
-                          </div>
-
-                        </form>
-                      </CardBody>
-                    )
-
-                    :
-
-                    (
-                      /* -------------------------------------- Active Deposit ----------------------------- */
-                      <CardBody>
-                        <form>
-                          <div className="mb-4 ">
-                            <Row>
-                              <Col sm="6">
-                                <div className="mb-3">
-                                  <label className="card-radio-label mb-2">
-                                    <Button
-                                      className="btn-block btn-sm"
-                                      color="light"
-                                      outline
-                                      onClick={() => {
-                                        tog_add_active_deposit();
-                                      }}
-                                    >
-                                      Add to Deposit
-                                    </Button>
-                                    <Modal
-                                      isOpen={modal_add_active_deposit}
-                                      toggle={() => {
-                                        tog_add_active_deposit();
-                                      }}
-                                      centered
-                                    >
-                                      <div className="modal-body">
-                                        <Form>
-                                          <div className="row mb-4">
-                                            <Col sm={12}>
-                                              <select className="form-select" onChange={handleDepositRequestSelect}>
-                                                <option hidden>Select Market</option>
-                                                {[...new Map(activeDepositsData.map((item: any) => [item['market'], item])).values()].map((asset, key) => {
-                                                  return <option key={key} value={EventMap[asset.market.toUpperCase()]}>{EventMap[asset.market.toUpperCase()]}</option>
-                                                })}
-                                              </select>
-                                            </Col>
-                                          </div>
-                                          <div className="row mb-4">
-                                            <Col sm={12}>
-                                              <select className="form-select" onChange={handleDepositRequestTime}>
-                                                <option hidden>Minimum Commitment Period</option>
-                                                {activeDepositsData.filter((asset) => {
-                                                  return (EventMap[asset.market.toUpperCase()] === depositRequestSel)
-                                                })
-                                                  .map(item => item['commitment'])
-                                                  .filter((value, index, self) => self.indexOf(value) === index)
-                                                  .map((asset, key) => {
-                                                    return <option key={key} value={asset}>{EventMap[asset]}</option>
-                                                  })}
-                                              </select>
-                                            </Col>
-                                          </div>
-                                          <div className="row mb-4">
-                                            <Col sm={12}>
-                                              <Input
-                                                type="text"
-                                                className="form-control"
-                                                id="horizontal-password-Input"
-                                                placeholder={depositRequestSel ? `Min amount should be greater than ${MinimumAmount[depositRequestSel]}` : 'Amount'}
-                                                onChange={(event) => { setInputVal1(Number(event.target.value)) }}
-                                              />
-                                            </Col>
-                                          </div>
-
-                                          <div className="d-grid gap-2">
-                                            <Button
-                                              color="primary"
-                                              className="w-md"
-                                              disabled={isTransactionDone || inputVal1 === 0}
-                                              onClick={handleDepositRequest}
-                                            >
-                                              {!isTransactionDone ? 'Add to Deposit' : <Spinner>Loading...</Spinner>}
-
-                                            </Button>
-                                          </div>
-                                        </Form>
-                                      </div>
-                                    </Modal>
-                                  </label>
-                                </div>
-                              </Col>
-
-                              <Col sm="6">
-                                <div className="mb-3">
-                                  <Label className="card-radio-label mb-2">
-                                    <Button
-                                      className="btn-block btn-sm"
-                                      color="light"
-                                      outline
-                                      onClick={() => {
-                                        tog_withdraw_active_deposit();
-                                      }}
-                                    >
-                                      Withdraw Deposit
-                                    </Button>
-                                    <Modal
-                                      isOpen={modal_withdraw_active_deposit}
-                                      toggle={() => {
-                                        tog_withdraw_active_deposit();
-                                      }}
-                                      centered
-                                    >
-                                      <div className="modal-body">
-                                        <Form>
-                                          <div className="row mb-4">
-                                            <Col sm={12}>
-                                              <select className="form-select" onChange={handleWithdrawDepositSelect}>
-                                                <option hidden>Select Market</option>
-                                                {[...new Map(activeDepositsData.map((item: any) => [item['market'], item])).values()].map((asset, key) => {
-                                                  return <option key={key} value={EventMap[asset.market.toUpperCase()]}>{EventMap[asset.market.toUpperCase()]}</option>
-                                                })}
-                                              </select>
-                                            </Col>
-                                          </div>
-                                          <div className="row mb-4">
-                                            <Col sm={12}>
-                                              <select className="form-select" onChange={handleWithdrawDepositTime}>
-                                                <option hidden>Minimum Commitment Period</option>
-                                                {activeDepositsData.filter((asset) => {
-                                                  return (EventMap[asset.market.toUpperCase()] === withdrawDepositSel)
-                                                })
-                                                  .map(item => item['commitment'])
-                                                  .filter((value, index, self) => self.indexOf(value) === index)
-                                                  .map((asset, key) => {
-                                                    return <option key={key} value={asset}>{EventMap[asset]}</option>
-                                                  })}
-                                              </select>
-                                            </Col>
-                                          </div>
-                                          <div className="row mb-4">
-                                            <Col sm={12}>
-                                              <Input
-                                                type="text"
-                                                className="form-control"
-                                                id="horizontal-password-Input"
-                                                placeholder="Amount"
-                                                onChange={(event) => { setInputVal1(Number(event.target.value)) }}
-                                              />
-                                            </Col>
-                                          </div>
-
-                                          <div className="d-grid gap-2">
-                                            <Button
-                                              color="primary"
-                                              className="w-md"
-                                              disabled={isTransactionDone || inputVal1 === 0}
-                                              onClick={handleWithdrawDeposit}
-                                            >
-                                              {!isTransactionDone ? 'Withdraw Deposit' : <Spinner>Loading...</Spinner>}
-
-                                            </Button>
-                                          </div>
-                                        </Form>
-                                      </div>
-                                    </Modal>
-                                  </Label>
-                                </div>
-                              </Col>
-                            </Row>
-                          </div>
-                        </form>
-                      </CardBody>
-                    )
-
-                    //   :
-
-                    //   /* -------------------------------------- DEPOSIT ----------------------------- */
-                  }
+                  {getPassbookActionScreen(passbookStatus)}
                 </Card>
               </Col>
               : null}
 
 
             <Col xl={customActiveTab === '2' ? "8" : "12"}>
-              <Card>
+              <Card style={{height: "29rem"}}>
                 <CardBody>
                   <Nav tabs className="nav-tabs-custom">
                     <NavItem>
@@ -1337,85 +1447,12 @@ const Dashboard = () => {
                           <select className="form-select form-select-sm" onChange={(e) => passbookActive(e)}>
                             <option value={"ActiveDeposit"}>Active Deposits</option>
                             <option value={"ActiveLoan"}>Active Loans</option>
-                            {/* <option value={"InactiveLoan"}>Inactive loans</option>
-                            <option value={"InactiveDeposit"}>Inactive deposits</option> */}
+                            <option value={"RepaidLoan"}>Repaid Loans</option>
+                            {/* <option value={"InactiveDeposit"}>Inactive deposits</option> */}
                           </select>
                         </Col>
                       </div>
-                      {passbookStatus === false ?
-
-                        // Active Loan
-                        <div className="table-responsive">
-                          <Table className="table table-nowrap align-middle mb-0">
-                            <thead>
-                              <tr>
-                                <th scope="col">Borrow Market</th>
-                                <th scope="col">Borrow Amount</th>
-                                <th scope="col">Commitment</th>
-                                <th scope="col">Collateral Market</th>
-                                <th scope="col">Collateral Amount</th>
-                                <th scope="col">Swap Status</th>
-                                <th scope="col">Borrow Market(Current)</th>
-                                <th scope="col">Borrow Amount(Current)</th>
-                                {/* <th scope="col" colSpan={2}>Interest</th> */}
-                              </tr>
-                            </thead>
-
-                            <tbody>
-                              <PassbookTBody isloading={isLoading} assets={activeLoansData}></PassbookTBody>
-                            </tbody>
-                          </Table>
-                        </div>
-
-                        :
-
-                        // Active Deposits
-                        <div className="table-responsive">
-                          <Table className="table table-nowrap align-middle mb-0">
-                            <thead>
-                              <tr>
-                                <th scope="col">Deposit Market</th>
-                                <th scope="col">Commitment</th>
-                                <th scope="col">Amount</th>
-                                {/* <th scope="col" colSpan={2}>Interest Earned</th> */}
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {Array.isArray(activeDepositsData) && activeDepositsData.length > 0 ? activeDepositsData.map((asset, key) => (
-                                <tr key={key}>
-                                  <th scope="row">
-                                    <div className="d-flex align-items-center">
-                                      <div className="avatar-xs me-3">
-                                        <span
-                                          className={
-                                            "avatar-title rounded-circle bg-soft bg-" +
-                                            asset.color +
-                                            " text-" +
-                                            asset.color +
-                                            " font-size-18"
-                                          }
-                                        >
-                                          <i className={CoinClassNames[EventMap[asset.market.toUpperCase()]] || asset.market.toUpperCase()} />
-                                        </span>
-                                      </div>
-                                      <span>{EventMap[asset.market.toUpperCase()]}</span>
-                                    </div>
-                                  </th>
-                                  <td>
-                                    <div className="text-muted">{EventMap[asset.commitment]}</div>
-                                  </td>
-                                  <td>
-                                    <div className="text-muted">{BNtoNum(Number(asset.amount))}</div>
-                                  </td>
-                                  {/* <td>
-                                    <div className="text-muted">{Number(asset.acquiredYield).toFixed(3)}</div>
-                                  </td>  */}
-                                </tr>
-                              )) : <tr align="center"><td colSpan={5}>No Records Found.</td></tr>}
-                            </tbody>
-                          </Table>
-                        </div>
-                      }
+                      { getPassbookTable(passbookStatus)}
                     </TabPane>
 
                     {/* -------------------------------------- LIQUIDATION ----------------------------- */}
