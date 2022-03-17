@@ -44,7 +44,7 @@ const Dashboard = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [activeDepositsData, setActiveDepositsData] = useState([]);
   const [activeLoansData, setActiveLoansData] = useState([]);
-  const [closedLoansData, setClosedLoansData] = useState([]);
+  const [repaidLoansData, setRepaidLoansData] = useState([]);
   const [isTransactionDone, setIsTransactionDone] = useState(false);
 
   const [customActiveTab, setCustomActiveTab] = useState("1");
@@ -244,7 +244,7 @@ const Dashboard = () => {
     setActiveLoansData(loans.filter(asset => {
       return asset.state === 0;
     }));
-    setClosedLoansData(loans.filter(asset => {
+    setRepaidLoansData(loans.filter(asset => {
       return asset.state === 1;
     }));
   }
@@ -408,11 +408,9 @@ const Dashboard = () => {
 
 
   const SuccessCallback = (data, eventName, msg) => {
-    // let eventName;
     let _amount;
     data.forEach(e => {
       if (e.event == eventName) {
-        // eventName = e.event
         _amount = e.args.amount.toBigInt()
       }
     })
@@ -432,8 +430,6 @@ const Dashboard = () => {
       case "ActiveLoan": return (    (
         <CardBody>
           <form>
-            {/* ----------------------- Loan Actions ----------------------- */}
-  
             <div className="mb-4 ">
               <Label>Loan Actions</Label>
               <Row>
@@ -1067,7 +1063,7 @@ const Dashboard = () => {
                             <Col sm={12}>
                               <select className="form-select" onChange={handleLoanOptionChange}>
                                 <option hidden>Loan Market</option>
-                                {[...new Map(closedLoansData.map((item: any) => [item['loanMarket'], item])).values()].map((asset, key) => {
+                                {[...new Map(repaidLoansData.map((item: any) => [item['loanMarket'], item])).values()].map((asset, key) => {
                                   return <option key={key} value={EventMap[asset.loanMarket.toUpperCase()]}>{EventMap[asset.loanMarket.toUpperCase()]}</option>
                                 })}
                               </select>
@@ -1077,7 +1073,7 @@ const Dashboard = () => {
                             <Col sm={12}>
                               <select className="form-select" onChange={handleLoanCommitementChange}>
                                 <option hidden>Minimum Commitment Period</option>
-                                {closedLoansData.filter((asset) => {
+                                {repaidLoansData.filter((asset) => {
                                   return (EventMap[asset.loanMarket.toUpperCase()] === loanOption)
                                 })
                                   .map(item => item['commitment'])
@@ -1206,7 +1202,7 @@ const Dashboard = () => {
         </thead>
 
         <tbody>
-          <PassbookTBody isloading={isLoading} assets={closedLoansData}></PassbookTBody>
+          <PassbookTBody isloading={isLoading} assets={repaidLoansData}></PassbookTBody>
         </tbody>
       </Table>
     </div>);
