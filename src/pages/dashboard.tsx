@@ -264,7 +264,6 @@ const Dashboard = () => {
       console.log("Approve Transaction sent: ", approveTransactionHash);
       const tx1 = await wrapper?.getLoanInstance().repayLoan(market, CommitMap[_commit], inputVal1, decimal);
       const tx = await tx1.wait();
-      // onLoanRepay(tx.events)
       SuccessCallback(tx.events, "LoanRepaid", "Loan Repaid Successfully");
     } catch (err) {
       setIsTransactionDone(false);
@@ -283,7 +282,6 @@ const Dashboard = () => {
 
       const tx1 = await wrapper?.getLoanInstance().permissibleWithdrawal(SymbolsMap[_loanOption], CommitMap[_commit], inputVal1, DecimalsMap[_loanOption]);
       const tx = await tx1.wait()
-      // onLoanWithdrawal(tx.events);
       SuccessCallback(tx.events, "WithdrawPartialLoan", "Loan Withdraw Successfully");
     } catch (err) {
       setIsTransactionDone(false);
@@ -303,7 +301,6 @@ const Dashboard = () => {
       console.log("Approve Transaction sent: ", approveTransactionHash);
       const tx1 = await wrapper?.getLoanInstance().addCollateral(SymbolsMap[_loanOption], CommitMap[_commit], inputVal1, DecimalsMap[_loanOption]);
       const tx = await tx1.wait()
-      // onCollateralAdded(tx.events);
       SuccessCallback(tx.events, "AddCollateral", "Collateral amount added");
     } catch (err) {
       setIsTransactionDone(false);
@@ -321,7 +318,6 @@ const Dashboard = () => {
       const _commit: string | undefined = loanCommitement;
       const tx1 = await wrapper?.getLoanInstance().withdrawCollateral(SymbolsMap[_loanOption], CommitMap[_commit]);
       const tx = await tx1.wait()
-      // onCollateralReleased(tx.events);
       SuccessCallback(tx.events, "CollateralReleased", "Collateral amount released");
     } catch (err) {
       setIsTransactionDone(false);
@@ -338,12 +334,8 @@ const Dashboard = () => {
       const _loanOption: string | undefined = loanOption;
       const _swapOption: string | undefined = swapOption;
       const _commit: string | undefined = loanCommitement;
-      // const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[_loanOption], BNtoNum(Number(commit[0].loanAmount)), DecimalsMap[_loanOption]);
-      // console.log("Approve Transaction sent: ", approveTransactionHash);
-      // await approveTransactionHash.wait();
       const tx1 = await wrapper?.getLoanInstance().swapLoan(SymbolsMap[_loanOption], CommitMap[_commit], SymbolsMap[_swapOption]);
       const tx = await tx1.wait()
-      // onSwap(tx.events);
       SuccessCallback(tx.events, "MarketSwapped", "Swap Loan successful");
     } catch (err) {
       setIsTransactionDone(false);
@@ -362,7 +354,6 @@ const Dashboard = () => {
 
       const tx1 = await wrapper?.getLoanInstance().swapToLoan(SymbolsMap[_loanOption], CommitMap[_commit]);
       const tx = await tx1.wait();
-      // onSwapToLoan(tx.events);
       SuccessCallback(tx.events, "MarketSwapped", "Swap to Loan successful");
     } catch (err) {
       setIsTransactionDone(false);
@@ -380,7 +371,6 @@ const Dashboard = () => {
       console.log("Approve Transaction sent: ", approveTransactionHash);
       const tx1 = await wrapper?.getDepositInstance().depositRequest(SymbolsMap[_depositRequestSel.toUpperCase()], CommitMap[_depositRequestVal], inputVal1, DecimalsMap[_depositRequestSel.toUpperCase()]);
       const tx = await tx1.wait();
-      // onDeposit(tx.events);
       SuccessCallback(tx.events, "DepositAdded", "Deposited amount");
     } catch (err) {
       setIsTransactionDone(false);
@@ -398,7 +388,6 @@ const Dashboard = () => {
       const tx1 = await wrapper?.getDepositInstance().withdrawDeposit(SymbolsMap[_withdrawDepositSel.toUpperCase()],
         CommitMap[_withdrawDepositVal], inputVal1, DecimalsMap[_withdrawDepositSel.toUpperCase()]);
       const tx = await tx1.wait();
-      // WithdrawalDeposit(tx.events);
       SuccessCallback(tx.events, "DepositWithdrawal", "Deposit Withdrawn");
     } catch (err) {
       setIsTransactionDone(false);
