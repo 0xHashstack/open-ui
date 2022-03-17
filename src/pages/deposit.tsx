@@ -84,7 +84,6 @@ let Deposit = props => {
       }
     })
     setIsTransactionDone(false)
-    // const res = data['DepositAdded'] ? data['DepositAdded']['returnValues'] : data['NewDeposit']['returnValues'];
     let amount = BNtoNum(_amount, 8)
     toast.success(`Deposited amount: ${amount}`, {
       position: toast.POSITION.BOTTOM_RIGHT,
