@@ -15,7 +15,7 @@ import { utils } from "ethers";
 
 
 export const fixedSpecial = (num: number, n: number) => {
-  var str = num.toFixed(n);
+  var str = num.toPrecision();
   if (str.indexOf('e+') === -1)
     return str;
 
