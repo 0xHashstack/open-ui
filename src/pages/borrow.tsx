@@ -16,12 +16,13 @@ import {
 import { BNtoNum, GetErrorText } from '../blockchain/utils';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import React from "react";
 
 toast.configure({
   autoClose: 4000
 });
 
-const Borrow = (props) => {
+let Borrow = (props) => {
 
     const [commitBorrowPeriod, setCommitBorrowPeriod] = useState();
     const [collateralMarket, setCollateralMarket] = useState();
@@ -66,24 +67,30 @@ const Borrow = (props) => {
         const _commitBorrowPeriod: string | undefined =  commitBorrowPeriod;
         const _collateralMarket: string | undefined =  collateralMarket;
         const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[_collateralMarket], collateralInputVal, DecimalsMap[_collateralMarket]);
+        await approveTransactionHash.wait();
         console.log("Approve Transaction sent: ", approveTransactionHash);
-        const tx = await wrapper?.getLoanInstance().loanRequest(SymbolsMap[props.assetID], CommitMap[_commitBorrowPeriod], loanInputVal, DecimalsMap[props.assetID],
+        const tx1 = await wrapper?.getLoanInstance().loanRequest(SymbolsMap[props.assetID], CommitMap[_commitBorrowPeriod], loanInputVal, DecimalsMap[props.assetID],
         SymbolsMap[_collateralMarket], collateralInputVal, DecimalsMap[_collateralMarket]);
+        const tx = await tx1.wait();
         onLoanRequested(tx.events);
       } catch (err) {
         setIsTransactionDone(false);
-        if (err instanceof Object) {
-          toast.error(`${GetErrorText(String(err['message']))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
-        } else {
-          toast.error(`${GetErrorText(String(err))}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
-        }
+        toast.error(`${GetErrorText(err)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
       }
     }
 
     const onLoanRequested = (data) => {
+    let eventName
+    let _amount
+    data.forEach(e => {
+      if (e.event == "NewLoan") {
+        eventName = e.event
+        _amount = e.args.loanAmount.toBigInt()
+      }
+    })
+
+    let amount = BNtoNum(_amount, 8)
       setIsTransactionDone(false);
-      const res = data['NewLoan']['returnValues'];
-      let amount = BNtoNum(Number(res.loanAmount), DecimalsMap[res.loanMarket]);
       toast.success(`Requested amount: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
     }
 
@@ -184,4 +191,4 @@ const Borrow = (props) => {
   }
 
 
-  export default Borrow;
+  export default Borrow = React.memo(Borrow);

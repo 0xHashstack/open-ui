@@ -1,75 +1,75 @@
-import TokenList from '../contracts/TokenList';
-import { NumToBN } from '../utils';
+import { ethers } from "ethers"
+import abi from "../abis/TokenList.json"
+import { NumToBN } from "../utils"
 
 class TokenListWrapper {
+  tokenList: any
 
-    tokenList: TokenList
+  constructor(signer: any) {
+    this.tokenList = new ethers.Contract(process.env.REACT_APP_DIAMOND_ADDRESS, abi, signer)
+  }
 
-    constructor(wrapperOptions: any) {
-        this.tokenList = new TokenList(wrapperOptions, process.env.REACT_APP_DIAMOND_ADDRESS);
-    }
+  addMarketSupport(market: string,decimals: number,tokenAddress: string,amount: number,amountDecimal: number) {
+    return this.tokenList.addMarketSupport(market, String(decimals), String(tokenAddress), NumToBN(amount, amountDecimal))
+  }
 
-    addMarketSupport(market: string, decimals: number, tokenAddress: string, amount: number, amountDecimal: number) {
-        return this.tokenList.send("addMarketSupport", {}, market, String(decimals), String(tokenAddress), NumToBN(amount, amountDecimal));
-    }
+  removeMarketSupport(market: string) {
+    return this.tokenList.removeMarketSupport(market)
+  }
 
-    removeMarketSupport(market: string) {
-        return this.tokenList.send("removeMarketSupport", {}, market)
-    }
+  updateMarketSupport(market: string, decimals: number, tokenAddress: string) {
+    return this.tokenList.updateMarketSupport(market, String(decimals), tokenAddress)
+  }
 
-    updateMarketSupport(market: string, decimals: number, tokenAddress: string) {
-        return this.tokenList.send("updateMarketSupport", {}, market, String(decimals), tokenAddress);
-    }
+  addMarket2Support(market: string, decimals: number, tokenAddress: string) {
+    return this.tokenList.addMarket2Support(market, String(decimals), tokenAddress)
+  }
 
-    addMarket2Support(market: string, decimals: number, tokenAddress: string) {
-        return this.tokenList.send("addMarket2Support", {}, market, String(decimals), tokenAddress);
-    }
+  removeMarket2Support(market: string) {
+    return this.tokenList.removeMarket2Support(market)
+  }
 
-    removeMarket2Support(market: string) {
-        return this.tokenList.send("removeMarket2Support", {}, market);
-    }
+  updateMarket2Support(market: string, decimals: number, tokenAddress: string) {
+    return this.tokenList.updateMarket2Support(market, decimals, tokenAddress)
+  }
 
-    updateMarket2Support(market : string, decimals: number, tokenAddress: string) {
-        return this.tokenList.send("updateMarket2Support", {}, market, decimals, tokenAddress);
-    }
-    
-    //getter methods
-    isMarketSupported(market: string) {
-        return this.tokenList.call("isMarketSupported", market);
-    }
+  //getter methods
+  isMarketSupported(market: string) {
+    return this.tokenList.isMarketSupported(market)
+  }
 
-    getMarketAddress(market: string) {
-        return this.tokenList.call("getMarketAddress", market);
-    }
+  getMarketAddress(market: string) {
+    return this.tokenList.getMarketAddress(market)
+  }
 
-    getMarketDecimal(market: string) {
-        return this.tokenList.call("getMarketDecimal", market);
-    }
+  getMarketDecimal(market: string) {
+    return this.tokenList.getMarketDecimal(market)
+  }
 
-    isMarket2Supported(market: string) {
-        return this.tokenList.call("isMarket2Supported", market);
-    }
+  isMarket2Supported(market: string) {
+    return this.tokenList.isMarket2Supported(market)
+  }
 
-    getMarket2Address(market: string) {
-        return this.tokenList.call("getMarket2Address", market);
-    }
+  getMarket2Address(market: string) {
+    return this.tokenList.getMarket2Address(market)
+  }
 
-    getMarket2Decimal(market: string) {
-        return this.tokenList.call("getMarket2Decimal", market);
-    }
+  getMarket2Decimal(market: string) {
+    return this.tokenList.getMarket2Decimal(market)
+  }
 
-    isPausedTokenList() {
-        return this.tokenList.call("isPausedTokenList");
-    }
+  isPausedTokenList() {
+    return this.tokenList.isPausedTokenList()
+  }
 
-    //admin operations
-    pauseTokenList() {
-        return this.tokenList.send("pauseTokenList", {});
-    }
+  //admin operations
+  pauseTokenList() {
+    return this.tokenList.pauseTokenList()
+  }
 
-    unpauseTokenList() {
-        return this.tokenList.send("unpauseTokenList", {});
-    }
+  unpauseTokenList() {
+    return this.tokenList.unpauseTokenList()
+  }
 }
 
-export default TokenListWrapper;
+export default TokenListWrapper

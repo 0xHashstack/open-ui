@@ -6,7 +6,7 @@ export const rpcUrls = {
   42: "https://kovan.infura.io/v3/99b8947af7e14278ae235bb21eb81f53",
   3: "https://eth-ropsten.alchemyapi.io/v2/fxrejtNAKunh--Iym4w8DI4mpb4pEEbA",
   97: "https://nd-400-266-190.p2pify.com/1efac602169fba8d5bf0589315ec436a"
-}
+};
 
 export const networkNames = {
   42: "Kovan Testnet",
@@ -78,21 +78,22 @@ export const BorrowInterestRates = {
 }
 
 // export const decimals = [18,18,18,8];
-export const decimals = [8, 18, 18, 18]
 
 export const DecimalsMap = {
   "BTC": 8,
   "BTC.T": 8,
   "0x4254432e74000000000000000000000000000000000000000000000000000000": 8,
-  "USDT": 18,
-  "USDT.T": 18,
-  "0x555344542e740000000000000000000000000000000000000000000000000000": 18,
-  "USDC.T": 18,
-  "USDC": 18,
-  "0x555344432e740000000000000000000000000000000000000000000000000000": 18,
-  "BNB": 18,
-  "BNB.T": 18,
-  "0x57424e4200000000000000000000000000000000000000000000000000000000": 18,
+  "USDT": 8,
+  "USDT.T": 8,
+  "0x555344542e740000000000000000000000000000000000000000000000000000": 8,
+  "USDC.T": 8,
+  "USDC": 8,
+  "0x555344432e740000000000000000000000000000000000000000000000000000": 8,
+  "BNB": 8,
+  "BNB.T": 8,
+  "0x57424e4200000000000000000000000000000000000000000000000000000000": 8,
+  "WBNB": 8,
+  "WBNB.T": 8,
 }
 
 export const CommitMap = {
@@ -103,6 +104,13 @@ export const CommitMap = {
     "0x636f6d69745f4f4e454d4f4e5448000000000000000000000000000000000000",
   THREEMONTHS:
     "0x636f6d69745f54485245454d4f4e544853000000000000000000000000000000",
+}
+
+export const CommitMapReverse = {
+  "0x636f6d69745f4e4f4e4500000000000000000000000000000000000000000000": "NONE",
+  "0x636f6d69745f54574f5745454b53000000000000000000000000000000000000": "TWOWEEKS",
+  "0x636f6d69745f4f4e454d4f4e5448000000000000000000000000000000000000": "ONEMONTH",
+  "0x636f6d69745f54485245454d4f4e544853000000000000000000000000000000": "THREEMONTHS"
 }
 
 export const comit_NONE =
@@ -144,11 +152,15 @@ export const EventMap = {
   "USDT.T": "USDT",
   "BTC.T": "BTC",
   "BNB.T": "BNB",
+  "WBNB.T": "BNB",
 
   USDC: "USDC",
   USDT: "USDT",
   BTC: "BTC",
   BNB: "BNB",
+  WBNB: "BNB",
+  CAKE: "CAKE",
+  SXP: "SXP",
 
   NONE: "None",
   TWOWEEKS: "Two Weeks",
@@ -161,15 +173,18 @@ export const CoinClassNames = {
   USDC: "mdi mdi-ethereum",
   BTC: "mdi mdi-bitcoin",
   BNB: "mdi mdi-drag-variant",
+  WBNB: "mdi mdi-drag-variant",
   "USDT.T": "mdi mdi-litecoin",
   "USDC.T": "mdi mdi-ethereum",
   "BTC.T": "mdi mdi-bitcoin",
   "BNB.T": "mdi mdi-drag-variant",
+  "WBNB.T": "mdi mdi-drag-variant",
+  CAKE: "mdi mdi-cake"
 }
 
 export const MinimumAmount = {
-  USDT: 100,
-  USDC: 100,
-  BTC: 0.1,
-  BNB: 0.25,
+  USDT: 2500,
+  USDC: 2500,
+  BTC: 1,
+  BNB: 2.5,
 }
