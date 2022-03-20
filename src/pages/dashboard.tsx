@@ -907,7 +907,7 @@ const Dashboard = () => {
                                   type="text"
                                   className="form-control"
                                   id="horizontal-password-Input"
-                                  placeholder={depositRequestSel ? `Min amount should be greater than ${MinimumAmount[depositRequestSel]}` : 'Amount'}
+                                  placeholder={depositRequestSel ? `Minimum amount =  ${MinimumAmount[depositRequestSel]}` : 'Amount'}
                                   onChange={(event) => { setInputVal1(Number(event.target.value)) }}
                                 />
                               </Col>

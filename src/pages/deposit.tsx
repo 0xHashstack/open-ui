@@ -121,7 +121,7 @@ let Deposit = props => {
                     type="number"
                     className="form-control"
                     id="amount"
-                    placeholder={`Min amount should be greater than ${
+                    placeholder={`Minimum amount = ${
                       MinimumAmount[props.asset]
                     }`}
                     onChange={handleInputChange}

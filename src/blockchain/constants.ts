@@ -183,8 +183,8 @@ export const CoinClassNames = {
 }
 
 export const MinimumAmount = {
-  USDT: 100,
-  USDC: 100,
-  BTC: 0.1,
-  BNB: 0.25,
+  USDT: 2500,
+  USDC: 2500,
+  BTC: 1,
+  BNB: 2.5,
 }
