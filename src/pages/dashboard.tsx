@@ -318,7 +318,7 @@ const Dashboard = () => {
       const _commit: string | undefined = loanCommitement;
       const tx1 = await wrapper?.getLoanInstance().withdrawCollateral(SymbolsMap[_loanOption], CommitMap[_commit]);
       const tx = await tx1.wait()
-      SuccessCallback(tx.events, "CollateralReleased", "Collateral amount released");
+      SuccessCallback(tx.events, "WithdrawCollateral", "Collateral amount released");
     } catch (err) {
       setIsTransactionDone(false);
       toast.error(`${GetErrorText(err)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true });
@@ -489,7 +489,7 @@ const Dashboard = () => {
                               <Button
                                 color="primary"
                                 className="w-md"
-                                disabled={isTransactionDone || inputVal1 === 0}
+                                disabled={isTransactionDone}
                                 onClick={handleRepay}
                               >
                                 {!isTransactionDone ? 'Repay' : <Spinner>Loading...</Spinner>}
@@ -690,16 +690,6 @@ const Dashboard = () => {
                     >
                       <div className="modal-body">
                         <Form>
-                          <div className="row mb-4">
-                            <Col sm={12}>
-                              <select className="form-select" onChange={handleSwapOptionChange}>
-                                <option hidden>Select Market to Swap</option>
-                                <option value={"SXP"}>SXP</option>
-                                <option value={"CAKE"}>CAKE</option>
-                              </select>
-                            </Col>
-                          </div>
-  
                           <div className="row mb-4">
                             <Col sm={12}>
                               <select className="form-select" onChange={handleLoanOptionChange}>
