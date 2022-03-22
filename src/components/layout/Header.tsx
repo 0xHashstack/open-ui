@@ -31,10 +31,11 @@ const Header = () => {
   async function handleGetToken (event: any) {
     try {
       setIsTransactionDone(true);
+      const tokenName = event.target.textContent;
       setCurrentProcessingToken(event.target.textContent);
-      const tx1 = await wrapper?.getFaucetInstance().getTokens(event.target.textContent);
+      const tx1 = await wrapper?.getFaucetInstance().getTokens(tokenName);
       const tx = await tx1.wait();
-      onSuccessCallback(tx.events);
+      onSuccessCallback(tx.events, tokenName);
     } catch (error) {
       setIsTransactionDone(false);
       setCurrentProcessingToken(null);
@@ -44,7 +45,7 @@ const Header = () => {
 
 
   
-  const onSuccessCallback = (data) => {
+  const onSuccessCallback = (data, tokenName) => {
     setIsTransactionDone(false);
     setCurrentProcessingToken(null);
     let _amount;
@@ -54,7 +55,7 @@ const Header = () => {
       }
     })
     const amount = BNtoNum(_amount, 8)
-    toast.success(`${amount} tokens Received Successfully.`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
+    toast.success(`${amount} ${tokenName} tokens Received Successfully.`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
   };
 
   function removeBodyCss() {
