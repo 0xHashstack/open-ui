@@ -1,5 +1,6 @@
 import abi from "../abis/Loan.json"
 import abiExt from "../abis/LoanExt.json"
+import abiExtv1 from "../abis/LoanExtv1.json"
 import { NumToBN } from "../utils"
 import { ethers } from "ethers"
 // import { pancakeSwapTokenAddress } from 'blockchain/constants';
@@ -7,10 +8,12 @@ class LoanWrapper {
   //Contract
   loan: any
   loanExt: any
+  loanExtv1: any
 
   constructor(signer) {
     this.loan = new ethers.Contract(process.env.REACT_APP_DIAMOND_ADDRESS, abi, signer)
     this.loanExt = new ethers.Contract(process.env.REACT_APP_DIAMOND_ADDRESS, abiExt, signer)
+    this.loanExtv1 = new ethers.Contract(process.env.REACT_APP_DIAMOND_ADDRESS, abiExtv1, signer)
   }
 
   //send transaction methods
@@ -27,7 +30,7 @@ class LoanWrapper {
   }
 
   repayLoan(market: string, commitment: string, repayAmount: number, decimal: number) {
-    return this.loanExt.repayLoan(market, commitment, NumToBN(repayAmount, decimal))
+    return this.loanExtv1.repayLoan(market, commitment, NumToBN(repayAmount, decimal))
   }
 
   loanRequest(market: string, commitment: string, loanAmount: number, loanDecimal: number, collateralMarket: string, collateralAmount: number, collateralDecimal: number) {
@@ -41,7 +44,7 @@ class LoanWrapper {
   }
 
   liquidation(address: string, market: string, commitment: string) {
-    return this.loanExt.liquidation(address, market, commitment)
+    return this.loanExtv1.liquidation(address, market, commitment)
   }
 
   permissibleWithdrawal(market: string, commitment: string, amount: number, decimal: number) {
@@ -86,6 +89,13 @@ class LoanWrapper {
 
   unpauseLoan1() {
     return this.loanExt.unpauseLoanExt()
+  }
+  pauseLoan2() {
+    return this.loanExtv1.pauseLoanExt()
+  }
+
+  unpauseLoan2() {
+    return this.loanExtv1.unpauseLoanExt()
   }
   getLoans(account: string) {
     return this.loanExt.getLoans(account);
