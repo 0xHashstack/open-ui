@@ -30,8 +30,10 @@ import {
 import { BNtoNum, GetErrorText, bytesToString } from '../blockchain/utils';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import PassbookTBody from "./passbook-body";
-import DashboardTBody from "./dashboard-body";
+
+import loadable from '@loadable/component';
+const PassbookTBody = loadable(() => import('./passbook-body'));
+const DashboardTBody = loadable(() => import('./dashboard-body'));
 import { BigNumber } from "ethers";
 
 toast.configure({

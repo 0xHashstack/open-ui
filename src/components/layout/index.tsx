@@ -16,8 +16,9 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 
 //components
-import Header from "./Header";
-import Footer from "./Footer";
+import loadable from '@loadable/component';
+const Header = loadable(() => import('./Header'));
+const Footer = loadable(() => import('./Footer'));
 
 import { Web3ModalContext } from "../../contexts/Web3ModalProvider";
 

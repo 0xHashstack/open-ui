@@ -6,9 +6,12 @@ import Dashboard from './pages/dashboard';
 import Web3ModalProvider from "contexts/Web3ModalProvider";
 import Web3WrapperProvider from "contexts/Web3WrapperProvider";
 import { BrowserRouter } from 'react-router-dom';
-import Layout from './components/layout/index';
+
+import loadable from '@loadable/component';
+const Layout = loadable(() => import('./components/layout/index'));
 import { Provider } from "react-redux";
 import store from "./store";
+
 import "./assets/scss/theme.scss";
 import './assets/fonts/AvenirNextLTPro-Regular.otf';
 
