@@ -298,10 +298,10 @@ const Dashboard = () => {
       const _loanOption: string | undefined = loanOption;
       const _collateralOption: string | undefined = collateralOption;
       const _commit: string | undefined = loanCommitement;
-      const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[_loanOption], inputVal1, DecimalsMap[_loanOption]);
+      const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[_collateralOption], inputVal1, DecimalsMap[_collateralOption]);
       await approveTransactionHash.wait();
       console.log("Approve Transaction sent: ", approveTransactionHash);
-      const tx1 = await wrapper?.getLoanInstance().addCollateral(SymbolsMap[_loanOption], CommitMap[_commit], inputVal1, DecimalsMap[_loanOption]);
+      const tx1 = await wrapper?.getLoanInstance().addCollateral(SymbolsMap[_loanOption], CommitMap[_commit], inputVal1, DecimalsMap[_collateralOption]);
       const tx = await tx1.wait()
       SuccessCallback(tx.events, "AddCollateral", "Collateral amount added");
     } catch (err) {
