@@ -3,7 +3,7 @@ import abi from '../abis/LoanExt.json';
 
 class LoanExt extends Contract {
   constructor(options, address) {
-    super(options, "LoanExt", abi, address);
+    super(options, "LoanExtv1", abi, address);
   }
 }
 

@@ -364,6 +364,7 @@ a {
   font-family: "AvenirNextLTPro";
   src: local("AvenirNextLTPro"),
  url("./assets/fonts/AvenirNextLTPro-Regular.otf") format("opentype");
+ font-display: swap;
 /* font-weight: bold; */
 }
 
