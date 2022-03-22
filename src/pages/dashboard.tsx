@@ -92,7 +92,7 @@ const Dashboard = () => {
     setTimeout(() => {
       setIsLoading(false);
     }, 100);
-    account && wrapper?.getLoanInstance().getLoans(account).then((loans) => {
+    !isTransactionDone && account && wrapper?.getLoanInstance().getLoans(account).then((loans) => {
       onLoansData(loans);
       setIsLoading(false);
     }, err => {
@@ -100,10 +100,10 @@ const Dashboard = () => {
       setActiveDepositsData([]);
       console.log(err);
     });
-  }, [account, passbookStatus, customActiveTab]);
+  }, [account, passbookStatus, customActiveTab, isTransactionDone]);
 
   useEffect(() => {
-    account && wrapper?.getDepositInstance().getDeposits(account).then((deposits) => {
+    !isTransactionDone && account && wrapper?.getDepositInstance().getDeposits(account).then((deposits) => {
       onDepositData(deposits);
       setIsLoading(false);
     }, err => {
@@ -111,7 +111,7 @@ const Dashboard = () => {
       setActiveDepositsData([]);
       console.log(err);
     });
-  }, [account, passbookStatus, customActiveTab]);
+  }, [account, passbookStatus, customActiveTab, isTransactionDone]);
 
   const toggleCustom = tab => {
     if (customActiveTab !== tab) {
