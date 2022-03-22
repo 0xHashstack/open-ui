@@ -16495,6 +16495,14 @@ trim-right@^1.0.1:
   dependencies:
     glob "^7.1.2"
 
+truffle-privatekey-provider@*:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/truffle-privatekey-provider/-/truffle-privatekey-provider-1.5.0.tgz#a4ba8e63ea44d8da7f8a92b6633e0b38a85a5fa1"
+  integrity sha512-Ir0WVXiJsg0M7U6qttPzDB57qEqprpwmBINHAHXOt4AmI1YO0I+LoMHO96rCdoG3N4ZwNc5NWgHw5qDz8qxy9A==
+  dependencies:
+    ethereumjs-wallet "^1.0.0"
+    web3-provider-engine "^15.0.12"
+
 tryer@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/tryer/-/tryer-1.0.1.tgz#f2c85406800b9b0f74c9f7465b81eaad241252f8"
@@ -17118,8 +17126,10 @@ watchpack@^1.7.4:
   resolved "https://registry.yarnpkg.com/watchpack/-/watchpack-1.7.5.tgz#1267e6c55e0b9b5be44c2023aed5437a2c26c453"
   integrity sha512-9P3MWk6SrKjHsGkLT2KHXdQ/9SNkyoJbabxnKOoJepsvJjJG8uYTR3yTPxPQvNDI3w4Nz1xnE0TLHK4RIVe/MQ==
   dependencies:
+    chokidar "^3.4.1"
     graceful-fs "^4.1.2"
     neo-async "^2.5.0"
+    watchpack-chokidar2 "^2.0.1"
   optionalDependencies:
     chokidar "^3.4.1"
     watchpack-chokidar2 "^2.0.1"
