@@ -390,6 +390,10 @@ const Dashboard = () => {
       const tx1 = await wrapper?.getDepositInstance().withdrawDeposit(SymbolsMap[_withdrawDepositSel.toUpperCase()],
         CommitMap[_withdrawDepositVal], inputVal1, DecimalsMap[_withdrawDepositSel.toUpperCase()]);
       const tx = await tx1.wait();
+      if (tx.events.length == 0) {
+        // for first withdrawal we can't throw from contract, hence need handling here
+        throw 'ERROR: Active timelock';
+      }
       SuccessCallback(tx.events, "DepositWithdrawal", "Deposit Withdrawn");
     } catch (err) {
       setIsTransactionDone(false);
