@@ -14,12 +14,13 @@ import { Web3WrapperContext } from "../contexts/Web3WrapperProvider"
 import { BNtoNum, GetErrorText, NumToBN } from "../blockchain/utils"
 import { toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
+import React from "react"
 
 toast.configure({
   autoClose: 4000,
 })
 
-const Deposit = props => {
+let Deposit = props => {
   const [commitPeriod, setCommitPeriod] = useState()
   const [modal_deposit, setmodal_deposit] = useState(false)
   const [inputVal, setInputVal] = useState(0)
@@ -46,8 +47,6 @@ const Deposit = props => {
   }
 
   const handleDeposit = async () => {
-    // console.log( BNtoNum(Number(0.21), 18));
-    // console.log(NumToBN(Number(0.21), 18));
     try {
       setIsTransactionDone(true)
       const approveTransactionHash = await wrapper
@@ -83,7 +82,6 @@ const Deposit = props => {
       }
     })
     setIsTransactionDone(false)
-    // const res = data['DepositAdded'] ? data['DepositAdded']['returnValues'] : data['NewDeposit']['returnValues'];
     let amount = BNtoNum(_amount, 8)
     toast.success(`Deposited amount: ${amount}`, {
       position: toast.POSITION.BOTTOM_RIGHT,
@@ -121,7 +119,7 @@ const Deposit = props => {
                     type="number"
                     className="form-control"
                     id="amount"
-                    placeholder={`Min amount should be greater than ${
+                    placeholder={`Minimum amount = ${
                       MinimumAmount[props.asset]
                     }`}
                     onChange={handleInputChange}
@@ -186,4 +184,4 @@ const Deposit = props => {
   )
 }
 
-export default Deposit
+export default Deposit = React.memo(Deposit);

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Col, Modal, Button, Form, Spinner } from "reactstrap";
 import { Web3ModalContext } from "../../contexts/Web3ModalProvider";
 import { Web3WrapperContext } from "../../contexts/Web3WrapperProvider";
-import { GetErrorText } from "../../blockchain/utils";
+import { GetErrorText, BNtoNum } from "../../blockchain/utils";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -31,10 +31,11 @@ const Header = () => {
   async function handleGetToken (event: any) {
     try {
       setIsTransactionDone(true);
+      const tokenName = event.target.textContent;
       setCurrentProcessingToken(event.target.textContent);
-      const tx1 = await wrapper?.getFaucetInstance().getTokens(event.target.textContent);
+      const tx1 = await wrapper?.getFaucetInstance().getTokens(tokenName);
       const tx = await tx1.wait();
-      onSuccessCallback(tx.events);
+      onSuccessCallback(tx.events, tokenName);
     } catch (error) {
       setIsTransactionDone(false);
       setCurrentProcessingToken(null);
@@ -44,11 +45,17 @@ const Header = () => {
 
 
   
-  const onSuccessCallback = (data) => {
-    console.log("Data:", data);
+  const onSuccessCallback = (data, tokenName) => {
     setIsTransactionDone(false);
     setCurrentProcessingToken(null);
-    toast.success(`${'Tokens Received Successfully.'}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
+    let _amount;
+    data.forEach(e => {
+      if (e.event == "TokensIssued") {
+        _amount = e.args.amount.toBigInt()
+      }
+    })
+    const amount = BNtoNum(_amount, 8)
+    toast.success(`${amount} ${tokenName} tokens Received Successfully.`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
   };
 
   function removeBodyCss() {
