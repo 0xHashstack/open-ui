@@ -13,6 +13,14 @@ class LiquidatorWrapper {
     return this.liquidator.swap(fromMarket, toMarket, NumToBN(fromAmount, decimal), String(mode))
   }
 
+  liquidation(account: string, _market: string, _commitment: string){
+    return this.liquidator.liquidation(account, _market, _commitment);
+  }
+
+  liquidableLoans(fromIndex: number, toIndex: number){
+    return this.liquidator.liquidableLoans(fromIndex, toIndex);
+  }
+
   //getter methods
   isPausedLiquidator() {
     return this.liquidator.isPausedLiquidator()

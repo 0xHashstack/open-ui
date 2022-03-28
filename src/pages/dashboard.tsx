@@ -47,6 +47,7 @@ const Dashboard = () => {
   const [activeDepositsData, setActiveDepositsData] = useState([]);
   const [activeLoansData, setActiveLoansData] = useState([]);
   const [repaidLoansData, setRepaidLoansData] = useState([]);
+  const [activeLiquidationsData, setActiveLiquidationsData] = useState([])
   const [isTransactionDone, setIsTransactionDone] = useState(false);
 
   const [customActiveTab, setCustomActiveTab] = useState("1");
@@ -97,7 +98,7 @@ const Dashboard = () => {
       setIsLoading(false);
     }, err => {
       setIsLoading(false);
-      setActiveDepositsData([]);
+      setActiveLoansData([]);
       console.log(err);
     });
   }, [account, passbookStatus, customActiveTab, isTransactionDone]);
@@ -111,6 +112,23 @@ const Dashboard = () => {
       setActiveDepositsData([]);
       console.log(err);
     });
+  }, [account, passbookStatus, customActiveTab, isTransactionDone]);
+  
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoading(false)
+    }, 100)
+    !isTransactionDone && account && wrapper?.getLiquidatorInstance().liquidableLoans(0).then(
+          loans => {
+            onLiquidationsData(loans)
+            setIsLoading(false)
+          },
+          err => {
+            setIsLoading(false)
+            setActiveLiquidationsData([])
+            console.log(err)
+          }
+        )
   }, [account, passbookStatus, customActiveTab, isTransactionDone]);
 
   const toggleCustom = tab => {
@@ -249,6 +267,21 @@ const Dashboard = () => {
     setRepaidLoansData(loans.filter(asset => {
       return asset.state === 1;
     }));
+  }
+
+  const onLiquidationsData = async liquidationsData => {
+    const liquidations = []
+    for (let i = 0; i < liquidationsData.amount.length; i++) {
+      liquidations.push({
+        loanOwner: liquidationsData.loanOwner[i].toString(),
+        loanMarket: bytesToString(liquidationsData.loanMarket[i]),
+        loanCommitment: CommitMapReverse[liquidationsData.loanCommitment[i]],
+        loanAmount: liquidationsData.loanAmount[i].toString(),
+        collateralMarket: bytesToString(liquidationsData.collateralMarket[i]),
+        collateralAmount: liquidationsData.collateralAmount[i].toString(),
+      })
+    }
+    setActiveLiquidationsData(liquidations)
   }
 
   const handleRepay = async () => {
@@ -1209,19 +1242,18 @@ const Dashboard = () => {
           <br />
 
           <Row>
-            {customActiveTab === '2' ?
+            {customActiveTab === "2" ? (
               <Col xl="4">
-                <Card style={{height: "29rem"}}>
+                <Card style={{ height: "29rem" }}>
                   {/* {customActiveTab === '2' ? */}
 
                   {getPassbookActionScreen(passbookStatus)}
                 </Card>
               </Col>
-              : null}
+            ) : null}
 
-
-            <Col xl={customActiveTab === '2' ? "8" : "12"}>
-              <Card style={{height: "29rem"}}>
+            <Col xl={customActiveTab === "2" ? "8" : "12"}>
+              <Card style={{ height: "29rem" }}>
                 <CardBody>
                   <Nav tabs className="nav-tabs-custom">
                     <NavItem>
@@ -1231,26 +1263,27 @@ const Dashboard = () => {
                           active: customActiveTab === "1",
                         })}
                         onClick={() => {
-                          toggleCustom("1");
+                          toggleCustom("1")
                         }}
                       >
                         <span className="d-none d-sm-block">Dashboard</span>
                       </NavLink>
                     </NavItem>
                     {account ? (
-                      <><NavItem>
-                        <NavLink
-                          style={{ cursor: "pointer" }}
-                          className={classnames({
-                            active: customActiveTab === "2",
-                          })}
-                          onClick={() => {
-                            toggleCustom("2");
-                          }}
-                        >
-                          <span className="d-none d-sm-block">Passbook</span>
-                        </NavLink>
-                      </NavItem>
+                      <>
+                        <NavItem>
+                          <NavLink
+                            style={{ cursor: "pointer" }}
+                            className={classnames({
+                              active: customActiveTab === "2",
+                            })}
+                            onClick={() => {
+                              toggleCustom("2")
+                            }}
+                          >
+                            <span className="d-none d-sm-block">Passbook</span>
+                          </NavLink>
+                        </NavItem>
                         <NavItem>
                           <NavLink
                             style={{ cursor: "pointer" }}
@@ -1258,23 +1291,26 @@ const Dashboard = () => {
                               active: customActiveTab === "3",
                             })}
                             onClick={() => {
-                              toggleCustom("3");
+                              toggleCustom("3")
                             }}
                           >
-                            <span className="d-none d-sm-block">Liquidation</span>
+                            <span className="d-none d-sm-block">
+                              Liquidation
+                            </span>
                           </NavLink>
-                        </NavItem></>) : null}
+                        </NavItem>
+                      </>
+                    ) : null}
                   </Nav>
 
-                  <TabContent
-                    activeTab={customActiveTab}
-                    className="p-1"
-                  >
-
+                  <TabContent activeTab={customActiveTab} className="p-1">
                     {/* ------------------------------------- DASHBOARD ----------------------------- */}
 
                     <TabPane tabId="1">
-                      <div className="table-responsive" style={{ paddingTop: "12px" }}>
+                      <div
+                        className="table-responsive"
+                        style={{ paddingTop: "12px" }}
+                      >
                         <Table className="table table-nowrap align-middle mb-0">
                           <thead>
                             <tr style={{ borderStyle: "hidden" }}>
@@ -1282,21 +1318,31 @@ const Dashboard = () => {
                               <th scope="col">Savings Interest</th>
                               <th scope="col">Borrow Interest</th>
                               <th scope="col">Deposit</th>
-                              <th scope="col" colSpan={2}>Borrow</th>
+                              <th scope="col" colSpan={2}>
+                                Borrow
+                              </th>
                             </tr>
                             <tr>
                               <th scope="col"></th>
                               <th scope="col">
-                                <select className="form-select form-select-sm" onChange={handleDepositInterestChange}>
+                                <select
+                                  className="form-select form-select-sm"
+                                  onChange={handleDepositInterestChange}
+                                >
                                   <option hidden>Commitment</option>
                                   <option value={"NONE"}>None</option>
                                   <option value={"TWOWEEKS"}>Two Weeks</option>
                                   <option value={"ONEMONTH"}>One Month</option>
-                                  <option value={"THREEMONTHS"}>Three Month</option>
+                                  <option value={"THREEMONTHS"}>
+                                    Three Month
+                                  </option>
                                 </select>
                               </th>
                               <th scope="col">
-                                <select className="form-select form-select-sm" onChange={handleBorrowInterestChange}>
+                                <select
+                                  className="form-select form-select-sm"
+                                  onChange={handleBorrowInterestChange}
+                                >
                                   <option hidden>Commitment</option>
                                   <option value={"NONE"}>None</option>
                                   <option value={"ONEMONTH"}>One Month</option>
@@ -1308,8 +1354,11 @@ const Dashboard = () => {
                             </tr>
                           </thead>
                           <tbody>
-                            <DashboardTBody isloading={isLoading} depositInterestChange={depositInterestChange}
-                              borrowInterestChange={borrowInterestChange}></DashboardTBody>
+                            <DashboardTBody
+                              isloading={isLoading}
+                              depositInterestChange={depositInterestChange}
+                              borrowInterestChange={borrowInterestChange}
+                            ></DashboardTBody>
                           </tbody>
                         </Table>
                       </div>
@@ -1318,24 +1367,140 @@ const Dashboard = () => {
                     {/* -------------------------------------- PASSBOOK ----------------------------- */}
 
                     <TabPane tabId="2">
-                      <div className="row justify-content-end" style={{ paddingTop: "12px" }}>
+                      <div
+                        className="row justify-content-end"
+                        style={{ paddingTop: "12px" }}
+                      >
                         <Col sm={3}>
-                          <select className="form-select form-select-sm" onChange={(e) => passbookActive(e)}>
-                            <option value={"ActiveDeposit"}>Active Deposits</option>
+                          <select
+                            className="form-select form-select-sm"
+                            onChange={e => passbookActive(e)}
+                          >
+                            <option value={"ActiveDeposit"}>
+                              Active Deposits
+                            </option>
                             <option value={"ActiveLoan"}>Active Loans</option>
                             <option value={"RepaidLoan"}>Repaid Loans</option>
                             {/* <option value={"InactiveDeposit"}>Inactive deposits</option> */}
                           </select>
                         </Col>
                       </div>
-                      { getPassbookTable(passbookStatus)}
+                      {getPassbookTable(passbookStatus)}
                     </TabPane>
 
                     {/* -------------------------------------- LIQUIDATION ----------------------------- */}
 
                     <TabPane tabId="3">
-                      <div className="row justify-content-end" style={{ paddingTop: "12px" }}>
-                        <p>This section is under construction. Check again in a few days</p>
+                      <div className="table-responsive">
+                        <Table className="table table-nowrap align-middle mb-0">
+                          <thead>
+                            <tr>
+                              <th scope="col">Loan Market</th>
+                              <th scope="col">Commitment</th>
+                              <th scope="col">Loan Amount</th>
+                              <th scope="col">Collateral Market</th>
+                              <th scope="col">Collateral Amount</th>
+                              {/* <th scope="col" colSpan={2}>Interest Earned</th> */}
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {Array.isArray(activeLiquidationsData) &&
+                            activeLiquidationsData.length > 0 ? (
+                              activeLiquidationsData.map((asset, key) => (
+                                <tr key={key}>
+                                  <th scope="row">
+                                    <div className="d-flex align-items-center">
+                                      <div className="avatar-xs me-3">
+                                        <span
+                                          className={
+                                            "avatar-title rounded-circle bg-soft bg-" +
+                                            asset.color +
+                                            " text-" +
+                                            asset.color +
+                                            " font-size-18"
+                                          }
+                                        >
+                                          <i
+                                            className={
+                                              CoinClassNames[
+                                                EventMap[
+                                                  asset.loanMarket.toUpperCase()
+                                                ]
+                                              ] ||
+                                              asset.loanMarket.toUpperCase()
+                                            }
+                                          />
+                                        </span>
+                                      </div>
+                                      <span>
+                                        {
+                                          EventMap[
+                                            asset.loanMarket.toUpperCase()
+                                          ]
+                                        }
+                                      </span>
+                                    </div>
+                                  </th>
+                                  <td>
+                                    <div className="text-muted">
+                                      {EventMap[asset.loanCommitment]}
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div className="text-muted">
+                                      {BNtoNum(Number(asset.loanAmount))}
+                                    </div>
+                                  </td>
+                                  <th scope="row">
+                                    <div className="d-flex align-items-center">
+                                      <div className="avatar-xs me-3">
+                                        <span
+                                          className={
+                                            "avatar-title rounded-circle bg-soft bg-" +
+                                            asset.color +
+                                            " text-" +
+                                            asset.color +
+                                            " font-size-18"
+                                          }
+                                        >
+                                          <i
+                                            className={
+                                              CoinClassNames[
+                                                EventMap[
+                                                  asset.collateralMarket.toUpperCase()
+                                                ]
+                                              ] ||
+                                              asset.collateralMarket.toUpperCase()
+                                            }
+                                          />
+                                        </span>
+                                      </div>
+                                      <span>
+                                        {
+                                          EventMap[
+                                            asset.collateralMarket.toUpperCase()
+                                          ]
+                                        }
+                                      </span>
+                                    </div>
+                                  </th>
+                                  <td>
+                                    <div className="text-muted">
+                                      {BNtoNum(Number(asset.collateralAmount))}
+                                    </div>
+                                  </td>
+                                  {/* <td>
+                    <div className="text-muted">{Number(asset.acquiredYield).toFixed(3)}</div>
+                  </td>  */}
+                                </tr>
+                              ))
+                            ) : (
+                              <tr align="center">
+                                <td colSpan={5}>No Records Found.</td>
+                              </tr>
+                            )}
+                          </tbody>
+                        </Table>
                       </div>
                     </TabPane>
                   </TabContent>
@@ -1343,10 +1508,10 @@ const Dashboard = () => {
               </Card>
             </Col>
           </Row>
-        </Container >
-      </div >
-    </React.Fragment >
-  );
+        </Container>
+      </div>
+    </React.Fragment>
+  )
 };
 
 export default Dashboard;
