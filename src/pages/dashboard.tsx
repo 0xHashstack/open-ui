@@ -275,7 +275,7 @@ const Dashboard = () => {
       liquidations.push({
         loanOwner: liquidationsData.loanOwner[i].toString(),
         loanMarket: bytesToString(liquidationsData.loanMarket[i]),
-        commitment: CommitMapReverse[liquidationsData.loanCommitment[i]],
+        loanCommitment: CommitMapReverse[liquidationsData.loanCommitment[i]],
         loanAmount: liquidationsData.loanAmount[i].toString(),
         collateralMarket: bytesToString(liquidationsData.collateralMarket[i]),
         collateralAmount: liquidationsData.collateralAmount[i].toString(),
@@ -1422,9 +1422,9 @@ const Dashboard = () => {
                             </tr>
                           </thead>
                           <tbody>
-                            {Array.isArray(activeLoansData) &&
-                            activeLoansData.length > 0 ? (
-                              activeLoansData.map((asset, key) => (
+                            {Array.isArray(activeLiquidationsData) &&
+                            activeLiquidationsData.length > 0 ? (
+                              activeLiquidationsData.map((asset, key) => (
                                 <tr key={key}>
                                   <th scope="row">
                                     <div className="d-flex align-items-center">
@@ -1461,7 +1461,7 @@ const Dashboard = () => {
                                   </th>
                                   <td>
                                     <div className="text-muted">
-                                      {EventMap[asset.commitment]}
+                                      {EventMap[asset.loanCommitment]}
                                     </div>
                                   </td>
                                   <td>
@@ -1506,19 +1506,6 @@ const Dashboard = () => {
                                     <div className="text-muted">
                                       {BNtoNum(Number(asset.collateralAmount))}
                                     </div>
-                                  </td>
-                                  <td>
-                                    <Button
-                                      className="text-muted"
-                                      color="light"
-                                      outline
-                                    >
-                                      {isTransactionDone ? (
-                                        <Spinner>Loading...</Spinner>
-                                      ) : (
-                                        "Liquidate"
-                                      )}
-                                    </Button>
                                   </td>
                                   {/* <td>
                     <div className="text-muted">{Number(asset.acquiredYield).toFixed(3)}</div>
