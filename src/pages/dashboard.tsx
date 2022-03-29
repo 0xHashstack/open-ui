@@ -275,7 +275,7 @@ const Dashboard = () => {
       liquidations.push({
         loanOwner: liquidationsData.loanOwner[i].toString(),
         loanMarket: bytesToString(liquidationsData.loanMarket[i]),
-        loanCommitment: CommitMapReverse[liquidationsData.loanCommitment[i]],
+        commitment: CommitMapReverse[liquidationsData.loanCommitment[i]],
         loanAmount: liquidationsData.loanAmount[i].toString(),
         collateralMarket: bytesToString(liquidationsData.collateralMarket[i]),
         collateralAmount: liquidationsData.collateralAmount[i].toString(),
@@ -431,6 +431,24 @@ const Dashboard = () => {
     } catch (err) {
       setIsTransactionDone(false);
       toast.error(`${GetErrorText(err)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true });
+    }
+  }
+
+  const handleLoanLiquidation = async () => {
+    try {
+      setIsTransactionDone(true);
+      const account = "";
+      const market = "";
+      const commitment = "";
+      const tx1 = await wrapper?.getLiquidatorInstance().liquidation(account, market, commitment);
+      const tx = await tx1.wait();
+      SuccessCallback(tx.events, "", "");
+    } catch (err) {
+      setIsTransactionDone(false)
+      toast.error(`${GetErrorText(err)}`, {
+        position: toast.POSITION.BOTTOM_RIGHT,
+        closeOnClick: true,
+      })
     }
   }
 
@@ -1404,9 +1422,9 @@ const Dashboard = () => {
                             </tr>
                           </thead>
                           <tbody>
-                            {Array.isArray(activeLiquidationsData) &&
-                            activeLiquidationsData.length > 0 ? (
-                              activeLiquidationsData.map((asset, key) => (
+                            {Array.isArray(activeLoansData) &&
+                            activeLoansData.length > 0 ? (
+                              activeLoansData.map((asset, key) => (
                                 <tr key={key}>
                                   <th scope="row">
                                     <div className="d-flex align-items-center">
@@ -1443,7 +1461,7 @@ const Dashboard = () => {
                                   </th>
                                   <td>
                                     <div className="text-muted">
-                                      {EventMap[asset.loanCommitment]}
+                                      {EventMap[asset.commitment]}
                                     </div>
                                   </td>
                                   <td>
@@ -1488,6 +1506,19 @@ const Dashboard = () => {
                                     <div className="text-muted">
                                       {BNtoNum(Number(asset.collateralAmount))}
                                     </div>
+                                  </td>
+                                  <td>
+                                    <Button
+                                      className="text-muted"
+                                      color="light"
+                                      outline
+                                    >
+                                      {isTransactionDone ? (
+                                        <Spinner>Loading...</Spinner>
+                                      ) : (
+                                        "Liquidate"
+                                      )}
+                                    </Button>
                                   </td>
                                   {/* <td>
                     <div className="text-muted">{Number(asset.acquiredYield).toFixed(3)}</div>
