@@ -291,15 +291,17 @@ const Dashboard = () => {
 
   const onLiquidationsData = async liquidationsData => {
     const liquidations = []
-    for (let i = 0; i < liquidationsData.amount.length; i++) {
-      liquidations.push({
-        loanOwner: liquidationsData.loanOwner[i].toString(),
-        loanMarket: bytesToString(liquidationsData.loanMarket[i]),
-        commitment: CommitMapReverse[liquidationsData.loanCommitment[i]],
-        loanAmount: liquidationsData.loanAmount[i].toString(),
-        collateralMarket: bytesToString(liquidationsData.collateralMarket[i]),
-        collateralAmount: liquidationsData.collateralAmount[i].toString(),
-      })
+    for (let i = 0; i < liquidationsData.loanAmount.length; i++) {
+        if(bytesToString(liquidationsData.loanMarket[i]) != ""){
+          liquidations.push({
+            loanOwner: liquidationsData.loanOwner[i].toString(),
+            loanMarket: bytesToString(liquidationsData.loanMarket[i]),
+            commitment: CommitMapReverse[liquidationsData.loanCommitment[i]],
+            loanAmount: liquidationsData.loanAmount[i].toString(),
+            collateralMarket: bytesToString(liquidationsData.collateralMarket[i]),
+            collateralAmount: liquidationsData.collateralAmount[i].toString(),
+        })
+      }
     }
     setActiveLiquidationsData(liquidations)
   }
