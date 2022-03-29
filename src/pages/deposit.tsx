@@ -42,13 +42,11 @@ let Deposit = props => {
   }
 
   function tog_center() {
-    // console.log( BNtoNum(Number(410000000), 8));
     setmodal_deposit(!modal_deposit)
     removeBodyCss()
   }
 
   const handleDeposit = async () => {
-    // console.log(NumToBN(Number(4.1), 8));
     try {
       setIsTransactionDone(true)
       const approveTransactionHash = await wrapper
