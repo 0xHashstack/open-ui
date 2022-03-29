@@ -9,16 +9,12 @@ class LiquidatorWrapper {
     this.liquidator = new ethers.Contract(process.env.REACT_APP_DIAMOND_ADDRESS, abi, signer)
   }
 
-  swap(fromMarket: string, toMarket: string, fromAmount: number, decimal: number, mode: number) {
-    return this.liquidator.swap(fromMarket, toMarket, NumToBN(fromAmount, decimal), String(mode))
-  }
-
   liquidation(account: string, _market: string, _commitment: string){
     return this.liquidator.liquidation(account, _market, _commitment);
   }
 
-  liquidableLoans(fromIndex: number, toIndex: number){
-    return this.liquidator.liquidableLoans(fromIndex, toIndex);
+  liquidableLoans(fromIndex: number) {
+    return this.liquidator.liquidableLoans(fromIndex);
   }
 
   //getter methods
