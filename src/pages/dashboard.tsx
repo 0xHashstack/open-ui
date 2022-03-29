@@ -275,7 +275,7 @@ const Dashboard = () => {
       liquidations.push({
         loanOwner: liquidationsData.loanOwner[i].toString(),
         loanMarket: bytesToString(liquidationsData.loanMarket[i]),
-        loanCommitment: CommitMapReverse[liquidationsData.loanCommitment[i]],
+        commitment: CommitMapReverse[liquidationsData.loanCommitment[i]],
         loanAmount: liquidationsData.loanAmount[i].toString(),
         collateralMarket: bytesToString(liquidationsData.collateralMarket[i]),
         collateralAmount: liquidationsData.collateralAmount[i].toString(),
@@ -357,6 +357,30 @@ const Dashboard = () => {
     } catch (err) {
       setIsTransactionDone(false);
       toast.error(`${GetErrorText(err)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true });
+    }
+  }
+
+  const handleLiquidation = async () => {
+    try {
+      setIsTransactionDone(true)
+      let _account;
+      let market;
+      let commitment;
+      const tx1 = await wrapper
+        ?.getLiquidatorInstance()
+        .liquidation(_account, market, commitment)
+      const tx = await tx1.wait()
+      SuccessCallback(
+        tx.events,
+        "",
+        ""
+      )
+    } catch (err) {
+      setIsTransactionDone(false)
+      toast.error(`${GetErrorText(err)}`, {
+        position: toast.POSITION.BOTTOM_RIGHT,
+        closeOnClick: true,
+      })
     }
   }
 
@@ -1461,7 +1485,7 @@ const Dashboard = () => {
                                   </th>
                                   <td>
                                     <div className="text-muted">
-                                      {EventMap[asset.loanCommitment]}
+                                      {EventMap[asset.commitment]}
                                     </div>
                                   </td>
                                   <td>
@@ -1506,6 +1530,20 @@ const Dashboard = () => {
                                     <div className="text-muted">
                                       {BNtoNum(Number(asset.collateralAmount))}
                                     </div>
+                                  </td>
+                                  <td>
+                                    <Button
+                                      className="text-muted"
+                                      color="light"
+                                      outline
+                                      onClick={handleLiquidation}
+                                    >
+                                      {isTransactionDone  ? (
+                                        <Spinner>Loading...</Spinner>
+                                      ) : (
+                                        "Liquidate"
+                                      )}
+                                    </Button>
                                   </td>
                                   {/* <td>
                     <div className="text-muted">{Number(asset.acquiredYield).toFixed(3)}</div>
