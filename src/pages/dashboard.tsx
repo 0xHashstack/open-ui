@@ -302,6 +302,7 @@ const Dashboard = () => {
             loanAmount: liquidationsData.loanAmount[i].toString(),
             collateralMarket: bytesToString(liquidationsData.collateralMarket[i]),
             collateralAmount: liquidationsData.collateralAmount[i].toString(),
+            isLiquidationDone: false, 
         })
       }
     }
@@ -460,6 +461,7 @@ const Dashboard = () => {
   const handleLiquidation = async asset => {
     try {
       setIsTransactionDone(true)
+      asset.isLiquidationDone = true
       let _account = asset.loanOwner
       let market = asset.loanMarket 
       let commitment = asset.commitment
@@ -477,6 +479,7 @@ const Dashboard = () => {
       const tx = await tx1.wait()
       SuccessCallback(tx.events, "Liquidation", "Loan Liquidated")
     } catch (err) {
+      asset.isLiquidationDone = false
       setIsTransactionDone(false)
       toast.error(`${GetErrorText(err)}`, {
         position: toast.POSITION.BOTTOM_RIGHT,
@@ -2118,7 +2121,7 @@ const Dashboard = () => {
                                         handleLiquidation(asset)
                                       }}
                                     >
-                                      {isTransactionDone ? (
+                                      {(isTransactionDone && asset.isLiquidationDone) ? (
                                         <Spinner>Loading...</Spinner>
                                       ) : (
                                         "Liquidate"
@@ -2145,11 +2148,7 @@ const Dashboard = () => {
                             increaseLiquidationIndex
                           }}
                         >
-                          {isTransactionDone ? (
-                            <Spinner>Loading...</Spinner>
-                          ) : (
-                            "Show More"
-                          )}
+                          Show More
                         </Button>
                       </div>
                     </TabPane>
