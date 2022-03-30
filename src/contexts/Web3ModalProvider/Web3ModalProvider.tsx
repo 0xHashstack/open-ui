@@ -6,7 +6,11 @@ import { providerOptions } from "blockchain/provider"
 import { toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 // import { string } from "prop-types"
-const BSCChainId = 97
+let BSCChainId = 97
+if (process.env.NODE_ENV === "development") {
+  BSCChainId = 1337
+}
+
 interface IWeb3ModalContext {
   ethersInstance: any | null;
   // web3: any | null;
