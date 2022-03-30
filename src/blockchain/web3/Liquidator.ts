@@ -6,7 +6,11 @@ class LiquidatorWrapper {
   liquidator: any
 
   constructor(signer: any) {
-    this.liquidator = new ethers.Contract(process.env.REACT_APP_DIAMOND_ADDRESS, abi, signer)
+    this.liquidator = new ethers.Contract(
+      process.env.REACT_APP_DIAMOND_ADDRESS,
+      JSON.stringify(abi),
+      signer
+    )
   }
 
   liquidation(account: string, _market: string, _commitment: string){

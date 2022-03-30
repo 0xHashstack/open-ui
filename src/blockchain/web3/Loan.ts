@@ -1,6 +1,6 @@
 import abi from "../abis/Loan.json"
-import abiExt from "../abis/LoanExt.json"
-import abiExtv1 from "../abis/LoanExtv1.json"
+import abi1 from "../abis/Loan1.json"
+import abi2 from "../abis/Loan2.json"
 import { NumToBN } from "../utils"
 import { ethers } from "ethers"
 // import { pancakeSwapTokenAddress } from 'blockchain/constants';
@@ -11,9 +11,21 @@ class LoanWrapper {
   loanExtv1: any
 
   constructor(signer) {
-    this.loan = new ethers.Contract(process.env.REACT_APP_DIAMOND_ADDRESS, abi, signer)
-    this.loanExt = new ethers.Contract(process.env.REACT_APP_DIAMOND_ADDRESS, abiExt, signer)
-    this.loanExtv1 = new ethers.Contract(process.env.REACT_APP_DIAMOND_ADDRESS, abiExtv1, signer)
+    this.loan = new ethers.Contract(
+      process.env.REACT_APP_DIAMOND_ADDRESS,
+      JSON.stringify(abi),
+      signer
+    )
+    this.loanExt = new ethers.Contract(
+      process.env.REACT_APP_DIAMOND_ADDRESS,
+      JSON.stringify(abi1),
+      signer
+    )
+    this.loanExtv1 = new ethers.Contract(
+      process.env.REACT_APP_DIAMOND_ADDRESS,
+      JSON.stringify(abi2),
+      signer
+    )
   }
 
   //send transaction methods

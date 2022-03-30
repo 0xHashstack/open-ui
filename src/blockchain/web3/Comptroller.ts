@@ -7,7 +7,11 @@ class ComptrollerWeb3Wrapper {
   comptroller: any
 
   constructor(signer: any) {
-    this.comptroller = new ethers.Contract(process.env.REACT_APP_DIAMOND_ADDRESS, abi, signer)
+    this.comptroller = new ethers.Contract(
+      process.env.REACT_APP_DIAMOND_ADDRESS,
+      JSON.stringify(abi),
+      signer
+    )
   }
 
   //send transaction methods
