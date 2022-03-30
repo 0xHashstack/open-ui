@@ -115,7 +115,7 @@ const Dashboard = () => {
             console.log(err)
           }
         )
-  }, [account, passbookStatus, customActiveTab, isTransactionDone])
+  }, [account, passbookStatus, customActiveTab, isTransactionDone, activeLiquidationsData])
 
   useEffect(() => {
     !isTransactionDone &&
@@ -140,8 +140,10 @@ const Dashboard = () => {
     setTimeout(() => {
       setIsLoading(false)
     }, 100)
-    navigateLoansToLiquidate(liquidationIndex)
-  }, [account, passbookStatus, customActiveTab, isTransactionDone])
+    if (customActiveTab == "3"){
+      navigateLoansToLiquidate(liquidationIndex)
+    }
+  }, [account, passbookStatus, customActiveTab, isTransactionDone, liquidationIndex])
 
   const toggleCustom = tab => {
     if (customActiveTab !== tab) {
@@ -323,7 +325,10 @@ const Dashboard = () => {
             console.log(err)
           }
         )
-    setLiquidationIndex(liquidationIndex + 10)
+  }
+
+  const increaseLiquidationIndex = async () => {
+    setLiquidationIndex(liquidationIndex + 10);
   }
 
   const handleRepay = async () => {
@@ -405,6 +410,8 @@ const Dashboard = () => {
         )
       await approveTransactionHash.wait()
       console.log("Approve Transaction sent: ", approveTransactionHash)
+      
+      
       const tx1 = await wrapper
         ?.getLoanInstance()
         .addCollateral(
@@ -454,18 +461,19 @@ const Dashboard = () => {
     try {
       setIsTransactionDone(true)
       let _account = asset.loanOwner
-      let market = asset.loanMarket
+      let market = asset.loanMarket 
       let commitment = asset.commitment
-      let loanAmount = asset.loanAmount
+      let loanAmount = BNtoNum(Number(asset.loanAmount))
       let decimal = DecimalsMap[market]
       const approveTransactionHash = await wrapper
         ?.getMockBep20Instance()
-        .approve(market, loanAmount, decimal)
+        .approve(SymbolsMap[market], loanAmount, decimal)
       await approveTransactionHash.wait()
+      console.log("Approve Transaction sent: ", approveTransactionHash)
 
       const tx1 = await wrapper
         ?.getLiquidatorInstance()
-        .liquidation(_account, market, commitment)
+        .liquidation(_account, SymbolsMap[market], CommitMap[commitment])
       const tx = await tx1.wait()
       SuccessCallback(tx.events, "Liquidation", "Loan Liquidated")
     } catch (err) {
@@ -544,6 +552,7 @@ const Dashboard = () => {
         )
       await approveTransactionHash.wait()
       console.log("Approve Transaction sent: ", approveTransactionHash)
+      
       const tx1 = await wrapper
         ?.getDepositInstance()
         .depositRequest(
@@ -2133,7 +2142,7 @@ const Dashboard = () => {
                           color="light"
                           outline
                           onClick={() => {
-                            navigateLoansToLiquidate
+                            increaseLiquidationIndex
                           }}
                         >
                           {isTransactionDone ? (
