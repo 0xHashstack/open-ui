@@ -13,12 +13,12 @@ class MockBep20Wrapper {
     tWBNB: any;
   
     constructor(signer: any) {
-        this.tBTC = new ethers.Contract(process.env.REACT_APP_T_BTC_ADDRESS, abi, signer);
-        this.tUSDC = new ethers.Contract(process.env.REACT_APP_T_USDC_ADDRESS, abi, signer);
-        this.tUSDT = new ethers.Contract(process.env.REACT_APP_T_USDT_ADDRESS, abi, signer);
-        this.tSXP = new ethers.Contract(process.env.REACT_APP_T_SXP_ADDRESS, abi, signer);
-        this.tCake = new ethers.Contract(process.env.REACT_APP_T_CAKE_ADDRESS, abi, signer);
-        this.tWBNB = new ethers.Contract(process.env.REACT_APP_T_WBNB_ADDRESS, abi, signer);
+        this.tBTC = new ethers.Contract(process.env.REACT_APP_T_BTC_ADDRESS, JSON.stringify(abi), signer);
+        this.tUSDC = new ethers.Contract(process.env.REACT_APP_T_USDC_ADDRESS, JSON.stringify(abi), signer);
+        this.tUSDT = new ethers.Contract(process.env.REACT_APP_T_USDT_ADDRESS, JSON.stringify(abi), signer);
+        this.tSXP = new ethers.Contract(process.env.REACT_APP_T_SXP_ADDRESS, JSON.stringify(abi), signer);
+        this.tCake = new ethers.Contract(process.env.REACT_APP_T_CAKE_ADDRESS, JSON.stringify(abi), signer);
+        this.tWBNB = new ethers.Contract(process.env.REACT_APP_T_WBNB_ADDRESS, JSON.stringify(abi), signer);
     }
 
    approve(market: string, value: number, decimal: number) {

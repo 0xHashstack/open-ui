@@ -165,6 +165,18 @@ const Header = () => {
                 </Form>
               </div>
             </Modal>
+            <Button
+              color="light"
+              outline
+              className="btn-outline"
+              style={{ float: "right" }}
+              disabled={account === null}
+              onClick={() => {
+                window.open("https://discord.com/channels/907151419650482217/907151709485277214");
+              }}
+            >
+              Join Discord
+            </Button>
             {account ?
               <>
                 <Button

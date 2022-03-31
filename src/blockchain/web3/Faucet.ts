@@ -8,9 +8,9 @@ class FaucetWrapper {
   constructor(signer: any) {
     this.faucet = new ethers.Contract(
       process.env.REACT_APP_FAUCET_ADDRESS,
-      abi,
+      JSON.stringify(abi),
       signer
-    );
+    )
   }
 
   TokenRequestMap = {

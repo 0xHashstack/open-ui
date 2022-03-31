@@ -82,6 +82,7 @@
     "test:jest": "env-cmd -f .env.development jest",
     "eject": "react-scripts eject",
     "start:development": "env-cmd -f .env.development yarn start",
+    "start:staging": "env-cmd -f .env.staging yarn start",
     "build:staging": "env-cmd -f .env.staging yarn build",
     "build:qa": "env-cmd -f .env.qa yarn build",
     "build:production": "env-cmd -f .env.production yarn build"

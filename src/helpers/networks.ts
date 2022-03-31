@@ -20,12 +20,6 @@ export const networkConfigs = {
     currencySymbol: "ETH",
     blockExplorerUrl: "https://goerli.etherscan.io/",
   },
-  "0x539": {
-    chainName: "Local Chain",
-    currencyName: "ETH",
-    currencySymbol: "ETH",
-    rpcUrl: "http://127.0.0.1:7545",
-  },
   "0xa86a": {
     chainId: 43114,
     chainName: "Avalanche Mainnet",
@@ -49,6 +43,14 @@ export const networkConfigs = {
     currencyName: "BNB",
     currencySymbol: "BNB",
     rpcUrl: "https://data-seed-prebsc-1-s1.binance.org:8545/",
+    blockExplorerUrl: "https://testnet.bscscan.com/",
+  },
+  "0x539": {
+    chainId: 1337,
+    chainName: "Smart Chain - Testnet",
+    currencyName: "BNB",
+    currencySymbol: "BNB",
+    rpcUrl: "http://127.0.0.1:8545/",
     blockExplorerUrl: "https://testnet.bscscan.com/",
   },
   "0x89": {
