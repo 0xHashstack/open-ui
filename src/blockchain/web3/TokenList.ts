@@ -6,7 +6,11 @@ class TokenListWrapper {
   tokenList: any
 
   constructor(signer: any) {
-    this.tokenList = new ethers.Contract(process.env.REACT_APP_DIAMOND_ADDRESS, abi, signer)
+    this.tokenList = new ethers.Contract(
+      process.env.REACT_APP_DIAMOND_ADDRESS,
+      JSON.stringify(abi),
+      signer
+    )
   }
 
   addMarketSupport(market: string,decimals: number,tokenAddress: string,amount: number,amountDecimal: number) {

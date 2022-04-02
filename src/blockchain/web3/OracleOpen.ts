@@ -6,7 +6,11 @@ class OracleOpenWrapper {
     oracleOpen: any
 
     constructor(signer) {
-        this.oracleOpen = new ethers.Contract(process.env.REACT_APP_DIAMOND_ADDRESS, abi, signer);
+        this.oracleOpen = new ethers.Contract(
+          process.env.REACT_APP_DIAMOND_ADDRESS,
+          JSON.stringify(abi),
+          signer
+        )
     }
 
     // liquidationTrigger(address: string, loanId: number) {

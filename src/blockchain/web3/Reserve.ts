@@ -6,7 +6,11 @@ class ReserveWrapper {
   reserve: any
 
   constructor(signer: any) {
-    this.reserve = new ethers.Contract(process.env.REACT_APP_DIAMOND_ADDRESS, abi, signer)
+    this.reserve = new ethers.Contract(
+      process.env.REACT_APP_DIAMOND_ADDRESS,
+      JSON.stringify(abi),
+      signer
+    )
   }
 
   transferAnyBEP20(address: string, recipient: string, value: number, decimal: number) {
