@@ -143,7 +143,7 @@ const Dashboard = () => {
     if (customActiveTab == "3"){
       navigateLoansToLiquidate(liquidationIndex)
     }
-  }, [account, passbookStatus, customActiveTab, isTransactionDone, liquidationIndex])
+  }, [account, passbookStatus, customActiveTab, isTransactionDone, liquidationIndex, activeLiquidationsData])
 
   const toggleCustom = tab => {
     if (customActiveTab !== tab) {
@@ -273,9 +273,6 @@ const Dashboard = () => {
         state: loansData.state[index], // Swap status
         currentLoanMarket: bytesToString(loansData.loanCurrentMarket[index]), // Borrow market(current)
         currentLoanAmount: Number(loansData.loanCurrentAmount[index]), // Borrow amount(current)
-        collateralYield: BNtoNum(
-          BigNumber.from(loansData.collateralYield[index] || "0").toNumber()
-        ), // Collateral yield
       })
     })
     // Borrow interest -- #Todo ( To be added after intrest issue resolved )

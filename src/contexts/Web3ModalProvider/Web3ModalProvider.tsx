@@ -7,7 +7,7 @@ import { toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 // import { string } from "prop-types"
 let BSCChainId = 97
-if (process.env.NODE_ENV === "development") {
+if ((process.env.REACT_APP_ENV == "dev")) {
   BSCChainId = 1337
 }
 
