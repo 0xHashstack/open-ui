@@ -143,7 +143,7 @@ const Dashboard = () => {
     if (customActiveTab == "3"){
       navigateLoansToLiquidate(liquidationIndex)
     }
-  }, [account, passbookStatus, customActiveTab, isTransactionDone, liquidationIndex])
+  }, [account, passbookStatus, customActiveTab, isTransactionDone, liquidationIndex, activeLiquidationsData])
 
   const toggleCustom = tab => {
     if (customActiveTab !== tab) {
@@ -273,9 +273,6 @@ const Dashboard = () => {
         state: loansData.state[index], // Swap status
         currentLoanMarket: bytesToString(loansData.loanCurrentMarket[index]), // Borrow market(current)
         currentLoanAmount: Number(loansData.loanCurrentAmount[index]), // Borrow amount(current)
-        collateralYield: BNtoNum(
-          BigNumber.from(loansData.collateralYield[index] || "0").toNumber()
-        ), // Collateral yield
       })
     })
     // Borrow interest -- #Todo ( To be added after intrest issue resolved )
@@ -2015,6 +2012,18 @@ const Dashboard = () => {
 
                     <TabPane tabId="3">
                       <div className="table-responsive">
+                      <Button
+                          className="d-flex"
+                          color="light"
+                          outline
+                          align="right"
+                          style={{ marginLeft: "90%" }}
+                          onClick={() => {
+                            increaseLiquidationIndex
+                          }}
+                        >
+                          Show More
+                        </Button>
                         <Table className="table table-nowrap align-middle mb-0">
                           <thead>
                             <tr>
@@ -2140,16 +2149,6 @@ const Dashboard = () => {
                             )}
                           </tbody>
                         </Table>
-                        <Button
-                          className="d-flex align-items-center"
-                          color="light"
-                          outline
-                          onClick={() => {
-                            increaseLiquidationIndex
-                          }}
-                        >
-                          Show More
-                        </Button>
                       </div>
                     </TabPane>
                   </TabContent>
