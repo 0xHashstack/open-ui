@@ -2012,6 +2012,18 @@ const Dashboard = () => {
 
                     <TabPane tabId="3">
                       <div className="table-responsive">
+                      <Button
+                          className="d-flex"
+                          color="light"
+                          outline
+                          align="right"
+                          style={{ marginLeft: "90%" }}
+                          onClick={() => {
+                            increaseLiquidationIndex
+                          }}
+                        >
+                          Show More
+                        </Button>
                         <Table className="table table-nowrap align-middle mb-0">
                           <thead>
                             <tr>
@@ -2137,16 +2149,6 @@ const Dashboard = () => {
                             )}
                           </tbody>
                         </Table>
-                        <Button
-                          className="d-flex align-items-center"
-                          color="light"
-                          outline
-                          onClick={() => {
-                            increaseLiquidationIndex
-                          }}
-                        >
-                          Show More
-                        </Button>
                       </div>
                     </TabPane>
                   </TabContent>
