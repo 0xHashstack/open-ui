@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 import axios from "axios";
 import { Button, Container, Row, Col, Spinner } from "reactstrap";
 
+import { useQuery, gql } from '@apollo/client';
+import { GET_WHITELIST_STATUS } from "../../graphQL/queries";
 //actions
 import {
   changeLayout,
@@ -39,6 +41,16 @@ const Layout = (props) => {
   const [isResponse,  setIsResponse ] = useState(false);
   const [isTransactionDone, setIsTransactionDone] = useState(false);
   const [counter, setCounter] = useState();
+
+  const {error, loading, data} = useQuery(GET_WHITELIST_STATUS,{
+    variables: { address: "0x0000000000000000000000DUMMY_1" },
+  });
+
+  useEffect(() => {
+    if (account) {
+      console.log(data);
+    } 
+  }, [data])
 
   useEffect(() => {
     dispatch(changePreloader(true));
