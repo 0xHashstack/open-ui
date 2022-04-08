@@ -11,6 +11,7 @@ import WalletConnectProvider from "@walletconnect/web3-provider";
 import { toast } from 'react-toastify';
 // import 'react-toastify/dist/ReactToastify.css';
 import { utils } from "ethers";
+import { Logger } from 'ethers/lib/utils';
 // import TokenList from './contracts/TokenList';
 
 
@@ -53,6 +54,9 @@ export const GetErrorText = (err) => {
   // else {
   //   return 'Oops! Something went wrong.';
   // }
+  console.log("::", Object.entries(err));
+  if(err.code === Logger.errors.CALL_EXCEPTION)
+    return `Transaction failed! \n ${err.transactionHash}`;
   if (typeof(err) == 'string') {
     return err;
   }
