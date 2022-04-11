@@ -54,18 +54,20 @@ export const GetErrorText = (err) => {
   // else {
   //   return 'Oops! Something went wrong.';
   // }
-  console.log("::", Object.entries(err));
+  // console.log("::", Object.entries(err));
   if(err.code === Logger.errors.CALL_EXCEPTION)
     return `Transaction failed! \n ${err.transactionHash}`;
-  if (typeof(err) == 'string') {
-    return err;
-  }
-  else if(err.data)
+  if(err.data){
+    console.log(1);
     return err.data.message;
-  else if(err.message)
+  }
+  else if(err.message){
+    console.log("Erro: ", err.message);
     return err.message;
-  else
-    return "Oops! Something went wrong."
+  }
+  else if (typeof err == "string") {
+    return err
+  } else return "Oops! Something went wrong."
 }
 
 export const toFixed = (num: number, digit: number) => {
