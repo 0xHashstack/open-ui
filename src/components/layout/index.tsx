@@ -58,6 +58,7 @@ const Layout = (props) => {
   useEffect(() => {
     dispatch(changePreloader(true));
     setIsResponse(false);
+    amplitude.getInstance().logEvent('walletConnected', {'address': account});
     let timer;
     if (account) {
       axios.get(`isWhiteListedAccount?address=${account}`)
@@ -90,6 +91,7 @@ const Layout = (props) => {
 
   
   const handleDisconnectWallet = useCallback(() => {
+    amplitude.getInstance().logEvent('walletDisconnected', {'account': account});
     disconnect();
   }, [disconnect]);
 
@@ -156,6 +158,7 @@ const Layout = (props) => {
 
 
   const handleAccountWhitelist = () => {
+    amplitude.getInstance().logEvent('addAccountClicked', {'address': account, "whiteListed": true});
     axios.post(`addAccount`,
       {
         "address": account,
