@@ -19,6 +19,7 @@ import { useSelector, useDispatch } from "react-redux";
 import loadable from '@loadable/component';
 const Header = loadable(() => import('./Header'));
 const Footer = loadable(() => import('./Footer'));
+import Analytics from '../../pages/analytics';
 
 import { Web3ModalContext } from "../../contexts/Web3ModalProvider";
 
@@ -247,7 +248,11 @@ const Layout = (props) => {
       return (
         <div id="layout-wrapper">
           <Header/>
-          <div className="main-content">{props.children}</div>
+
+          <div className="main-content">
+            <Analytics></Analytics>
+            {props.children}
+            </div>
           <Footer />
         </div>
       )

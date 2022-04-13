@@ -81,13 +81,13 @@ const Dashboard = () => {
   const [depositRequestVal, setDepositRequestVal] = useState()
   const [withdrawDepositVal, setWithdrawDepositVal] = useState()
 
-  const [repayLoanTooltipOpen, setRepayLoanTooltipOpen] = useState(false)
-  const [swapLoanTooltipOpen, setSwapLoanTooltipOpen] = useState(false)
-  const [swapToLoanTooltipOpen, setSwapToLoanTooltipOpen] = useState(false)
-  const [addCollateralTooltipOpen, setAddCollateralTooltipOpen] =
-    useState(false)
-  const [withdrawCollateralTooltipOpen, setWithdrawCollateralTooltipOpen] =
-    useState(false)
+  // const [repayLoanTooltipOpen, setRepayLoanTooltipOpen] = useState(false)
+  // const [swapLoanTooltipOpen, setSwapLoanTooltipOpen] = useState(false)
+  // const [swapToLoanTooltipOpen, setSwapToLoanTooltipOpen] = useState(false)
+  // const [addCollateralTooltipOpen, setAddCollateralTooltipOpen] =
+  //   useState(false)
+  // const [withdrawCollateralTooltipOpen, setWithdrawCollateralTooltipOpen] =
+  //   useState(false)
 
   const [inputVal1, setInputVal1] = useState(0)
   const [liquidationIndex, setLiquidationIndex] = useState(0)
