@@ -5,6 +5,8 @@ import { Button, Container, Row, Col, Spinner } from "reactstrap";
 
 import { useQuery, gql } from '@apollo/client';
 import { GET_WHITELIST_STATUS } from "../../graphQL/queries";
+
+import amplitude from '../../helpers/AmplitudeService';
 //actions
 import {
   changeLayout,
@@ -80,6 +82,7 @@ const Layout = (props) => {
   }, [account]);
 
   const handleConnectWallet = useCallback(() => {
+    amplitude.getInstance().logEvent('connectWalletClicked', {});
     setIsTransactionDone(true);
     connect();
     setIsTransactionDone(false);

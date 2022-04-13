@@ -7,3 +7,5 @@ amplitude.getInstance().init(process.env.REACT_APP_AMPLITUDE_KEY, null, {
   includeGclid: true,
   includeReferrer: true,
 });
+
+export default amplitude;
