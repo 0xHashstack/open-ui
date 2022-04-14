@@ -1,4 +1,3 @@
-import { DecimalsMap } from './constants';
 import { BigNumber } from "bignumber.js";
 import Fortmatic from "fortmatic";
 import Portis from "@portis/web3";
@@ -77,11 +76,6 @@ export const toFixed = (num: number, digit: number) => {
 }
 
 
-export const OnSuccessCallback = (data, eventName, key, message) => {
-  const res = data[eventName]['returnValues'];
-  let amount = BNtoNum(Number(res.amount), DecimalsMap[res[key]]);
-  toast.success(`${message}: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
-}
 
 export const OnErrorCallback = (err) => {
   if (err instanceof Object) {

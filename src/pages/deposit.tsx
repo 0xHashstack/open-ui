@@ -3,7 +3,7 @@ import { Col, Button, Form, Input, Modal, Spinner } from "reactstrap"
 
 import {
   SymbolsMap,
-  DecimalsMap,
+  marketDataOnChain,
   DepositInterestRates,
   CommitMap,
   VariableDepositInterestRates,
@@ -26,7 +26,7 @@ let Deposit = props => {
   const [inputVal, setInputVal] = useState(0)
   const [isTransactionDone, setIsTransactionDone] = useState(false)
 
-  const { connect, disconnect, account } = useContext(Web3ModalContext)
+  const { chainId, account } = useContext(Web3ModalContext)
   const { web3Wrapper: wrapper } = useContext(Web3WrapperContext)
 
   const handleDepositChange = e => {
@@ -51,7 +51,7 @@ let Deposit = props => {
       setIsTransactionDone(true)
       const approveTransactionHash = await wrapper
         ?.getMockBep20Instance()
-        .approve(SymbolsMap[props.asset], inputVal, DecimalsMap[props.asset])
+        .approve(SymbolsMap[props.asset], inputVal, marketDataOnChain[chainId].DecimalsMap[props.asset])
       await approveTransactionHash.wait()
       console.log("Approve Transaction sent: ", approveTransactionHash)
       const _commitPeriod: string | undefined = commitPeriod
@@ -62,7 +62,7 @@ let Deposit = props => {
           SymbolsMap[props.asset],
           CommitMap[_commitPeriod],
           inputVal,
-          DecimalsMap[props.asset]
+          marketDataOnChain[chainId].DecimalsMap[props.asset]
         )
       const tx = await tx1.wait()
       onDeposit(tx.events)
