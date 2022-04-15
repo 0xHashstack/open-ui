@@ -11,7 +11,7 @@ import {
 import { Web3ModalContext } from '../contexts/Web3ModalProvider';
 import { Web3WrapperContext } from '../contexts/Web3WrapperProvider';
 import {
-  SymbolsMap, DecimalsMap, BorrowInterestRates, CommitMap
+  SymbolsMap, marketDataOnChain, BorrowInterestRates, CommitMap
 } from '../blockchain/constants';
 import { BNtoNum, GetErrorText } from '../blockchain/utils';
 import { toast } from 'react-toastify';
@@ -32,7 +32,7 @@ let Borrow = (props) => {
     const [loanInputVal, setLoanInputVal] = useState(0);
     const [collateralInputVal, setCollateralInputVal] = useState(0);
   
-    const { connect, disconnect, account } = useContext(Web3ModalContext);
+    const { chainId, account } = useContext(Web3ModalContext);
     const { web3Wrapper: wrapper } = useContext(Web3WrapperContext);
 
 
@@ -66,11 +66,11 @@ let Borrow = (props) => {
         setIsTransactionDone(true);
         const _commitBorrowPeriod: string | undefined =  commitBorrowPeriod;
         const _collateralMarket: string | undefined =  collateralMarket;
-        const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[_collateralMarket], collateralInputVal, DecimalsMap[_collateralMarket]);
+        const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[_collateralMarket], collateralInputVal, marketDataOnChain[chainId].DecimalsMap[_collateralMarket]);
         await approveTransactionHash.wait();
         console.log("Approve Transaction sent: ", approveTransactionHash);
-        const tx1 = await wrapper?.getLoanInstance().loanRequest(SymbolsMap[props.assetID], CommitMap[_commitBorrowPeriod], loanInputVal, DecimalsMap[props.assetID],
-        SymbolsMap[_collateralMarket], collateralInputVal, DecimalsMap[_collateralMarket]);
+        const tx1 = await wrapper?.getLoanInstance().loanRequest(SymbolsMap[props.assetID], CommitMap[_commitBorrowPeriod], loanInputVal, marketDataOnChain[chainId].DecimalsMap[props.assetID],
+        SymbolsMap[_collateralMarket], collateralInputVal, marketDataOnChain[chainId].DecimalsMap[_collateralMarket]);
         const tx = await tx1.wait();
         onLoanRequested(tx.events);
       } catch (err) {
