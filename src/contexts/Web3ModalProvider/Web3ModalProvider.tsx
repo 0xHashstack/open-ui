@@ -115,15 +115,15 @@ const Web3ModalProvider = (props: any) => {
     });
     const _chainId = (await ethersProviderInstance.getNetwork()).chainId
     //===========================================================================================================//
-    // if (_chainId != BSCChainId) {
-    //   toast.warn(`Please connect to BSC Testnet`, {
-    //     position: toast.POSITION.BOTTOM_RIGHT,
-    //     autoClose: 4000,
-    //     closeOnClick: true,
-    //   })
-    //   disconnect()
-    //   return
-    // }
+    if (_chainId != BSCChainId) {
+      toast.warn(`Please connect to BSC Testnet`, {
+        position: toast.POSITION.BOTTOM_RIGHT,
+        autoClose: 4000,
+        closeOnClick: true,
+      })
+      disconnect()
+      return
+    }
     setAccount(String(_account))
     setChainId(_chainId)
     setConnected(true)
@@ -139,16 +139,16 @@ const Web3ModalProvider = (props: any) => {
 
       const handleChainChanged = async (_hexChainId: string) => {
         setChainId(parseInt(_hexChainId, 16))
-        // if (parseInt(_hexChainId, 16) !== BSCChainId) {
-        //   toast.warn(`Please connect to BSC Testnet`, {
-        //     position: toast.POSITION.BOTTOM_RIGHT,
-        //     autoClose: 4000,
-        //     closeOnClick: true,
-        //   })
-        //   setConnected(false)
-        //   disconnect()
-        //   return
-        // }
+        if (parseInt(_hexChainId, 16) !== BSCChainId) {
+          toast.warn(`Please connect to BSC Testnet`, {
+            position: toast.POSITION.BOTTOM_RIGHT,
+            autoClose: 4000,
+            closeOnClick: true,
+          })
+          setConnected(false)
+          disconnect()
+          return
+        }
         toast.success("Connected to BSC Testnet", {
           position: toast.POSITION.BOTTOM_RIGHT,
           autoClose: 4000,
