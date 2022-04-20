@@ -93,6 +93,7 @@
     "build:qa": "env-cmd -f .env.qa yarn build",
     "build:production": "env-cmd -f .env.production yarn build"
   },
+  "proxy": "https://devapi.hashstack.finance/",
   "eslintConfig": {
     "extends": [
       "react-app",
