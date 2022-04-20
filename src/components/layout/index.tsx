@@ -1,12 +1,13 @@
 import React, { useEffect, useState, useContext, useCallback } from 'react';
 import PropTypes from "prop-types";
 import axios from "axios";
-import { Button, Container, Row, Col, Spinner } from "reactstrap";
+import { Button, Container, Row, Col, Spinner, Nav, NavItem, NavLink, TabContent, TabPane } from "reactstrap";
 
-import { useQuery, gql } from '@apollo/client';
-import { GET_WHITELIST_STATUS } from "../../graphQL/queries";
+// import { useQuery, gql } from '@apollo/client';
+// import { GET_WHITELIST_STATUS, GET_PROTOCOL_DATA, GET_DEPOSIT_DATA } from "../../graphQL/queries";
 
 import amplitude from '../../helpers/AmplitudeService';
+import {cacheService} from '../../helpers/CacheService';
 //actions
 import {
   changeLayout,
@@ -18,6 +19,7 @@ import {
 
 //redux
 import { useSelector, useDispatch } from "react-redux";
+import { groupBy } from '../../blockchain/utils';
 
 //components
 import loadable from '@loadable/component';
@@ -30,6 +32,7 @@ import { Web3ModalContext } from "../../contexts/Web3ModalProvider";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './index.scss';
+// import { forEach } from 'lodash';
 
 toast.configure();
 
@@ -45,15 +48,6 @@ const Layout = (props) => {
   const [isTransactionDone, setIsTransactionDone] = useState(false);
   const [counter, setCounter] = useState();
 
-  const {error, loading, data} = useQuery(GET_WHITELIST_STATUS,{
-    variables: { address: "0x0000000000000000000000DUMMY_1" },
-  });
-
-  useEffect(() => {
-    if (account) {
-      console.log(data);
-    } 
-  }, [data])
 
   useEffect(() => {
     dispatch(changePreloader(true));
@@ -61,6 +55,7 @@ const Layout = (props) => {
     amplitude.getInstance().logEvent('walletConnected', {'address': account});
     let timer;
     if (account) {
+      cacheService.setItem('account', account);
       axios.get(`isWhiteListedAccount?address=${account}`)
         .then(res => {
           dispatch(changePreloader(true));
@@ -104,18 +99,6 @@ const Layout = (props) => {
     isPreloader: state.Layout.isPreloader,
     showRightSidebar: state.Layout.showRightSidebar,
   }))
-
-  //hides right sidebar on body click
-  // const hideRightbar = (event) => {
-  //   var rightbar = document.getElementById("right-bar");
-  //   //if clicked in inside right bar, then do nothing
-  //   if (rightbar && rightbar.contains(event.target)) {
-  //     return;
-  //   } else {
-  //     //if clicked in outside of rightbar then fire action for hide rightbar
-  //     dispatch(showRightSidebarAction(false));
-  //   }
-  // };
 
   /*
   layout settings
@@ -268,9 +251,45 @@ const Layout = (props) => {
           <Header/>
 
           <div className="main-content">
-            <Analytics></Analytics>
+          {/* <div>
+            <Nav tabs className="nav-tabs-custom">
+              <NavItem>
+                <NavLink
+                  className=""
+                  onClick={function noRefCheck(){}}
+                >
+                  Open Protocol
+                </NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink
+                  className="active"
+                  onClick={function noRefCheck(){}}
+                >
+                  Protocol Analytics
+                </NavLink>
+              </NavItem>
+            </Nav>
+            <TabContent activeTab="2">
+              <TabPane tabId="1">
+                <Row>
+                  <Col sm="12">
+                    {props.children}
+                  </Col>
+                </Row>
+              </TabPane>
+              <TabPane tabId="2">
+                <Row>
+                  <Col sm="12">
+                   <Analytics></Analytics>
+                  </Col>
+                </Row>
+              </TabPane>
+            </TabContent>
+          </div> */}
+            {/* <Analytics></Analytics> */}
             {props.children}
-            </div>
+          </div>
           <Footer />
         </div>
       )

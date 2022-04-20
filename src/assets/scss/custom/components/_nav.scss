@@ -45,7 +45,39 @@ color: #495057;
 
 .nav-tabs-custom {
   border-bottom: 2px solid $gray-300;
+  .nav-item {
+    position: relative;
+    color: $dark;
+    .nav-link {
+      border: none;
 
+      &::after {
+        content: "";
+        background: $primary;
+        height: 2px;
+        position: absolute;
+        width: 100%;
+        left: 0;
+        bottom: -1px;
+        transition: all 250ms ease 0s;
+        transform: scale(0);
+      }
+
+      &.active{
+        color: $primary;
+        &:after{
+          transform: scale(1);
+        }
+      }
+
+    }
+  }
+}
+
+.nav-tabs-custom-main {
+  border-bottom: 2px solid $gray-300;
+  margin-left: 150px;
+  margin-right: 150px;
   .nav-item {
     position: relative;
     color: $dark;
