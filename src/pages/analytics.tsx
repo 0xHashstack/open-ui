@@ -2,10 +2,19 @@ import React, {useState} from 'react';
 import {
     Container,
     Row,
-    Col
+    Col,
+    UncontrolledAccordion,
+    AccordionItem,
+    AccordionHeader,
+    AccordionBody,
+    Table
 } from "reactstrap";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar, Sector, PieChart, Pie } from 'recharts';
 
+import DepositsByMarket from "./depositByMarket";
+import LoansByMarket from "./loansByMarket";
+import NetDepositVsLoans from "./netDepositVsLoans";
+import NetDepositVsProtocolDeposits from "./netDepositVsProtocolDeposits";
 
 const data = [
     {
@@ -124,62 +133,51 @@ const onPieEnter = (_, index) => {
 
     return (
         <React.Fragment>
-          <div className="page-content">
+          <div className="page-content-subTab">
             <Container fluid>
-              <h5>OPEN PROTOCOL</h5>
-              <br />
-    
-              <Row>
+              <div>
+                <UncontrolledAccordion
+                  defaultOpen={[
+                    '1'
+                  ]}
+                  open='true'
+                >
+                  <AccordionItem>
+                    <AccordionHeader targetId="1">
+                      Deposit by market & commitment
+                    </AccordionHeader>
+                    <AccordionBody accordionId="1">
+                     <DepositsByMarket></DepositsByMarket>
+                    </AccordionBody>
+                  </AccordionItem>
+                  <AccordionItem>
+                    <AccordionHeader targetId="2">
+                      Borrow by market & commitment
+                    </AccordionHeader>
+                    <AccordionBody accordionId="2">
+                        <LoansByMarket></LoansByMarket>
+                    </AccordionBody>
+                  </AccordionItem>
+                  <AccordionItem>
+                    <AccordionHeader targetId="3">
+                    Net Deposits vs Loans
+                    </AccordionHeader>
+                    <AccordionBody accordionId="3">
+                      <NetDepositVsLoans></NetDepositVsLoans>
+                    </AccordionBody>
+                  </AccordionItem>
+                  <AccordionItem>
+                    <AccordionHeader targetId="4">
+                    Net Deposits vs Protocol Deposits
+                    </AccordionHeader>
+                    <AccordionBody accordionId="4">
+                      <NetDepositVsProtocolDeposits></NetDepositVsProtocolDeposits>
+                    </AccordionBody>
+                  </AccordionItem>
+                </UncontrolledAccordion>
+              </div>
+              {/* <Row>
                   <Col sm="6">
-                                    {/* <ResponsiveContainer> */}
-                    <LineChart
-                    width={500}
-                    height={300}
-                    data={data}
-                    margin={{
-                        top: 5,
-                        right: 30,
-                        left: 20,
-                        bottom: 5,
-                    }}
-                    >
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="name" />
-                    <YAxis />
-                    <Tooltip />
-                    <Legend />
-                    <Line type="monotone" dataKey="deposits" stroke="#8884d8" activeDot={{ r: 8 }} />
-                    <Line type="monotone" dataKey="borrows" stroke="#82ca9d" />
-                    </LineChart>
-                {/* </ResponsiveContainer> */}
-                  </Col>
-                  <Col sm="6">
-                                    {/* <ResponsiveContainer> */}
-                    <BarChart
-                        width={600}
-                        height={400}
-                        data={bardata}
-                        margin={{
-                            top: 20,
-                            right: 30,
-                            left: 20,
-                            bottom: 5,
-                        }}
-                        >
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="name" />
-                        <YAxis />
-                        <Tooltip />
-                        <Legend />
-                        <Bar dataKey="deposits" stackId="a" fill="#8884d8" />
-                        <Bar dataKey="borrow" stackId="a" fill="#82ca9d" />
-                        </BarChart>
-                {/* </ResponsiveContainer> */}
-                  </Col>
-              </Row>
-              <Row>
-                  <Col sm="6">
-                                    {/* <ResponsiveContainer> */}
                     <PieChart width={500} height={400}>
                         <Pie
                             activeIndex={activeIndex || 0}
@@ -194,10 +192,8 @@ const onPieEnter = (_, index) => {
                             onMouseEnter={onPieEnter}
                         />
                         </PieChart>
-                {/* </ResponsiveContainer> */}
                   </Col>
                   <Col sm="6">
-                                    {/* <ResponsiveContainer> */}
                     <BarChart
                         width={600}
                         height={400}
@@ -217,9 +213,8 @@ const onPieEnter = (_, index) => {
                         <Bar dataKey="deposits" stackId="a" fill="#8884d8" />
                         <Bar dataKey="borrow" stackId="a" fill="#82ca9d" />
                         </BarChart>
-                {/* </ResponsiveContainer> */}
                   </Col>
-              </Row>
+              </Row> */}
             </Container>
           </div>
         </React.Fragment>
