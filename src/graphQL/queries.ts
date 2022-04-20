@@ -50,3 +50,57 @@ query GetAllLoanByAccountId($accountId: ID!) {
     }
   }
 `;
+
+export const GET_PROTOCOL_DATA = gql `
+query Users ($first: Int){
+  users(first: $first) {
+    id
+    address
+    loans {
+      id
+    } 
+    deposits {
+      id
+    }
+  }
+}
+`;
+
+export const GET_DEPOSIT_DATA = gql `
+query Deposits ($first: Int){
+  deposits(first: $first) {
+    id
+    market
+    commitment
+    amount
+    state
+    user {
+      id
+      address
+    }
+    interestAccrued
+  }
+}
+`;
+
+export const GET_LOANS_DATA = gql `
+query Loans ($first: Int){
+  loans(first: $first) {
+    id
+    initialMarket
+    initialAmount
+    currentMarket
+    currentAmount
+    user {
+      id
+      address
+    }
+    collateral {
+      id
+    }
+    state
+    interestAccrued
+    commitment
+  }
+}
+`;
