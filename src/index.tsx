@@ -14,7 +14,8 @@ const Layout = loadable(() => import('./components/layout/index'));
 import { Provider } from "react-redux";
 import store from "./store";
 
-import client from './apoloClient';
+// import client from './apoloClient';
+import SubgraphClient from './subgraphClient';
 
 import "./assets/scss/theme.scss";
 import './assets/fonts/AvenirNextLTPro-Regular.otf';
@@ -34,7 +35,7 @@ ReactDOM.render(
       <BrowserRouter>
             <Web3ModalProvider>
               <Web3WrapperProvider>
-               <ApolloProvider client={client}>
+               <ApolloProvider client={new SubgraphClient().client}>
                 <Layout>
                   <Dashboard />
                 </Layout>
