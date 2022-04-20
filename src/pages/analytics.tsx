@@ -15,6 +15,7 @@ import DepositsByMarket from "./depositByMarket";
 import LoansByMarket from "./loansByMarket";
 import NetDepositVsLoans from "./netDepositVsLoans";
 import NetDepositVsProtocolDeposits from "./netDepositVsProtocolDeposits";
+import TVLVariation from "./tvlVariation";
 
 const data = [
     {
@@ -172,6 +173,14 @@ const onPieEnter = (_, index) => {
                     </AccordionHeader>
                     <AccordionBody accordionId="4">
                       <NetDepositVsProtocolDeposits></NetDepositVsProtocolDeposits>
+                    </AccordionBody>
+                  </AccordionItem>
+                  <AccordionItem>
+                    <AccordionHeader targetId="5">
+                    TVL Variations
+                    </AccordionHeader>
+                    <AccordionBody accordionId="5">
+                      <TVLVariation></TVLVariation>
                     </AccordionBody>
                   </AccordionItem>
                 </UncontrolledAccordion>

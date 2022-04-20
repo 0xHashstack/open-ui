@@ -53,7 +53,7 @@ const NetDepositVsProtocolDeposits = () => {
             let keyName = key;
             res.push({ name: key, NetDeposits:  netDepositsByMarket[index]['Deposits'], ProtocolDeposits: protocolDepositsByMarket[index]['Deposits'], amt: 2000});
           });
-          console.log(res);
+          // console.log(res);
           setLineChartData(res);
         }
     }
