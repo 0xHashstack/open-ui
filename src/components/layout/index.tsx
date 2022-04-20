@@ -1,8 +1,13 @@
-import React, { useEffect, useState, useContext, useCallback } from "react"
-import PropTypes from "prop-types"
-import axios from "axios"
-import { Button, Container, Row, Col, Spinner } from "reactstrap"
+import React, { useEffect, useState, useContext, useCallback } from 'react';
+import PropTypes from "prop-types";
+import axios from "axios";
+import { Button, Container, Row, Col, Spinner, Nav, NavItem, NavLink, TabContent, TabPane } from "reactstrap";
 
+// import { useQuery, gql } from '@apollo/client';
+// import { GET_WHITELIST_STATUS, GET_PROTOCOL_DATA, GET_DEPOSIT_DATA } from "../../graphQL/queries";
+
+import amplitude from '../../helpers/AmplitudeService';
+import {cacheService} from '../../helpers/CacheService';
 //actions
 import {
   changeLayout,
@@ -13,18 +18,21 @@ import {
 } from "../../store/actions"
 
 //redux
-import { useSelector, useDispatch } from "react-redux"
+import { useSelector, useDispatch } from "react-redux";
+import { groupBy } from '../../blockchain/utils';
 
 //components
-import loadable from "@loadable/component"
-const Header = loadable(() => import("./Header"))
-const Footer = loadable(() => import("./Footer"))
+import loadable from '@loadable/component';
+const Header = loadable(() => import('./Header'));
+const Footer = loadable(() => import('./Footer'));
+import Analytics from '../../pages/analytics';
 
 import { Web3ModalContext } from "../../contexts/Web3ModalProvider"
 
-import { toast } from "react-toastify"
-import "react-toastify/dist/ReactToastify.css"
-import "./index.scss"
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import './index.scss';
+// import { forEach } from 'lodash';
 
 toast.configure()
 
@@ -39,13 +47,15 @@ const Layout = props => {
   const [isTransactionDone, setIsTransactionDone] = useState(false)
   const [counter, setCounter] = useState()
 
+
   useEffect(() => {
-    dispatch(changePreloader(true))
-    setIsResponse(false)
-    let timer
+    dispatch(changePreloader(true));
+    setIsResponse(false);
+    amplitude.getInstance().logEvent('walletConnected', {'address': account});
+    let timer;
     if (account) {
-      axios
-        .get(`isWhiteListedAccount?address=${account}`)
+      cacheService.setItem('account', account);
+      axios.get(`isWhiteListedAccount?address=${account}`)
         .then(res => {
           dispatch(changePreloader(true))
 
@@ -69,14 +79,16 @@ const Layout = props => {
   }, [account])
 
   const handleConnectWallet = useCallback(() => {
-    setIsTransactionDone(true)
-    connect()
-    setIsTransactionDone(false)
-  }, [connect])
+    amplitude.getInstance().logEvent('connectWalletClicked', {});
+    setIsTransactionDone(true);
+    connect();
+    setIsTransactionDone(false);
+  }, [connect]);
 
   const handleDisconnectWallet = useCallback(() => {
-    disconnect()
-  }, [disconnect])
+    amplitude.getInstance().logEvent('walletDisconnected', {'account': account});
+    disconnect();
+  }, [disconnect]);
 
   const { topbarTheme, layoutWidth, isPreloader } = useSelector(
     (state: any) => ({
@@ -86,18 +98,6 @@ const Layout = props => {
       showRightSidebar: state.Layout.showRightSidebar,
     })
   )
-
-  //hides right sidebar on body click
-  // const hideRightbar = (event) => {
-  //   var rightbar = document.getElementById("right-bar");
-  //   //if clicked in inside right bar, then do nothing
-  //   if (rightbar && rightbar.contains(event.target)) {
-  //     return;
-  //   } else {
-  //     //if clicked in outside of rightbar then fire action for hide rightbar
-  //     dispatch(showRightSidebarAction(false));
-  //   }
-  // };
 
   /*
   layout settings
@@ -139,10 +139,11 @@ const Layout = props => {
   // }, [dispatch, layoutWidth]);
 
   const handleAccountWhitelist = () => {
-    axios
-      .post(`addAccount`, {
-        address: account,
-        whiteListed: true,
+    amplitude.getInstance().logEvent('addAccountClicked', {'address': account, "whiteListed": true});
+    axios.post(`addAccount`,
+      {
+        "address": account,
+        "whiteListed": true
       })
       .then(res => {
         if (res.data) {
@@ -368,8 +369,48 @@ const Layout = props => {
     } else if (account && isWhiteListedAccount) {
       return (
         <div id="layout-wrapper">
-          <Header />
-          <div className="main-content">{props.children}</div>
+          <Header/>
+
+          <div className="main-content">
+          {/* <div>
+            <Nav tabs className="nav-tabs-custom">
+              <NavItem>
+                <NavLink
+                  className=""
+                  onClick={function noRefCheck(){}}
+                >
+                  Open Protocol
+                </NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink
+                  className="active"
+                  onClick={function noRefCheck(){}}
+                >
+                  Protocol Analytics
+                </NavLink>
+              </NavItem>
+            </Nav>
+            <TabContent activeTab="2">
+              <TabPane tabId="1">
+                <Row>
+                  <Col sm="12">
+                    {props.children}
+                  </Col>
+                </Row>
+              </TabPane>
+              <TabPane tabId="2">
+                <Row>
+                  <Col sm="12">
+                   <Analytics></Analytics>
+                  </Col>
+                </Row>
+              </TabPane>
+            </TabContent>
+          </div> */}
+            {/* <Analytics></Analytics> */}
+            {props.children}
+          </div>
           <Footer />
         </div>
       )

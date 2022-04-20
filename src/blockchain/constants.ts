@@ -252,6 +252,10 @@ export const EventMap = {
   TWOWEEKS: "Two Weeks",
   ONEMONTH: "One Month",
   THREEMONTHS: "Three Months",
+  comit_NONE: "None",
+  comit_TWOWEEKS: "Two Weeks",
+  comit_ONEMONTH: "One Month",
+  comit_THREEMONTHS: "Three Months",
 }
 
 export const CoinClassNames = {

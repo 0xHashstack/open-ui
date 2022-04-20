@@ -6,11 +6,16 @@ import Dashboard from './pages/dashboard';
 import Web3ModalProvider from "contexts/Web3ModalProvider";
 import Web3WrapperProvider from "contexts/Web3WrapperProvider";
 import { BrowserRouter } from 'react-router-dom';
+// import { ApolloProvider } from 'react-apollo';
+import { ApolloProvider } from "@apollo/client";
 
 import loadable from '@loadable/component';
 const Layout = loadable(() => import('./components/layout/index'));
 import { Provider } from "react-redux";
 import store from "./store";
+
+// import client from './apoloClient';
+import SubgraphClient from './subgraphClient';
 
 import "./assets/scss/theme.scss";
 import './assets/fonts/AvenirNextLTPro-Regular.otf';
@@ -25,16 +30,20 @@ Sentry.init({
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
 ReactDOM.render(
-  <Provider store={store}>
-    <BrowserRouter>
-          <Web3ModalProvider>
-            <Web3WrapperProvider>
-              <Layout>
-                <Dashboard />
-              </Layout>
-            </Web3WrapperProvider>
-          </Web3ModalProvider>
-    </BrowserRouter>
-  </Provider>,
+ 
+    <Provider store={store}>
+      <BrowserRouter>
+            <Web3ModalProvider>
+              <Web3WrapperProvider>
+               <ApolloProvider client={new SubgraphClient().client}>
+                <Layout>
+                  <Dashboard />
+                </Layout>
+                </ApolloProvider>
+              </Web3WrapperProvider>
+            </Web3ModalProvider>
+      </BrowserRouter>
+    </Provider>
+    ,
   document.getElementById('root')
 );
