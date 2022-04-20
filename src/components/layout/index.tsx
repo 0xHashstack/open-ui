@@ -14,8 +14,8 @@ import {
   changeTopbarTheme,
   changeLayoutWidth,
   showRightSidebarAction,
-  changePreloader
-} from "../../store/actions";
+  changePreloader,
+} from "../../store/actions"
 
 //redux
 import { useSelector, useDispatch } from "react-redux";
@@ -27,26 +27,25 @@ const Header = loadable(() => import('./Header'));
 const Footer = loadable(() => import('./Footer'));
 import Analytics from '../../pages/analytics';
 
-import { Web3ModalContext } from "../../contexts/Web3ModalProvider";
+import { Web3ModalContext } from "../../contexts/Web3ModalProvider"
 
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './index.scss';
 // import { forEach } from 'lodash';
 
-toast.configure();
+toast.configure()
 
-const Layout = (props) => {
+const Layout = props => {
+  const dispatch = useDispatch()
 
-  const dispatch = useDispatch();
-
-
-  const { connect, disconnect, account } = useContext(Web3ModalContext);
-  const [ isWhiteListedAccount, setIsWhiteListedAccount ] = useState(false);
-  const [ isWhiteListedAccountRequested, setIsWhiteListedAccountRequested ] = useState(false);
-  const [isResponse,  setIsResponse ] = useState(false);
-  const [isTransactionDone, setIsTransactionDone] = useState(false);
-  const [counter, setCounter] = useState();
+  const { connect, disconnect, account } = useContext(Web3ModalContext)
+  const [isWhiteListedAccount, setIsWhiteListedAccount] = useState(false)
+  const [isWhiteListedAccountRequested, setIsWhiteListedAccountRequested] =
+    useState(false)
+  const [isResponse, setIsResponse] = useState(false)
+  const [isTransactionDone, setIsTransactionDone] = useState(false)
+  const [counter, setCounter] = useState()
 
 
   useEffect(() => {
@@ -58,24 +57,26 @@ const Layout = (props) => {
       cacheService.setItem('account', account);
       axios.get(`isWhiteListedAccount?address=${account}`)
         .then(res => {
-          dispatch(changePreloader(true));
+          dispatch(changePreloader(true))
 
-          dispatch(changePreloader(true));
-          setIsWhiteListedAccountRequested(res.data['whitelist_Requested']);
+          dispatch(changePreloader(true))
+          setIsWhiteListedAccountRequested(res.data["whitelist_Requested"])
           setIsWhiteListedAccount(res.data["isWhiteListed"])
-          setCounter(res.data['waitlist_ct']);
-          timer = setTimeout(() => {dispatch(changePreloader(false));}, 300);
-          setIsResponse(true);
-          setIsTransactionDone(false);
+          setCounter(res.data["waitlist_ct"])
+          timer = setTimeout(() => {
+            dispatch(changePreloader(false))
+          }, 300)
+          setIsResponse(true)
+          setIsTransactionDone(false)
         })
         .catch(err => {
-          setIsResponse(true);
+          setIsResponse(true)
           // setIsWhiteListedAccount(true);
           console.log("Error", err)
-        });
+        })
     }
     return () => clearTimeout(timer)
-  }, [account]);
+  }, [account])
 
   const handleConnectWallet = useCallback(() => {
     amplitude.getInstance().logEvent('connectWalletClicked', {});
@@ -84,61 +85,58 @@ const Layout = (props) => {
     setIsTransactionDone(false);
   }, [connect]);
 
-  
   const handleDisconnectWallet = useCallback(() => {
     amplitude.getInstance().logEvent('walletDisconnected', {'account': account});
     disconnect();
   }, [disconnect]);
 
-
-  const {
-    topbarTheme, layoutWidth, isPreloader
-  } = useSelector((state: any) => ({
-    topbarTheme: state.Layout.topbarTheme,
-    layoutWidth: state.Layout.layoutWidth,
-    isPreloader: state.Layout.isPreloader,
-    showRightSidebar: state.Layout.showRightSidebar,
-  }))
+  const { topbarTheme, layoutWidth, isPreloader } = useSelector(
+    (state: any) => ({
+      topbarTheme: state.Layout.topbarTheme,
+      layoutWidth: state.Layout.layoutWidth,
+      isPreloader: state.Layout.isPreloader,
+      showRightSidebar: state.Layout.showRightSidebar,
+    })
+  )
 
   /*
   layout settings
   */
   useEffect(() => {
-    dispatch(changeLayout("horizontal"));
-  }, [dispatch]);
+    dispatch(changeLayout("horizontal"))
+  }, [dispatch])
 
   useEffect(() => {
     //init body click event fot toggle rightbar
-    
+
     // document.body.addEventListener("click", hideRightbar, true);
-    let timer;
+    let timer
     if (isPreloader === true) {
-      document.getElementById("preloader").style.display = "block";
-      document.getElementById("status").style.display = "block";
+      document.getElementById("preloader").style.display = "block"
+      document.getElementById("status").style.display = "block"
 
       timer = setTimeout(function () {
-        document.getElementById("preloader").style.display = "none";
-        document.getElementById("status").style.display = "none";
-      }, 3000);
+        document.getElementById("preloader").style.display = "none"
+        document.getElementById("status").style.display = "none"
+      }, 3000)
     } else {
-      document.getElementById("preloader").style.display = "none";
-      document.getElementById("status").style.display = "none";
+      document.getElementById("preloader").style.display = "none"
+      document.getElementById("status").style.display = "none"
     }
     return () => clearTimeout(timer)
-  }, [isPreloader]);
+  }, [isPreloader])
 
   useEffect(() => {
     if (topbarTheme) {
-      dispatch(changeTopbarTheme(topbarTheme));
+      dispatch(changeTopbarTheme(topbarTheme))
     }
-  }, [dispatch, topbarTheme]);
+  }, [dispatch, topbarTheme])
 
   // useEffect(() => {
   //   if (layoutWidth) {
   //     dispatch(changeLayoutWidth(layoutWidth));
   //   }
   // }, [dispatch, layoutWidth]);
-
 
   const handleAccountWhitelist = () => {
     amplitude.getInstance().logEvent('addAccountClicked', {'address': account, "whiteListed": true});
@@ -149,22 +147,27 @@ const Layout = (props) => {
       })
       .then(res => {
         if (res.data) {
-          setCounter(res.data.data['waitlist_ct']);
-          setIsWhiteListedAccountRequested(true);
-          setIsWhiteListedAccount(res.data.data['whiteListed']);
+          setCounter(res.data.data["waitlist_ct"])
+          setIsWhiteListedAccountRequested(true)
+          setIsWhiteListedAccount(res.data.data["whiteListed"])
         }
       })
-      .catch(err => {console.log("Error", err);})
+      .catch(err => {
+        console.log("Error", err)
+      })
   }
 
   function switchScreens() {
-    if ( !account ) {
+    if (!account) {
       return (
         <Container>
-          <Row style={{ marginTop: '25ch' }}>
+          <Row style={{ marginTop: "25ch" }}>
             <Col lg="12">
               <div className="text-center mb-5">
-                <h4 className="font-weight-medium">Connect your wallet to access Hashstack&apos;s closed beta testnet</h4>
+                <h4 className="font-weight-medium">
+                  Connect your wallet to access Hashstack&apos;s closed beta
+                  testnet
+                </h4>
                 <div className="mt-5 text-center">
                   <Button
                     color="dark"
@@ -173,8 +176,11 @@ const Layout = (props) => {
                     disabled={isTransactionDone}
                     onClick={handleConnectWallet}
                   >
-                    {!isTransactionDone ? 'Connect Wallet' : <Spinner>Loading...</Spinner>}
-                    
+                    {!isTransactionDone ? (
+                      "Connect Wallet"
+                    ) : (
+                      <Spinner>Loading...</Spinner>
+                    )}
                   </Button>
                 </div>
               </div>
@@ -182,14 +188,22 @@ const Layout = (props) => {
           </Row>
         </Container>
       )
-    } else if (account && isResponse && (!isWhiteListedAccount) && (!isWhiteListedAccountRequested)) {
+    } else if (
+      account &&
+      isResponse &&
+      !isWhiteListedAccount &&
+      !isWhiteListedAccountRequested
+    ) {
       return (
         <Container>
-          <Row style={{ marginTop: '25ch' }}>
+          <Row style={{ marginTop: "25ch" }}>
             <Col lg="12">
               <div className="text-center mb-5">
                 <h4 className="font-weight-medium">Uh, oh!</h4>
-                <h4 className="font-weight-medium">It appears though you are not whitelisted. You can request for whitelist from below</h4>
+                <h4 className="font-weight-medium">
+                  It appears though you are not whitelisted. You can request for
+                  whitelist from below
+                </h4>
                 <div className="mt-3 text-center">
                   <Button
                     color="dark"
@@ -200,29 +214,87 @@ const Layout = (props) => {
                     Request to Whitelist
                   </Button>
                   <div className="w-layout-grid-s footer-socials-s">
-                    <a href="https://twitter.com/0xhashstack" rel="noreferrer" target="_blank" className="w-inline-block-s"><img src="./images/Twitter-Icon-Fill.svg" loading="lazy" alt="" /></a>
-                    <a href="https://in.linkedin.com/company/0xhashstack" rel="noreferrer" target="_blank" className="w-inline-block-s"><img src="./images/Linkedin-Icon-Fill.svg" loading="lazy" alt=""/></a>
-                    <a href="https://github.com/0xHashstack" rel="noreferrer" target="_blank" className="w-inline-block-s"><img src="./images/github.svg" loading="lazy" alt="" /></a>
-                    <a href="http://hashstack.community" rel="noreferrer" target="_blank" className="w-inline-block-s"><img src="./images/discord.svg" loading="lazy" alt="" /></a>
-                    <a href="https://hashstack.medium.com/" rel="noreferrer" target="_blank" className="w-inline-block-s"><img src="./images/medium.svg" loading="lazy" alt="" /></a>
-                    <a href="https://www.reddit.com/r/Hashstack/" rel="noreferrer" target="_blank" className="w-inline-block-s"><img src="./images/reddit.svg" loading="lazy" alt="" /></a>
-                 </div>
+                    <a
+                      href="https://twitter.com/0xhashstack"
+                      rel="noreferrer"
+                      target="_blank"
+                      className="w-inline-block-s"
+                    >
+                      <img
+                        src="./images/Twitter-Icon-Fill.svg"
+                        loading="lazy"
+                        alt=""
+                      />
+                    </a>
+                    <a
+                      href="https://in.linkedin.com/company/0xhashstack"
+                      rel="noreferrer"
+                      target="_blank"
+                      className="w-inline-block-s"
+                    >
+                      <img
+                        src="./images/Linkedin-Icon-Fill.svg"
+                        loading="lazy"
+                        alt=""
+                      />
+                    </a>
+                    <a
+                      href="https://github.com/0xHashstack"
+                      rel="noreferrer"
+                      target="_blank"
+                      className="w-inline-block-s"
+                    >
+                      <img src="./images/github.svg" loading="lazy" alt="" />
+                    </a>
+                    <a
+                      href="http://hashstack.community"
+                      rel="noreferrer"
+                      target="_blank"
+                      className="w-inline-block-s"
+                    >
+                      <img src="./images/discord.svg" loading="lazy" alt="" />
+                    </a>
+                    <a
+                      href="https://hashstack.medium.com/"
+                      rel="noreferrer"
+                      target="_blank"
+                      className="w-inline-block-s"
+                    >
+                      <img src="./images/medium.svg" loading="lazy" alt="" />
+                    </a>
+                    <a
+                      href="https://www.reddit.com/r/0xHashstack/"
+                      rel="noreferrer"
+                      target="_blank"
+                      className="w-inline-block-s"
+                    >
+                      <img src="./images/reddit.svg" loading="lazy" alt="" />
+                    </a>
+                  </div>
                 </div>
               </div>
             </Col>
           </Row>
         </Container>
       )
-    } else if (account && (!isWhiteListedAccount) && isWhiteListedAccountRequested) {
+    } else if (
+      account &&
+      !isWhiteListedAccount &&
+      isWhiteListedAccountRequested
+    ) {
       return (
         <Container>
-          <Row style={{ marginTop: '25ch' }}>
+          <Row style={{ marginTop: "25ch" }}>
             <Col lg="12">
               <div className="text-center mb-5">
-                <h4 className="font-weight-medium">Congratulations! Request sent Successfully.</h4>
-                <h4 className="font-weight-medium">Your account will be whitelisted after {counter} requests. </h4>
+                <h4 className="font-weight-medium">
+                  Congratulations! Request sent Successfully.
+                </h4>
+                <h4 className="font-weight-medium">
+                  Your account will be whitelisted after {counter} requests.{" "}
+                </h4>
                 <div className="mt-3 text-center">
-                <Button
+                  <Button
                     color="dark"
                     outline
                     className="btn-outline"
@@ -231,21 +303,70 @@ const Layout = (props) => {
                     Disconnect
                   </Button>
                   <div className="w-layout-grid-s footer-socials-s">
-                    <a href="https://twitter.com/0xhashstack" rel="noreferrer" target="_blank" className="w-inline-block-s"><img src="./images/Twitter-Icon-Fill.svg" loading="lazy" alt="" /></a>
-                    <a href="https://in.linkedin.com/company/0xhashstack" rel="noreferrer" target="_blank" className="w-inline-block-s"><img src="./images/Linkedin-Icon-Fill.svg" loading="lazy" alt=""/></a>
-                    <a href="https://github.com/0xHashstack" rel="noreferrer" target="_blank" className="w-inline-block-s"><img src="./images/github.svg" loading="lazy" alt="" /></a>
-                    <a href="http://hashstack.community" rel="noreferrer" target="_blank" className="w-inline-block-s"><img src="./images/discord.svg" loading="lazy" alt="" /></a>
-                    <a href="https://hashstack.medium.com/" rel="noreferrer" target="_blank" className="w-inline-block-s"><img src="./images/medium.svg" loading="lazy" alt="" /></a>
-                    <a href="https://www.reddit.com/r/Hashstack/" rel="noreferrer" target="_blank" className="w-inline-block-s"><img src="./images/reddit.svg" loading="lazy" alt="" /></a>
-                 </div>
+                    <a
+                      href="https://twitter.com/0xhashstack"
+                      rel="noreferrer"
+                      target="_blank"
+                      className="w-inline-block-s"
+                    >
+                      <img
+                        src="./images/Twitter-Icon-Fill.svg"
+                        loading="lazy"
+                        alt=""
+                      />
+                    </a>
+                    <a
+                      href="https://in.linkedin.com/company/0xhashstack"
+                      rel="noreferrer"
+                      target="_blank"
+                      className="w-inline-block-s"
+                    >
+                      <img
+                        src="./images/Linkedin-Icon-Fill.svg"
+                        loading="lazy"
+                        alt=""
+                      />
+                    </a>
+                    <a
+                      href="https://github.com/0xHashstack"
+                      rel="noreferrer"
+                      target="_blank"
+                      className="w-inline-block-s"
+                    >
+                      <img src="./images/github.svg" loading="lazy" alt="" />
+                    </a>
+                    <a
+                      href="http://hashstack.community"
+                      rel="noreferrer"
+                      target="_blank"
+                      className="w-inline-block-s"
+                    >
+                      <img src="./images/discord.svg" loading="lazy" alt="" />
+                    </a>
+                    <a
+                      href="https://hashstack.medium.com/"
+                      rel="noreferrer"
+                      target="_blank"
+                      className="w-inline-block-s"
+                    >
+                      <img src="./images/medium.svg" loading="lazy" alt="" />
+                    </a>
+                    <a
+                      href="https://www.reddit.com/r/0xHashstack/"
+                      rel="noreferrer"
+                      target="_blank"
+                      className="w-inline-block-s"
+                    >
+                      <img src="./images/reddit.svg" loading="lazy" alt="" />
+                    </a>
+                  </div>
                 </div>
               </div>
             </Col>
           </Row>
         </Container>
       )
-    }
-     else if (account && isWhiteListedAccount) {
+    } else if (account && isWhiteListedAccount) {
       return (
         <div id="layout-wrapper">
           <Header/>
@@ -294,7 +415,7 @@ const Layout = (props) => {
         </div>
       )
     } else {
-      return null;
+      return null
     }
   }
 
@@ -314,12 +435,12 @@ const Layout = (props) => {
       </div>
 
       {switchScreens()}
-    </React.Fragment >
-  );
+    </React.Fragment>
+  )
 }
 
 Layout.propTypes = {
-  changeLayout: PropTypes.func,/*  */
+  changeLayout: PropTypes.func /*  */,
   changeLayoutWidth: PropTypes.func,
   changeTopbarTheme: PropTypes.func,
   children: PropTypes.object,
@@ -327,7 +448,7 @@ Layout.propTypes = {
   layoutWidth: PropTypes.any,
   location: PropTypes.object,
   showRightSidebar: PropTypes.any,
-  topbarTheme: PropTypes.any
+  topbarTheme: PropTypes.any,
 }
 
-export default Layout;
+export default Layout

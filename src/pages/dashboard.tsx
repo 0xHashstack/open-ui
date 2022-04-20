@@ -28,9 +28,9 @@ import {
   CoinClassNames,
   MinimumAmount,
   SymbolsMap,
-  DecimalsMap,
   CommitMap,
   CommitMapReverse,
+  marketDataOnChain
 } from "../blockchain/constants"
 import { BNtoNum, GetErrorText, bytesToString } from "../blockchain/utils"
 import { toast } from "react-toastify"
@@ -94,7 +94,7 @@ const Dashboard = () => {
   const [inputVal1, setInputVal1] = useState(0)
   const [liquidationIndex, setLiquidationIndex] = useState(0)
 
-  const { connect, disconnect, account } = useContext(Web3ModalContext)
+  const { connect, disconnect, account, chainId } = useContext(Web3ModalContext)
   const { web3Wrapper: wrapper } = useContext(Web3WrapperContext)
 
   useEffect(() => {
@@ -145,7 +145,7 @@ const Dashboard = () => {
     if (customActiveTab == "3"){
       navigateLoansToLiquidate(liquidationIndex)
     }
-  }, [account, passbookStatus, customActiveTab, isTransactionDone, liquidationIndex])
+  }, [account, passbookStatus, customActiveTab, isTransactionDone, liquidationIndex, activeLiquidationsData])
 
   const toggleCustom = tab => {
     if (customActiveTab !== tab) {
@@ -275,9 +275,6 @@ const Dashboard = () => {
         state: loansData.state[index], // Swap status
         currentLoanMarket: bytesToString(loansData.loanCurrentMarket[index]), // Borrow market(current)
         currentLoanAmount: Number(loansData.loanCurrentAmount[index]), // Borrow amount(current)
-        collateralYield: BNtoNum(
-          BigNumber.from(loansData.collateralYield[index] || "0").toNumber()
-        ), // Collateral yield
       })
     })
     // Borrow interest -- #Todo ( To be added after intrest issue resolved )
@@ -339,7 +336,7 @@ const Dashboard = () => {
       setIsTransactionDone(true)
       const _loanOption: string | undefined = loanOption
       const market = SymbolsMap[_loanOption]
-      const decimal = DecimalsMap[_loanOption]
+      const decimal = marketDataOnChain[chainId].DecimalsMap[_loanOption]
       const _commit: string | undefined = loanCommitement
       const commit = activeLoansData.filter(asset => {
         return (
@@ -381,7 +378,7 @@ const Dashboard = () => {
           SymbolsMap[_loanOption],
           CommitMap[_commit],
           inputVal1,
-          DecimalsMap[_loanOption]
+          marketDataOnChain[chainId].DecimalsMap[_loanOption]
         )
       const tx = await tx1.wait()
       SuccessCallback(
@@ -409,7 +406,7 @@ const Dashboard = () => {
         .approve(
           SymbolsMap[_collateralOption],
           inputVal1,
-          DecimalsMap[_collateralOption]
+          marketDataOnChain[chainId].DecimalsMap[_collateralOption]
         )
       await approveTransactionHash.wait()
       console.log("Approve Transaction sent: ", approveTransactionHash)
@@ -421,7 +418,7 @@ const Dashboard = () => {
           SymbolsMap[_loanOption],
           CommitMap[_commit],
           inputVal1,
-          DecimalsMap[_collateralOption]
+          marketDataOnChain[chainId].DecimalsMap[_collateralOption]
         )
       const tx = await tx1.wait()
       SuccessCallback(tx.events, "AddCollateral", "Collateral amount added")
@@ -468,7 +465,7 @@ const Dashboard = () => {
       let market = asset.loanMarket 
       let commitment = asset.commitment
       let loanAmount = BNtoNum(Number(asset.loanAmount))
-      let decimal = DecimalsMap[market]
+      let decimal = marketDataOnChain[chainId].DecimalsMap[market]
       const approveTransactionHash = await wrapper
         ?.getMockBep20Instance()
         .approve(SymbolsMap[market], loanAmount, decimal)
@@ -553,7 +550,7 @@ const Dashboard = () => {
         .approve(
           SymbolsMap[_depositRequestSel],
           inputVal1,
-          DecimalsMap[_depositRequestSel]
+          marketDataOnChain[chainId].DecimalsMap[_depositRequestSel]
         )
       await approveTransactionHash.wait()
       console.log("Approve Transaction sent: ", approveTransactionHash)
@@ -564,7 +561,7 @@ const Dashboard = () => {
           SymbolsMap[_depositRequestSel.toUpperCase()],
           CommitMap[_depositRequestVal],
           inputVal1,
-          DecimalsMap[_depositRequestSel.toUpperCase()]
+          marketDataOnChain[chainId].DecimalsMap[_depositRequestSel.toUpperCase()]
         )
       const tx = await tx1.wait()
       SuccessCallback(tx.events, "DepositAdded", "Deposited amount")
@@ -588,7 +585,7 @@ const Dashboard = () => {
           SymbolsMap[_withdrawDepositSel.toUpperCase()],
           CommitMap[_withdrawDepositVal],
           inputVal1,
-          DecimalsMap[_withdrawDepositSel.toUpperCase()]
+          marketDataOnChain[chainId].DecimalsMap[_withdrawDepositSel.toUpperCase()]
         )
       const tx = await tx1.wait()
       if (tx.events.length == 0) {

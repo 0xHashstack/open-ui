@@ -1,4 +1,3 @@
-import { DecimalsMap } from './constants';
 import { BigNumber } from "bignumber.js";
 import Fortmatic from "fortmatic";
 import Portis from "@portis/web3";
@@ -11,6 +10,7 @@ import WalletConnectProvider from "@walletconnect/web3-provider";
 import { toast } from 'react-toastify';
 // import 'react-toastify/dist/ReactToastify.css';
 import { utils } from "ethers";
+import { Logger } from 'ethers/lib/utils';
 // import TokenList from './contracts/TokenList';
 
 
@@ -53,15 +53,20 @@ export const GetErrorText = (err) => {
   // else {
   //   return 'Oops! Something went wrong.';
   // }
-  if (typeof(err) == 'string') {
-    return err;
-  }
-  else if(err.data)
+  // console.log("::", Object.entries(err));
+  if(err.code === Logger.errors.CALL_EXCEPTION)
+    return `Transaction failed! \n ${err.transactionHash}`;
+  if(err.data){
+    console.log(1);
     return err.data.message;
-  else if(err.message)
+  }
+  else if(err.message){
+    console.log("Erro: ", err.message);
     return err.message;
-  else
-    return "Oops! Something went wrong."
+  }
+  else if (typeof err == "string") {
+    return err
+  } else return "Oops! Something went wrong."
 }
 
 export const toFixed = (num: number, digit: number) => {
@@ -71,11 +76,6 @@ export const toFixed = (num: number, digit: number) => {
 }
 
 
-export const OnSuccessCallback = (data, eventName, key, message) => {
-  const res = data[eventName]['returnValues'];
-  let amount = BNtoNum(Number(res.amount), DecimalsMap[res[key]]);
-  toast.success(`${message}: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true});
-}
 
 export const OnErrorCallback = (err) => {
   if (err instanceof Object) {
