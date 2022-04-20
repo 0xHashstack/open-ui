@@ -39,6 +39,7 @@ import "react-toastify/dist/ReactToastify.css"
 import loadable from "@loadable/component"
 const PassbookTBody = loadable(() => import("./passbook-body"))
 const DashboardTBody = loadable(() => import("./dashboard-body"))
+import Analytics from "./analytics";
 import { BigNumber } from "ethers"
 
 toast.configure({
@@ -54,6 +55,7 @@ const Dashboard = () => {
   const [isTransactionDone, setIsTransactionDone] = useState(false)
 
   const [customActiveTab, setCustomActiveTab] = useState("1")
+  const [mainTab, setMainTab] = useState("1");
   const [passbookStatus, setPassbookStatus] = useState("ActiveDeposit")
 
   const [modal_repay_loan, setmodal_repay_loan] = useState(false)
@@ -1852,311 +1854,357 @@ const Dashboard = () => {
 
   return (
     <React.Fragment>
-      <div className="page-content">
+      <div className="page-content" style={{'marginTop': '0px'}}>
         <MetaTags>
           <title>Hashstack Finance</title>
         </MetaTags>
         {/* <Banner /> */}
-        <Container fluid>
-          <h5>OPEN PROTOCOL</h5>
-          <br />
 
-          <Row>
-            {customActiveTab === "2" ? (
-              <Col xl="4">
-                <Card style={{ height: "29rem" }}>
-                  {/* {customActiveTab === '2' ? */}
+          <div>
+            <Nav tabs className="nav-tabs-custom-main">
+              <NavItem>
+                <NavLink
+                  className={mainTab === "1" ? "active" : ""}
+                  onClick={function noRefCheck(){
+                    setMainTab("1");
+                  }}
+                >
+                  Open Protocol
+                </NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink
+                  className={mainTab === "2" ? "active" : ""}
+                  onClick={function noRefCheck(){
+                    setMainTab("2");
+                  }}
+                >
+                  Protocol Analytics
+                </NavLink>
+              </NavItem>
+            </Nav>
+            <TabContent activeTab={mainTab}>
+              <TabPane tabId="1">
+                <Row>
+                  <Col sm="12">
+                    <div className="page-content-subTab">
+                    <Container fluid>
+                        {/* <h5>OPEN PROTOCOL</h5> */}
+                        <br />
 
-                  {getPassbookActionScreen(passbookStatus)}
-                </Card>
-              </Col>
-            ) : null}
+                        <Row>
+                          {customActiveTab === "2" ? (
+                            <Col xl="4">
+                              <Card style={{ height: "29rem" }}>
+                                {/* {customActiveTab === '2' ? */}
 
-            <Col xl={customActiveTab === "2" ? "8" : "12"}>
-              <Card style={{ height: "29rem" }}>
-                <CardBody>
-                  <Nav tabs className="nav-tabs-custom">
-                    <NavItem>
-                      <NavLink
-                        style={{ cursor: "pointer" }}
-                        className={classnames({
-                          active: customActiveTab === "1",
-                        })}
-                        onClick={() => {
-                          toggleCustom("1")
-                        }}
-                      >
-                        <span className="d-none d-sm-block">Dashboard</span>
-                      </NavLink>
-                    </NavItem>
-                    {account ? (
-                      <>
-                        <NavItem>
-                          <NavLink
-                            style={{ cursor: "pointer" }}
-                            className={classnames({
-                              active: customActiveTab === "2",
-                            })}
-                            onClick={() => {
-                              toggleCustom("2")
-                            }}
-                          >
-                            <span className="d-none d-sm-block">Passbook</span>
-                          </NavLink>
-                        </NavItem>
-                        <NavItem>
-                          <NavLink
-                            style={{ cursor: "pointer" }}
-                            className={classnames({
-                              active: customActiveTab === "3",
-                            })}
-                            onClick={() => {
-                              toggleCustom("3")
-                            }}
-                          >
-                            <span className="d-none d-sm-block">
-                              Liquidation
-                            </span>
-                          </NavLink>
-                        </NavItem>
-                      </>
-                    ) : null}
-                  </Nav>
+                                {getPassbookActionScreen(passbookStatus)}
+                              </Card>
+                            </Col>
+                          ) : null}
 
-                  <TabContent activeTab={customActiveTab} className="p-1">
-                    {/* ------------------------------------- DASHBOARD ----------------------------- */}
-
-                    <TabPane tabId="1">
-                      <div
-                        className="table-responsive"
-                        style={{ paddingTop: "12px" }}
-                      >
-                        <Table className="table table-nowrap align-middle mb-0">
-                          <thead>
-                            <tr style={{ borderStyle: "hidden" }}>
-                              <th scope="col">Markets</th>
-                              <th scope="col">Savings Interest</th>
-                              <th scope="col">Borrow Interest</th>
-                              <th scope="col">Deposit</th>
-                              <th scope="col" colSpan={2}>
-                                Borrow
-                              </th>
-                            </tr>
-                            <tr>
-                              <th scope="col"></th>
-                              <th scope="col">
-                                <select
-                                  className="form-select form-select-sm"
-                                  onChange={handleDepositInterestChange}
-                                >
-                                  <option hidden>Commitment</option>
-                                  <option value={"NONE"}>None</option>
-                                  <option value={"TWOWEEKS"}>Two Weeks</option>
-                                  <option value={"ONEMONTH"}>One Month</option>
-                                  <option value={"THREEMONTHS"}>
-                                    Three Month
-                                  </option>
-                                </select>
-                              </th>
-                              <th scope="col">
-                                <select
-                                  className="form-select form-select-sm"
-                                  onChange={handleBorrowInterestChange}
-                                >
-                                  <option hidden>Commitment</option>
-                                  <option value={"NONE"}>None</option>
-                                  <option value={"ONEMONTH"}>One Month</option>
-                                </select>
-                              </th>
-                              <th scope="col"></th>
-                              <th scope="col"></th>
-                              <th scope="col"></th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <DashboardTBody
-                              isloading={isLoading}
-                              depositInterestChange={depositInterestChange}
-                              borrowInterestChange={borrowInterestChange}
-                            ></DashboardTBody>
-                          </tbody>
-                        </Table>
-                      </div>
-                    </TabPane>
-
-                    {/* -------------------------------------- PASSBOOK ----------------------------- */}
-
-                    <TabPane tabId="2">
-                      <div
-                        className="row justify-content-end"
-                        style={{ paddingTop: "12px" }}
-                      >
-                        <Col sm={3}>
-                          <select
-                            className="form-select form-select-sm"
-                            onChange={e => passbookActive(e)}
-                          >
-                            <option value={"ActiveDeposit"}>
-                              Active Deposits
-                            </option>
-                            <option value={"ActiveLoan"}>Active Loans</option>
-                            <option value={"RepaidLoan"}>Repaid Loans</option>
-                            {/* <option value={"InactiveDeposit"}>Inactive deposits</option> */}
-                          </select>
-                        </Col>
-                      </div>
-                      {getPassbookTable(passbookStatus)}
-                    </TabPane>
-
-                    {/* -------------------------------------- LIQUIDATION ----------------------------- */}
-
-                    <TabPane tabId="3">
-                      <div className="table-responsive">
-                      <Button
-                          className="d-flex"
-                          color="light"
-                          outline
-                          align="right"
-                          style={{ marginLeft: "90%" }}
-                          onClick={() => {
-                            increaseLiquidationIndex
-                          }}
-                        >
-                          Show More
-                        </Button>
-                        <Table className="table table-nowrap align-middle mb-0">
-                          <thead>
-                            <tr>
-                              <th scope="col">Loan Market</th>
-                              <th scope="col">Commitment</th>
-                              <th scope="col">Loan Amount</th>
-                              <th scope="col">Collateral Market</th>
-                              <th scope="col">Collateral Amount</th>
-                              {/* <th scope="col" colSpan={2}>Interest Earned</th> */}
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {Array.isArray(activeLiquidationsData) &&
-                            activeLiquidationsData.length > 0 ? (
-                              activeLiquidationsData.map((asset, key) => (
-                                <tr key={key}>
-                                  <th scope="row">
-                                    <div className="d-flex align-items-center">
-                                      <div className="avatar-xs me-3">
-                                        <span
-                                          className={
-                                            "avatar-title rounded-circle bg-soft bg-" +
-                                            asset.color +
-                                            " text-" +
-                                            asset.color +
-                                            " font-size-18"
-                                          }
-                                        >
-                                          <i
-                                            className={
-                                              CoinClassNames[
-                                                EventMap[
-                                                  asset.loanMarket.toUpperCase()
-                                                ]
-                                              ] ||
-                                              asset.loanMarket.toUpperCase()
-                                            }
-                                          />
-                                        </span>
-                                      </div>
-                                      <span>
-                                        {
-                                          EventMap[
-                                            asset.loanMarket.toUpperCase()
-                                          ]
-                                        }
-                                      </span>
-                                    </div>
-                                  </th>
-                                  <td>
-                                    <div className="text-muted">
-                                      {EventMap[asset.commitment]}
-                                    </div>
-                                  </td>
-                                  <td>
-                                    <div className="text-muted">
-                                      {BNtoNum(Number(asset.loanAmount))}
-                                    </div>
-                                  </td>
-                                  <th scope="row">
-                                    <div className="d-flex align-items-center">
-                                      <div className="avatar-xs me-3">
-                                        <span
-                                          className={
-                                            "avatar-title rounded-circle bg-soft bg-" +
-                                            asset.color +
-                                            " text-" +
-                                            asset.color +
-                                            " font-size-18"
-                                          }
-                                        >
-                                          <i
-                                            className={
-                                              CoinClassNames[
-                                                EventMap[
-                                                  asset.collateralMarket.toUpperCase()
-                                                ]
-                                              ] ||
-                                              asset.collateralMarket.toUpperCase()
-                                            }
-                                          />
-                                        </span>
-                                      </div>
-                                      <span>
-                                        {
-                                          EventMap[
-                                            asset.collateralMarket.toUpperCase()
-                                          ]
-                                        }
-                                      </span>
-                                    </div>
-                                  </th>
-                                  <td>
-                                    <div className="text-muted">
-                                      {BNtoNum(Number(asset.collateralAmount))}
-                                    </div>
-                                  </td>
-                                  <td>
-                                    <Button
-                                      className="text-muted"
-                                      color="light"
-                                      outline
+                          <Col xl={customActiveTab === "2" ? "8" : "12"}>
+                            <Card style={{ height: "29rem" }}>
+                              <CardBody>
+                                <Nav tabs className="nav-tabs-custom">
+                                  <NavItem>
+                                    <NavLink
+                                      style={{ cursor: "pointer" }}
+                                      className={classnames({
+                                        active: customActiveTab === "1",
+                                      })}
                                       onClick={() => {
-                                        handleLiquidation(asset)
+                                        toggleCustom("1")
                                       }}
                                     >
-                                      {(isTransactionDone && asset.isLiquidationDone) ? (
-                                        <Spinner>Loading...</Spinner>
-                                      ) : (
-                                        "Liquidate"
-                                      )}
-                                    </Button>
-                                  </td>
-                                  {/* <td>
-                    <div className="text-muted">{Number(asset.acquiredYield).toFixed(3)}</div>
-                  </td>  */}
-                                </tr>
-                              ))
-                            ) : (
-                              <tr align="center">
-                                <td colSpan={5}>No Records Found.</td>
-                              </tr>
-                            )}
-                          </tbody>
-                        </Table>
-                      </div>
-                    </TabPane>
-                  </TabContent>
-                </CardBody>
-              </Card>
-            </Col>
-          </Row>
-        </Container>
+                                      <span className="d-none d-sm-block">Dashboard</span>
+                                    </NavLink>
+                                  </NavItem>
+                                  {account ? (
+                                    <>
+                                      <NavItem>
+                                        <NavLink
+                                          style={{ cursor: "pointer" }}
+                                          className={classnames({
+                                            active: customActiveTab === "2",
+                                          })}
+                                          onClick={() => {
+                                            toggleCustom("2")
+                                          }}
+                                        >
+                                          <span className="d-none d-sm-block">Passbook</span>
+                                        </NavLink>
+                                      </NavItem>
+                                      <NavItem>
+                                        <NavLink
+                                          style={{ cursor: "pointer" }}
+                                          className={classnames({
+                                            active: customActiveTab === "3",
+                                          })}
+                                          onClick={() => {
+                                            toggleCustom("3")
+                                          }}
+                                        >
+                                          <span className="d-none d-sm-block">
+                                            Liquidation
+                                          </span>
+                                        </NavLink>
+                                      </NavItem>
+                                    </>
+                                  ) : null}
+                                </Nav>
+
+                                <TabContent activeTab={customActiveTab} className="p-1">
+                                  {/* ------------------------------------- DASHBOARD ----------------------------- */}
+
+                                  <TabPane tabId="1">
+                                    <div
+                                      className="table-responsive"
+                                      style={{ paddingTop: "12px" }}
+                                    >
+                                      <Table className="table table-nowrap align-middle mb-0">
+                                        <thead>
+                                          <tr style={{ borderStyle: "hidden" }}>
+                                            <th scope="col">Markets</th>
+                                            <th scope="col">Savings Interest</th>
+                                            <th scope="col">Borrow Interest</th>
+                                            <th scope="col">Deposit</th>
+                                            <th scope="col" colSpan={2}>
+                                              Borrow
+                                            </th>
+                                          </tr>
+                                          <tr>
+                                            <th scope="col"></th>
+                                            <th scope="col">
+                                              <select
+                                                className="form-select form-select-sm"
+                                                onChange={handleDepositInterestChange}
+                                              >
+                                                <option hidden>Commitment</option>
+                                                <option value={"NONE"}>None</option>
+                                                <option value={"TWOWEEKS"}>Two Weeks</option>
+                                                <option value={"ONEMONTH"}>One Month</option>
+                                                <option value={"THREEMONTHS"}>
+                                                  Three Month
+                                                </option>
+                                              </select>
+                                            </th>
+                                            <th scope="col">
+                                              <select
+                                                className="form-select form-select-sm"
+                                                onChange={handleBorrowInterestChange}
+                                              >
+                                                <option hidden>Commitment</option>
+                                                <option value={"NONE"}>None</option>
+                                                <option value={"ONEMONTH"}>One Month</option>
+                                              </select>
+                                            </th>
+                                            <th scope="col"></th>
+                                            <th scope="col"></th>
+                                            <th scope="col"></th>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                          <DashboardTBody
+                                            isloading={isLoading}
+                                            depositInterestChange={depositInterestChange}
+                                            borrowInterestChange={borrowInterestChange}
+                                          ></DashboardTBody>
+                                        </tbody>
+                                      </Table>
+                                    </div>
+                                  </TabPane>
+
+                                  {/* -------------------------------------- PASSBOOK ----------------------------- */}
+
+                                  <TabPane tabId="2">
+                                    <div
+                                      className="row justify-content-end"
+                                      style={{ paddingTop: "12px" }}
+                                    >
+                                      <Col sm={3}>
+                                        <select
+                                          className="form-select form-select-sm"
+                                          onChange={e => passbookActive(e)}
+                                        >
+                                          <option value={"ActiveDeposit"}>
+                                            Active Deposits
+                                          </option>
+                                          <option value={"ActiveLoan"}>Active Loans</option>
+                                          <option value={"RepaidLoan"}>Repaid Loans</option>
+                                          {/* <option value={"InactiveDeposit"}>Inactive deposits</option> */}
+                                        </select>
+                                      </Col>
+                                    </div>
+                                    {getPassbookTable(passbookStatus)}
+                                  </TabPane>
+
+                                  {/* -------------------------------------- LIQUIDATION ----------------------------- */}
+
+                                  <TabPane tabId="3">
+                                    <div className="table-responsive">
+                                      <Table className="table table-nowrap align-middle mb-0">
+                                        <thead>
+                                          <tr>
+                                            <th scope="col">Loan Market</th>
+                                            <th scope="col">Commitment</th>
+                                            <th scope="col">Loan Amount</th>
+                                            <th scope="col">Collateral Market</th>
+                                            <th scope="col">Collateral Amount</th>
+                                            {/* <th scope="col" colSpan={2}>Interest Earned</th> */}
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                          {Array.isArray(activeLiquidationsData) &&
+                                          activeLiquidationsData.length > 0 ? (
+                                            activeLiquidationsData.map((asset, key) => (
+                                              <tr key={key}>
+                                                <th scope="row">
+                                                  <div className="d-flex align-items-center">
+                                                    <div className="avatar-xs me-3">
+                                                      <span
+                                                        className={
+                                                          "avatar-title rounded-circle bg-soft bg-" +
+                                                          asset.color +
+                                                          " text-" +
+                                                          asset.color +
+                                                          " font-size-18"
+                                                        }
+                                                      >
+                                                        <i
+                                                          className={
+                                                            CoinClassNames[
+                                                              EventMap[
+                                                                asset.loanMarket.toUpperCase()
+                                                              ]
+                                                            ] ||
+                                                            asset.loanMarket.toUpperCase()
+                                                          }
+                                                        />
+                                                      </span>
+                                                    </div>
+                                                    <span>
+                                                      {
+                                                        EventMap[
+                                                          asset.loanMarket.toUpperCase()
+                                                        ]
+                                                      }
+                                                    </span>
+                                                  </div>
+                                                </th>
+                                                <td>
+                                                  <div className="text-muted">
+                                                    {EventMap[asset.commitment]}
+                                                  </div>
+                                                </td>
+                                                <td>
+                                                  <div className="text-muted">
+                                                    {BNtoNum(Number(asset.loanAmount))}
+                                                  </div>
+                                                </td>
+                                                <th scope="row">
+                                                  <div className="d-flex align-items-center">
+                                                    <div className="avatar-xs me-3">
+                                                      <span
+                                                        className={
+                                                          "avatar-title rounded-circle bg-soft bg-" +
+                                                          asset.color +
+                                                          " text-" +
+                                                          asset.color +
+                                                          " font-size-18"
+                                                        }
+                                                      >
+                                                        <i
+                                                          className={
+                                                            CoinClassNames[
+                                                              EventMap[
+                                                                asset.collateralMarket.toUpperCase()
+                                                              ]
+                                                            ] ||
+                                                            asset.collateralMarket.toUpperCase()
+                                                          }
+                                                        />
+                                                      </span>
+                                                    </div>
+                                                    <span>
+                                                      {
+                                                        EventMap[
+                                                          asset.collateralMarket.toUpperCase()
+                                                        ]
+                                                      }
+                                                    </span>
+                                                  </div>
+                                                </th>
+                                                <td>
+                                                  <div className="text-muted">
+                                                    {BNtoNum(Number(asset.collateralAmount))}
+                                                  </div>
+                                                </td>
+                                                <td>
+                                                  <Button
+                                                    className="text-muted"
+                                                    color="light"
+                                                    outline
+                                                    onClick={() => {
+                                                      handleLiquidation(asset)
+                                                    }}
+                                                  >
+                                                    {(isTransactionDone && asset.isLiquidationDone) ? (
+                                                      <Spinner>Loading...</Spinner>
+                                                    ) : (
+                                                      "Liquidate"
+                                                    )}
+                                                  </Button>
+                                                </td>
+                                                {/* <td>
+                                  <div className="text-muted">{Number(asset.acquiredYield).toFixed(3)}</div>
+                                </td>  */}
+                                              </tr>
+                                            ))
+                                          ) : (
+                                            <tr align="center">
+                                              <td colSpan={5}>No Records Found.</td>
+                                            </tr>
+                                          )}
+                                        </tbody>
+                                      </Table>
+                                      <Button
+                                        className="d-flex align-items-center"
+                                        color="light"
+                                        outline
+                                        onClick={() => {
+                                          increaseLiquidationIndex
+                                        }}
+                                      >
+                                        Show More
+                                      </Button>
+                                    </div>
+                                  </TabPane>
+                                </TabContent>
+                              </CardBody>
+                            </Card>
+                          </Col>
+                        </Row>
+                      </Container>
+                  
+                  
+                  
+                  
+                    </div>
+                  </Col>
+                </Row>
+              </TabPane>
+              <TabPane tabId="2">
+                <Row>
+                  <Col sm="12">
+                   <Analytics></Analytics>
+                  </Col>
+                </Row>
+              </TabPane>
+            </TabContent>
+          </div>
+            {/* <Analytics></Analytics>
+            {props.children} */}
       </div>
     </React.Fragment>
   )

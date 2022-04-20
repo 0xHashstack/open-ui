@@ -5,6 +5,7 @@ import { Web3ModalContext } from "../../contexts/Web3ModalProvider";
 import { Web3WrapperContext } from "../../contexts/Web3WrapperProvider";
 import { GetErrorText, BNtoNum } from "../../blockchain/utils";
 import { toast } from 'react-toastify';
+import amplitude from '../../helpers/AmplitudeService';
 import 'react-toastify/dist/ReactToastify.css';
 
 toast.configure({ autoClose: 4000 });
@@ -21,10 +22,12 @@ const Header = () => {
 
 
   const handleConnectWallet = useCallback(() => {
+    amplitude.getInstance().logEvent('connectWalletClicked', {});
     connect();
   }, [connect]);
 
   const handleDisconnectWallet = useCallback(() => {
+    amplitude.getInstance().logEvent('walletDisconnected', {'address': account});
     disconnect();
   }, [disconnect]);
 
@@ -32,6 +35,7 @@ const Header = () => {
     try {
       setIsTransactionDone(true);
       const tokenName = event.target.textContent;
+      amplitude.getInstance().logEvent('getTokenClicked', {'address': account, 'tokenName':tokenName });
       setCurrentProcessingToken(event.target.textContent);
       const tx1 = await wrapper?.getFaucetInstance().getTokens(tokenName);
       const tx = await tx1.wait();
