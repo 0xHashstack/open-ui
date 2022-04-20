@@ -1,7 +1,9 @@
 
 import { ApolloClient, HttpLink, ApolloLink, InMemoryCache, from } from '@apollo/client';
 
-const httpLink = new HttpLink({ uri: 'https://devapi.hashstack.finance/' });
+const httpLink = new HttpLink({ uri: 'https://api.thegraph.com/subgraphs/name/prtk418/open_protocol_bsc_test', fetchOptions: {
+  mode: 'no-cors',
+}, });
 
 const authMiddleware = new ApolloLink((operation, forward) => {
   // add the authorization to the headers
@@ -30,8 +32,8 @@ const activityMiddleware = new ApolloLink((operation, forward) => {
 export default new ApolloClient({
   cache: new InMemoryCache(),
   link: from([
-    authMiddleware,
-    activityMiddleware,
+    // authMiddleware,
+    // activityMiddleware,
     httpLink
   ]),
 });
