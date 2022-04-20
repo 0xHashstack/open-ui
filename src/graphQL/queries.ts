@@ -104,3 +104,16 @@ query Loans ($first: Int){
   }
 }
 `;
+
+export const GET_TVL_DATA = gql `
+query Reserves ($first: Int){
+	reserves(first: $first) {
+    id
+    market
+    amount
+    commitment
+    date
+    instrumentType
+  }
+}
+`;
