@@ -154,7 +154,7 @@ const Web3ModalProvider = (props: any) => {
 
     const handleSign = async () => {
       
-      const data = 'WELCOME_TO_HASHSTACK';
+      const data = 'LOGIN_TO_HASHSTACK';
       const sig = await signMessage({
         message: data
       });
