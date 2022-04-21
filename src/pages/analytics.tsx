@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import { ApolloProvider } from "@apollo/client";
 import {
     Container,
     Row,
@@ -9,67 +10,14 @@ import {
     AccordionBody,
     Table
 } from "reactstrap";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar, Sector, PieChart, Pie } from 'recharts';
+import { Sector} from 'recharts';
 
 import DepositsByMarket from "./depositByMarket";
 import LoansByMarket from "./loansByMarket";
 import NetDepositVsLoans from "./netDepositVsLoans";
 import NetDepositVsProtocolDeposits from "./netDepositVsProtocolDeposits";
 import TVLVariation from "./tvlVariation";
-
-const data = [
-    {
-      name: 'USDT',
-      deposits: 4000,
-      borrows: 2400,
-      amt: 2400,
-    },
-    {
-      name: 'USDC',
-      deposits: 3000,
-      borrows: 1398,
-      amt: 2210,
-    },
-    {
-      name: 'BNB',
-      deposits: 2000,
-      borrows: 9800,
-      amt: 2290,
-    },
-    {
-      name: 'BTC',
-      deposits: 2780,
-      borrows: 3908,
-      amt: 2000,
-    }
-];
-
-const bardata = [
-    {
-      name: 'None',
-      deposits: 4000,
-      borrow: 2400,
-      amt: 2400,
-    },
-    {
-      name: 'One Month',
-      deposits: 3000,
-      borrow: 1398,
-      amt: 2210,
-    },
-    {
-      name: 'Two Weeks',
-      deposits: 2000,
-      borrow: 0,
-      amt: 2290,
-    },
-    {
-      name: 'Three months',
-      deposits: 2780,
-      borrow: 0,
-      amt: 2000,
-    }
-];
+import SubgraphClient from "../subgraphClient";
 
 const piedata = [
     { name: 'USDC', value: 400 },
@@ -133,6 +81,7 @@ const onPieEnter = (_, index) => {
 };
 
     return (
+      <ApolloProvider client={new SubgraphClient().client}>
         <React.Fragment>
           <div className="page-content-subTab">
             <Container fluid>
@@ -227,6 +176,8 @@ const onPieEnter = (_, index) => {
             </Container>
           </div>
         </React.Fragment>
+      </ApolloProvider>
+
       )
 }
 

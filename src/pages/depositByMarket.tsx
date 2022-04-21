@@ -10,7 +10,6 @@ import {
 import { XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar } from 'recharts';
 import { EventMap } from 'blockchain/constants';
 import {cacheService} from '../helpers/CacheService';
-
   
 const DepositsByMarket = () => {
     const [barDataByMarkets , setBarDataByMarket] = useState([]);

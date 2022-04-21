@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useContext, useCallback } from 'react';
 import PropTypes from "prop-types";
 import axios from "axios";
-import { Button, Container, Row, Col, Spinner, Nav, NavItem, NavLink, TabContent, TabPane } from "reactstrap";
+import { Button, Container, Row, Col, Spinner } from "reactstrap";
 
-// import { useQuery, gql } from '@apollo/client';
-// import { GET_WHITELIST_STATUS, GET_PROTOCOL_DATA, GET_DEPOSIT_DATA } from "../../graphQL/queries";
+import { useQuery, gql } from '@apollo/client';
+import { GET_WHITELIST_STATUS } from "../../graphQL/queries";
 
 import amplitude from '../../helpers/AmplitudeService';
 import {cacheService} from '../../helpers/CacheService';
@@ -19,20 +19,18 @@ import {
 
 //redux
 import { useSelector, useDispatch } from "react-redux";
-import { groupBy } from '../../blockchain/utils';
 
 //components
 import loadable from '@loadable/component';
 const Header = loadable(() => import('./Header'));
 const Footer = loadable(() => import('./Footer'));
-import Analytics from '../../pages/analytics';
+// import Analytics from '../../pages/analytics';
 
 import { Web3ModalContext } from "../../contexts/Web3ModalProvider"
 
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './index.scss';
-// import { forEach } from 'lodash';
 
 toast.configure()
 
@@ -48,12 +46,23 @@ const Layout = props => {
   const [counter, setCounter] = useState()
 
 
+  const {error, loading, data} = useQuery(GET_WHITELIST_STATUS,{
+    variables: { address: account },
+  });
+
+  useEffect(() => {
+    if(data) {
+      console.log(data);
+    }
+  }, [data]);
+
   useEffect(() => {
     dispatch(changePreloader(true));
     setIsResponse(false);
     amplitude.getInstance().logEvent('walletConnected', {'address': account});
     let timer;
     if (account) {
+      
       cacheService.setItem('account', account);
       axios.get(`isWhiteListedAccount?address=${account}`)
         .then(res => {
@@ -372,43 +381,6 @@ const Layout = props => {
           <Header/>
 
           <div className="main-content">
-          {/* <div>
-            <Nav tabs className="nav-tabs-custom">
-              <NavItem>
-                <NavLink
-                  className=""
-                  onClick={function noRefCheck(){}}
-                >
-                  Open Protocol
-                </NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink
-                  className="active"
-                  onClick={function noRefCheck(){}}
-                >
-                  Protocol Analytics
-                </NavLink>
-              </NavItem>
-            </Nav>
-            <TabContent activeTab="2">
-              <TabPane tabId="1">
-                <Row>
-                  <Col sm="12">
-                    {props.children}
-                  </Col>
-                </Row>
-              </TabPane>
-              <TabPane tabId="2">
-                <Row>
-                  <Col sm="12">
-                   <Analytics></Analytics>
-                  </Col>
-                </Row>
-              </TabPane>
-            </TabContent>
-          </div> */}
-            {/* <Analytics></Analytics> */}
             {props.children}
           </div>
           <Footer />

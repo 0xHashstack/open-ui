@@ -20,7 +20,6 @@ import {cacheService} from '../helpers/CacheService';
 
   
 const TVLVariation = () => {
-    // const [barDataByMarkets , setBarDataByMarket] = useState([]);
     const [tvlData , setTvlData] = useState([]);
     const [series, setSeries] = useState(new TimeSeries({
         name: "TVL Variations",

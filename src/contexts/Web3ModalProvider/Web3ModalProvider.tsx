@@ -5,6 +5,7 @@ import { ethers } from "ethers"
 import { providerOptions } from "blockchain/provider"
 import { toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
+import {cacheService} from "../../helpers/CacheService";
 // import { string } from "prop-types"
 let BSCChainId = 97
 if ((process.env.REACT_APP_ENV == "dev")) {
@@ -115,18 +116,54 @@ const Web3ModalProvider = (props: any) => {
     });
     const _chainId = (await ethersProviderInstance.getNetwork()).chainId
     //===========================================================================================================//
-    if (_chainId != BSCChainId) {
-      toast.warn(`Please connect to BSC Testnet`, {
-        position: toast.POSITION.BOTTOM_RIGHT,
-        autoClose: 4000,
-        closeOnClick: true,
-      })
-      disconnect()
-      return
-    }
+    // if (_chainId != BSCChainId) {
+    //   toast.warn(`Please connect to BSC Testnet`, {
+    //     position: toast.POSITION.BOTTOM_RIGHT,
+    //     autoClose: 4000,
+    //     closeOnClick: true,
+    //   })
+    //   disconnect()
+    //   return
+    // }
     setAccount(String(_account))
     setChainId(_chainId)
-    setConnected(true)
+    setConnected(true);
+    const signMessage = async ({ message }) => {
+      try {
+        console.log({ message });
+        if (!window.ethereum)
+          throw new Error("No crypto wallet found. Please install it.");
+    
+        await window.ethereum.send("eth_requestAccounts");
+        // const provider = new ethers.providers.Web3Provider(window.ethereum);
+        // const signer = provider.getSigner();
+        const signature = await signer.signMessage(message);
+        const address = await signer.getAddress();
+        
+        cacheService.setItem("AuthToken", signature);
+        return {
+          message,
+          signature,
+          address
+        };
+      } catch (err) {
+        console.log(err);
+      }
+      return null;
+    };
+
+    const handleSign = async () => {
+      
+      const data = 'WELCOME_TO_HASHSTACK';
+      const sig = await signMessage({
+        message: data
+      });
+      if (sig) {
+        console.log(sig);
+      }
+    };
+
+    handleSign();
   }, [web3Modal])
 
   useEffect(() => {
@@ -139,22 +176,23 @@ const Web3ModalProvider = (props: any) => {
 
       const handleChainChanged = async (_hexChainId: string) => {
         setChainId(parseInt(_hexChainId, 16))
-        if (parseInt(_hexChainId, 16) !== BSCChainId) {
-          toast.warn(`Please connect to BSC Testnet`, {
-            position: toast.POSITION.BOTTOM_RIGHT,
-            autoClose: 4000,
-            closeOnClick: true,
-          })
-          setConnected(false)
-          disconnect()
-          return
-        }
+        // if (parseInt(_hexChainId, 16) !== BSCChainId) {
+        //   toast.warn(`Please connect to BSC Testnet`, {
+        //     position: toast.POSITION.BOTTOM_RIGHT,
+        //     autoClose: 4000,
+        //     closeOnClick: true,
+        //   })
+        //   setConnected(false)
+        //   disconnect()
+        //   return
+        // }
         toast.success("Connected to BSC Testnet", {
           position: toast.POSITION.BOTTOM_RIGHT,
           autoClose: 4000,
           closeOnClick: true,
-        })
+        });
       }
+      
 
       const handleDisconnect = async (error: { code: number; message: string }) => {
         // eslint-disable-next-line no-console
