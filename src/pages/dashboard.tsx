@@ -33,6 +33,7 @@ import {
   marketDataOnChain
 } from "../blockchain/constants"
 import { BNtoNum, GetErrorText, bytesToString } from "../blockchain/utils"
+import amplitude from '../helpers/AmplitudeService';
 import { toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 
@@ -348,7 +349,13 @@ const Dashboard = () => {
         ?.getMockBep20Instance()
         .approve(market, inputVal1, decimal)
       await approveTransactionHash.wait()
-      console.log("Approve Transaction sent: ", approveTransactionHash)
+      console.log("Approve Transaction sent: ", approveTransactionHash);
+      amplitude.getInstance().logEvent('loanRepaidEventSent', {
+        'account': account,
+        'borrowMarket': market,
+        'commitment': CommitMap[_commit],
+        'repaidAmount': inputVal1
+      });
       const tx1 = await wrapper
         ?.getLoanInstance()
         .repayLoan(market, CommitMap[_commit], inputVal1, decimal)
@@ -380,7 +387,13 @@ const Dashboard = () => {
           inputVal1,
           marketDataOnChain[chainId].DecimalsMap[_loanOption]
         )
-      const tx = await tx1.wait()
+      const tx = await tx1.wait();
+      amplitude.getInstance().logEvent('withdrawPartialLoanEventSent', {
+        'account': account,
+        'borrowMarket': SymbolsMap[_loanOption],
+        'commitment': CommitMap[_commit],
+        'repaidAmount': inputVal1
+      });
       SuccessCallback(
         tx.events,
         "WithdrawPartialLoan",
@@ -411,7 +424,14 @@ const Dashboard = () => {
       await approveTransactionHash.wait()
       console.log("Approve Transaction sent: ", approveTransactionHash)
       
-      
+      amplitude.getInstance().logEvent('addCollateralEventSent', {
+        'account': account,
+        'borrowMarket': SymbolsMap[_loanOption],
+        'commitment': CommitMap[_commit],
+        'collateralAmount': inputVal1,
+        'CollateralMarket': SymbolsMap[_collateralOption]
+      });
+
       const tx1 = await wrapper
         ?.getLoanInstance()
         .addCollateral(
@@ -442,7 +462,14 @@ const Dashboard = () => {
       const tx1 = await wrapper
         ?.getLoanInstance()
         .withdrawCollateral(SymbolsMap[_loanOption], CommitMap[_commit])
-      const tx = await tx1.wait()
+      const tx = await tx1.wait();
+
+      amplitude.getInstance().logEvent('withdrawCollateralEventSent', {
+        'account': account,
+        'borrowMarket': SymbolsMap[_loanOption],
+        'commitment': CommitMap[_commit]
+      });
+
       SuccessCallback(
         tx.events,
         "WithdrawCollateral",
@@ -503,7 +530,15 @@ const Dashboard = () => {
           CommitMap[_commit],
           SymbolsMap[_swapOption]
         )
-      const tx = await tx1.wait()
+      const tx = await tx1.wait();
+
+      amplitude.getInstance().logEvent('marketSwappedEventSent', {
+        'account': account,
+        'borrowMarket': SymbolsMap[_loanOption],
+        'commitment': CommitMap[_commit],
+        'swapMarket': SymbolsMap[_swapOption]
+      });
+
       SuccessCallback(tx.events, "MarketSwapped", "Swap Loan successful")
     } catch (err) {
       setIsTransactionDone(false)
@@ -529,7 +564,12 @@ const Dashboard = () => {
       const tx1 = await wrapper
         ?.getLoanInstance()
         .swapToLoan(SymbolsMap[_loanOption], CommitMap[_commit])
-      const tx = await tx1.wait()
+      const tx = await tx1.wait();
+      amplitude.getInstance().logEvent('marketSwappedEventSent', {
+        'account': account,
+        'borrowMarket': SymbolsMap[_loanOption],
+        'commitment': CommitMap[_commit]
+      });
       SuccessCallback(tx.events, "MarketSwapped", "Swap to Loan successful")
     } catch (err) {
       setIsTransactionDone(false)
@@ -563,7 +603,13 @@ const Dashboard = () => {
           inputVal1,
           marketDataOnChain[chainId].DecimalsMap[_depositRequestSel.toUpperCase()]
         )
-      const tx = await tx1.wait()
+      const tx = await tx1.wait();
+      amplitude.getInstance().logEvent('depositAddedEventSent', {
+        'account': account,
+        'borrowMarket': SymbolsMap[_depositRequestSel.toUpperCase()],
+        'commitment': CommitMap[_depositRequestVal],
+        'depositAmount': inputVal1
+      });
       SuccessCallback(tx.events, "DepositAdded", "Deposited amount")
     } catch (err) {
       setIsTransactionDone(false)
@@ -587,7 +633,13 @@ const Dashboard = () => {
           inputVal1,
           marketDataOnChain[chainId].DecimalsMap[_withdrawDepositSel.toUpperCase()]
         )
-      const tx = await tx1.wait()
+      const tx = await tx1.wait();
+      amplitude.getInstance().logEvent('depositAddedEventSent', {
+        'account': account,
+        'borrowMarket': SymbolsMap[_withdrawDepositSel.toUpperCase()],
+        'commitment': CommitMap[_withdrawDepositVal],
+        'withdrawAmount': inputVal1
+      });
       if (tx.events.length == 0) {
         // for first withdrawal we can't throw from contract, hence need handling here
         throw "ERROR: Active timelock"
@@ -639,6 +691,10 @@ const Dashboard = () => {
   }
 
   const passbookActive = e => {
+    amplitude.getInstance().logEvent('passbookOptionChanged', {
+      'account': account,
+      'option': e.target.value
+    });
     setPassbookStatus(e.target.value)
   }
 
@@ -660,7 +716,10 @@ const Dashboard = () => {
                           id="RepayLoanButton"
                           outline
                           onClick={() => {
-                            tog_repay_loan()
+                            tog_repay_loan();
+                            amplitude.getInstance().logEvent('rapayLoanButtonClicked', {
+                              'account': account
+                            });
                           }}
                         >
                           Repay Loan
@@ -787,7 +846,10 @@ const Dashboard = () => {
                           color="light"
                           outline
                           onClick={() => {
-                            tog_withdraw_loan()
+                            tog_withdraw_loan();
+                            amplitude.getInstance().logEvent('withdrawLoanButtonClicked', {
+                              'account': account
+                            });
                           }}
                         >
                           Withdraw Loan
@@ -920,7 +982,10 @@ const Dashboard = () => {
                         outline
                         id="SwapLoanButton"
                         onClick={() => {
-                          tog_swap_loan()
+                          tog_swap_loan();
+                          amplitude.getInstance().logEvent('swapLoanButtonClicked', {
+                            'account': account
+                          });
                         }}
                       >
                         Swap Loan
@@ -1049,7 +1114,10 @@ const Dashboard = () => {
                         id="SwapToLoanButton"
                         outline
                         onClick={() => {
-                          tog_swap_to_loan()
+                          tog_swap_to_loan();
+                          amplitude.getInstance().logEvent('swapToLoanButtonClicked', {
+                            'account': account
+                          });
                         }}
                       >
                         Swap to Loan
@@ -1171,7 +1239,10 @@ const Dashboard = () => {
                         id="AddCollateralButton"
                         outline
                         onClick={() => {
-                          tog_add_collateral()
+                          tog_add_collateral();
+                          amplitude.getInstance().logEvent('addCollateralButtonClicked', {
+                            'account': account
+                          });
                         }}
                       >
                         Add Collateral
@@ -1346,7 +1417,10 @@ const Dashboard = () => {
                           color="light"
                           outline
                           onClick={() => {
-                            tog_add_active_deposit()
+                            tog_add_active_deposit();
+                            amplitude.getInstance().logEvent('addToDepositButtonClicked', {
+                              'account': account
+                            });
                           }}
                         >
                           Add to Deposit
@@ -1470,7 +1544,10 @@ const Dashboard = () => {
                           color="light"
                           outline
                           onClick={() => {
-                            tog_withdraw_active_deposit()
+                            tog_withdraw_active_deposit();
+                            amplitude.getInstance().logEvent('withdrawDepositButtonClicked', {
+                              'account': account
+                            });
                           }}
                         >
                           Withdraw Deposit
@@ -1605,7 +1682,10 @@ const Dashboard = () => {
                         id="WithdrawCollateralButton"
                         outline
                         onClick={() => {
-                          tog_withdraw_collateral()
+                          tog_withdraw_collateral();
+                          amplitude.getInstance().logEvent('withdrawCollateralButtonClicked', {
+                            'account': account
+                          });
                         }}
                       >
                         Withdraw Collateral
@@ -1867,6 +1947,9 @@ const Dashboard = () => {
                   className={mainTab === "1" ? "active" : ""}
                   onClick={function noRefCheck(){
                     setMainTab("1");
+                    amplitude.getInstance().logEvent('openProtocolTabClicked', {
+                      'account': account,
+                    });
                   }}
                 >
                   Open Protocol
@@ -1877,6 +1960,9 @@ const Dashboard = () => {
                   className={mainTab === "2" ? "active" : ""}
                   onClick={function noRefCheck(){
                     setMainTab("2");
+                    amplitude.getInstance().logEvent('protocolAnalyticsTabClicked', {
+                      'account': account,
+                    });
                   }}
                 >
                   Protocol Analytics
@@ -1914,7 +2000,10 @@ const Dashboard = () => {
                                         active: customActiveTab === "1",
                                       })}
                                       onClick={() => {
-                                        toggleCustom("1")
+                                        toggleCustom("1");
+                                        amplitude.getInstance().logEvent('dashboardTabClicked', {
+                                          'account': account,
+                                        });
                                       }}
                                     >
                                       <span className="d-none d-sm-block">Dashboard</span>
@@ -1929,7 +2018,10 @@ const Dashboard = () => {
                                             active: customActiveTab === "2",
                                           })}
                                           onClick={() => {
-                                            toggleCustom("2")
+                                            toggleCustom("2");
+                                            amplitude.getInstance().logEvent('passbookTabClicked', {
+                                              'account': account,
+                                            });
                                           }}
                                         >
                                           <span className="d-none d-sm-block">Passbook</span>
@@ -1942,7 +2034,10 @@ const Dashboard = () => {
                                             active: customActiveTab === "3",
                                           })}
                                           onClick={() => {
-                                            toggleCustom("3")
+                                            toggleCustom("3");
+                                            amplitude.getInstance().logEvent('liquidationTabClicked', {
+                                              'account': account,
+                                            });
                                           }}
                                         >
                                           <span className="d-none d-sm-block">

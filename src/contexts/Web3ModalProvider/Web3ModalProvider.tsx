@@ -5,7 +5,8 @@ import { ethers } from "ethers"
 import { providerOptions } from "blockchain/provider"
 import { toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
-import {cacheService} from "../../helpers/CacheService";
+import { cacheService } from "../../helpers/CacheService";
+import amplitude from '../../helpers/AmplitudeService';
 // import { string } from "prop-types"
 let BSCChainId = 97
 if ((process.env.REACT_APP_ENV == "dev")) {
@@ -116,18 +117,19 @@ const Web3ModalProvider = (props: any) => {
     });
     const _chainId = (await ethersProviderInstance.getNetwork()).chainId
     //===========================================================================================================//
-    if (_chainId != BSCChainId) {
-      toast.warn(`Please connect to BSC Testnet`, {
-        position: toast.POSITION.BOTTOM_RIGHT,
-        autoClose: 4000,
-        closeOnClick: true,
-      })
-      disconnect()
-      return
-    }
+    // if (_chainId != BSCChainId) {
+    //   toast.warn(`Please connect to BSC Testnet`, {
+    //     position: toast.POSITION.BOTTOM_RIGHT,
+    //     autoClose: 4000,
+    //     closeOnClick: true,
+    //   })
+    //   disconnect()
+    //   return
+    // }
     setAccount(String(_account))
     setChainId(_chainId)
     setConnected(true);
+    amplitude.getInstance().logEvent('walletConnected', {'address': account});
     const signMessage = async ({ message }) => {
       try {
         console.log({ message });
@@ -170,22 +172,24 @@ const Web3ModalProvider = (props: any) => {
     if (provider?.on) {
       const handleAccountsChanged = (accounts: string[]) => {
         // eslint-disable-next-line no-console
-        console.log("accountsChanged", accounts)
+        console.log("accountsChanged", accounts);
+        amplitude.getInstance().logEvent('accountChanged', {'oldAccount': account, 'changedAccount': accounts[0]});
         chainId === BSCChainId ? setAccount(accounts[0]) : setAccount(null)
       }
 
       const handleChainChanged = async (_hexChainId: string) => {
         setChainId(parseInt(_hexChainId, 16))
-        if (parseInt(_hexChainId, 16) !== BSCChainId) {
-          toast.warn(`Please connect to BSC Testnet`, {
-            position: toast.POSITION.BOTTOM_RIGHT,
-            autoClose: 4000,
-            closeOnClick: true,
-          })
-          setConnected(false)
-          disconnect()
-          return
-        }
+        // if (parseInt(_hexChainId, 16) !== BSCChainId) {
+        //   toast.warn(`Please connect to BSC Testnet`, {
+        //     position: toast.POSITION.BOTTOM_RIGHT,
+        //     autoClose: 4000,
+        //     closeOnClick: true,
+        //   })
+        //   setConnected(false)
+        //   disconnect()
+        //   return
+        // }
+        amplitude.getInstance().logEvent('walletConnected', {'address': account, 'chainId': parseInt(_hexChainId, 16)});
         toast.success("Connected to BSC Testnet", {
           position: toast.POSITION.BOTTOM_RIGHT,
           autoClose: 4000,
@@ -196,7 +200,8 @@ const Web3ModalProvider = (props: any) => {
 
       const handleDisconnect = async (error: { code: number; message: string }) => {
         // eslint-disable-next-line no-console
-        console.log("disconnect", error.message)
+        console.log("disconnect", error.message);
+        amplitude.getInstance().logEvent('walletDisconnected', {'account': account});
         await web3Modal.clearCachedProvider()
         resetWeb3();
       }

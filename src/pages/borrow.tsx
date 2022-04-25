@@ -17,7 +17,7 @@ import { BNtoNum, GetErrorText } from '../blockchain/utils';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import React from "react";
-
+import amplitude from '../helpers/AmplitudeService';
 toast.configure({
   autoClose: 4000
 });
@@ -58,6 +58,10 @@ let Borrow = (props) => {
 
     function tog_borrow() {
         setmodal_borrow(!modal_borrow);
+        amplitude.getInstance().logEvent('borrowButtonClicked', {
+          'account': account,
+          'token': props.asset
+        });
         removeBodyCss();
     }
 
@@ -69,6 +73,13 @@ let Borrow = (props) => {
         const approveTransactionHash = await wrapper?.getMockBep20Instance().approve(SymbolsMap[_collateralMarket], collateralInputVal, marketDataOnChain[chainId].DecimalsMap[_collateralMarket]);
         await approveTransactionHash.wait();
         console.log("Approve Transaction sent: ", approveTransactionHash);
+        amplitude.getInstance().logEvent('newLoanRequested', {
+          'account': account,
+          'borrowAmount': loanInputVal,
+          'collateralAmount': collateralInputVal,
+          'borrowMarket': SymbolsMap[props.assetID],
+          'collateralMarket': SymbolsMap[_collateralMarket]
+        });
         const tx1 = await wrapper?.getLoanInstance().loanRequest(SymbolsMap[props.assetID], CommitMap[_commitBorrowPeriod], loanInputVal, marketDataOnChain[chainId].DecimalsMap[props.assetID],
         SymbolsMap[_collateralMarket], collateralInputVal, marketDataOnChain[chainId].DecimalsMap[_collateralMarket]);
         const tx = await tx1.wait();

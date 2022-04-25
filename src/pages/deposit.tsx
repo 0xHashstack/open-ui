@@ -12,6 +12,7 @@ import {
 import { Web3ModalContext } from "../contexts/Web3ModalProvider"
 import { Web3WrapperContext } from "../contexts/Web3WrapperProvider"
 import { BNtoNum, GetErrorText, NumToBN } from "../blockchain/utils"
+import amplitude from '../helpers/AmplitudeService';
 import { toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import React from "react"
@@ -42,7 +43,11 @@ let Deposit = props => {
   }
 
   function tog_center() {
-    setmodal_deposit(!modal_deposit)
+    setmodal_deposit(!modal_deposit);
+    amplitude.getInstance().logEvent('depositButtonClicked', {
+      'account': account,
+      'token': props.asset
+    });
     removeBodyCss()
   }
 
@@ -55,6 +60,13 @@ let Deposit = props => {
       await approveTransactionHash.wait()
       console.log("Approve Transaction sent: ", approveTransactionHash)
       const _commitPeriod: string | undefined = commitPeriod
+
+      amplitude.getInstance().logEvent('depositRequested', {
+        'account': account,
+        'depositAmount': inputVal,
+        'depositMarket': SymbolsMap[props.asset],
+        'commitPeriod': CommitMap[_commitPeriod]
+      });
 
       const tx1 = await wrapper
         ?.getDepositInstance()
