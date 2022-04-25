@@ -117,15 +117,15 @@ const Web3ModalProvider = (props: any) => {
     });
     const _chainId = (await ethersProviderInstance.getNetwork()).chainId
     //===========================================================================================================//
-    // if (_chainId != BSCChainId) {
-    //   toast.warn(`Please connect to BSC Testnet`, {
-    //     position: toast.POSITION.BOTTOM_RIGHT,
-    //     autoClose: 4000,
-    //     closeOnClick: true,
-    //   })
-    //   disconnect()
-    //   return
-    // }
+    if (_chainId != BSCChainId) {
+      toast.warn(`Please connect to BSC Testnet`, {
+        position: toast.POSITION.BOTTOM_RIGHT,
+        autoClose: 4000,
+        closeOnClick: true,
+      })
+      disconnect()
+      return
+    }
     setAccount(String(_account))
     setChainId(_chainId)
     setConnected(true);
@@ -141,13 +141,15 @@ const Web3ModalProvider = (props: any) => {
         // const signer = provider.getSigner();
         const signature = await signer.signMessage(message);
         const address = await signer.getAddress();
+        cacheService.setItem("signature", signature);
         
-        cacheService.setItem("AuthToken", signature);
         return {
           message,
           signature,
           address
         };
+
+      
       } catch (err) {
         console.log(err);
       }
@@ -179,16 +181,16 @@ const Web3ModalProvider = (props: any) => {
 
       const handleChainChanged = async (_hexChainId: string) => {
         setChainId(parseInt(_hexChainId, 16))
-        // if (parseInt(_hexChainId, 16) !== BSCChainId) {
-        //   toast.warn(`Please connect to BSC Testnet`, {
-        //     position: toast.POSITION.BOTTOM_RIGHT,
-        //     autoClose: 4000,
-        //     closeOnClick: true,
-        //   })
-        //   setConnected(false)
-        //   disconnect()
-        //   return
-        // }
+        if (parseInt(_hexChainId, 16) !== BSCChainId) {
+          toast.warn(`Please connect to BSC Testnet`, {
+            position: toast.POSITION.BOTTOM_RIGHT,
+            autoClose: 4000,
+            closeOnClick: true,
+          })
+          setConnected(false)
+          disconnect()
+          return
+        }
         amplitude.getInstance().logEvent('walletConnected', {'address': account, 'chainId': parseInt(_hexChainId, 16)});
         toast.success("Connected to BSC Testnet", {
           position: toast.POSITION.BOTTOM_RIGHT,

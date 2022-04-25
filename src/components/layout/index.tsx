@@ -3,8 +3,9 @@ import PropTypes from "prop-types";
 import axios from "axios";
 import { Button, Container, Row, Col, Spinner } from "reactstrap";
 
-import { useQuery, gql } from '@apollo/client';
+import { useQuery, gql, useMutation } from '@apollo/client';
 import { GET_WHITELIST_STATUS } from "../../graphQL/queries";
+import { LOGIN } from "../../graphQL/mutations";
 
 import amplitude from '../../helpers/AmplitudeService';
 import {cacheService} from '../../helpers/CacheService';
@@ -50,11 +51,27 @@ const Layout = props => {
     variables: { address: account },
   });
 
+  // const [getJWTToken, data1] = useMutation(LOGIN);
+
+  // useEffect(() => {
+  //   if(data1) {
+  //     console.log(data1);
+  //     cacheService.setItem("AuthToken", data1['accessToken']);
+  //   }
+  // }, [data1]);
+
   useEffect(() => {
     if(data) {
       console.log(data);
     }
   }, [data]);
+
+  // useEffect(() => {
+  //   if(account) {
+  //     getJWTToken({ variables: { 'signature': cacheService.getItem('signature'), 'loginAddress2': account } });
+  //   }
+    
+  // },[account]);
 
   useEffect(() => {
     dispatch(changePreloader(true));
