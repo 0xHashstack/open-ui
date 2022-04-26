@@ -7,6 +7,7 @@ import ReserveWrapper from './Reserve';
 import Faucet from './Faucet';
 import TokenList from './TokenList';
 import MockBep20Wrapper from './MockBep20';
+import PancakeWrapper from './Pancake';
 
 export default class Web3Wrapper {
   signer: any;
@@ -19,6 +20,7 @@ export default class Web3Wrapper {
   oracleOpenInstance: any;
   faucetInstance: any;
   mockBep20Instance: any;
+  pancakeInstance: any;
 
   constructor(_signer: any) {
     this.signer = _signer;
@@ -86,5 +88,12 @@ export default class Web3Wrapper {
       this.mockBep20Instance = new MockBep20Wrapper(this.signer);
     }
     return this.mockBep20Instance;
+  }
+
+  getPancakeInstance() {
+    if (!this.pancakeInstance) {
+      this.pancakeInstance = new PancakeWrapper(this.signer)
+    }
+    return this.pancakeInstance
   }
 }
