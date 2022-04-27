@@ -3,7 +3,7 @@ import abi from "../abis/BEP20Token.json"
 import { NumToBN } from "../utils"
 import { ethers } from "ethers"
 
-class MockBep20Wrapper {  
+class MockBep20Wrapper {
     // Contracts
     tBTC: any;
     tUSDC: any;
@@ -11,7 +11,7 @@ class MockBep20Wrapper {
     tSXP: any;
     tCake: any;
     tWBNB: any;
-  
+
     constructor(signer: any) {
         this.tBTC = new ethers.Contract(process.env.REACT_APP_T_BTC_ADDRESS, JSON.stringify(abi), signer);
         this.tUSDC = new ethers.Contract(process.env.REACT_APP_T_USDC_ADDRESS, JSON.stringify(abi), signer);
