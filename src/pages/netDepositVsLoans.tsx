@@ -47,7 +47,7 @@ const NetDepositVsLoans = () => {
   function setFormatedDataForLinechart() {
     const keys = ["USDT", "USDC", "BNB", "BTC"];
     const res = [];
-    if (depositsByMarket?.length > 0 && loansByMarket.length > 0) {
+    if (depositsByMarket?.length > 0 && loansByMarket?.length > 0) {
       keys.forEach((key, index) => {
         let keyName = key;
         res.push({ name: key, Deposits: depositsByMarket[index]['Deposits'], Borrows: loansByMarket[index]['Loans'], amt: 2000 });
@@ -89,7 +89,7 @@ const NetDepositVsLoans = () => {
       <Row>
         <Col sm="3"></Col>
         <Col sm="6">
-          <h3 style={{marginTop: "50px", textAlign:"center"}}>Net Deposits VS Net Loans</h3>
+          <h3 style={{ marginTop: "50px", textAlign: "center" }}>Net Deposits VS Net Loans</h3>
         </Col>
         <Col sm="3"></Col>
       </Row>
@@ -152,7 +152,7 @@ const NetDepositVsLoans = () => {
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" />
             <YAxis />
-            <Tooltip cursor={false}/>
+            <Tooltip cursor={false} />
             <Legend />
             <Line type="monotone" dataKey="Deposits" stroke="#8884d8" activeDot={{ r: 8 }} />
             <Line type="monotone" dataKey="Borrows" stroke="#82ca9d" />
