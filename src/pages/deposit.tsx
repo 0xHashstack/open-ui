@@ -48,7 +48,6 @@ let Deposit = props => {
     const getCurrentBalnce = await wrapper
       ?.getMockBep20Instance()
       .balanceOf(SymbolsMap[props.asset], account)
-
     setBalance(BNtoNum(Number(getCurrentBalnce)));
   }
 
@@ -157,6 +156,17 @@ let Deposit = props => {
                     </Button>
                     }
                   </InputGroup>
+                </Col>
+                <Col sm={3}>
+                  {<button
+                    type="button"
+                    className="btn btn-dark btn-md w-xs"
+                    onClick={handleMax}
+                    disabled = {balance ? false : true}
+                  >
+                    Max
+                  </button>
+                  }
                 </Col>
               </div>
               <div className="row mb-4">
