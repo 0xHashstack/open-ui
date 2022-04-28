@@ -2,7 +2,7 @@ import abi from "../abis/Pancake.json";
 import { NumToBN } from "../utils";
 import { ethers } from "ethers";
 import { SymbolsMap } from "blockchain/constants";
-const pancakeAddress = "";
+const pancakeAddress = "0x9Ac64Cc6e4415144C455BD8E4837Fea55603e5c3"
 class PancakeWrapper {
   // Contracts
   pancake: any
@@ -20,7 +20,7 @@ class PancakeWrapper {
         }
 
         let addressTokenIn: String;
-        let addressTokenOut: String
+        let addressTokenOut: String;
 
         switch (_tokenIn) {
             case SymbolsMap.BTC:
@@ -47,22 +47,22 @@ class PancakeWrapper {
 
         switch (_tokenOut) {
             case SymbolsMap.BTC:
-                addressTokenIn = process.env.REACT_APP_T_BTC_ADDRESS
+                addressTokenOut = process.env.REACT_APP_T_BTC_ADDRESS
                 break
             case SymbolsMap.USDC:
-                addressTokenIn = process.env.REACT_APP_T_USDC_ADDRESS
+                addressTokenOut = process.env.REACT_APP_T_USDC_ADDRESS
                 break
             case SymbolsMap.USDT:
                 addressTokenIn = process.env.REACT_APP_T_USDT_ADDRESS
                 break
             case SymbolsMap.SXP:
-                addressTokenIn = process.env.REACT_APP_T_SXP_ADDRESS
+                addressTokenOut = process.env.REACT_APP_T_SXP_ADDRESS
                 break
             case SymbolsMap.CAKE:
-                addressTokenIn = process.env.REACT_APP_T_CAKE_ADDRESS
+                addressTokenOut = process.env.REACT_APP_T_CAKE_ADDRESS
                 break
             case SymbolsMap.BNB:
-                addressTokenIn = process.env.REACT_APP_T_WBNB_ADDRESS
+                addressTokenOut = process.env.REACT_APP_T_WBNB_ADDRESS
                 break
             default:
                 break
