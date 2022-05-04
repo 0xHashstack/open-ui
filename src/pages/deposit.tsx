@@ -1,5 +1,5 @@
 import { useState, useContext } from "react"
-import { Col, Button, Form, Input, Modal, Spinner } from "reactstrap"
+import { Col, Button, Form, Input, Modal, Spinner, InputGroup } from "reactstrap"
 
 import {
   SymbolsMap,
@@ -48,7 +48,6 @@ let Deposit = props => {
     const getCurrentBalnce = await wrapper
       ?.getMockBep20Instance()
       .balanceOf(SymbolsMap[props.asset], account)
-    
     setBalance(BNtoNum(Number(getCurrentBalnce)));
   }
 
@@ -122,37 +121,41 @@ let Deposit = props => {
             <Form>
               <div className="row mb-4">
                 <Col sm={8}>
-                  {props.asset}
+                  <h5> {props.asset}</h5>
                 </Col>
                 {/* <Col sm={4}></Col> */}
-                <Col sm={4}>
-                  Balance : {balance ? balance : " Loading"}
+                <Col sm={4} >
+                  <div align="right">Balance : {balance  ? balance : " Loading"}</div>
                 </Col>
 
               </div>
               <div className="row mb-4">
-                <Col sm={9}>
-                  <Input
-                    type="number"
-                    className="form-control"
-                    id="amount"
-                    placeholder={`Minimum amount = ${MinimumAmount[props.asset]
-                      }`}
-                    onChange={handleInputChange}
-                    value={inputVal !== 0 ? inputVal : `Minimum amount = ${MinimumAmount[props.asset]
-                      }`}
-                  />
-                </Col>
-                <Col sm={3}>
-                  {<button
-                    type="button"
-                    className="btn btn-dark btn-md w-xs"
-                    onClick={handleMax}
-                    disabled = {balance ? false : true}
-                  >
-                    Max
-                  </button>
-                  }
+                <Col sm={12}>
+                  <InputGroup>
+                    <Input
+                      type="number"
+                      className="form-control"
+                      id="amount"
+                      placeholder={`Minimum amount = ${MinimumAmount[props.asset]
+                        }`}
+                      onChange={handleInputChange}
+                      value={inputVal !== 0 ? inputVal : `Minimum amount = ${MinimumAmount[props.asset]
+                        }`}
+                    />
+
+
+                    {<Button
+                      outline
+                      type="button"
+                      className="btn btn-md w-xs"
+                      onClick={handleMax}
+                      disabled={balance ? false : true}
+                      style={{ background: "#2e3444", border: "#2e3444" }}
+                    >
+                      <span style={{ borderBottom: "2px dotted #fff"}}>Max</span>
+                    </Button>
+                    }
+                  </InputGroup>
                 </Col>
               </div>
               <div className="row mb-4">
@@ -170,7 +173,7 @@ let Deposit = props => {
                   </select>
                 </Col>
               </div>
-              <div className="row mb-4">
+              {/* <div className="row mb-4">
                 <Col sm={6}>
                   <p>
                     Fixed APY{" "}
@@ -188,7 +191,7 @@ let Deposit = props => {
                     </strong>
                   </p>
                 </Col>
-              </div>
+              </div> */}
               <div className="d-grid gap-2">
                 <Button
                   color="primary"
