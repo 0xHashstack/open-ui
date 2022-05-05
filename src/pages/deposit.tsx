@@ -1,5 +1,5 @@
 import { useState, useContext } from "react"
-import { Col, Button, Form, Input, Modal, Spinner } from "reactstrap"
+import { Col, Button, Form, Input, Modal, Spinner, InputGroup } from "reactstrap"
 
 import {
   SymbolsMap,
@@ -25,9 +25,9 @@ let Deposit = props => {
   const [modal_deposit, setmodal_deposit] = useState(false)
   const [inputVal, setInputVal] = useState(0)
   const [isTransactionDone, setIsTransactionDone] = useState(false)
-
   const { chainId, account } = useContext(Web3ModalContext)
   const { web3Wrapper: wrapper } = useContext(Web3WrapperContext)
+  const [balance, setBalance] = useState(null)
 
   const handleDepositChange = e => {
     setCommitPeriod(e.target.value)
@@ -41,16 +41,27 @@ let Deposit = props => {
     document.body.classList.add("no_padding")
   }
 
-  function tog_center() {
+
+  const tog_center = async () => {
     setmodal_deposit(!modal_deposit)
     removeBodyCss()
+    const getCurrentBalnce = await wrapper
+      ?.getMockBep20Instance()
+      .balanceOf(SymbolsMap[props.asset], account)
+    setBalance(BNtoNum(Number(getCurrentBalnce)));
+  }
+
+  const handleMax = () => {
+    if (balance) {
+      setInputVal(balance)
+    }
   }
 
   const handleDeposit = async () => {
     try {
       setIsTransactionDone(true)
       const approveTransactionHash = await wrapper
-        ?.getMockBep20Instance()
+        ?.getMockBep20Instance() //SymbolsMap[the market name from dropdown]
         .approve(SymbolsMap[props.asset], inputVal, marketDataOnChain[chainId].DecimalsMap[props.asset])
       await approveTransactionHash.wait()
       console.log("Approve Transaction sent: ", approveTransactionHash)
@@ -68,7 +79,7 @@ let Deposit = props => {
       onDeposit(tx.events)
     } catch (err) {
       setIsTransactionDone(false)
-      toast.error(`${GetErrorText(err)}`, {position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true,})
+      toast.error(`${GetErrorText(err)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true, })
     }
   }
 
@@ -94,9 +105,7 @@ let Deposit = props => {
       <button
         type="button"
         className="btn btn-dark btn-sm w-xs"
-        onClick={() => {
-          tog_center()
-        }}
+        onClick={tog_center}
       >
         Deposit
       </button>
@@ -111,19 +120,42 @@ let Deposit = props => {
           {account ? (
             <Form>
               <div className="row mb-4">
-                <h6>{props.asset}</h6>
+                <Col sm={8}>
+                  <h5> {props.asset}</h5>
+                </Col>
+                {/* <Col sm={4}></Col> */}
+                <Col sm={4} >
+                  <div align="right">Balance : {balance  ? balance : " Loading"}</div>
+                </Col>
+
               </div>
               <div className="row mb-4">
                 <Col sm={12}>
-                  <Input
-                    type="number"
-                    className="form-control"
-                    id="amount"
-                    placeholder={`Minimum amount = ${
-                      MinimumAmount[props.asset]
-                    }`}
-                    onChange={handleInputChange}
-                  />
+                  <InputGroup>
+                    <Input
+                      type="number"
+                      className="form-control"
+                      id="amount"
+                      placeholder={`Minimum amount = ${MinimumAmount[props.asset]
+                        }`}
+                      onChange={handleInputChange}
+                      value={inputVal !== 0 ? inputVal : `Minimum amount = ${MinimumAmount[props.asset]
+                        }`}
+                    />
+
+
+                    {<Button
+                      outline
+                      type="button"
+                      className="btn btn-md w-xs"
+                      onClick={handleMax}
+                      disabled={balance ? false : true}
+                      style={{ background: "#2e3444", border: "#2e3444" }}
+                    >
+                      <span style={{ borderBottom: "2px dotted #fff"}}>Max</span>
+                    </Button>
+                    }
+                  </InputGroup>
                 </Col>
               </div>
               <div className="row mb-4">
@@ -141,7 +173,7 @@ let Deposit = props => {
                   </select>
                 </Col>
               </div>
-              <div className="row mb-4">
+              {/* <div className="row mb-4">
                 <Col sm={6}>
                   <p>
                     Fixed APY{" "}
@@ -159,7 +191,7 @@ let Deposit = props => {
                     </strong>
                   </p>
                 </Col>
-              </div>
+              </div> */}
               <div className="d-grid gap-2">
                 <Button
                   color="primary"
