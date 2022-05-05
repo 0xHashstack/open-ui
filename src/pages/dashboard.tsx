@@ -19,6 +19,11 @@ import {
   TabPane,
   Label,
   Spinner,
+  Accordion,
+  AccordionItem,
+  AccordionHeader,
+  AccordionBody,
+  UncontrolledAccordion
 } from "reactstrap"
 import classnames from "classnames"
 import { Web3ModalContext } from "../contexts/Web3ModalProvider"
@@ -55,6 +60,7 @@ const Dashboard = () => {
   const [isTransactionDone, setIsTransactionDone] = useState(false)
 
   const [customActiveTab, setCustomActiveTab] = useState("1")
+  const [customActiveTabs, setCustomActiveTabs] = useState("1")
   const [mainTab, setMainTab] = useState("1");
   const [passbookStatus, setPassbookStatus] = useState("ActiveDeposit")
 
@@ -66,7 +72,7 @@ const Dashboard = () => {
   const [modal_withdraw_collateral, setmodal_withdraw_collateral] =
     useState(false)
   const [modal_add_active_deposit, setmodal_add_active_deposit] =
-    useState(false)
+    useState(true)
   const [modal_withdraw_active_deposit, setmodal_withdraw_active_deposit] =
     useState(false)
 
@@ -93,6 +99,17 @@ const Dashboard = () => {
 
   const [inputVal1, setInputVal1] = useState(0)
   const [liquidationIndex, setLiquidationIndex] = useState(0)
+
+
+  const [index, setIndex] = useState('1');
+
+  function toggle(newIndex: string) {
+    if (newIndex === index) {
+      setIndex('1');
+    } else {
+      setIndex(newIndex);
+    }
+  }
 
   const { connect, disconnect, account, chainId } = useContext(Web3ModalContext)
   const { web3Wrapper: wrapper } = useContext(Web3WrapperContext)
@@ -142,7 +159,7 @@ const Dashboard = () => {
     setTimeout(() => {
       setIsLoading(false)
     }, 100)
-    if (customActiveTab == "3"){
+    if (customActiveTab == "3") {
       navigateLoansToLiquidate(liquidationIndex)
     }
   }, [account, passbookStatus, customActiveTab, isTransactionDone, liquidationIndex, activeLiquidationsData])
@@ -152,6 +169,13 @@ const Dashboard = () => {
       setCustomActiveTab(tab)
     }
   }
+
+  const toggleCustoms = tab => {
+    if (customActiveTabs !== tab) {
+      setCustomActiveTabs(tab)
+    }
+  }
+
   function removeBodyCss() {
     setInputVal1(0)
     document.body.classList.add("no_padding")
@@ -183,10 +207,12 @@ const Dashboard = () => {
   }
   function tog_add_active_deposit() {
     setmodal_add_active_deposit(!modal_add_active_deposit)
+    setmodal_withdraw_active_deposit(false)
     removeBodyCss()
   }
   function tog_withdraw_active_deposit() {
     setmodal_withdraw_active_deposit(!modal_withdraw_active_deposit)
+    setmodal_add_active_deposit(false)
     removeBodyCss()
   }
 
@@ -260,7 +286,7 @@ const Dashboard = () => {
         } else if (cdr >= 0.333 && cdr < 0.5) {
           debtCategory = 3
         }
-      } catch {}
+      } catch { }
       loans.push({
         loanMarket: bytesToString(loansData.loanMarket[index]), // 1 Loan Market
         loanAmount: Number(loansData.loanAmount[index]), // 2 Amount
@@ -293,15 +319,15 @@ const Dashboard = () => {
   const onLiquidationsData = async liquidationsData => {
     const liquidations = []
     for (let i = 0; i < liquidationsData.loanAmount.length; i++) {
-        if(bytesToString(liquidationsData.loanMarket[i]) != ""){
-          liquidations.push({
-            loanOwner: liquidationsData.loanOwner[i].toString(),
-            loanMarket: bytesToString(liquidationsData.loanMarket[i]),
-            commitment: CommitMapReverse[liquidationsData.loanCommitment[i]],
-            loanAmount: liquidationsData.loanAmount[i].toString(),
-            collateralMarket: bytesToString(liquidationsData.collateralMarket[i]),
-            collateralAmount: liquidationsData.collateralAmount[i].toString(),
-            isLiquidationDone: false, 
+      if (bytesToString(liquidationsData.loanMarket[i]) != "") {
+        liquidations.push({
+          loanOwner: liquidationsData.loanOwner[i].toString(),
+          loanMarket: bytesToString(liquidationsData.loanMarket[i]),
+          commitment: CommitMapReverse[liquidationsData.loanCommitment[i]],
+          loanAmount: liquidationsData.loanAmount[i].toString(),
+          collateralMarket: bytesToString(liquidationsData.collateralMarket[i]),
+          collateralAmount: liquidationsData.collateralAmount[i].toString(),
+          isLiquidationDone: false,
         })
       }
     }
@@ -410,8 +436,8 @@ const Dashboard = () => {
         )
       await approveTransactionHash.wait()
       console.log("Approve Transaction sent: ", approveTransactionHash)
-      
-      
+
+
       const tx1 = await wrapper
         ?.getLoanInstance()
         .addCollateral(
@@ -462,7 +488,7 @@ const Dashboard = () => {
       setIsTransactionDone(true)
       asset.isLiquidationDone = true
       let _account = asset.loanOwner
-      let market = asset.loanMarket 
+      let market = asset.loanMarket
       let commitment = asset.commitment
       let loanAmount = BNtoNum(Number(asset.loanAmount))
       let decimal = marketDataOnChain[chainId].DecimalsMap[market]
@@ -554,7 +580,7 @@ const Dashboard = () => {
         )
       await approveTransactionHash.wait()
       console.log("Approve Transaction sent: ", approveTransactionHash)
-      
+
       const tx1 = await wrapper
         ?.getDepositInstance()
         .depositRequest(
@@ -697,13 +723,13 @@ const Dashboard = () => {
                                           key={key}
                                           value={
                                             EventMap[
-                                              asset.loanMarket.toUpperCase()
+                                            asset.loanMarket.toUpperCase()
                                             ]
                                           }
                                         >
                                           {
                                             EventMap[
-                                              asset.loanMarket.toUpperCase()
+                                            asset.loanMarket.toUpperCase()
                                             ]
                                           }
                                         </option>
@@ -725,7 +751,7 @@ const Dashboard = () => {
                                       .filter(asset => {
                                         return (
                                           EventMap[
-                                            asset.loanMarket.toUpperCase()
+                                          asset.loanMarket.toUpperCase()
                                           ] === loanOption
                                         )
                                       })
@@ -821,13 +847,13 @@ const Dashboard = () => {
                                           key={key}
                                           value={
                                             EventMap[
-                                              asset.loanMarket.toUpperCase()
+                                            asset.loanMarket.toUpperCase()
                                             ]
                                           }
                                         >
                                           {
                                             EventMap[
-                                              asset.loanMarket.toUpperCase()
+                                            asset.loanMarket.toUpperCase()
                                             ]
                                           }
                                         </option>
@@ -849,7 +875,7 @@ const Dashboard = () => {
                                       .filter(asset => {
                                         return (
                                           EventMap[
-                                            asset.loanMarket.toUpperCase()
+                                          asset.loanMarket.toUpperCase()
                                           ] === loanOption
                                         )
                                       })
@@ -961,13 +987,13 @@ const Dashboard = () => {
                                         key={key}
                                         value={
                                           EventMap[
-                                            asset.loanMarket.toUpperCase()
+                                          asset.loanMarket.toUpperCase()
                                           ]
                                         }
                                       >
                                         {
                                           EventMap[
-                                            asset.loanMarket.toUpperCase()
+                                          asset.loanMarket.toUpperCase()
                                           ]
                                         }
                                       </option>
@@ -989,7 +1015,7 @@ const Dashboard = () => {
                                     .filter(asset => {
                                       return (
                                         EventMap[
-                                          asset.loanMarket.toUpperCase()
+                                        asset.loanMarket.toUpperCase()
                                         ] === loanOption && !asset.isSwapped
                                       )
                                     })
@@ -1088,13 +1114,13 @@ const Dashboard = () => {
                                         key={key}
                                         value={
                                           EventMap[
-                                            asset.loanMarket.toUpperCase()
+                                          asset.loanMarket.toUpperCase()
                                           ]
                                         }
                                       >
                                         {
                                           EventMap[
-                                            asset.loanMarket.toUpperCase()
+                                          asset.loanMarket.toUpperCase()
                                           ]
                                         }
                                       </option>
@@ -1116,7 +1142,7 @@ const Dashboard = () => {
                                     .filter(asset => {
                                       return (
                                         EventMap[
-                                          asset.loanMarket.toUpperCase()
+                                        asset.loanMarket.toUpperCase()
                                         ] === loanOption && asset.isSwapped
                                       )
                                     })
@@ -1208,13 +1234,13 @@ const Dashboard = () => {
                                         key={key}
                                         value={
                                           EventMap[
-                                            asset.loanMarket.toUpperCase()
+                                          asset.loanMarket.toUpperCase()
                                           ]
                                         }
                                       >
                                         {
                                           EventMap[
-                                            asset.loanMarket.toUpperCase()
+                                          asset.loanMarket.toUpperCase()
                                           ]
                                         }
                                       </option>
@@ -1236,7 +1262,7 @@ const Dashboard = () => {
                                     .filter(asset => {
                                       return (
                                         EventMap[
-                                          asset.loanMarket.toUpperCase()
+                                        asset.loanMarket.toUpperCase()
                                         ] === loanOption
                                       )
                                     })
@@ -1275,13 +1301,13 @@ const Dashboard = () => {
                                         key={key}
                                         value={
                                           EventMap[
-                                            asset.loanMarket.toUpperCase()
+                                          asset.loanMarket.toUpperCase()
                                           ]
                                         }
                                       >
                                         {
                                           EventMap[
-                                            asset.loanMarket.toUpperCase()
+                                          asset.loanMarket.toUpperCase()
                                           ]
                                         }
                                       </option>
@@ -1335,6 +1361,7 @@ const Dashboard = () => {
           /* -------------------------------------- Active Deposit ----------------------------- */
           <CardBody>
             <form>
+              {/* // */}
               <Label>Deposit Actions</Label>
               <div className="mb-4 ">
                 <Row>
@@ -1402,7 +1429,7 @@ const Dashboard = () => {
                                       .filter(asset => {
                                         return (
                                           EventMap[
-                                            asset.market.toUpperCase()
+                                          asset.market.toUpperCase()
                                           ] === depositRequestSel
                                         )
                                       })
@@ -1526,7 +1553,7 @@ const Dashboard = () => {
                                       .filter(asset => {
                                         return (
                                           EventMap[
-                                            asset.market.toUpperCase()
+                                          asset.market.toUpperCase()
                                           ] === withdrawDepositSel
                                         )
                                       })
@@ -1642,13 +1669,13 @@ const Dashboard = () => {
                                         key={key}
                                         value={
                                           EventMap[
-                                            asset.loanMarket.toUpperCase()
+                                          asset.loanMarket.toUpperCase()
                                           ]
                                         }
                                       >
                                         {
                                           EventMap[
-                                            asset.loanMarket.toUpperCase()
+                                          asset.loanMarket.toUpperCase()
                                           ]
                                         }
                                       </option>
@@ -1670,7 +1697,7 @@ const Dashboard = () => {
                                     .filter(asset => {
                                       return (
                                         EventMap[
-                                          asset.loanMarket.toUpperCase()
+                                        asset.loanMarket.toUpperCase()
                                         ] === loanOption
                                       )
                                     })
@@ -1736,7 +1763,7 @@ const Dashboard = () => {
               </thead>
               <tbody>
                 {Array.isArray(activeDepositsData) &&
-                activeDepositsData.length > 0 ? (
+                  activeDepositsData.length > 0 ? (
                   activeDepositsData.map((asset, key) => (
                     <tr key={key}>
                       <th scope="row">
@@ -1754,7 +1781,7 @@ const Dashboard = () => {
                               <i
                                 className={
                                   CoinClassNames[
-                                    EventMap[asset.market.toUpperCase()]
+                                  EventMap[asset.market.toUpperCase()]
                                   ] || asset.market.toUpperCase()
                                 }
                               />
@@ -1789,7 +1816,7 @@ const Dashboard = () => {
         )
         break
 
-      case "ActiveLoan":
+      case "ActiveLoan": //
         return (
           <div className="table-responsive">
             <Table className="table table-nowrap align-middle mb-0">
@@ -1852,358 +1879,805 @@ const Dashboard = () => {
     }
   }
 
+  const getActionTabs = customActiveTab => {
+    switch (customActiveTab) {
+      case "1":
+        return (
+          // Active Deposits
+          <div className="table-responsive">
+
+            <Row>
+              <Col><h6>Deposit Market</h6></Col>
+              <Col><h6>Commitment</h6></Col>
+              <Col><h6>Amount</h6></Col>
+            </Row>
+            {Array.isArray(activeDepositsData) &&
+              activeDepositsData.length > 0 ? (
+              activeDepositsData.map((asset, key) => (
+                <div key={key}>
+                  <UncontrolledAccordion defaultOpen="0" open="1">
+                    <AccordionItem>
+                      <AccordionHeader targetId="1">
+
+
+                        <Col>
+                          <div className="d-flex align-items-center">
+                            <div className="avatar-xs me-3">
+                              <span
+                                className={
+                                  "avatar-title rounded-circle bg-soft bg-" +
+                                  asset.color +
+                                  " text-" +
+                                  asset.color +
+                                  " font-size-18"
+                                }
+                              >
+                                <i
+                                  className={
+                                    CoinClassNames[
+                                    EventMap[asset.market.toUpperCase()]
+                                    ] || asset.market.toUpperCase()
+                                  }
+                                />
+                              </span>
+                            </div>
+                            <span>{EventMap[asset.market.toUpperCase()]}</span>
+                          </div>
+                        </Col>
+
+                        <Col>
+                          <div className="text-muted">
+                            {EventMap[asset.commitment]}
+                          </div>
+                        </Col>
+
+                        <Col>
+                          <div className="text-muted">
+                            {BNtoNum(Number(asset.amount))}
+                          </div>
+                        </Col>
+
+                      </AccordionHeader>
+                      <AccordionBody accordionId="1">
+                        <div style={{ borderWidth: 1 }}>
+                          <CardBody>
+                            <form >
+                              {/* // */}
+                              <div className="mb-4 ">
+                                <Row>
+                                  <Col lg="4 mb-3" >
+                                    <div className="block-example border border-primary" style={{ padding: "15px", borderRadius: "5px" }}>
+                                      <div className="mb-3">
+
+                                        {/* <label className="card-radio-label mb-2"> */}
+                                        <Button
+                                          className="btn-block btn-md"
+                                          color="light"
+
+                                          onClick={() => {
+                                            tog_add_active_deposit()
+                                          }}
+                                        >
+                                          Add to Deposit
+                                        </Button>
+                                        {'   '}
+                                        <Button
+                                          className="btn-block btn-md"
+                                          color="light"
+                                          onClick={() => {
+                                            tog_withdraw_active_deposit()
+                                          }}
+                                        >
+                                          Withdraw Deposit
+                                        </Button>
+                                        {/* </label> */}
+                                      </div>
+                                      {/* <Modal
+                                        // isOpen={modal_add_active_deposit}
+                                        isOpen={true}
+                                        toggle={() => {
+                                          tog_add_active_deposit()
+                                        }}
+                                        centered
+                                      > */}
+                                      {modal_add_active_deposit &&
+                                        <Form>
+                                          {/* <div className="row mb-4">
+                                        <Col lg={12}>
+                                          <select
+                                            className="form-select"
+                                            onChange={handleDepositRequestSelect}
+                                          >
+                                            <option hidden>Select Market</option>
+                                            {[
+                                              ...new Map(
+                                                activeDepositsData.map((item: any) => [
+                                                  item["market"],
+                                                  item,
+                                                ])
+                                              ).values(),
+                                            ].map((asset, key) => {
+                                              return (
+                                                <option
+                                                  key={key}
+                                                  value={
+                                                    EventMap[asset.market.toUpperCase()]
+                                                  }
+                                                >
+                                                  {EventMap[asset.market.toUpperCase()]}
+                                                </option>
+                                              )
+                                            })}
+                                          </select>
+                                        </Col>
+                                      </div>
+                                      <div className="row mb-4">
+                                        <Col sm={12}>
+                                          <select
+                                            className="form-select"
+                                            onChange={handleDepositRequestTime}
+                                          >
+                                            <option hidden>
+                                              Minimum Commitment Period
+                                            </option>
+                                            {activeDepositsData
+                                              .filter(asset => {
+                                                return (
+                                                  EventMap[
+                                                  asset.market.toUpperCase()
+                                                  ] === depositRequestSel
+                                                )
+                                              })
+                                              .map(item => item["commitment"])
+                                              .filter(
+                                                (value, index, self) =>
+                                                  self.indexOf(value) === index
+                                              )
+                                              .map((asset, key) => {
+                                                return (
+                                                  <option key={key} value={asset}>
+                                                    {EventMap[asset]}
+                                                  </option>
+                                                )
+                                              })}
+                                          </select>
+                                        </Col>
+                                      </div> */}
+                                          <div className="row mb-4">
+                                            <Col sm={12}>
+                                              <Input
+                                                type="text"
+                                                className="form-control"
+                                                id="horizontal-password-Input"
+                                                placeholder={
+                                                  depositRequestSel
+                                                    ? `Minimum amount =  ${MinimumAmount[depositRequestSel]}`
+                                                    : "Amount"
+                                                }
+                                                onChange={event => {
+                                                  setInputVal1(Number(event.target.value))
+                                                }}
+                                              />
+                                            </Col>
+                                          </div>
+
+                                          <div className="d-grid gap-2">
+                                            <Button
+                                              color="primary"
+                                              className="w-md"
+                                              disabled={
+                                                isTransactionDone || inputVal1 === 0
+                                              }
+                                              onClick={handleDepositRequest}
+                                            >
+                                              {!isTransactionDone ? (
+                                                "Add to Deposit"
+                                              ) : (
+                                                <Spinner>Loading...</Spinner>
+                                              )}
+                                            </Button>
+                                          </div>
+                                        </Form>
+                                      }
+                                      {modal_withdraw_active_deposit &&
+                                        <Form>
+                                          {/* <div className="row mb-4">
+                                            <Col sm={12}>
+                                              <select
+                                                className="form-select"
+                                                onChange={handleWithdrawDepositSelect}
+                                              >
+                                                <option hidden>Select Market</option>
+                                                {[
+                                                  ...new Map(
+                                                    activeDepositsData.map((item: any) => [
+                                                      item["market"],
+                                                      item,
+                                                    ])
+                                                  ).values(),
+                                                ].map((asset, key) => {
+                                                  return (
+                                                    <option
+                                                      key={key}
+                                                      value={
+                                                        EventMap[asset.market.toUpperCase()]
+                                                      }
+                                                    >
+                                                      {EventMap[asset.market.toUpperCase()]}
+                                                    </option>
+                                                  )
+                                                })}
+                                              </select>
+                                            </Col>
+                                          </div>
+                                          <div className="row mb-4">
+                                            <Col sm={12}>
+                                              <select
+                                                className="form-select"
+                                                onChange={handleWithdrawDepositTime}
+                                              >
+                                                <option hidden>
+                                                  Minimum Commitment Period
+                                                </option>
+                                                {activeDepositsData
+                                                  .filter(asset => {
+                                                    return (
+                                                      EventMap[
+                                                      asset.market.toUpperCase()
+                                                      ] === withdrawDepositSel
+                                                    )
+                                                  })
+                                                  .map(item => item["commitment"])
+                                                  .filter(
+                                                    (value, index, self) =>
+                                                      self.indexOf(value) === index
+                                                  )
+                                                  .map((asset, key) => {
+                                                    return (
+                                                      <option key={key} value={asset}>
+                                                        {EventMap[asset]}
+                                                      </option>
+                                                    )
+                                                  })}
+                                              </select>
+                                            </Col>
+                                          </div> */}
+                                          <div className="row mb-4">
+                                            <Col sm={12}>
+                                              <Input
+                                                type="text"
+                                                className="form-control"
+                                                id="horizontal-password-Input"
+                                                placeholder="Amount"
+                                                onChange={event => {
+                                                  setInputVal1(Number(event.target.value))
+                                                }}
+                                              />
+                                            </Col>
+                                          </div>
+
+                                          <div className="d-grid gap-2">
+                                            <Button
+                                              color="primary"
+                                              className="w-md"
+                                              disabled={
+                                                isTransactionDone || inputVal1 === 0
+                                              }
+                                              onClick={handleWithdrawDeposit}
+                                            >
+                                              {!isTransactionDone ? (
+                                                "Withdraw Deposit"
+                                              ) : (
+                                                <Spinner>Loading...</Spinner>
+                                              )}
+                                            </Button>
+                                          </div>
+                                        </Form>}
+
+                                    </div>
+                                  </Col>
+                                  <Col lg="8">
+                                  </Col>
+                                </Row>
+                              </div>
+                            </form>
+                          </CardBody>
+                        </div>
+                      </AccordionBody>
+                    </AccordionItem>
+                  </UncontrolledAccordion>
+                </div >
+              ))
+            ) : (
+              <div>
+                No records found
+              </div>
+            )}
+          </div >
+        )
+        break
+
+      case "2": //
+        return (
+          <div className="table-responsive">
+            <Table className="table table-nowrap align-middle mb-0">
+              <thead>
+                <tr>
+                  <th scope="col">Borrow Market</th>
+                  <th scope="col">Borrow Amount</th>
+                  <th scope="col">Commitment</th>
+                  <th scope="col">Collateral Market</th>
+                  <th scope="col">Collateral Amount</th>
+                  <th scope="col">Swap Status</th>
+                  <th scope="col">Borrow Market(Current)</th>
+                  <th scope="col">Borrow Amount(Current)</th>
+                  {/* <th scope="col" colSpan={2}>Interest</th> */}
+                </tr>
+              </thead>
+
+              <tbody>
+                <PassbookTBody
+                  isloading={isLoading}
+                  assets={activeLoansData}
+                ></PassbookTBody>
+              </tbody>
+            </Table>
+          </div>
+        )
+        break
+
+      case "3":
+        return (
+          <div className="table-responsive">
+            <Table className="table table-nowrap align-middle mb-0">
+              <thead>
+                <tr>
+                  <th scope="col">Borrow Market</th>
+                  <th scope="col">Borrow Amount</th>
+                  <th scope="col">Commitment</th>
+                  <th scope="col">Collateral Market</th>
+                  <th scope="col">Collateral Amount</th>
+                  <th scope="col">Swap Status</th>
+                  <th scope="col">Borrow Market(Current)</th>
+                  <th scope="col">Borrow Amount(Current)</th>
+                  {/* <th scope="col" colSpan={2}>Interest</th> */}
+                </tr>
+              </thead>
+
+              <tbody>
+                <PassbookTBody
+                  isloading={isLoading}
+                  assets={repaidLoansData}
+                ></PassbookTBody>
+              </tbody>
+            </Table>
+          </div>
+        )
+        break
+
+      default:
+        return null
+    }
+  }
+
   return (
     <React.Fragment>
-      <div className="page-content" style={{'marginTop': '0px'}}>
+      <div className="page-content" style={{ 'marginTop': '0px' }}>
         <MetaTags>
           <title>Hashstack Finance</title>
         </MetaTags>
         {/* <Banner /> */}
 
-          <div>
-            <Nav tabs className="nav-tabs-custom-main">
-              <NavItem>
-                <NavLink
-                  className={mainTab === "1" ? "active" : ""}
-                  onClick={function noRefCheck(){
-                    setMainTab("1");
-                  }}
-                >
-                  Open Protocol
-                </NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink
-                  className={mainTab === "2" ? "active" : ""}
-                  onClick={function noRefCheck(){
-                    setMainTab("2");
-                  }}
-                >
-                  Protocol Analytics
-                </NavLink>
-              </NavItem>
-            </Nav>
-            <TabContent activeTab={mainTab}>
-              <TabPane tabId="1">
-                <Row>
-                  <Col sm="12">
-                    <div className="page-content-subTab">
+        <div>
+          <Nav tabs className="nav-tabs-custom-main">
+            <NavItem>
+              <NavLink
+                className={mainTab === "1" ? "active" : ""}
+                onClick={function noRefCheck() {
+                  setMainTab("1");
+                }}
+              >
+                Open Protocol
+              </NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink
+                className={mainTab === "2" ? "active" : ""}
+                onClick={function noRefCheck() {
+                  setMainTab("2");
+                }}
+              >
+                Protocol Analytics
+              </NavLink>
+            </NavItem>
+          </Nav>
+          <TabContent activeTab={mainTab}>
+            <TabPane tabId="1">
+              <Row>
+                <Col lg="12">
+                  <div className="">
                     <Container fluid>
-                        {/* <h5>OPEN PROTOCOL</h5> */}
-                        <br />
+                      {/* <h5>OPEN PROTOCOL</h5> */}
+                      <br />
 
-                        <Row>
-                          {customActiveTab === "2" ? (
-                            <Col xl="4">
-                              <Card style={{ height: "29rem" }}>
-                                {/* {customActiveTab === '2' ? */}
+                      <Row>
+                        {
+                          // customActiveTab === "2" ? (
+                          //   <Col xl="4">
+                          //     <Card style={{ height: "29rem" }}>
+                          //       {/* {customActiveTab === '2' ? */}
 
-                                {getPassbookActionScreen(passbookStatus)}
-                              </Card>
-                            </Col>
-                          ) : null}
+                          //       {getPassbookActionScreen(passbookStatus)}
+                          //     </Card>
+                          //   </Col>
+                          // ) : null
+                        }
 
-                          <Col xl={customActiveTab === "2" ? "8" : "12"}>
-                            <Card style={{ height: "29rem" }}>
-                              <CardBody>
-                                <Nav tabs className="nav-tabs-custom">
-                                  <NavItem>
-                                    <NavLink
-                                      style={{ cursor: "pointer" }}
-                                      className={classnames({
-                                        active: customActiveTab === "1",
-                                      })}
-                                      onClick={() => {
-                                        toggleCustom("1")
-                                      }}
-                                    >
-                                      <span className="d-none d-sm-block">Dashboard</span>
-                                    </NavLink>
-                                  </NavItem>
-                                  {account ? (
-                                    <>
-                                      <NavItem>
-                                        <NavLink
-                                          style={{ cursor: "pointer" }}
-                                          className={classnames({
-                                            active: customActiveTab === "2",
-                                          })}
-                                          onClick={() => {
-                                            toggleCustom("2")
-                                          }}
-                                        >
-                                          <span className="d-none d-sm-block">Passbook</span>
-                                        </NavLink>
-                                      </NavItem>
-                                      <NavItem>
-                                        <NavLink
-                                          style={{ cursor: "pointer" }}
-                                          className={classnames({
-                                            active: customActiveTab === "3",
-                                          })}
-                                          onClick={() => {
-                                            toggleCustom("3")
-                                          }}
-                                        >
-                                          <span className="d-none d-sm-block">
-                                            Liquidation
-                                          </span>
-                                        </NavLink>
-                                      </NavItem>
-                                    </>
-                                  ) : null}
-                                </Nav>
 
-                                <TabContent activeTab={customActiveTab} className="p-1">
-                                  {/* ------------------------------------- DASHBOARD ----------------------------- */}
+                        <Col xl={"12"}>
+                          <Card style={{ height: "29rem" }}>
+                            <CardBody>
+                              <Row>
 
-                                  <TabPane tabId="1">
-                                    <div
-                                      className="table-responsive"
-                                      style={{ paddingTop: "12px" }}
-                                    >
-                                      <Table className="table table-nowrap align-middle mb-0">
-                                        <thead>
-                                          <tr style={{ borderStyle: "hidden" }}>
-                                            <th scope="col">Markets</th>
-                                            <th scope="col">Savings Interest</th>
-                                            <th scope="col">Borrow Interest</th>
-                                            <th scope="col">Deposit</th>
-                                            <th scope="col" colSpan={2}>
-                                              Borrow
-                                            </th>
-                                          </tr>
-                                          <tr>
-                                            <th scope="col"></th>
-                                            <th scope="col">
-                                              <select
-                                                className="form-select form-select-sm"
-                                                onChange={handleDepositInterestChange}
-                                              >
-                                                <option hidden>Commitment</option>
-                                                <option value={"NONE"}>None</option>
-                                                <option value={"TWOWEEKS"}>Two Weeks</option>
-                                                <option value={"ONEMONTH"}>One Month</option>
-                                                <option value={"THREEMONTHS"}>
-                                                  Three Month
-                                                </option>
-                                              </select>
-                                            </th>
-                                            <th scope="col">
-                                              <select
-                                                className="form-select form-select-sm"
-                                                onChange={handleBorrowInterestChange}
-                                              >
-                                                <option hidden>Commitment</option>
-                                                <option value={"NONE"}>None</option>
-                                                <option value={"ONEMONTH"}>One Month</option>
-                                              </select>
-                                            </th>
-                                            <th scope="col"></th>
-                                            <th scope="col"></th>
-                                            <th scope="col"></th>
-                                          </tr>
-                                        </thead>
-                                        <tbody>
-                                          <DashboardTBody
-                                            isloading={isLoading}
-                                            depositInterestChange={depositInterestChange}
-                                            borrowInterestChange={borrowInterestChange}
-                                          ></DashboardTBody>
-                                        </tbody>
-                                      </Table>
-                                    </div>
-                                  </TabPane>
-
-                                  {/* -------------------------------------- PASSBOOK ----------------------------- */}
-
-                                  <TabPane tabId="2">
-                                    <div
-                                      className="row justify-content-end"
-                                      style={{ paddingTop: "12px" }}
-                                    >
-                                      <Col sm={3}>
-                                        <select
-                                          className="form-select form-select-sm"
-                                          onChange={e => passbookActive(e)}
-                                        >
-                                          <option value={"ActiveDeposit"}>
-                                            Active Deposits
-                                          </option>
-                                          <option value={"ActiveLoan"}>Active Loans</option>
-                                          <option value={"RepaidLoan"}>Repaid Loans</option>
-                                          {/* <option value={"InactiveDeposit"}>Inactive deposits</option> */}
-                                        </select>
-                                      </Col>
-                                    </div>
-                                    {getPassbookTable(passbookStatus)}
-                                  </TabPane>
-
-                                  {/* -------------------------------------- LIQUIDATION ----------------------------- */}
-
-                                  <TabPane tabId="3">
-                                    <div className="table-responsive">
-                                      <Table className="table table-nowrap align-middle mb-0">
-                                        <thead>
-                                          <tr>
-                                            <th scope="col">Loan Market</th>
-                                            <th scope="col">Commitment</th>
-                                            <th scope="col">Loan Amount</th>
-                                            <th scope="col">Collateral Market</th>
-                                            <th scope="col">Collateral Amount</th>
-                                            {/* <th scope="col" colSpan={2}>Interest Earned</th> */}
-                                          </tr>
-                                        </thead>
-                                        <tbody>
-                                          {Array.isArray(activeLiquidationsData) &&
-                                          activeLiquidationsData.length > 0 ? (
-                                            activeLiquidationsData.map((asset, key) => (
-                                              <tr key={key}>
-                                                <th scope="row">
-                                                  <div className="d-flex align-items-center">
-                                                    <div className="avatar-xs me-3">
-                                                      <span
-                                                        className={
-                                                          "avatar-title rounded-circle bg-soft bg-" +
-                                                          asset.color +
-                                                          " text-" +
-                                                          asset.color +
-                                                          " font-size-18"
-                                                        }
-                                                      >
-                                                        <i
-                                                          className={
-                                                            CoinClassNames[
-                                                              EventMap[
-                                                                asset.loanMarket.toUpperCase()
-                                                              ]
-                                                            ] ||
-                                                            asset.loanMarket.toUpperCase()
-                                                          }
-                                                        />
-                                                      </span>
-                                                    </div>
-                                                    <span>
-                                                      {
-                                                        EventMap[
-                                                          asset.loanMarket.toUpperCase()
-                                                        ]
-                                                      }
-                                                    </span>
-                                                  </div>
-                                                </th>
-                                                <td>
-                                                  <div className="text-muted">
-                                                    {EventMap[asset.commitment]}
-                                                  </div>
-                                                </td>
-                                                <td>
-                                                  <div className="text-muted">
-                                                    {BNtoNum(Number(asset.loanAmount))}
-                                                  </div>
-                                                </td>
-                                                <th scope="row">
-                                                  <div className="d-flex align-items-center">
-                                                    <div className="avatar-xs me-3">
-                                                      <span
-                                                        className={
-                                                          "avatar-title rounded-circle bg-soft bg-" +
-                                                          asset.color +
-                                                          " text-" +
-                                                          asset.color +
-                                                          " font-size-18"
-                                                        }
-                                                      >
-                                                        <i
-                                                          className={
-                                                            CoinClassNames[
-                                                              EventMap[
-                                                                asset.collateralMarket.toUpperCase()
-                                                              ]
-                                                            ] ||
-                                                            asset.collateralMarket.toUpperCase()
-                                                          }
-                                                        />
-                                                      </span>
-                                                    </div>
-                                                    <span>
-                                                      {
-                                                        EventMap[
-                                                          asset.collateralMarket.toUpperCase()
-                                                        ]
-                                                      }
-                                                    </span>
-                                                  </div>
-                                                </th>
-                                                <td>
-                                                  <div className="text-muted">
-                                                    {BNtoNum(Number(asset.collateralAmount))}
-                                                  </div>
-                                                </td>
-                                                <td>
-                                                  <Button
-                                                    className="text-muted"
-                                                    color="light"
-                                                    outline
-                                                    onClick={() => {
-                                                      handleLiquidation(asset)
-                                                    }}
-                                                  >
-                                                    {(isTransactionDone && asset.isLiquidationDone) ? (
-                                                      <Spinner>Loading...</Spinner>
-                                                    ) : (
-                                                      "Liquidate"
-                                                    )}
-                                                  </Button>
-                                                </td>
-                                                {/* <td>
-                                  <div className="text-muted">{Number(asset.acquiredYield).toFixed(3)}</div>
-                                </td>  */}
-                                              </tr>
-                                            ))
-                                          ) : (
-                                            <tr align="center">
-                                              <td colSpan={5}>No Records Found.</td>
-                                            </tr>
-                                          )}
-                                        </tbody>
-                                      </Table>
-                                      <Button
-                                        className="d-flex align-items-center"
-                                        color="light"
-                                        outline
+                                <Col>
+                                  <Nav tabs className="nav-tabs-custom">
+                                    <NavItem>
+                                      <NavLink
+                                        style={{ cursor: "pointer" }}
+                                        className={classnames({
+                                          active: customActiveTab === "1",
+                                        })}
                                         onClick={() => {
-                                          increaseLiquidationIndex
+                                          toggleCustom("1")
                                         }}
                                       >
-                                        Show More
-                                      </Button>
-                                    </div>
-                                  </TabPane>
-                                </TabContent>
-                              </CardBody>
-                            </Card>
-                          </Col>
-                        </Row>
-                      </Container>
-                  
-                  
-                  
-                  
-                    </div>
-                  </Col>
-                </Row>
-              </TabPane>
-              <TabPane tabId="2">
-                <Row>
-                  <Col sm="12">
-                   <Analytics></Analytics>
-                  </Col>
-                </Row>
-              </TabPane>
-            </TabContent>
-          </div>
-            {/* <Analytics></Analytics>
+                                        <span className="d-none d-sm-block">Dashboard</span>
+                                      </NavLink>
+                                    </NavItem>
+                                    {account ? (
+                                      <>
+                                        <NavItem>
+                                          <NavLink
+                                            style={{ cursor: "pointer" }}
+                                            className={classnames({
+                                              active: customActiveTab === "2",
+                                            })}
+                                            onClick={() => {
+                                              toggleCustom("2")
+                                            }}
+                                          >
+                                            {/* // */}
+                                            <span className="d-none d-sm-block">Passbook</span>
+                                          </NavLink>
+                                        </NavItem>
+                                        <NavItem>
+                                          <NavLink
+                                            style={{ cursor: "pointer" }}
+                                            className={classnames({
+                                              active: customActiveTab === "3",
+                                            })}
+                                            onClick={() => {
+                                              toggleCustom("3")
+                                            }}
+                                          >
+                                            <span className="d-none d-sm-block">
+                                              Liquidation
+                                            </span>
+                                          </NavLink>
+                                        </NavItem>
+                                      </>
+                                    ) : null}
+                                  </Nav>
+
+                                </Col>
+                                {/* <Row>
+                                  <Col lg={6}></Col>
+                                  <Col lg={6}> */}
+
+                                <Col>
+                                  {customActiveTab === "2" && <Nav tabs className="nav-tabs-custom">
+                                    <NavItem>
+                                      <NavLink
+                                        style={{ cursor: "pointer" }}
+                                        className={classnames({
+                                          active: customActiveTabs === "0",
+                                        })}
+                                        onClick={() => {
+                                          toggleCustoms("0")
+                                        }}
+                                      >
+                                        <span className="d-none d-sm-block">All</span>
+                                      </NavLink>
+                                    </NavItem>
+                                    {account ? (
+                                      <>
+                                        <NavItem>
+                                          <NavLink
+                                            style={{ cursor: "pointer" }}
+                                            className={classnames({
+                                              active: customActiveTabs === "1",
+                                            })}
+                                            onClick={() => {
+                                              toggleCustoms("1")
+                                            }}
+                                          >
+                                            <span className="d-none d-sm-block">Active Deposits</span>
+                                          </NavLink>
+                                        </NavItem>
+                                        <NavItem>
+                                          <NavLink
+                                            style={{ cursor: "pointer" }}
+                                            className={classnames({
+                                              active: customActiveTabs === "2",
+                                            })}
+                                            onClick={() => {
+                                              toggleCustoms("2")
+                                            }}
+                                          >
+                                            <span className="d-none d-sm-block">
+                                              Active Loans
+                                            </span>
+                                          </NavLink>
+                                        </NavItem>
+                                        <NavItem>
+                                          <NavLink
+                                            style={{ cursor: "pointer" }}
+                                            className={classnames({
+                                              active: customActiveTabs === "3",
+                                            })}
+                                            onClick={() => {
+                                              toggleCustoms("3")
+                                            }}
+                                          >
+                                            <span className="d-none d-sm-block">
+                                              Repaid Loans
+                                            </span>
+                                          </NavLink>
+                                        </NavItem>
+                                      </>
+                                    ) : null}
+                                  </Nav>
+
+                                  }
+                                </Col>
+                              </Row>
+                              {/* </Col>
+                                </Row> */}
+                              <Row>
+                                <Col lg={12}>
+                                  {customActiveTab === "2" && getActionTabs(customActiveTabs)}
+                                  {/* {getPassbookTable(passbookStatus)} */}
+                                </Col>
+                              </Row>
+                              <TabContent activeTab={customActiveTab} className="p-1">
+                                {/* ------------------------------------- DASHBOARD ----------------------------- */}
+
+                                <TabPane tabId="1">
+                                  <div
+                                    className="table-responsive"
+                                    style={{ paddingTop: "12px" }}
+                                  >
+                                    <Table className="table table-nowrap align-middle mb-0">
+                                      <thead>
+                                        <tr style={{ borderStyle: "hidden" }}>
+                                          <th scope="col">Markets</th>
+                                          <th scope="col">Savings Interest</th>
+                                          <th scope="col">Borrow Interest</th>
+                                          <th scope="col">Deposit</th>
+                                          <th scope="col" colSpan={2}>
+                                            Borrow
+                                          </th>
+                                        </tr>
+                                        <tr>
+                                          <th scope="col"></th>
+                                          <th scope="col">
+                                            <select
+                                              className="form-select form-select-sm"
+                                              onChange={handleDepositInterestChange}
+                                            >
+                                              <option hidden>Commitment</option>
+                                              <option value={"NONE"}>None</option>
+                                              <option value={"TWOWEEKS"}>Two Weeks</option>
+                                              <option value={"ONEMONTH"}>One Month</option>
+                                              <option value={"THREEMONTHS"}>
+                                                Three Month
+                                              </option>
+                                            </select>
+                                          </th>
+                                          <th scope="col">
+                                            <select
+                                              className="form-select form-select-sm"
+                                              onChange={handleBorrowInterestChange}
+                                            >
+                                              <option hidden>Commitment</option>
+                                              <option value={"NONE"}>None</option>
+                                              <option value={"ONEMONTH"}>One Month</option>
+                                            </select>
+                                          </th>
+                                          <th scope="col"></th>
+                                          <th scope="col"></th>
+                                          <th scope="col"></th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        <DashboardTBody
+                                          isloading={isLoading}
+                                          depositInterestChange={depositInterestChange}
+                                          borrowInterestChange={borrowInterestChange}
+                                        ></DashboardTBody>
+                                      </tbody>
+                                    </Table>
+                                  </div>
+                                </TabPane>
+
+                                {/* -------------------------------------- PASSBOOK ----------------------------- */}
+
+
+                                {/* -------------------------------------- LIQUIDATION ----------------------------- */}
+
+                                <TabPane tabId="3">
+                                  <div className="table-responsive">
+                                    <Table className="table table-nowrap align-middle mb-0">
+                                      <thead>
+                                        <tr>
+                                          <th scope="col">Loan Market</th>
+                                          <th scope="col">Commitment</th>
+                                          <th scope="col">Loan Amount</th>
+                                          <th scope="col">Collateral Market</th>
+                                          <th scope="col">Collateral Amount</th>
+                                          {/* <th scope="col" colSpan={2}>Interest Earned</th> */}
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        {Array.isArray(activeLiquidationsData) &&
+                                          activeLiquidationsData.length > 0 ? (
+                                          activeLiquidationsData.map((asset, key) => (
+                                            <tr key={key}>
+                                              <th scope="row">
+                                                <div className="d-flex align-items-center">
+                                                  <div className="avatar-xs me-3">
+                                                    <span
+                                                      className={
+                                                        "avatar-title rounded-circle bg-soft bg-" +
+                                                        asset.color +
+                                                        " text-" +
+                                                        asset.color +
+                                                        " font-size-18"
+                                                      }
+                                                    >
+                                                      <i
+                                                        className={
+                                                          CoinClassNames[
+                                                          EventMap[
+                                                          asset.loanMarket.toUpperCase()
+                                                          ]
+                                                          ] ||
+                                                          asset.loanMarket.toUpperCase()
+                                                        }
+                                                      />
+                                                    </span>
+                                                  </div>
+                                                  <span>
+                                                    {
+                                                      EventMap[
+                                                      asset.loanMarket.toUpperCase()
+                                                      ]
+                                                    }
+                                                  </span>
+                                                </div>
+                                              </th>
+                                              <td>
+                                                <div className="text-muted">
+                                                  {EventMap[asset.commitment]}
+                                                </div>
+                                              </td>
+                                              <td>
+                                                <div className="text-muted">
+                                                  {BNtoNum(Number(asset.loanAmount))}
+                                                </div>
+                                              </td>
+                                              <th scope="row">
+                                                <div className="d-flex align-items-center">
+                                                  <div className="avatar-xs me-3">
+                                                    <span
+                                                      className={
+                                                        "avatar-title rounded-circle bg-soft bg-" +
+                                                        asset.color +
+                                                        " text-" +
+                                                        asset.color +
+                                                        " font-size-18"
+                                                      }
+                                                    >
+                                                      <i
+                                                        className={
+                                                          CoinClassNames[
+                                                          EventMap[
+                                                          asset.collateralMarket.toUpperCase()
+                                                          ]
+                                                          ] ||
+                                                          asset.collateralMarket.toUpperCase()
+                                                        }
+                                                      />
+                                                    </span>
+                                                  </div>
+                                                  <span>
+                                                    {
+                                                      EventMap[
+                                                      asset.collateralMarket.toUpperCase()
+                                                      ]
+                                                    }
+                                                  </span>
+                                                </div>
+                                              </th>
+                                              <td>
+                                                <div className="text-muted">
+                                                  {BNtoNum(Number(asset.collateralAmount))}
+                                                </div>
+                                              </td>
+                                              <td>
+                                                <Button
+                                                  className="text-muted"
+                                                  color="light"
+                                                  outline
+                                                  onClick={() => {
+                                                    handleLiquidation(asset)
+                                                  }}
+                                                >
+                                                  {(isTransactionDone && asset.isLiquidationDone) ? (
+                                                    <Spinner>Loading...</Spinner>
+                                                  ) : (
+                                                    "Liquidate"
+                                                  )}
+                                                </Button>
+                                              </td>
+                                              {/* <td>
+                                  <div className="text-muted">{Number(asset.acquiredYield).toFixed(3)}</div>
+                                </td>  */}
+                                            </tr>
+                                          ))
+                                        ) : (
+                                          <tr align="center">
+                                            <td colSpan={5}>No Records Found.</td>
+                                          </tr>
+                                        )}
+                                      </tbody>
+                                    </Table>
+                                    <Button
+                                      className="d-flex align-items-center"
+                                      color="light"
+                                      outline
+                                      onClick={() => {
+                                        increaseLiquidationIndex
+                                      }}
+                                    >
+                                      Show More
+                                    </Button>
+                                  </div>
+                                </TabPane>
+                              </TabContent>
+                            </CardBody>
+                          </Card>
+                        </Col>
+                      </Row>
+                    </Container>
+
+
+
+
+                  </div>
+                </Col>
+              </Row>
+            </TabPane>
+            <TabPane tabId="2">
+              <Row>
+                <Col sm="12">
+                  <Analytics></Analytics>
+                </Col>
+              </Row>
+            </TabPane>
+          </TabContent>
+        </div>
+        {/* <Analytics></Analytics>
             {props.children} */}
       </div>
     </React.Fragment>
