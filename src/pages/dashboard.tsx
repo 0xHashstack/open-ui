@@ -1887,17 +1887,15 @@ const Dashboard = () => {
           <div className="table-responsive">
 
             <Row>
-              <Col><h5>Deposit Market</h5></Col>
-              <Col><h5>Commitment</h5></Col>
-              <Col><h5>Amount</h5></Col>
+              <Col><h6>Deposit Market</h6></Col>
+              <Col><h6>Commitment</h6></Col>
+              <Col><h6>Amount</h6></Col>
             </Row>
             {Array.isArray(activeDepositsData) &&
               activeDepositsData.length > 0 ? (
               activeDepositsData.map((asset, key) => (
                 <div key={key}>
-
-                  <UncontrolledAccordion defaultOpen="1" open="1">
-
+                  <UncontrolledAccordion defaultOpen="0" open="1">
                     <AccordionItem>
                       <AccordionHeader targetId="1">
 
@@ -1941,61 +1939,40 @@ const Dashboard = () => {
 
                       </AccordionHeader>
                       <AccordionBody accordionId="1">
+                        <div style={{ borderWidth: 1 }}>
+                          <CardBody>
+                            <form >
+                              {/* // */}
+                              <div className="mb-4 ">
+                                <Row>
+                                  <Col lg="4 mb-3" >
+                                    <div className="block-example border border-primary" style={{ padding: "15px", borderRadius: "5px" }}>
+                                      <div className="mb-3">
 
+                                        {/* <label className="card-radio-label mb-2"> */}
+                                        <Button
+                                          className="btn-block btn-md"
+                                          color="light"
 
-                        <strong>
-                          This is the first items accordion body.
-                        </strong>
-                        You can modify any of this with custom CSS or overriding our default variables. Its also worth noting that just about any HTML can go within the
-                        <code>
-                          .accordion-body
-                        </code>
-                        , though the transition does limit overflow.
-
-                        <CardBody>
-                          <form>
-                            {/* // */}
-                            <Label>Deposit Actions</Label>
-                            <div className="mb-4 ">
-                              <Row>
-
-
-                                <Col lg="6">
-                                  <div className="mb-3">
-
-                                    <label className="card-radio-label mb-2">
-                                      <Button
-                                        className="btn-block btn-sm"
-                                        color="light"
-                                        outline
-                                        onClick={() => {
-                                          tog_add_active_deposit()
-                                        }}
-                                      >
-                                        Add to Deposit
-                                      </Button>
-                                    </label>
-                                  </div>
-                                </Col>
-                                <Col lg="6">
-                                  <div className="mb-3">
-
-                                    <label className="card-radio-label mb-2">
-
-                                      <Button
-                                        className="btn-block btn-sm"
-                                        color="light"
-                                        outline
-                                        onClick={() => {
-                                          tog_withdraw_active_deposit()
-                                        }}
-                                      >
-                                        Withdraw Deposit
-                                      </Button>
-                                    </label>
-                                  </div>
-                                </Col>
-                                {/* <Modal
+                                          onClick={() => {
+                                            tog_add_active_deposit()
+                                          }}
+                                        >
+                                          Add to Deposit
+                                        </Button>
+                                        {'   '}
+                                        <Button
+                                          className="btn-block btn-md"
+                                          color="light"
+                                          onClick={() => {
+                                            tog_withdraw_active_deposit()
+                                          }}
+                                        >
+                                          Withdraw Deposit
+                                        </Button>
+                                        {/* </label> */}
+                                      </div>
+                                      {/* <Modal
                                         // isOpen={modal_add_active_deposit}
                                         isOpen={true}
                                         toggle={() => {
@@ -2003,10 +1980,9 @@ const Dashboard = () => {
                                         }}
                                         centered
                                       > */}
-                                {modal_add_active_deposit && <Col lg="12">
-                                  <div className="modal-body">
-                                    <Form>
-                                      <div className="row mb-4">
+                                      {modal_add_active_deposit &&
+                                        <Form>
+                                          {/* <div className="row mb-4">
                                         <Col lg={12}>
                                           <select
                                             className="form-select"
@@ -2066,54 +2042,46 @@ const Dashboard = () => {
                                               })}
                                           </select>
                                         </Col>
-                                      </div>
-                                      <div className="row mb-4">
-                                        <Col sm={12}>
-                                          <Input
-                                            type="text"
-                                            className="form-control"
-                                            id="horizontal-password-Input"
-                                            placeholder={
-                                              depositRequestSel
-                                                ? `Minimum amount =  ${MinimumAmount[depositRequestSel]}`
-                                                : "Amount"
-                                            }
-                                            onChange={event => {
-                                              setInputVal1(Number(event.target.value))
-                                            }}
-                                          />
-                                        </Col>
-                                      </div>
-
-                                      <div className="d-grid gap-2">
-                                        <Button
-                                          color="primary"
-                                          className="w-md"
-                                          disabled={
-                                            isTransactionDone || inputVal1 === 0
-                                          }
-                                          onClick={handleDepositRequest}
-                                        >
-                                          {!isTransactionDone ? (
-                                            "Add to Deposit"
-                                          ) : (
-                                            <Spinner>Loading...</Spinner>
-                                          )}
-                                        </Button>
-                                      </div>
-                                    </Form>
-                                  </div>
-                                </Col>
-                                }
-                                {/* </Modal> */}
-                                {modal_withdraw_active_deposit && <Col lg="12">
-                                  <div className="mb-3">
-                                    <Label className="card-radio-label mb-2">
-
-
-                                      <div className="modal-body">
-                                        <Form>
+                                      </div> */}
                                           <div className="row mb-4">
+                                            <Col sm={12}>
+                                              <Input
+                                                type="text"
+                                                className="form-control"
+                                                id="horizontal-password-Input"
+                                                placeholder={
+                                                  depositRequestSel
+                                                    ? `Minimum amount =  ${MinimumAmount[depositRequestSel]}`
+                                                    : "Amount"
+                                                }
+                                                onChange={event => {
+                                                  setInputVal1(Number(event.target.value))
+                                                }}
+                                              />
+                                            </Col>
+                                          </div>
+
+                                          <div className="d-grid gap-2">
+                                            <Button
+                                              color="primary"
+                                              className="w-md"
+                                              disabled={
+                                                isTransactionDone || inputVal1 === 0
+                                              }
+                                              onClick={handleDepositRequest}
+                                            >
+                                              {!isTransactionDone ? (
+                                                "Add to Deposit"
+                                              ) : (
+                                                <Spinner>Loading...</Spinner>
+                                              )}
+                                            </Button>
+                                          </div>
+                                        </Form>
+                                      }
+                                      {modal_withdraw_active_deposit &&
+                                        <Form>
+                                          {/* <div className="row mb-4">
                                             <Col sm={12}>
                                               <select
                                                 className="form-select"
@@ -2173,7 +2141,7 @@ const Dashboard = () => {
                                                   })}
                                               </select>
                                             </Col>
-                                          </div>
+                                          </div> */}
                                           <div className="row mb-4">
                                             <Col sm={12}>
                                               <Input
@@ -2204,16 +2172,17 @@ const Dashboard = () => {
                                               )}
                                             </Button>
                                           </div>
-                                        </Form>
-                                      </div>
+                                        </Form>}
 
-                                    </Label>
-                                  </div>
-                                </Col>}
-                              </Row>
-                            </div>
-                          </form>
-                        </CardBody>
+                                    </div>
+                                  </Col>
+                                  <Col lg="8">
+                                  </Col>
+                                </Row>
+                              </div>
+                            </form>
+                          </CardBody>
+                        </div>
                       </AccordionBody>
                     </AccordionItem>
                   </UncontrolledAccordion>
