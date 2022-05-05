@@ -77,7 +77,7 @@ let Borrow = (props) => {
 
   const handleMax = () => {
     if (balance) {
-      setInputVal(balance)
+      setCollateralInputVal(balance);
     }
   }
 
@@ -181,12 +181,12 @@ let Borrow = (props) => {
                 <Col sm={12}>
                   <InputGroup>
                     <Input
-                      type="text"
+                      type="number"
                       className="form-control"
-                      id="horizontal-password-Input"
+                      id="amount"
                       placeholder="Amount"
                       onChange={handleCollateralInputChange}
-                      value={inputVal !== 0 ? inputVal : "Amount"}
+                      value={collateralInputVal !== 0 ? collateralInputVal : "Amount"}
                     />
                     {<Button
                       outline
@@ -196,7 +196,7 @@ let Borrow = (props) => {
                       disabled={balance ? false : true}
                       style={{ background: "#2e3444", border: "#2e3444" }}
                     >
-                      Max
+                      <span style={{ borderBottom: "2px dotted #fff" }}>Max</span>
                     </Button>
                     }
                   </InputGroup>
