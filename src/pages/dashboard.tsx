@@ -19,11 +19,12 @@ import {
   TabPane,
   Label,
   Spinner,
-  Accordion,
   AccordionItem,
   AccordionHeader,
   AccordionBody,
-  UncontrolledAccordion
+  UncontrolledAccordion,
+  CardTitle,
+  CardSubtitle,
 } from "reactstrap"
 import classnames from "classnames"
 import { Web3ModalContext } from "../contexts/Web3ModalProvider"
@@ -2266,9 +2267,86 @@ const Dashboard = () => {
         <MetaTags>
           <title>Hashstack Finance</title>
         </MetaTags>
-        {/* <Banner /> */}
 
         <div>
+          <div className="container-fluid">
+            <Row>
+              <Col xl={3}>
+                <Card>
+                  <CardBody className="text-center">
+                    <div className="mb-3">
+                      <img src="./gross.png" width="18%" ></img>  {'   '} {'   '} {'   '} <div className="float: right" style={{ display: "inline-block", fontSize: "15px" }}> Total Value Locked </div>
+                    </div>
+                    <CardTitle tag="h5">
+                    </CardTitle>
+                    <CardSubtitle
+                      className="mb-2 text-muted"
+                      tag="h2"
+                      align="right"
+                    >
+                      $46,000
+                    </CardSubtitle>
+                  </CardBody>
+                </Card>
+              </Col>
+
+              <Col xl={3}>
+                <Card>
+                  <CardBody className="text-center">
+                    <div className="mb-3">
+                      <img src="./gross.png" width="18%" ></img>  {'   '} {'   '} {'   '} <div className="float: right" style={{ display: "inline-block", fontSize: "15px" }}> Utilization Rate </div>
+                    </div>
+                    <CardTitle tag="h5">
+                    </CardTitle>
+                    <CardSubtitle
+                      className="mb-2 text-muted"
+                      tag="h2"
+                      align="right"
+                    >
+                      0.46
+                    </CardSubtitle>
+                  </CardBody>
+                </Card>
+              </Col>
+
+              <Col xl={3}>
+                <Card>
+                  <CardBody className="text-center">
+                    <div className="mb-3">
+                      <img src="./gross.png" width="18%" ></img>  {'   '} {'   '} {'   '} <div className="float: right" style={{ display: "inline-block", fontSize: "15px" }}> Utilization Rate </div>
+                    </div>
+                    <CardTitle tag="h5">
+                    </CardTitle>
+                    <CardSubtitle
+                      className="mb-2 text-muted"
+                      tag="h2"
+                      align="right"
+                    >
+                      345
+                    </CardSubtitle>
+                  </CardBody>
+                </Card>
+              </Col>
+              <Col xl={3}>
+                <Card>
+                  <CardBody className="text-center">
+                    <div className="mb-3">
+                      <img src="./gross.png" width="20%" ></img>  {'   '} {'   '} {'   '} <div className="float: right" style={{ display: "inline-block", fontSize: "15px" }}> Users</div>
+                    </div>
+                    <CardTitle tag="h5">
+                    </CardTitle>
+                    <CardSubtitle
+                      className="mb-2 text-muted"
+                      tag="h2"
+                      align="right"
+                    >
+                      26,090988
+                    </CardSubtitle>
+                  </CardBody>
+                </Card>
+              </Col>
+            </Row>
+          </div>
           <Nav tabs className="nav-tabs-custom-main">
             <NavItem>
               <NavLink
