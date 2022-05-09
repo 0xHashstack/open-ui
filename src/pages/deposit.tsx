@@ -153,7 +153,7 @@ let Deposit = props => {
                       className="btn btn-md w-xs"
                       onClick={handleMax}
                       disabled={balance ? false : true}
-                      style={{ background: "#2e3444", border: "#2e3444" }}
+                      style={{ marginLeft: '0px',background: "#2e3444", border: "#2e3444" }}
                     >
                       <span style={{ borderBottom: "2px dotted #fff"}}>Max</span>
                     </Button>
