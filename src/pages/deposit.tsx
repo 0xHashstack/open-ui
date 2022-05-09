@@ -206,7 +206,7 @@ let Deposit = props => {
                 <Button
                   color="primary"
                   className="w-md"
-                  disabled={commitPeriod === undefined || isTransactionDone || inputVal<2500}
+                  disabled={commitPeriod === undefined || isTransactionDone || inputVal<MinimumAmount[props.asset]}
                   onClick={handleDeposit}
                 >
                   {!isTransactionDone ? (
