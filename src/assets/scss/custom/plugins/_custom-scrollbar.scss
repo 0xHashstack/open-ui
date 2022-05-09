@@ -130,6 +130,12 @@
   pointer-events: all;
 }
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 .simplebar-scrollbar {
   position: absolute;
   right: 2px;
