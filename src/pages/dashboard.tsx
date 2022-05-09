@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useContext } from "react"
-import MetaTags from "react-meta-tags"
+import React, { useState, useEffect, useContext } from "react";
+import MetaTags from "react-meta-tags";
 // import axios from "axios";
 import {
   Container,
@@ -19,15 +19,16 @@ import {
   TabPane,
   Label,
   Spinner,
-  Accordion,
   AccordionItem,
   AccordionHeader,
   AccordionBody,
-  UncontrolledAccordion
+  UncontrolledAccordion,
+  CardTitle,
+  CardSubtitle,
 } from "reactstrap"
-import classnames from "classnames"
-import { Web3ModalContext } from "../contexts/Web3ModalProvider"
-import { Web3WrapperContext } from "../contexts/Web3WrapperProvider"
+import classnames from "classnames";
+import { Web3ModalContext } from "../contexts/Web3ModalProvider";
+import { Web3WrapperContext } from "../contexts/Web3WrapperProvider";
 import {
   EventMap,
   CoinClassNames,
@@ -36,10 +37,11 @@ import {
   CommitMap,
   CommitMapReverse,
   marketDataOnChain
-} from "../blockchain/constants"
-import { BNtoNum, GetErrorText, bytesToString } from "../blockchain/utils"
-import { toast } from "react-toastify"
-import "react-toastify/dist/ReactToastify.css"
+} from "../blockchain/constants";
+import { BNtoNum, GetErrorText, bytesToString } from "../blockchain/utils";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { main } from './dataAnalytics';
 
 import loadable from "@loadable/component"
 const PassbookTBody = loadable(() => import("./passbook-body"))
@@ -103,6 +105,11 @@ const Dashboard = () => {
 
   const [index, setIndex] = useState('1');
 
+  const [uf, setUf] = useState(null);
+  const [tvl, setTvl] = useState(null)
+  const [totalUsers, setTotalUsers] = useState(null)
+  const [dominantMarket, setDominantMarket] = useState('')
+
   function toggle(newIndex: string) {
     if (newIndex === index) {
       setIndex('1');
@@ -110,6 +117,31 @@ const Dashboard = () => {
       setIndex(newIndex);
     }
   }
+
+  var utilizationFactor
+  main('totalBorrowedUsd').then(res1 => {
+    if (res1) {
+      main('totalDepositUsd').then(res2 => {
+        //@ts-ignore
+        utilizationFactor = res1 / res2
+        const uf = utilizationFactor.toFixed(2)
+        setUf(uf)
+      })
+    }
+  })
+
+  main("totalValueLocked").then(res => {
+    //@ts-ignore
+    setTvl(res?.toFixed(2))
+  })
+
+  main('totalUsers').then(res => {
+    setTotalUsers(res)
+  })
+
+  main("dominantMarket").then(res => {
+    setDominantMarket(res[0])
+  })
 
   const { connect, disconnect, account, chainId } = useContext(Web3ModalContext)
   const { web3Wrapper: wrapper } = useContext(Web3WrapperContext)
@@ -2266,9 +2298,86 @@ const Dashboard = () => {
         <MetaTags>
           <title>Hashstack Finance</title>
         </MetaTags>
-        {/* <Banner /> */}
 
         <div>
+          <div className="container-fluid">
+            <Row>
+              <Col xl={3}>
+                <Card style={{borderRadius : "0.8rem"}}>
+                  <CardBody className="text-center">
+                    <div className="mb-3">
+                      <img src="./tvl.svg" width="18%" ></img>  {'   '} {'   '} {'   '} <div className="float: right" style={{ display: "inline-block", fontSize: "15px" }}> Total Value Locked </div>
+                    </div>
+                    <CardTitle tag="h5">
+                    </CardTitle>
+                    <CardSubtitle
+                      className="mb-2 text-muted"
+                      tag="h2"
+                      align="right"
+                    >
+                      {tvl ? tvl : '...'}
+                    </CardSubtitle>
+                  </CardBody>
+                </Card>
+              </Col>
+
+              <Col xl={3}>
+                <Card>
+                  <CardBody className="text-center">
+                    <div className="mb-3">
+                      <img src="./uf.svg" width="18%" ></img>  {'   '} {'   '} {'   '} <div className="float: right" style={{ display: "inline-block", fontSize: "15px" }}> Utilization Rate </div>
+                    </div>
+                    <CardTitle tag="h5">
+                    </CardTitle>
+                    <CardSubtitle
+                      className="mb-2 text-muted"
+                      tag="h2"
+                      align="right"
+                    >
+                      {uf ? uf : "..."}
+                    </CardSubtitle>
+                  </CardBody>
+                </Card>
+              </Col>
+
+              <Col xl={3}>
+                <Card>
+                  <CardBody className="text-center">
+                    <div className="mb-3">
+                      <img src="./dominantMarket.svg" width="18%" ></img>  {'   '} {'   '} {'   '} <div className="float: right" style={{ display: "inline-block", fontSize: "15px" }}> Dominant Market</div>
+                    </div>
+                    <CardTitle tag="h5">
+                    </CardTitle>
+                    <CardSubtitle
+                      className="mb-2 text-muted"
+                      tag="h2"
+                      align="right"
+                    >
+                      {dominantMarket}
+                    </CardSubtitle>
+                  </CardBody>
+                </Card>
+              </Col>
+              <Col xl={3}>
+                <Card>
+                  <CardBody className="text-center">
+                    <div className="mb-3">
+                      <img src="./totalUsers.svg" width="20%" ></img>  {'   '} {'   '} {'   '} <div className="float: right" style={{ display: "inline-block", fontSize: "15px" }}> Total Users</div>
+                    </div>
+                    <CardTitle tag="h5">
+                    </CardTitle>
+                    <CardSubtitle
+                      className="mb-2 text-muted"
+                      tag="h2"
+                      align="right"
+                    >
+                      {totalUsers}
+                    </CardSubtitle>
+                  </CardBody>
+                </Card>
+              </Col>
+            </Row>
+          </div>
           <Nav tabs className="nav-tabs-custom-main">
             <NavItem>
               <NavLink
@@ -2684,4 +2793,5 @@ const Dashboard = () => {
   )
 }
 
-export default Dashboard
+export default Dashboard;
+
