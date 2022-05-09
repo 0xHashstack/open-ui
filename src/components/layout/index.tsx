@@ -149,7 +149,7 @@ const Layout = props => {
         if (res.data) {
           setCounter(res.data.data["waitlist_ct"])
           setIsWhiteListedAccountRequested(true)
-          setIsWhiteListedAccount(res.data.data["whiteListed"])
+          setIsWhiteListedAccount(true)
         }
       })
       .catch(err => {

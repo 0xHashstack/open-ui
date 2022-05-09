@@ -78,7 +78,7 @@ const Header = () => {
           <div className="d-flex">
             <div className="navbar-brand-box">
               <Link to="" className="logo logo-dark">
-                <img src="./logo.png" style={{ width: '30px', height: '30px', marginRight: '0.5rem' }}></img>
+                <img src="./hstkLogo-white.svg" style={{ width: '30px', height: '30px', marginRight: '0.5rem' }}></img>
                 <span className="logo-sm">
                   <strong style={{ color: 'white', fontSize: '22px', fontWeight: '600' }}>Hashstack</strong>
                 </span>
@@ -88,7 +88,7 @@ const Header = () => {
               </Link>
 
               <Link to="" className="logo logo-light">
-                <img src="./logo.png" style={{ width: '30px', height: '30px', marginRight: '0.5rem' }}></img>
+                <img src="./hstkLogo-white.svg" style={{ width: '30px', height: '30px', marginRight: '0.5rem' }}></img>
                 <span className="logo-sm">
                   <strong style={{ color: 'white', fontSize: '22px', fontWeight: '600' }}>Hashstack</strong>
                 </span>
