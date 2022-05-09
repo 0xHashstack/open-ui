@@ -1,5 +1,5 @@
 import { useState, useContext } from "react"
-import { Col, Button, Form, Input, Modal, Spinner, InputGroup } from "reactstrap"
+import { Col, Button, Form, Input, Modal, Spinner, InputGroup, FormText, FormGroup } from "reactstrap"
 
 import {
   SymbolsMap,
@@ -129,9 +129,12 @@ let Deposit = props => {
                 </Col>
 
               </div>
+              <FormGroup>
               <div className="row mb-4">
                 <Col sm={12}>
-                  <InputGroup>
+                  <InputGroup style={{
+                    border: inputVal==0 || inputVal>=MinimumAmount[props.asset]? '1px solid #556EE6':""
+                  }}>
                     <Input
                       type="number"
                       className="form-control"
@@ -141,6 +144,7 @@ let Deposit = props => {
                       onChange={handleInputChange}
                       value={inputVal !== 0 ? inputVal : `Minimum amount = ${MinimumAmount[props.asset]
                         }`}
+                      invalid = {inputVal!==0 && inputVal<MinimumAmount[props.asset] ? true : false}
                     />
 
 
@@ -156,8 +160,14 @@ let Deposit = props => {
                     </Button>
                     }
                   </InputGroup>
+                    {
+                      inputVal!=0 && inputVal<MinimumAmount[props.asset] && <FormText>
+                        {`Please enter amount more than minimum amount = ${MinimumAmount[props.asset]}`}
+                      </FormText>
+                    }
                 </Col>
               </div>
+              </FormGroup>
               <div className="row mb-4">
                 <Col sm={12}>
                   <select
@@ -196,7 +206,7 @@ let Deposit = props => {
                 <Button
                   color="primary"
                   className="w-md"
-                  disabled={commitPeriod === undefined || isTransactionDone}
+                  disabled={commitPeriod === undefined || isTransactionDone || inputVal<MinimumAmount[props.asset]}
                   onClick={handleDeposit}
                 >
                   {!isTransactionDone ? (
