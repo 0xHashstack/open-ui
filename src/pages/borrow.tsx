@@ -92,26 +92,28 @@ let Borrow = (props) => {
       const tx1 = await wrapper?.getLoanInstance().loanRequest(SymbolsMap[props.assetID], CommitMap[_commitBorrowPeriod], loanInputVal, marketDataOnChain[chainId].DecimalsMap[props.assetID],
         SymbolsMap[_collateralMarket], collateralInputVal, marketDataOnChain[chainId].DecimalsMap[_collateralMarket]);
       const tx = await tx1.wait();
-      onLoanRequested(tx.events);
+      onLoanRequested(tx.events, loanInputVal);
     } catch (err) {
       setIsTransactionDone(false);
       toast.error(`${GetErrorText(err)}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true });
     }
   }
 
-  const onLoanRequested = (data) => {
+  const onLoanRequested = (data, loanInputVal) => {
     let eventName
     let _amount
     data.forEach(e => {
       if (e.event == "NewLoan") {
         eventName = e.event
         _amount = e.args.loanAmount.toBigInt()
+        
       }
     })
 
     let amount = BNtoNum(_amount, 8)
     setIsTransactionDone(false);
-    toast.success(`Requested amount: ${amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true });
+    //
+    toast.success(`Requested amount: ${amount === "NaN" ? loanInputVal : amount}`, { position: toast.POSITION.BOTTOM_RIGHT, closeOnClick: true });
   }
 
   return (
