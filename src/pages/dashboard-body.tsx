@@ -26,7 +26,7 @@ let DashboardTBody = (props) => {
                     " font-size-18"
                   }
                 >
-                  <i className={"mdi mdi-litecoin"} />
+                  <img src='./usdt.svg'></img>
                 </span>
               </div>
               <span>{"USDT"}</span>
@@ -59,8 +59,8 @@ let DashboardTBody = (props) => {
                     "primary" +
                     " font-size-18"
                   }
-                >
-                  <i className={"mdi mdi-ethereum"} />
+                >        
+                  <img src='./usdc.svg'></img>
                 </span>
               </div>
               <span>{"USDC"}</span>
@@ -94,7 +94,7 @@ let DashboardTBody = (props) => {
                     " font-size-18"
                   }
                 >
-                  <i className={"mdi mdi-bitcoin"} />
+                  <img src='./btc.svg'></img>
                 </span>
               </div>
               <span>{"BTC"}</span>
@@ -128,7 +128,7 @@ let DashboardTBody = (props) => {
                     " font-size-18"
                   }
                 >
-                  <i className={"mdi mdi-drag-variant"} />
+                  <img src='./bnb.svg'></img>
                 </span>
               </div>
               <span>{"BNB"}</span>
