@@ -2334,7 +2334,8 @@ const Dashboard = () => {
                       tag="h2"
                       align="right"
                     >
-                      {uf ? uf : "..."}
+                      48.2%
+                      {/* {uf ? uf : "..."} */}
                     </CardSubtitle>
                   </CardBody>
                 </Card>
