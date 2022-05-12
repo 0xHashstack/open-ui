@@ -413,7 +413,7 @@ const Dashboard = () => {
         ?.getLoanInstance()
         .repayLoan(market, CommitMap[_commit], inputVal1, decimal)
       const tx = await tx1.wait()
-      SuccessCallback(tx.events, "LoanRepaid", "Loan Repaid Successfully")
+      SuccessCallback(tx.events, "LoanRepaid", "Loan Repaid Successfully", inputVal1)
     } catch (err) {
       setIsTransactionDone(false)
       toast.error(`${GetErrorText(err)}`, {
@@ -444,7 +444,8 @@ const Dashboard = () => {
       SuccessCallback(
         tx.events,
         "WithdrawPartialLoan",
-        "Loan Withdraw Successfully"
+        "Loan Withdraw Successfully",
+        inputVal1
       )
     } catch (err) {
       setIsTransactionDone(false)
@@ -481,7 +482,7 @@ const Dashboard = () => {
           marketDataOnChain[chainId].DecimalsMap[_collateralOption]
         )
       const tx = await tx1.wait()
-      SuccessCallback(tx.events, "AddCollateral", "Collateral amount added")
+      SuccessCallback(tx.events, "AddCollateral", "Collateral amount added", inputVal1)
     } catch (err) {
       setIsTransactionDone(false)
       toast.error(`${GetErrorText(err)}`, {
@@ -506,7 +507,8 @@ const Dashboard = () => {
       SuccessCallback(
         tx.events,
         "WithdrawCollateral",
-        "Collateral amount released"
+        "Collateral amount released",
+        inputVal1
       )
     } catch (err) {
       setIsTransactionDone(false)
@@ -536,7 +538,7 @@ const Dashboard = () => {
         ?.getLiquidatorInstance()
         .liquidation(_account, SymbolsMap[market], CommitMap[commitment])
       const tx = await tx1.wait()
-      SuccessCallback(tx.events, "Liquidation", "Loan Liquidated")
+      SuccessCallback(tx.events, "Liquidation", "Loan Liquidated", inputVal1)
     } catch (err) {
       asset.isLiquidationDone = false
       setIsTransactionDone(false)
@@ -564,7 +566,7 @@ const Dashboard = () => {
           SymbolsMap[_swapOption]
         )
       const tx = await tx1.wait()
-      SuccessCallback(tx.events, "MarketSwapped", "Swap Loan successful")
+      SuccessCallback(tx.events, "MarketSwapped", "Swap Loan successful", '')
     } catch (err) {
       setIsTransactionDone(false)
       toast.error(`${GetErrorText(err)}`, {
@@ -590,7 +592,7 @@ const Dashboard = () => {
         ?.getLoanInstance()
         .swapToLoan(SymbolsMap[_loanOption], CommitMap[_commit])
       const tx = await tx1.wait()
-      SuccessCallback(tx.events, "MarketSwapped", "Swap to Loan successful")
+      SuccessCallback(tx.events, "MarketSwapped", "Swap to Loan successful", '')
     } catch (err) {
       setIsTransactionDone(false)
       toast.error(`${GetErrorText(err)}`, {
@@ -624,7 +626,7 @@ const Dashboard = () => {
           marketDataOnChain[chainId].DecimalsMap[_depositRequestSel.toUpperCase()]
         )
       const tx = await tx1.wait()
-      SuccessCallback(tx.events, "DepositAdded", "Deposited amount")
+      SuccessCallback(tx.events, "DepositAdded", "Deposited amount", inputVal1)
     } catch (err) {
       setIsTransactionDone(false)
       toast.error(`${GetErrorText(err)}`, {
@@ -652,7 +654,7 @@ const Dashboard = () => {
         // for first withdrawal we can't throw from contract, hence need handling here
         throw "ERROR: Active timelock"
       }
-      SuccessCallback(tx.events, "DepositWithdrawal", "Deposit Withdrawn")
+      SuccessCallback(tx.events, "DepositWithdrawal", "Deposit Withdrawn", inputVal1)
     } catch (err) {
       setIsTransactionDone(false)
       toast.error(`${GetErrorText(err)}`, {
@@ -672,7 +674,7 @@ const Dashboard = () => {
         ?.getLiquidatorInstance()
         .liquidation(account, market, commitment)
       const tx = await tx1.wait()
-      SuccessCallback(tx.events, "", "")
+      SuccessCallback(tx.events, "", "", '')
     } catch (err) {
       setIsTransactionDone(false)
       toast.error(`${GetErrorText(err)}`, {
@@ -682,16 +684,15 @@ const Dashboard = () => {
     }
   }
 
-  const SuccessCallback = (data, eventName, msg) => {
+  const SuccessCallback = (data, eventName, msg, userInput) => {
     let _amount
     data.forEach(e => {
       if (e.event == eventName) {
         _amount = e.args.amount.toBigInt()
       }
     })
-
     let amount = BNtoNum(_amount)
-    toast.success(`${msg}: ${amount}`, {
+    toast.success(`${msg}: ${amount === "NaN" ? userInput : amount}`, {
       position: toast.POSITION.BOTTOM_RIGHT,
       closeOnClick: true,
     })
