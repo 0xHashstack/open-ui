@@ -2587,9 +2587,10 @@ const Dashboard = () => {
                                             <select
                                               className="form-select form-select-sm"
                                               onChange={handleDepositInterestChange}
+                                              value="NONE"
                                             >
                                               <option hidden>Commitment</option>
-                                              <option value={"NONE"}>None</option>
+                                              <option value={"NONE"} >None</option>
                                               <option value={"TWOWEEKS"}>Two Weeks</option>
                                               <option value={"ONEMONTH"}>One Month</option>
                                               <option value={"THREEMONTHS"}>
@@ -2601,9 +2602,10 @@ const Dashboard = () => {
                                             <select
                                               className="form-select form-select-sm"
                                               onChange={handleBorrowInterestChange}
+                                              value="NONE"
                                             >
                                               <option hidden>Commitment</option>
-                                              <option value={"NONE"}>None</option>
+                                              <option value={"NONE"} >None</option>
                                               <option value={"ONEMONTH"}>One Month</option>
                                             </select>
                                           </th>
