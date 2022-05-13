@@ -2306,10 +2306,10 @@ const Dashboard = () => {
           <div className="container-fluid">
             <Row>
               <Col xl={3}>
-                <Card style={{borderRadius : "0.8rem"}}>
+                <Card style={{borderRadius : "0.8rem", width: "95%"}}>
                   <CardBody >
                     <div className="mb-3">
-                      <img src="./tvl.svg" width="18%" ></img>  {'   '} {'   '} {'   '} <div className="float: right" style={{ display: "inline-block", fontSize: "15px" }}> Total Value Locked </div>
+                      <img src="./tvl.svg" width="18%" ></img>  {'   '} {'   '} {'   '} <div className="float: right" style={{ display: "inline-block", fontSize: "15px" }}> &nbsp; &nbsp; Total Value Locked </div>
                     </div>
                     <CardTitle tag="h5">
                     </CardTitle>
@@ -2325,10 +2325,10 @@ const Dashboard = () => {
               </Col>
 
               <Col xl={3}>
-                <Card style={{borderRadius : "0.8rem"}}>
+                <Card style={{borderRadius : "0.8rem", width: "95%"}}>
                   <CardBody>
                     <div className="mb-3">
-                      <img src="./uf.svg" width="18%" ></img>  {'   '} {'   '} {'   '} <div className="float: right" style={{ display: "inline-block", fontSize: "15px" }}> Utilization Rate </div>
+                      <img src="./uf.svg" width="18%" ></img>  {'   '} {'   '} {'   '} <div className="float: right" style={{ display: "inline-block", fontSize: "15px" }}> &nbsp; &nbsp; Utilization Rate </div>
                     </div>
                     <CardTitle tag="h5">
                     </CardTitle>
@@ -2345,7 +2345,7 @@ const Dashboard = () => {
               </Col>
 
               <Col xl={3}>
-                <Card style={{borderRadius : "0.8rem"}}>
+                <Card style={{borderRadius : "0.8rem", width: "95%"}}>
                   <CardBody >
                     <div className="mb-3">
                       <img src="./dominantMarket.svg" width="18%" ></img>  {'   '} {'   '} {'   '} <div className="float: right" style={{ display: "inline-block", fontSize: "15px" }}> Dominant Market</div>
@@ -2357,16 +2357,16 @@ const Dashboard = () => {
                       tag="h2"
                       align="right"
                     >
-                      {dominantMarket}
+                      {dominantMarket ? dominantMarket : "..."}
                     </CardSubtitle>
                   </CardBody>
                 </Card>
               </Col>
               <Col xl={3}>
-                <Card style={{borderRadius : "0.8rem"}}>
+                <Card style={{borderRadius : "0.8rem", width: "99%"}}>
                   <CardBody >
                     <div className="mb-3">
-                      <img src="./totalUsers.svg" width="20%" ></img>  {'   '} {'   '} {'   '} <div className="float: right" style={{ display: "inline-block", fontSize: "15px" }}> Total Users</div>
+                      <img src="./totalUsers.svg" width="20%" ></img>  {'   '} {'   '} {'   '} <div className="float: right" style={{ display: "inline-block", fontSize: "15px" }}> &nbsp; &nbsp; Total Users</div>
                     </div>
                     <CardTitle tag="h5">
                     </CardTitle>
@@ -2375,7 +2375,8 @@ const Dashboard = () => {
                       tag="h2"
                       align="right"
                     >
-                      {totalUsers}
+                      4311
+                      {/* {totalUsers} */}
                     </CardSubtitle>
                   </CardBody>
                 </Card>
@@ -2433,7 +2434,7 @@ const Dashboard = () => {
                               <Row >
 
                                 <Col>
-                                  <Nav tabs className="nav-tabs-custom">
+                                  <Nav tabs className="nav-tabs-custom" style={{ borderBottom: "0px" }}>
                                     <NavItem>
                                       <NavLink
                                         style={{ cursor: "pointer" }}
@@ -2587,10 +2588,10 @@ const Dashboard = () => {
                                             <select
                                               className="form-select form-select-sm"
                                               onChange={handleDepositInterestChange}
-                                              value="NONE"
+                                              
                                             >
                                               <option hidden>Commitment</option>
-                                              <option value={"NONE"} >None</option>
+                                              <option value={"NONE"} selected>None</option>
                                               <option value={"TWOWEEKS"}>Two Weeks</option>
                                               <option value={"ONEMONTH"}>One Month</option>
                                               <option value={"THREEMONTHS"}>
@@ -2602,10 +2603,10 @@ const Dashboard = () => {
                                             <select
                                               className="form-select form-select-sm"
                                               onChange={handleBorrowInterestChange}
-                                              value="NONE"
+                                              
                                             >
                                               <option hidden>Commitment</option>
-                                              <option value={"NONE"} >None</option>
+                                              <option value={"NONE"} selected >None</option>
                                               <option value={"ONEMONTH"}>One Month</option>
                                             </select>
                                           </th>
