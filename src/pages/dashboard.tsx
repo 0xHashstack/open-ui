@@ -1956,7 +1956,7 @@ const Dashboard = () => {
                     tag="h2"
                     align="right"
                   >
-                    {dominantMarket ? dominantMarket : "..."}
+                    BTC
                   </CardSubtitle>
                 </CardBody>
               </Card>
