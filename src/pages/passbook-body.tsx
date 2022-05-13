@@ -7,29 +7,19 @@ import { BNtoNum } from '../blockchain/utils';
 
 
 let PassbookTBody = (props) => {
-    const assets = props.assets;
-    if (props.isloading && assets.length === 0) {
-      return (<tr align="center"><td colSpan={6}><Spinner>Loading...</Spinner></td></tr>)
-    } else if (Array.isArray(assets) && assets.length > 0) {
-      return (
-        <>
-          {assets
+  const assets = props.assets;
+  if (props.isloading && assets.length === 0) {
+    return (<tr align="center"><td colSpan={6}><Spinner>Loading...</Spinner></td></tr>)
+  } else if (Array.isArray(assets) && assets.length > 0) {
+    return (
+      <>
+        {assets
           .map((asset, key) => (
             <tr key={key}>
               <th scope="row">
                 <div className="d-flex align-items-center">
                   <div className="avatar-xs me-3">
-                    <span
-                      className={
-                        "avatar-title rounded-circle bg-soft bg-" +
-                        asset.color +
-                        " text-" +
-                        asset.color +
-                        " font-size-18"
-                      }
-                    >
-                      <i className={CoinClassNames[EventMap[asset.loanMarket.toUpperCase()]] || asset.loanMarket.toUpperCase()} />
-                    </span>
+                    <img src={CoinClassNames[EventMap[asset.loanMarket.toUpperCase()]] || asset.loanMarket.toUpperCase()} />
                   </div>
                   <span>{EventMap[asset.loanMarket.toUpperCase()]}</span>
                 </div>
@@ -43,17 +33,7 @@ let PassbookTBody = (props) => {
               <td>
                 <div className="d-flex align-items-center">
                   <div className="avatar-xs me-3">
-                    <span
-                      className={
-                        "avatar-title rounded-circle bg-soft bg-" +
-                        asset.color +
-                        " text-" +
-                        asset.color +
-                        " font-size-18"
-                      }
-                    >
-                      <i className={CoinClassNames[EventMap[asset.collateralMarket.toUpperCase()]]} />
-                    </span>
+                    <img src={CoinClassNames[EventMap[asset.collateralMarket.toUpperCase()]]} />
                   </div>
                   <span>{EventMap[asset.collateralMarket.toUpperCase()]}</span>
                 </div>
@@ -70,19 +50,9 @@ let PassbookTBody = (props) => {
                 <div className="text-muted">{asset.isSwapped ? 'Yes' : 'No'}</div>
               </td>
               <td>
-              <div className="d-flex align-items-center">
+                <div className="d-flex align-items-center">
                   <div className="avatar-xs me-3">
-                    <span
-                      className={
-                        "avatar-title rounded-circle bg-soft bg-" +
-                        asset.color +
-                        " text-" +
-                        asset.color +
-                        " font-size-18"
-                      }
-                    >
-                      <i className={CoinClassNames[EventMap[asset.currentLoanMarket.toUpperCase()]]} />
-                    </span>
+                    <img src={CoinClassNames[EventMap[asset.currentLoanMarket.toUpperCase()]]} />
                   </div>
                   <span>{EventMap[asset.currentLoanMarket.toUpperCase()]}</span>
                 </div>
@@ -91,20 +61,20 @@ let PassbookTBody = (props) => {
                 <div className="text-muted">{BNtoNum(Number(asset.currentLoanAmount))}</div>
               </td>
               {/* <td> */}
-                {/* <h5 className="font-size-14 mb-1">
+              {/* <h5 className="font-size-14 mb-1">
                   {asset.loansRate}
                 </h5> */}
-                {/* <div className="text-muted">
+              {/* <div className="text-muted">
                   {Number(asset.cdr).toFixed(3)}
                 </div>
               </td> */}
             </tr>
           ))}
-        </>
-      );
-    } else {
-      return (<><tr align="center"><td colSpan={7}>No Records found.</td></tr></>);
-    }
+      </>
+    );
+  } else {
+    return (<><tr align="center"><td colSpan={7}>No Records found.</td></tr></>);
   }
+}
 
-  export default PassbookTBody = React.memo(PassbookTBody);
+export default PassbookTBody = React.memo(PassbookTBody);

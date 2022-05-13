@@ -17,17 +17,7 @@ let DashboardTBody = (props) => {
           <th scope="row">
             <div className="d-flex align-items-center">
               <div className="avatar-xs me-3">
-                <span
-                  className={
-                    "avatar-title rounded-circle bg-soft bg-" +
-                    "info" +
-                    " text-" +
-                    "info" +
-                    " font-size-18"
-                  }
-                >
                   <img src='./usdt.svg'></img>
-                </span>
               </div>
               <span>{"USDT"}</span>
             </div>
@@ -50,18 +40,8 @@ let DashboardTBody = (props) => {
         <tr key={1}>
           <th scope="row">
             <div className="d-flex align-items-center">
-              <div className="avatar-xs me-3">
-                <span
-                  className={
-                    "avatar-title rounded-circle bg-soft bg-" +
-                    "primary" +
-                    " text-" +
-                    "primary" +
-                    " font-size-18"
-                  }
-                >        
+              <div className="avatar-xs me-3">      
                   <img src='./usdc.svg'></img>
-                </span>
               </div>
               <span>{"USDC"}</span>
             </div>
@@ -85,17 +65,7 @@ let DashboardTBody = (props) => {
           <th scope="row">
             <div className="d-flex align-items-center">
               <div className="avatar-xs me-3">
-                <span
-                  className={
-                    "avatar-title rounded-circle bg-soft bg-" +
-                    "warning" +
-                    " text-" +
-                    "warning" +
-                    " font-size-18"
-                  }
-                >
                   <img src='./btc.svg'></img>
-                </span>
               </div>
               <span>{"BTC"}</span>
             </div>
@@ -119,17 +89,7 @@ let DashboardTBody = (props) => {
           <th scope="row">
             <div className="d-flex align-items-center">
               <div className="avatar-xs me-3">
-                <span
-                  className={
-                    "avatar-title rounded-circle bg-soft bg-" +
-                    "warning" +
-                    " text-" +
-                    "warning" +
-                    " font-size-18"
-                  }
-                >
                   <img src='./bnb.svg'></img>
-                </span>
               </div>
               <span>{"BNB"}</span>
             </div>

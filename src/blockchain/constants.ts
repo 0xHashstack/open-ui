@@ -257,19 +257,19 @@ export const EventMap = {
   comit_ONEMONTH: "One Month",
   comit_THREEMONTHS: "Three Months",
 }
-
+//
 export const CoinClassNames = {
-  USDT: "mdi mdi-litecoin",
-  USDC: "mdi mdi-ethereum",
-  BTC: "mdi mdi-bitcoin",
-  BNB: "mdi mdi-drag-variant",
-  WBNB: "mdi mdi-drag-variant",
-  "USDT.T": "mdi mdi-litecoin",
-  "USDC.T": "mdi mdi-ethereum",
-  "BTC.T": "mdi mdi-bitcoin",
-  "BNB.T": "mdi mdi-drag-variant",
-  "WBNB.T": "mdi mdi-drag-variant",
-  CAKE: "mdi mdi-cake"
+  USDT: "./usdt.svg",
+  USDC: "./usdc.svg",
+  BTC: "./btc.svg",
+  BNB: "./bnb.svg",
+  WBNB: "./bnb.svg",
+  "USDT.T": "./usdt.svg",
+  "USDC.T": "./usdc.svg",
+  "BTC.T": "./btc.svg",
+  "BNB.T": "./bnb.svg",
+  "WBNB.T": "./bnb.svg",
+  CAKE: "./pancake.svg"
 }
 
 export const MinimumAmount = {

@@ -128,9 +128,8 @@ const Dashboard = () => {
   })
 
   main("totalValueLocked").then(res => {
-    console.log(res,"res",typeof(res))
-    typeof(res)
-    if (typeof(res) === "number") {
+    typeof (res)
+    if (typeof (res) === "number") {
       //@ts-ignore
       setTvl(res?.toFixed(2))
     }
@@ -1792,23 +1791,12 @@ const Dashboard = () => {
                       <th scope="row">
                         <div className="d-flex align-items-center">
                           <div className="avatar-xs me-3">
-                            <span
-                              className={
-                                "avatar-title rounded-circle bg-soft bg-" +
-                                asset.color +
-                                " text-" +
-                                asset.color +
-                                " font-size-18"
-                              }
-                            >
-                              <i
-                                className={
-                                  CoinClassNames[
-                                  EventMap[asset.market.toUpperCase()]
-                                  ] || asset.market.toUpperCase()
-                                }
-                              />
-                            </span>
+                            <img src={
+                              CoinClassNames[
+                              EventMap[asset.market.toUpperCase()]
+                              ] || asset.market.toUpperCase()
+                            }
+                            />
                           </div>
                           <span>{EventMap[asset.market.toUpperCase()]}</span>
                         </div>
@@ -2179,26 +2167,15 @@ const Dashboard = () => {
                                   <th scope="row">
                                     <div className="d-flex align-items-center">
                                       <div className="avatar-xs me-3">
-                                        <span
-                                          className={
-                                            "avatar-title rounded-circle bg-soft bg-" +
-                                            asset.color +
-                                            " text-" +
-                                            asset.color +
-                                            " font-size-18"
-                                          }
-                                        >
-                                          <i
-                                            className={
-                                              CoinClassNames[
-                                              EventMap[
-                                              asset.loanMarket.toUpperCase()
-                                              ]
-                                              ] ||
-                                              asset.loanMarket.toUpperCase()
-                                            }
-                                          />
-                                        </span>
+                                        <img src={
+                                          CoinClassNames[
+                                          EventMap[
+                                          asset.loanMarket.toUpperCase()
+                                          ]
+                                          ] ||
+                                          asset.loanMarket.toUpperCase()
+                                        }
+                                        />
                                       </div>
                                       <span>
                                         {
@@ -2222,26 +2199,15 @@ const Dashboard = () => {
                                   <th scope="row">
                                     <div className="d-flex align-items-center">
                                       <div className="avatar-xs me-3">
-                                        <span
-                                          className={
-                                            "avatar-title rounded-circle bg-soft bg-" +
-                                            asset.color +
-                                            " text-" +
-                                            asset.color +
-                                            " font-size-18"
-                                          }
-                                        >
-                                          <i
-                                            className={
-                                              CoinClassNames[
-                                              EventMap[
-                                              asset.collateralMarket.toUpperCase()
-                                              ]
-                                              ] ||
-                                              asset.collateralMarket.toUpperCase()
-                                            }
-                                          />
-                                        </span>
+                                        <img src={
+                                          CoinClassNames[
+                                          EventMap[
+                                          asset.collateralMarket.toUpperCase()
+                                          ]
+                                          ] ||
+                                          asset.collateralMarket.toUpperCase()
+                                        }
+                                        />
                                       </div>
                                       <span>
                                         {
