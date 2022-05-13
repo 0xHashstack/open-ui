@@ -128,7 +128,8 @@ const Dashboard = () => {
   })
 
   main("totalValueLocked").then(res => {
-    if (res) {
+    console.log(res,"res")
+    if (res !== undefined) {
       //@ts-ignore
       setTvl(res?.toFixed(2))
     }
@@ -2007,7 +2008,7 @@ const Dashboard = () => {
             <Col xl={customActiveTab === "2" ? "8" : "12"}>
               <Card style={{ height: "29rem" }}>
                 <CardBody>
-                  <Nav tabs className="nav-tabs-custom">
+                  <Nav tabs className="nav-tabs-custom" style={{ borderBottom: "0px" }}>
                     <NavItem>
                       <NavLink
                         style={{ cursor: "pointer" }}
@@ -2080,9 +2081,10 @@ const Dashboard = () => {
                                 <select
                                   className="form-select form-select-sm"
                                   onChange={handleDepositInterestChange}
+                                  defaultValue={"NONE"}
                                 >
                                   <option hidden>Commitment</option>
-                                  <option value={"NONE"} selected>None</option>
+                                  <option value={"NONE"} >None</option>
                                   <option value={"TWOWEEKS"}>Two Weeks</option>
                                   <option value={"ONEMONTH"}>One Month</option>
                                   <option value={"THREEMONTHS"}>
@@ -2094,9 +2096,10 @@ const Dashboard = () => {
                                 <select
                                   className="form-select form-select-sm"
                                   onChange={handleBorrowInterestChange}
+                                  defaultValue={"NONE"}
                                 >
                                   <option hidden>Commitment</option>
-                                  <option value={"NONE"} selected>None</option>
+                                  <option value={"NONE"} >None</option>
                                   <option value={"ONEMONTH"}>One Month</option>
                                 </select>
                               </th>
