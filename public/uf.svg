@@ -8,22 +8,16 @@
 	.st2{fill:#231F20;}
 	.st3{fill:#FFFFFF;}
 	.st4{fill-rule:evenodd;clip-rule:evenodd;fill:#FFFFFF;}
-	.st5{fill:url(#SVGID_1_);}
-	.st6{fill:url(#SVGID_2_);}
-	.st7{fill:url(#SVGID_3_);}
-	.st8{fill:url(#SVGID_4_);}
-	.st9{fill:url(#SVGID_5_);}
-	.st10{fill:url(#SVGID_6_);}
-	.st11{fill:url(#SVGID_7_);}
-	.st12{fill:url(#SVGID_8_);}
+	.st5{fill:#4B41E5;}
+	.st6{fill:url(#SVGID_1_);}
+	.st7{fill:url(#SVGID_2_);}
+	.st8{fill:url(#SVGID_3_);}
+	.st9{fill:url(#SVGID_4_);}
+	.st10{fill:url(#SVGID_5_);}
+	.st11{fill:url(#SVGID_6_);}
+	.st12{fill:url(#SVGID_7_);}
+	.st13{fill:url(#SVGID_8_);}
 </style>
-<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="-3.1077" y1="22.5" x2="40.2203" y2="22.5">
-	<stop  offset="0" style="stop-color:#A844E2"/>
-	<stop  offset="0.2894" style="stop-color:#8243E3"/>
-	<stop  offset="0.5788" style="stop-color:#6442E4"/>
-	<stop  offset="0.8257" style="stop-color:#5241E5"/>
-	<stop  offset="1" style="stop-color:#4B41E5"/>
-</linearGradient>
 <path class="st5" d="M8.02,37.98c0.01,0.47-0.38,0.86-0.85,0.86c-0.45,0-0.83-0.37-0.84-0.82c-0.01-0.47,0.38-0.86,0.85-0.86
 	C7.62,37.15,8,37.53,8.02,37.98z M37.95,24.19c-5.55,0-11.09,0-16.64,0c-0.16,0-0.32,0-0.5,0c0-0.24,0-0.41,0-0.58
 	c0-5.55,0-11.09,0-16.64c0-0.78-0.3-1.11-1.07-1.07c-0.53,0.03-1.06,0.06-1.58,0.11c-0.22,0.02-0.45,0.05-0.67,0.07
