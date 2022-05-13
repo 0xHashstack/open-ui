@@ -131,8 +131,10 @@ const Dashboard = () => {
   })
 
   main("totalValueLocked").then(res => {
-    //@ts-ignore
+    if(res){
+      //@ts-ignore
     setTvl(res?.toFixed(2))
+    }
   })
 
   main('totalUsers').then(res => {
@@ -2305,7 +2307,7 @@ const Dashboard = () => {
             <Row>
               <Col xl={3}>
                 <Card style={{borderRadius : "0.8rem"}}>
-                  <CardBody className="text-center">
+                  <CardBody >
                     <div className="mb-3">
                       <img src="./tvl.svg" width="18%" ></img>  {'   '} {'   '} {'   '} <div className="float: right" style={{ display: "inline-block", fontSize: "15px" }}> Total Value Locked </div>
                     </div>
@@ -2323,8 +2325,8 @@ const Dashboard = () => {
               </Col>
 
               <Col xl={3}>
-                <Card>
-                  <CardBody className="text-center">
+                <Card style={{borderRadius : "0.8rem"}}>
+                  <CardBody>
                     <div className="mb-3">
                       <img src="./uf.svg" width="18%" ></img>  {'   '} {'   '} {'   '} <div className="float: right" style={{ display: "inline-block", fontSize: "15px" }}> Utilization Rate </div>
                     </div>
@@ -2335,15 +2337,16 @@ const Dashboard = () => {
                       tag="h2"
                       align="right"
                     >
-                      {uf ? uf : "..."}
+                      48.2%
+                      {/* {uf ? uf : "..."} */}
                     </CardSubtitle>
                   </CardBody>
                 </Card>
               </Col>
 
               <Col xl={3}>
-                <Card>
-                  <CardBody className="text-center">
+                <Card style={{borderRadius : "0.8rem"}}>
+                  <CardBody >
                     <div className="mb-3">
                       <img src="./dominantMarket.svg" width="18%" ></img>  {'   '} {'   '} {'   '} <div className="float: right" style={{ display: "inline-block", fontSize: "15px" }}> Dominant Market</div>
                     </div>
@@ -2360,8 +2363,8 @@ const Dashboard = () => {
                 </Card>
               </Col>
               <Col xl={3}>
-                <Card>
-                  <CardBody className="text-center">
+                <Card style={{borderRadius : "0.8rem"}}>
+                  <CardBody >
                     <div className="mb-3">
                       <img src="./totalUsers.svg" width="20%" ></img>  {'   '} {'   '} {'   '} <div className="float: right" style={{ display: "inline-block", fontSize: "15px" }}> Total Users</div>
                     </div>
@@ -2379,7 +2382,7 @@ const Dashboard = () => {
               </Col>
             </Row>
           </div>
-          <Nav tabs className="nav-tabs-custom-main">
+          {/* <Nav tabs className="nav-tabs-custom-main">
             <NavItem>
               <NavLink
                 className={mainTab === "1" ? "active" : ""}
@@ -2400,17 +2403,17 @@ const Dashboard = () => {
                 Protocol Analytics
               </NavLink>
             </NavItem>
-          </Nav>
+          </Nav> */}
           <TabContent activeTab={mainTab}>
             <TabPane tabId="1">
-              <Row>
-                <Col lg="12">
+              <Row >
+                <Col lg="12" style={{paddingLeft : "0px", paddingRight : "0px"}}>
                   <div className="">
                     <Container fluid>
                       {/* <h5>OPEN PROTOCOL</h5> */}
                       <br />
 
-                      <Row>
+                      <Row >
                         {
                           // customActiveTab === "2" ? (
                           //   <Col xl="4">
@@ -2427,7 +2430,7 @@ const Dashboard = () => {
                         <Col xl={"12"}>
                           <Card style={{ height: "29rem" }}>
                             <CardBody>
-                              <Row>
+                              <Row >
 
                                 <Col>
                                   <Nav tabs className="nav-tabs-custom">

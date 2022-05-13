@@ -70,7 +70,7 @@ export const main = async (type: string) => {
       "https://api.pancakeswap.info/api/v2/tokens/0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c"
     )
     .then((response) => {
-      btcPrice = response.data.data.price;
+      btcPrice = parseInt(response.data.data.price);
     })
     .catch((error) => {
       console.log(error);
@@ -82,7 +82,7 @@ export const main = async (type: string) => {
       "https://api.pancakeswap.info/api/v2/tokens/0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"
     )
     .then((response) => {
-      bnbPrice = response.data.data.price;
+      bnbPrice = parseInt(response.data.data.price);
     })
     .catch((error) => {
       console.log(error);
@@ -109,10 +109,10 @@ export const main = async (type: string) => {
   let data;
   let totalUsers = 0;
   let flag = 0;
-  while (flag == totalUsers){
-  try {
-    data = await axios.post(openProtocolURL, {
-      query: `
+  while (flag == totalUsers) {
+    try {
+      data = await axios.post(openProtocolURL, {
+        query: `
                 {
                     users(first: 1000, skip: ${flag}){
                         address
@@ -140,123 +140,126 @@ export const main = async (type: string) => {
                     }
                 },
             `,
-    });
-  } catch (err) {
-    console.log(err);
-    return err;
-  }
-  for (let u of data.data.data.users) {
-    for (let d of u.deposits) {
-      if (d.market == "BTC.t") {
-        totalDepositBtcUsd += (btcPrice * d.currentAmount) / 100000000;
-        totalDepositBtcCount += 1;
-      } else if (d.market == "WBNB") {
-        totalDepositBnbUsd += (bnbPrice * d.currentAmount) / 100000000;
-        totalDepositBnbCount += 1;
-      } else if (d.market == "USDC.t") {
-        totalDepositUsdcUsd += d.currentAmount / 100000000;
-        totalDepositUsdcCount += 1;
-      } else if (d.market == "USDT.t") {
-        totalDepositUsdtUsd += d.currentAmount / 100000000;
-        totalDepositUsdtCount += 1;
+      });
+    } catch (err) {
+      console.log(err);
+      return err;
+    }
+    for (let u of data.data.data.users) {
+      for (let d of u.deposits) {
+        if(d.currentAmount < 0) continue;
+        if (d.market == "BTC.t") {
+          totalDepositBtcUsd += btcPrice * (d.currentAmount / 100000000);
+          totalDepositBtcCount += 1;
+        } else if (d.market == "WBNB") {
+          totalDepositBnbUsd += bnbPrice * (d.currentAmount / 100000000);
+          totalDepositBnbCount += 1;
+        } else if (d.market == "USDC.t") {
+          totalDepositUsdcUsd += d.currentAmount / 100000000;
+          totalDepositUsdcCount += 1;
+        } else if (d.market == "USDT.t") {
+          totalDepositUsdtUsd += d.currentAmount / 100000000;
+          totalDepositUsdtCount += 1;
+        }
+
+        if (d.commitment == "comit_THREEMONTHS") {
+          totalDeposit3Month += 1;
+        } else if (d.commitment == "comit_ONEMONTH") {
+          totalDeposit1Month += 1;
+        } else if (d.commitment == "comit_NONE") {
+          totalDepositNone += 1;
+        } else if (d.commitment == "comit_TWOWEEKS") {
+          totalDeposit2Weeks += 1;
+        }
       }
 
-      if (d.commitment == "comit_THREEMONTHS") {
-        totalDeposit3Month += 1;
-      } else if (d.commitment == "comit_ONEMONTH") {
-        totalDeposit1Month += 1;
-      } else if (d.commitment == "comit_NONE") {
-        totalDepositNone += 1;
-      } else if (d.commitment == "comit_TWOWEEKS") {
-        totalDeposit2Weeks += 1;
+      for (let l of u.loans) {
+        if(l.initialAmount < 0) continue;
+        if (l.initialMarket == "BTC.t") {
+          totalBorrowedBtcUsd += btcPrice * (l.initialAmount / 100000000);
+          totalBorrowedBtcCount += 1;
+          if (l.isSwapped) totalBorrowedBtcSwapped++;
+          if (l.state == "Active") {
+            totalBorrowedActive += btcPrice * (l.initialAmount / 100000000);
+            totalBorrowedActiveCount++;
+          }
+
+          if (l.state == "Repaid") {
+            totalBorrowedBtcRepayTime += l.updatedAt - l.createdAt;
+            totalBorrowedBtcRepayCount++;
+          }
+        } else if (l.initialMarket == "WBNB") {
+          totalBorrowedBnbUsd += bnbPrice * (l.initialAmount / 100000000);
+          totalBorrowedBnbCount += 1;
+          if (l.isSwapped) totalBorrowedBnbSwapped++;
+          if (l.state == "Active") {
+            totalBorrowedActive += bnbPrice * (l.initialAmount / 100000000);
+            totalBorrowedActiveCount++;
+          }
+
+          if (l.state == "Repaid") {
+            totalBorrowedBnbRepayTime += l.updatedAt - l.createdAt;
+            totalBorrowedBnbRepayCount++;
+          }
+        } else if (l.initialMarket == "USDC.t") {
+          totalBorrowedUsdcUsd += l.initialAmount / 100000000;
+          totalBorrowedUsdcCount += 1;
+          if (l.isSwapped) totalBorrowedUsdcSwapped++;
+          if (l.state == "Active") {
+            totalBorrowedActive += l.initialAmount / 100000000;
+            totalBorrowedActiveCount++;
+          }
+
+          if (l.state == "Repaid") {
+            totalBorrowedUsdcRepayTime += l.updatedAt - l.createdAt;
+            totalBorrowedUsdcRepayCount++;
+          }
+        } else if (l.initialMarket == "USDT.t") {
+          totalBorrowedUsdtUsd += l.initialAmount / 100000000;
+          totalBorrowedUsdtCount += 1;
+          if (l.isSwapped) totalBorrowedUsdtSwapped++;
+          if (l.state == "Active") {
+            totalBorrowedActive += l.initialAmount / 100000000;
+            totalBorrowedActiveCount++;
+          }
+
+          if (l.state == "Repaid") {
+            totalBorrowedUsdtRepayTime += l.updatedAt - l.createdAt;
+            totalBorrowedUsdtRepayCount++;
+          }
+        }
+
+        if (l.collateral.initialAmount < 0) continue;
+          if (l.collateral.market == "BTC.t") {
+            totalCollateralBtcUsd +=
+              btcPrice * (l.collateral.initialAmount / 100000000);
+          } else if (l.collateral.market == "WBNB") {
+            totalCollateralBnbUsd +=
+              bnbPrice * (l.collateral.initialAmount / 100000000);
+          } else if (l.collateral.market == "USDC.t") {
+            totalCollateralUsdcUsd += l.collateral.initialAmount / 100000000;
+          } else if (l.collateral.market == "USDT.t") {
+            totalCollateralUsdtUsd += l.collateral.initialAmount / 100000000;
+          }
+
+        if (l.commitment == "comit_ONEMONTH") {
+          totalBorrowed1Month += 1;
+          if (l.state == "Repaid") {
+            totalBorrowed1MonthRepayTime += l.updatedAt - l.createdAt;
+            totalBorrowed1MonthRepayCount++;
+          }
+        } else if (l.commitment == "comit_NONE") {
+          totalBorrowedNone += 1;
+          if (l.state == "Repaid") {
+            totalBorrowedNoneRepayTime += l.updatedAt - l.createdAt;
+            totalBorrowedNoneRepayCount++;
+          }
+        }
       }
     }
-
-    for (let l of u.loans) {
-      if (l.initialMarket == "BTC.t") {
-        totalBorrowedBtcUsd += (btcPrice * l.initialAmount) / 100000000;
-        totalBorrowedBtcCount += 1;
-        if (l.isSwapped) totalBorrowedBtcSwapped++;
-        if (l.state == "Active") {
-          totalBorrowedActive += (btcPrice * l.initialAmount) / 100000000;
-          totalBorrowedActiveCount++;
-        }
-
-        if (l.state == "Repaid") {
-          totalBorrowedBtcRepayTime += l.updatedAt - l.createdAt;
-          totalBorrowedBtcRepayCount++;
-        }
-      } else if (l.initialMarket == "WBNB") {
-        totalBorrowedBnbUsd += (bnbPrice * l.initialAmount) / 100000000;
-        totalBorrowedBnbCount += 1;
-        if (l.isSwapped) totalBorrowedBnbSwapped++;
-        if (l.state == "Active") {
-          totalBorrowedActive += (bnbPrice * l.initialAmount) / 100000000;
-          totalBorrowedActiveCount++;
-        }
-
-        if (l.state == "Repaid") {
-          totalBorrowedBnbRepayTime += l.updatedAt - l.createdAt;
-          totalBorrowedBnbRepayCount++;
-        }
-      } else if (l.initialMarket == "USDC.t") {
-        totalBorrowedUsdcUsd += l.initialAmount / 100000000;
-        totalBorrowedUsdcCount += 1;
-        if (l.isSwapped) totalBorrowedUsdcSwapped++;
-        if (l.state == "Active") {
-          totalBorrowedActive += l.initialAmount / 100000000;
-          totalBorrowedActiveCount++;
-        }
-
-        if (l.state == "Repaid") {
-          totalBorrowedUsdcRepayTime += l.updatedAt - l.createdAt;
-          totalBorrowedUsdcRepayCount++;
-        }
-      } else if (l.initialMarket == "USDT.t") {
-        totalBorrowedUsdtUsd += l.initialAmount / 100000000;
-        totalBorrowedUsdtCount += 1;
-        if (l.isSwapped) totalBorrowedUsdtSwapped++;
-        if (l.state == "Active") {
-          totalBorrowedActive += l.initialAmount / 100000000;
-          totalBorrowedActiveCount++;
-        }
-
-        if (l.state == "Repaid") {
-          totalBorrowedUsdtRepayTime += l.updatedAt - l.createdAt;
-          totalBorrowedUsdtRepayCount++;
-        }
-      }
-
-      if (l.collateral.market == "BTC.t") {
-        totalCollateralBtcUsd +=
-          (btcPrice * l.collateral.initialAmount) / 100000000;
-      } else if (l.collateral.market == "WBNB") {
-        totalCollateralBnbUsd +=
-          (bnbPrice * l.collateral.initialAmount) / 100000000;
-      } else if (l.collateral.market == "USDC.t") {
-        totalCollateralUsdcUsd += l.collateral.initialAmount / 100000000;
-      } else if (l.collateral.market == "USDT.t") {
-        totalCollateralUsdtUsd += l.collateral.initialAmount / 100000000;
-      }
-
-      if (l.commitment == "comit_ONEMONTH") {
-        totalBorrowed1Month += 1;
-        if (l.state == "Repaid") {
-          totalBorrowed1MonthRepayTime += l.updatedAt - l.createdAt;
-          totalBorrowed1MonthRepayCount++;
-        }
-      } else if (l.commitment == "comit_NONE") {
-        totalBorrowedNone += 1;
-        if (l.state == "Repaid") {
-          totalBorrowedNoneRepayTime += l.updatedAt - l.createdAt;
-          totalBorrowedNoneRepayCount++;
-        }
-      }
-    }
+    totalUsers += data.data.data.users.length;
+    flag += 1000;
   }
-  totalUsers += data.data.data.users.length;
-  flag += 1000;
-}
   console.log(
     "Total USD Deposit: ",
     totalDepositBtcUsd +
@@ -265,10 +268,10 @@ export const main = async (type: string) => {
       totalDepositBnbUsd
   );
   // console.log("Deposit:");
-  // console.log("BTC equivalnent USD: ", totalDepositBtcUsd);
-  // console.log("BNB equivalent USD: ", totalDepositBnbUsd);
-  // console.log("USDC equivalent USD: ", totalDepositUsdcUsd);
-  // console.log("USDT equivalent USD: ", totalDepositUsdtUsd);
+  console.log("BTC equivalnent USD: ", totalDepositBtcUsd);
+  console.log("BNB equivalent USD: ", totalDepositBnbUsd);
+  console.log("USDC equivalent USD: ", totalDepositUsdcUsd);
+  console.log("USDT equivalent USD: ", totalDepositUsdtUsd);
 
   // console.log("BTC Count: ", totalDepositBtcCount);
   // console.log("USDC Count: ", totalDepositUsdcCount);
@@ -471,5 +474,3 @@ export const main = async (type: string) => {
   else if (type == "averageRepay1Month")
     return totalBorrowed1MonthRepayTime / totalBorrowed1MonthRepayCount;
 };
-
-//main()

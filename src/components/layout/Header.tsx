@@ -5,7 +5,6 @@ import { Web3ModalContext } from "../../contexts/Web3ModalProvider";
 import { Web3WrapperContext } from "../../contexts/Web3WrapperProvider";
 import { GetErrorText, BNtoNum } from "../../blockchain/utils";
 import { toast } from 'react-toastify';
-import amplitude from '../../helpers/AmplitudeService';
 import 'react-toastify/dist/ReactToastify.css';
 
 toast.configure({ autoClose: 4000 });
@@ -22,12 +21,10 @@ const Header = () => {
 
 
   const handleConnectWallet = useCallback(() => {
-    amplitude.getInstance().logEvent('connectWalletClicked', {});
     connect();
   }, [connect]);
 
   const handleDisconnectWallet = useCallback(() => {
-    amplitude.getInstance().logEvent('walletDisconnected', {'address': account});
     disconnect();
   }, [disconnect]);
 
@@ -35,7 +32,6 @@ const Header = () => {
     try {
       setIsTransactionDone(true);
       const tokenName = event.target.textContent;
-      amplitude.getInstance().logEvent('getTokenClicked', {'address': account, 'tokenName':tokenName });
       setCurrentProcessingToken(event.target.textContent);
       const tx1 = await wrapper?.getFaucetInstance().getTokens(tokenName);
       const tx = await tx1.wait();
@@ -78,7 +74,7 @@ const Header = () => {
           <div className="d-flex">
             <div className="navbar-brand-box">
               <Link to="" className="logo logo-dark">
-                <img src="./hstkLogo-white.svg" style={{ width: '30px', height: '30px', marginRight: '0.5rem' }}></img>
+                <img src="./white_logo.svg" style={{ width: '55%', height: '30px', marginRight: '0.5rem' }}></img>
                 <span className="logo-sm">
                   <strong style={{ color: 'white', fontSize: '22px', fontWeight: '600' }}>Hashstack</strong>
                 </span>
@@ -88,13 +84,13 @@ const Header = () => {
               </Link>
 
               <Link to="" className="logo logo-light">
-                <img src="./hstkLogo-white.svg" style={{ width: '30px', height: '30px', marginRight: '0.5rem' }}></img>
-                <span className="logo-sm">
+                <img src="./white_logo.svg" style={{ width: '55%', marginRight: '0.5rem' }}></img>
+                {/* <span className="logo-sm">
                   <strong style={{ color: 'white', fontSize: '22px', fontWeight: '600' }}>Hashstack</strong>
                 </span>
                 <span className="logo-lg">
                   <strong style={{ color: 'white', fontSize: '19px', fontWeight: '600' }}>Hashstack</strong>
-                </span>
+                </span> */}
               </Link>
             </div>
           </div>
@@ -161,6 +157,7 @@ const Header = () => {
                         className="btn-block btn-lg"
                         outline
                         onClick={handleGetToken}
+                        
                       >
                         {isTransactionDone && currentProcessingToken === 'USDT' ? <Spinner>Loading...</Spinner> : "USDT" }
                       </Button>
