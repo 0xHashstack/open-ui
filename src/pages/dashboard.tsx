@@ -128,8 +128,9 @@ const Dashboard = () => {
   })
 
   main("totalValueLocked").then(res => {
-    console.log(res,"res")
-    if (res !== undefined) {
+    console.log(res,"res",typeof(res))
+    typeof(res)
+    if (typeof(res) === "number") {
       //@ts-ignore
       setTvl(res?.toFixed(2))
     }
