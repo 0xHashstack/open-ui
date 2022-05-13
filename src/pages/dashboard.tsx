@@ -25,6 +25,8 @@ import {
   UncontrolledAccordion,
   CardTitle,
   CardSubtitle,
+  ListInlineItem,
+  List
 } from "reactstrap"
 import classnames from "classnames";
 import { Web3ModalContext } from "../contexts/Web3ModalProvider";
@@ -131,9 +133,10 @@ const Dashboard = () => {
   })
 
   main("totalValueLocked").then(res => {
-    if(res){
+    console.log(res,"restvl")
+    if (res) {
       //@ts-ignore
-    setTvl(res?.toFixed(2))
+      setTvl(res?.toFixed(2))
     }
   })
 
@@ -1789,10 +1792,17 @@ const Dashboard = () => {
           <div className="table-responsive">
             <Table className="table table-nowrap align-middle mb-0">
               <thead>
-                <tr>
-                  <th scope="col">Deposit Market</th>
-                  <th scope="col">Commitment</th>
-                  <th scope="col">Amount</th>
+                <tr align-items-center>
+                  <th scope="row">
+                    <div className="d-flex align-items-center">
+                      <div className="avatar-xs me-3">
+                        <span>Deposit Market</span>
+                      </div>
+                    </div>
+                  </th>
+                  {/* <th scope="col" colSpan={1}>Deposit Market</th> */}
+                  <th scope="col" colSpan={1}>Commitment</th>
+                  <th scope="col" colSpan={10}>Amount</th>
                   {/* <th scope="col" colSpan={2}>Interest Earned</th> */}
                 </tr>
               </thead>
@@ -1920,12 +1930,28 @@ const Dashboard = () => {
         return (
           // Active Deposits
           <div className="table-responsive">
+           
 
             <Row>
-              <Col><h6>Deposit Market</h6></Col>
-              <Col><h6>Commitment</h6></Col>
-              <Col><h6>Amount</h6></Col>
+              <Col>
+              <div className="d-flex align-items-center">
+                    
+                  Deposit Market
+                </div>
+                
+              </Col>
+              <Col><div className="d-flex align-items-center">
+                      
+                  Deposit Market
+            
+                </div></Col>
+              <Col><div className="d-flex align-items-center">
+                      
+                  Deposit Market
+                
+                </div></Col>
             </Row>
+
             {Array.isArray(activeDepositsData) &&
               activeDepositsData.length > 0 ? (
               activeDepositsData.map((asset, key) => (
@@ -2305,11 +2331,11 @@ const Dashboard = () => {
         <div>
           <div className="container-fluid">
             <Row>
-              <Col xl={3}>
-                <Card style={{borderRadius : "0.8rem"}}>
+              <Col xl={3} className="dicons">
+                <Card style={{ borderRadius: "0.8rem", width: "95%" }}>
                   <CardBody >
                     <div className="mb-3">
-                      <img src="./tvl.svg" width="18%" ></img>  {'   '} {'   '} {'   '} <div className="float: right" style={{ display: "inline-block", fontSize: "15px" }}> Total Value Locked </div>
+                      <img src="./tvl.svg" width="18%" ></img>  {'   '} {'   '} {'   '} <div className="float: right" style={{ display: "inline-block", fontSize: "15px" }}> &nbsp; &nbsp;Total Value Locked </div>
                     </div>
                     <CardTitle tag="h5">
                     </CardTitle>
@@ -2325,10 +2351,10 @@ const Dashboard = () => {
               </Col>
 
               <Col xl={3}>
-                <Card style={{borderRadius : "0.8rem"}}>
+                <Card style={{ borderRadius: "0.8rem", width: "95%" }}>
                   <CardBody>
                     <div className="mb-3">
-                      <img src="./uf.svg" width="18%" ></img>  {'   '} {'   '} {'   '} <div className="float: right" style={{ display: "inline-block", fontSize: "15px" }}> Utilization Rate </div>
+                      <img src="./uf.svg" width="18%" ></img>  {'   '} {'   '} {'   '} <div className="float: right" style={{ display: "inline-block", fontSize: "15px" }}> &nbsp; &nbsp;Utilization Rate </div>
                     </div>
                     <CardTitle tag="h5">
                     </CardTitle>
@@ -2345,7 +2371,7 @@ const Dashboard = () => {
               </Col>
 
               <Col xl={3}>
-                <Card style={{borderRadius : "0.8rem"}}>
+                <Card style={{ borderRadius: "0.8rem", width: "95%" }}>
                   <CardBody >
                     <div className="mb-3">
                       <img src="./dominantMarket.svg" width="18%" ></img>  {'   '} {'   '} {'   '} <div className="float: right" style={{ display: "inline-block", fontSize: "15px" }}> Dominant Market</div>
@@ -2357,16 +2383,16 @@ const Dashboard = () => {
                       tag="h2"
                       align="right"
                     >
-                      {dominantMarket}
+                      {dominantMarket ? dominantMarket : "..."}
                     </CardSubtitle>
                   </CardBody>
                 </Card>
               </Col>
               <Col xl={3}>
-                <Card style={{borderRadius : "0.8rem"}}>
+                <Card style={{ borderRadius: "0.8rem", width: "99%" }}>
                   <CardBody >
                     <div className="mb-3">
-                      <img src="./totalUsers.svg" width="20%" ></img>  {'   '} {'   '} {'   '} <div className="float: right" style={{ display: "inline-block", fontSize: "15px" }}> Total Users</div>
+                      <img src="./totalUsers.svg" width="18%" ></img>  {'   '} {'   '} {'   '} <div className="float: right" style={{ display: "inline-block", fontSize: "15px" }}> &nbsp; &nbsp;Total Users</div>
                     </div>
                     <CardTitle tag="h5">
                     </CardTitle>
@@ -2375,7 +2401,8 @@ const Dashboard = () => {
                       tag="h2"
                       align="right"
                     >
-                      {totalUsers}
+                      {/* {totalUsers} */}
+                      4311
                     </CardSubtitle>
                   </CardBody>
                 </Card>
@@ -2407,7 +2434,7 @@ const Dashboard = () => {
           <TabContent activeTab={mainTab}>
             <TabPane tabId="1">
               <Row >
-                <Col lg="12" style={{paddingLeft : "0px", paddingRight : "0px"}}>
+                <Col lg="12" style={{ paddingLeft: "0px", paddingRight: "0px" }}>
                   <div className="">
                     <Container fluid>
                       {/* <h5>OPEN PROTOCOL</h5> */}
@@ -2433,7 +2460,7 @@ const Dashboard = () => {
                               <Row >
 
                                 <Col>
-                                  <Nav tabs className="nav-tabs-custom">
+                                  <Nav tabs className="nav-tabs-custom" style={{ borderBottom: "0px" }}>
                                     <NavItem>
                                       <NavLink
                                         style={{ cursor: "pointer" }}
@@ -2445,6 +2472,7 @@ const Dashboard = () => {
                                         }}
                                       >
                                         <span className="d-none d-sm-block">Dashboard</span>
+
                                       </NavLink>
                                     </NavItem>
                                     {account ? (
