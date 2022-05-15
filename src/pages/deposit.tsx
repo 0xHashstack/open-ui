@@ -124,48 +124,48 @@ let Deposit = props => {
                 </Col>
                 {/* <Col sm={4}></Col> */}
                 <Col sm={4} >
-                  <div align="right">Balance : {balance  ? balance : " Loading"}</div>
+                  <div align="right">Balance : {balance ? balance : " Loading"}</div>
                 </Col>
 
               </div>
               <FormGroup>
-              <div className="row mb-4">
-                <Col sm={12}>
-                  <InputGroup style={{
-                    border: inputVal==0 || inputVal>=MinimumAmount[props.asset]? '1px solid #556EE6':""
-                  }}>
-                    <Input
-                      type="number"
-                      className="form-control"
-                      id="amount"
-                      placeholder={`Minimum amount = ${MinimumAmount[props.asset]
-                        }`}
-                      onChange={handleInputChange}
-                      value={inputVal !== 0 ? inputVal : `Minimum amount = ${MinimumAmount[props.asset]
-                        }`}
-                      invalid = {inputVal!==0 && inputVal<MinimumAmount[props.asset] ? true : false}
-                    />
+                <div className="row mb-4">
+                  <Col sm={12}>
+                    <InputGroup style={{
+                      border: inputVal == 0 || inputVal >= MinimumAmount[props.asset] ? '1px solid #556EE6' : ""
+                    }}>
+                      <Input
+                        type="number"
+                        className="form-control"
+                        id="amount"
+                        placeholder={`Minimum amount = ${MinimumAmount[props.asset]
+                          }`}
+                        onChange={handleInputChange}
+                        value={inputVal !== 0 ? inputVal : `Minimum amount = ${MinimumAmount[props.asset]
+                          }`}
+                        invalid={inputVal !== 0 && inputVal < MinimumAmount[props.asset] ? true : false}
+                      />
 
 
-                    {<Button
-                      outline
-                      type="button"
-                      className="btn btn-md w-xs"
-                      onClick={handleMax}
-                      disabled={balance ? false : true}
-                      style={{ marginLeft: '0px',background: "#2e3444", border: "#2e3444" }}
-                    >
-                      <span style={{ borderBottom: "2px dotted #fff"}}>Max</span>
-                    </Button>
-                    }
-                  </InputGroup>
+                      {<Button
+                        outline
+                        type="button"
+                        className="btn btn-md w-xs"
+                        onClick={handleMax}
+                        disabled={balance ? false : true}
+                        style={{ background: "#2e3444", border: "#2e3444" }}
+                      >
+                        <span style={{ borderBottom: "2px dotted #fff" }}>Max</span>
+                      </Button>
+                      }
+                    </InputGroup>
                     {
-                      inputVal!=0 && inputVal<MinimumAmount[props.asset] && <FormText>
+                      inputVal != 0 && inputVal < MinimumAmount[props.asset] && <FormText>
                         {`Please enter amount more than minimum amount = ${MinimumAmount[props.asset]}`}
                       </FormText>
                     }
-                </Col>
-              </div>
+                  </Col>
+                </div>
               </FormGroup>
               <div className="row mb-4">
                 <Col sm={12}>
@@ -205,7 +205,7 @@ let Deposit = props => {
                 <Button
                   color="primary"
                   className="w-md"
-                  disabled={commitPeriod === undefined || isTransactionDone || inputVal<MinimumAmount[props.asset]}
+                  disabled={commitPeriod === undefined || isTransactionDone || inputVal < MinimumAmount[props.asset]}
                   onClick={handleDeposit}
                 >
                   {!isTransactionDone ? (

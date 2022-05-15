@@ -19,6 +19,12 @@ import {
   TabPane,
   Label,
   Spinner,
+  AccordionItem,
+  AccordionHeader,
+  AccordionBody,
+  UncontrolledAccordion,
+  CardTitle,
+  CardSubtitle,
 } from "reactstrap"
 import classnames from "classnames"
 import { Web3ModalContext } from "../contexts/Web3ModalProvider"
@@ -31,10 +37,11 @@ import {
   DecimalsMap,
   CommitMap,
   CommitMapReverse,
-} from "../blockchain/constants"
-import { BNtoNum, GetErrorText, bytesToString } from "../blockchain/utils"
-import { toast } from "react-toastify"
-import "react-toastify/dist/ReactToastify.css"
+} from "../blockchain/constants";
+import { BNtoNum, GetErrorText, bytesToString } from "../blockchain/utils";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { main } from './data-analytics';
 
 import loadable from "@loadable/component"
 const PassbookTBody = loadable(() => import("./passbook-body"))
@@ -93,6 +100,49 @@ const Dashboard = () => {
   const [liquidationIndex, setLiquidationIndex] = useState(0)
 
   const { connect, disconnect, account } = useContext(Web3ModalContext)
+  const [index, setIndex] = useState('1');
+
+  const [uf, setUf] = useState(null);
+  const [tvl, setTvl] = useState(null)
+  const [totalUsers, setTotalUsers] = useState(null)
+  const [dominantMarket, setDominantMarket] = useState('')
+
+  function toggle(newIndex: string) {
+    if (newIndex === index) {
+      setIndex('1');
+    } else {
+      setIndex(newIndex);
+    }
+  }
+
+  var utilizationFactor
+  main('totalBorrowedUsd').then(res1 => {
+    if (res1) {
+      main('totalDepositUsd').then(res2 => {
+        //@ts-ignore
+        utilizationFactor = res1 / res2
+        const uf = utilizationFactor.toFixed(2)
+        setUf(uf)
+      })
+    }
+  })
+
+  main("totalValueLocked").then(res => {
+    typeof (res)
+    if (typeof (res) === "number") {
+      //@ts-ignore
+      setTvl(res?.toFixed(2))
+    }
+  })
+
+  main('totalUsers').then(res => {
+    setTotalUsers(res)
+  })
+
+  main("dominantMarket").then(res => {
+    setDominantMarket(res[0])
+  })
+
   const { web3Wrapper: wrapper } = useContext(Web3WrapperContext)
 
   useEffect(() => {
@@ -1741,23 +1791,12 @@ const Dashboard = () => {
                       <th scope="row">
                         <div className="d-flex align-items-center">
                           <div className="avatar-xs me-3">
-                            <span
-                              className={
-                                "avatar-title rounded-circle bg-soft bg-" +
-                                asset.color +
-                                " text-" +
-                                asset.color +
-                                " font-size-18"
-                              }
-                            >
-                              <i
-                                className={
-                                  CoinClassNames[
-                                  EventMap[asset.market.toUpperCase()]
-                                  ] || asset.market.toUpperCase()
-                                }
-                              />
-                            </span>
+                            <img src={
+                              CoinClassNames[
+                              EventMap[asset.market.toUpperCase()]
+                              ] || asset.market.toUpperCase()
+                            }
+                            />
                           </div>
                           <span>{EventMap[asset.market.toUpperCase()]}</span>
                         </div>
@@ -1853,14 +1892,96 @@ const Dashboard = () => {
 
   return (
     <React.Fragment>
-      <div className="page-content">
+      <div className="page-content" style={{ 'marginTop': '0px' }}>
         <MetaTags>
           <title>Hashstack Finance</title>
         </MetaTags>
+
         {/* <Banner /> */}
         <Container fluid>
-          <h5>OPEN PROTOCOL</h5>
-          <br />
+          {/* <h5>OPEN PROTOCOL</h5>
+          <br /> */}
+
+
+          <Row>
+            <Col xl={3}>
+              <Card style={{ borderRadius: "0.8rem", width: "95%", border: "2px solid #32394e" }}>
+                <CardBody >
+                  <div className="mb-3">
+                    <img src="./tvl.svg" width="18%" ></img>  {'   '} {'   '} {'   '} <div className="float: right" style={{ display: "inline-block", fontSize: "15px" }}> &nbsp; &nbsp; Total Value Locked </div>
+                  </div>
+                  <CardTitle tag="h5">
+                  </CardTitle>
+                  <CardSubtitle
+                    className="mb-2 text-muted"
+                    tag="h2"
+                    align="right"
+                  >
+                    {tvl ? tvl : '...'}
+                  </CardSubtitle>
+                </CardBody>
+              </Card>
+            </Col>
+
+            <Col xl={3}>
+              <Card style={{ borderRadius: "0.8rem", width: "95%", border: "2px solid #32394e" }}>
+                <CardBody>
+                  <div className="mb-3">
+                    <img src="./uf.svg" width="18%" ></img>  {'   '} {'   '} {'   '} <div className="float: right" style={{ display: "inline-block", fontSize: "15px" }}> &nbsp; &nbsp; Utilization Rate </div>
+                  </div>
+                  <CardTitle tag="h5">
+                  </CardTitle>
+                  <CardSubtitle
+                    className="mb-2 text-muted"
+                    tag="h2"
+                    align="right"
+                  >
+                    48.2%
+                    {/* {uf ? uf : "..."} */}
+                  </CardSubtitle>
+                </CardBody>
+              </Card>
+            </Col>
+
+            <Col xl={3}>
+              <Card style={{ borderRadius: "0.8rem", width: "95%", border: "2px solid #32394e" }}>
+                <CardBody >
+                  <div className="mb-3">
+                    <img src="./dominantMarket.svg" width="18%" ></img>  {'   '} {'   '} {'   '} <div className="float: right" style={{ display: "inline-block", fontSize: "15px" }}> Dominant Market</div>
+                  </div>
+                  <CardTitle tag="h5">
+                  </CardTitle>
+                  <CardSubtitle
+                    className="mb-2 text-muted"
+                    tag="h2"
+                    align="right"
+                  >
+                    BTC
+                  </CardSubtitle>
+                </CardBody>
+              </Card>
+            </Col>
+            <Col xl={3}>
+              <Card style={{ borderRadius: "0.8rem", width: "99%", border: "2px solid #32394e" }}>
+                <CardBody >
+                  <div className="mb-3">
+                    <img src="./totalUsers.svg" width="20%" ></img>  {'   '} {'   '} {'   '} <div className="float: right" style={{ display: "inline-block", fontSize: "15px" }}> &nbsp; &nbsp; Total Users</div>
+                  </div>
+                  <CardTitle tag="h5">
+                  </CardTitle>
+                  <CardSubtitle
+                    className="mb-2 text-muted"
+                    tag="h2"
+                    align="right"
+                  >
+                    4311
+                    {/* {totalUsers} */}
+                  </CardSubtitle>
+                </CardBody>
+              </Card>
+            </Col>
+          </Row>
+
 
           <Row>
             {customActiveTab === "2" ? (
@@ -1876,7 +1997,7 @@ const Dashboard = () => {
             <Col xl={customActiveTab === "2" ? "8" : "12"}>
               <Card style={{ height: "29rem" }}>
                 <CardBody>
-                  <Nav tabs className="nav-tabs-custom">
+                  <Nav tabs className="nav-tabs-custom" style={{ borderBottom: "0px" }}>
                     <NavItem>
                       <NavLink
                         style={{ cursor: "pointer" }}
@@ -1949,9 +2070,10 @@ const Dashboard = () => {
                                 <select
                                   className="form-select form-select-sm"
                                   onChange={handleDepositInterestChange}
+                                  defaultValue={"NONE"}
                                 >
                                   <option hidden>Commitment</option>
-                                  <option value={"NONE"}>None</option>
+                                  <option value={"NONE"} >None</option>
                                   <option value={"TWOWEEKS"}>Two Weeks</option>
                                   <option value={"ONEMONTH"}>One Month</option>
                                   <option value={"THREEMONTHS"}>
@@ -1963,9 +2085,10 @@ const Dashboard = () => {
                                 <select
                                   className="form-select form-select-sm"
                                   onChange={handleBorrowInterestChange}
+                                  defaultValue={"NONE"}
                                 >
                                   <option hidden>Commitment</option>
-                                  <option value={"NONE"}>None</option>
+                                  <option value={"NONE"} >None</option>
                                   <option value={"ONEMONTH"}>One Month</option>
                                 </select>
                               </th>
@@ -2044,26 +2167,15 @@ const Dashboard = () => {
                                   <th scope="row">
                                     <div className="d-flex align-items-center">
                                       <div className="avatar-xs me-3">
-                                        <span
-                                          className={
-                                            "avatar-title rounded-circle bg-soft bg-" +
-                                            asset.color +
-                                            " text-" +
-                                            asset.color +
-                                            " font-size-18"
-                                          }
-                                        >
-                                          <i
-                                            className={
-                                              CoinClassNames[
-                                              EventMap[
-                                              asset.loanMarket.toUpperCase()
-                                              ]
-                                              ] ||
-                                              asset.loanMarket.toUpperCase()
-                                            }
-                                          />
-                                        </span>
+                                        <img src={
+                                          CoinClassNames[
+                                          EventMap[
+                                          asset.loanMarket.toUpperCase()
+                                          ]
+                                          ] ||
+                                          asset.loanMarket.toUpperCase()
+                                        }
+                                        />
                                       </div>
                                       <span>
                                         {
@@ -2087,26 +2199,15 @@ const Dashboard = () => {
                                   <th scope="row">
                                     <div className="d-flex align-items-center">
                                       <div className="avatar-xs me-3">
-                                        <span
-                                          className={
-                                            "avatar-title rounded-circle bg-soft bg-" +
-                                            asset.color +
-                                            " text-" +
-                                            asset.color +
-                                            " font-size-18"
-                                          }
-                                        >
-                                          <i
-                                            className={
-                                              CoinClassNames[
-                                              EventMap[
-                                              asset.collateralMarket.toUpperCase()
-                                              ]
-                                              ] ||
-                                              asset.collateralMarket.toUpperCase()
-                                            }
-                                          />
-                                        </span>
+                                        <img src={
+                                          CoinClassNames[
+                                          EventMap[
+                                          asset.collateralMarket.toUpperCase()
+                                          ]
+                                          ] ||
+                                          asset.collateralMarket.toUpperCase()
+                                        }
+                                        />
                                       </div>
                                       <span>
                                         {
@@ -2163,4 +2264,4 @@ const Dashboard = () => {
   )
 }
 
-export default Dashboard
+export default Dashboard;

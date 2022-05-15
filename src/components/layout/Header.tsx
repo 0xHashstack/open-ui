@@ -70,7 +70,7 @@ const Header = () => {
   return (
     <React.Fragment>
       <header id="page-topbar">
-        <div className="navbar-header">
+        <div className="navbar-header" style={{paddingRight: "2%"}}>
           <div className="d-flex">
             <div className="navbar-brand-box">
               <Link to="" className="logo logo-dark">
@@ -169,7 +169,7 @@ const Header = () => {
               color="light"
               outline
               className="btn-outline"
-              style={{ float: "right" }}
+               style={{ float: "right" }}
               disabled={account === null}
               onClick={() => {
                 window.open("https://discord.com/channels/907151419650482217/907151709485277214");

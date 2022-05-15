@@ -72,16 +72,16 @@ class ComptrollerWeb3Wrapper {
   }
 
   //getter methods
-  getAPR(commitment: string) {
-    return this.comptroller.getAPR(commitment)
+  getAPR( market: string, commitment: string,) {
+    return this.comptroller.getAPR(market, commitment)
   }
 
   getAPRInd(commitment: string, index: number) {
     return this.comptroller.getAPRInd(commitment, String(index))
   }
 
-  getAPY(commitment: string) {
-    return this.comptroller.getAPY(commitment)
+  getsavingsAPR(commitment: string, market: string) {
+    return this.comptroller.getsavingsAPR(market,commitment)
   }
 
   getAPYInd(commitment: string, index: number) {

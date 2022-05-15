@@ -106,7 +106,7 @@ let Borrow = (props) => {
       if (e.event == "NewLoan") {
         eventName = e.event
         _amount = e.args.loanAmount.toBigInt()
-        
+
       }
     })
 

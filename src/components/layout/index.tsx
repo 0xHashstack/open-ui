@@ -164,8 +164,7 @@ const Layout = props => {
             <Col lg="12">
               <div className="text-center mb-5">
                 <h4 className="font-weight-medium">
-                  Connect your wallet to access Hashstack&apos;s closed beta
-                  testnet
+                  Welcome to Hashstack&apos;s public testnet
                 </h4>
                 <div className="mt-5 text-center">
                   <Button
