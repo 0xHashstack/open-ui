@@ -1,0 +1,32 @@
+
+   
+{
+    "rules": {
+      "no-undef": "off",
+      "react/jsx-uses-react": "off",
+      "react/react-in-jsx-scope": "off",
+      "react/prop-types": "off"
+    },
+    "extends": [
+      "plugin:react/recommended",
+      "plugin:react-hooks/recommended"
+    ],
+    "settings": {
+      "react": {
+        "version": "^17.0.1"
+      }
+    },
+    "plugins": [
+      "react-hooks"
+    ],
+    "parser": "babel-eslint",
+    "parserOptions": {
+      "ecmaVersion": 2020,
+      "sourceType": "module",
+      "ecmaFeatures": {
+        "jsx": true,
+        "modules": true,
+        "experimentalObjectRestSpread": true
+      }
+    }
+  }
