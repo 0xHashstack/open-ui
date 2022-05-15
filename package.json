@@ -41,7 +41,6 @@
         "metismenujs": "1.3.0",
         "mocha": "^9.2.1",
         "moment": "2.29.1",
-        "node-sass": "6.0.1",
         "prop-types": "15.7.2",
         "react": "^17.0.2",
         "react-bootstrap": "^2.0.1",
