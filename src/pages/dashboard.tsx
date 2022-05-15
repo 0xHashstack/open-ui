@@ -1905,7 +1905,7 @@ const Dashboard = () => {
 
           <Row>
             <Col xl={3}>
-              <Card style={{ borderRadius: "0.8rem", width: "95%", border:"2px solid #32394e" }}>
+              <Card style={{ borderRadius: "0.8rem", width: "95%", border: "2px solid #32394e" }}>
                 <CardBody >
                   <div className="mb-3">
                     <img src="./tvl.svg" width="18%" ></img>  {'   '} {'   '} {'   '} <div className="float: right" style={{ display: "inline-block", fontSize: "15px" }}> &nbsp; &nbsp; Total Value Locked </div>
@@ -1924,7 +1924,7 @@ const Dashboard = () => {
             </Col>
 
             <Col xl={3}>
-              <Card style={{ borderRadius: "0.8rem", width: "95%", border:"2px solid #32394e"  }}>
+              <Card style={{ borderRadius: "0.8rem", width: "95%", border: "2px solid #32394e" }}>
                 <CardBody>
                   <div className="mb-3">
                     <img src="./uf.svg" width="18%" ></img>  {'   '} {'   '} {'   '} <div className="float: right" style={{ display: "inline-block", fontSize: "15px" }}> &nbsp; &nbsp; Utilization Rate </div>
@@ -1944,7 +1944,7 @@ const Dashboard = () => {
             </Col>
 
             <Col xl={3}>
-              <Card style={{ borderRadius: "0.8rem", width: "95%", border:"2px solid #32394e"  }}>
+              <Card style={{ borderRadius: "0.8rem", width: "95%", border: "2px solid #32394e" }}>
                 <CardBody >
                   <div className="mb-3">
                     <img src="./dominantMarket.svg" width="18%" ></img>  {'   '} {'   '} {'   '} <div className="float: right" style={{ display: "inline-block", fontSize: "15px" }}> Dominant Market</div>
@@ -1962,7 +1962,7 @@ const Dashboard = () => {
               </Card>
             </Col>
             <Col xl={3}>
-              <Card style={{ borderRadius: "0.8rem", width: "99%", border:"2px solid #32394e"  }}>
+              <Card style={{ borderRadius: "0.8rem", width: "99%", border: "2px solid #32394e" }}>
                 <CardBody >
                   <div className="mb-3">
                     <img src="./totalUsers.svg" width="20%" ></img>  {'   '} {'   '} {'   '} <div className="float: right" style={{ display: "inline-block", fontSize: "15px" }}> &nbsp; &nbsp; Total Users</div>

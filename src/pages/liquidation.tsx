@@ -3,8 +3,7 @@ export default function index() {
 
   return (
     <>
-     <p>This section is under construction. Check again in a few days</p>
+      <p>This section is under construction. Check again in a few days</p>
     </>
-
   )
 }

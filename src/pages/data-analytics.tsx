@@ -147,7 +147,7 @@ export const main = async (type: string) => {
     }
     for (let u of data.data.data.users) {
       for (let d of u.deposits) {
-        if(d.currentAmount < 0) continue;
+        if (d.currentAmount < 0) continue;
         if (d.market == "BTC.t") {
           totalDepositBtcUsd += btcPrice * (d.currentAmount / 100000000);
           totalDepositBtcCount += 1;
@@ -174,7 +174,7 @@ export const main = async (type: string) => {
       }
 
       for (let l of u.loans) {
-        if(l.initialAmount < 0) continue;
+        if (l.initialAmount < 0) continue;
         if (l.initialMarket == "BTC.t") {
           totalBorrowedBtcUsd += btcPrice * (l.initialAmount / 100000000);
           totalBorrowedBtcCount += 1;
@@ -230,17 +230,17 @@ export const main = async (type: string) => {
         }
 
         if (l.collateral.initialAmount < 0) continue;
-          if (l.collateral.market == "BTC.t") {
-            totalCollateralBtcUsd +=
-              btcPrice * (l.collateral.initialAmount / 100000000);
-          } else if (l.collateral.market == "WBNB") {
-            totalCollateralBnbUsd +=
-              bnbPrice * (l.collateral.initialAmount / 100000000);
-          } else if (l.collateral.market == "USDC.t") {
-            totalCollateralUsdcUsd += l.collateral.initialAmount / 100000000;
-          } else if (l.collateral.market == "USDT.t") {
-            totalCollateralUsdtUsd += l.collateral.initialAmount / 100000000;
-          }
+        if (l.collateral.market == "BTC.t") {
+          totalCollateralBtcUsd +=
+            btcPrice * (l.collateral.initialAmount / 100000000);
+        } else if (l.collateral.market == "WBNB") {
+          totalCollateralBnbUsd +=
+            bnbPrice * (l.collateral.initialAmount / 100000000);
+        } else if (l.collateral.market == "USDC.t") {
+          totalCollateralUsdcUsd += l.collateral.initialAmount / 100000000;
+        } else if (l.collateral.market == "USDT.t") {
+          totalCollateralUsdtUsd += l.collateral.initialAmount / 100000000;
+        }
 
         if (l.commitment == "comit_ONEMONTH") {
           totalBorrowed1Month += 1;
@@ -263,9 +263,9 @@ export const main = async (type: string) => {
   console.log(
     "Total USD Deposit: ",
     totalDepositBtcUsd +
-      totalDepositUsdtUsd +
-      totalDepositUsdcUsd +
-      totalDepositBnbUsd
+    totalDepositUsdtUsd +
+    totalDepositUsdcUsd +
+    totalDepositBnbUsd
   );
   // console.log("Deposit:");
   console.log("BTC equivalnent USD: ", totalDepositBtcUsd);
@@ -335,47 +335,47 @@ export const main = async (type: string) => {
   else if (type == "dominantMarket") {
     if (
       totalDepositBtcUsd + totalBorrowedBtcUsd >
-        totalDepositUsdtUsd + totalBorrowedUsdtUsd &&
+      totalDepositUsdtUsd + totalBorrowedUsdtUsd &&
       totalDepositBtcUsd + totalBorrowedBtcUsd >
-        totalDepositUsdcUsd + totalBorrowedUsdcUsd &&
+      totalDepositUsdcUsd + totalBorrowedUsdcUsd &&
       totalDepositBtcUsd + totalBorrowedBtcUsd >
-        totalDepositBnbUsd + totalBorrowedBnbUsd
+      totalDepositBnbUsd + totalBorrowedBnbUsd
     )
       return ["BTC", totalDepositBtcUsd + totalBorrowedBtcUsd];
     if (
       totalDepositUsdtUsd + totalBorrowedUsdtUsd >
-        totalDepositBtcUsd + totalBorrowedUsdtUsd &&
+      totalDepositBtcUsd + totalBorrowedUsdtUsd &&
       totalDepositUsdtUsd + totalBorrowedUsdtUsd >
-        totalDepositUsdcUsd + totalBorrowedUsdcUsd &&
+      totalDepositUsdcUsd + totalBorrowedUsdcUsd &&
       totalDepositUsdtUsd + totalBorrowedUsdtUsd >
-        totalDepositBnbUsd + totalBorrowedBnbUsd
+      totalDepositBnbUsd + totalBorrowedBnbUsd
     )
       return ["USDT", totalDepositUsdtUsd + totalBorrowedUsdtUsd];
     if (
       totalDepositUsdcUsd + totalBorrowedUsdcUsd >
-        totalDepositUsdtUsd + totalBorrowedUsdtUsd &&
+      totalDepositUsdtUsd + totalBorrowedUsdtUsd &&
       totalDepositUsdcUsd + totalBorrowedUsdcUsd >
-        totalDepositBtcUsd + totalBorrowedBtcUsd &&
+      totalDepositBtcUsd + totalBorrowedBtcUsd &&
       totalDepositUsdcUsd + totalBorrowedUsdcUsd >
-        totalDepositBnbUsd + totalBorrowedBnbUsd
+      totalDepositBnbUsd + totalBorrowedBnbUsd
     )
       return ["USDC", totalDepositUsdcUsd + totalBorrowedUsdcUsd];
     if (
       totalDepositBnbUsd + totalBorrowedBnbUsd >
-        totalDepositUsdtUsd + totalBorrowedUsdtUsd &&
+      totalDepositUsdtUsd + totalBorrowedUsdtUsd &&
       totalDepositBnbUsd + totalBorrowedBnbUsd >
-        totalDepositUsdcUsd + totalBorrowedUsdcUsd &&
+      totalDepositUsdcUsd + totalBorrowedUsdcUsd &&
       totalDepositBnbUsd + totalBorrowedBnbUsd >
-        totalDepositBtcUsd + totalBorrowedBtcUsd
+      totalDepositBtcUsd + totalBorrowedBtcUsd
     )
       return ["BNB", totalDepositBnbUsd + totalBorrowedBnbUsd];
   } else if (type == "totalDepositUsd") {
     console.log(
       "Total USD Deposit: ",
       totalDepositBtcUsd +
-        totalDepositUsdtUsd +
-        totalDepositUsdcUsd +
-        totalDepositBnbUsd
+      totalDepositUsdtUsd +
+      totalDepositUsdcUsd +
+      totalDepositBnbUsd
     );
     return (
       totalDepositBtcUsd +
