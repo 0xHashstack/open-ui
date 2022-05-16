@@ -19,6 +19,7 @@ import {
   TabPane,
   Label,
   Spinner,
+  Accordion,
   AccordionItem,
   AccordionHeader,
   AccordionBody,
@@ -37,11 +38,11 @@ import {
   DecimalsMap,
   CommitMap,
   CommitMapReverse,
-} from "../blockchain/constants";
-import { BNtoNum, GetErrorText, bytesToString } from "../blockchain/utils";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { main } from './data-analytics';
+} from "../blockchain/constants"
+import { BNtoNum, GetErrorText, bytesToString } from "../blockchain/utils"
+import { toast } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
+import { main } from "./data-analytics"
 
 import loadable from "@loadable/component"
 const PassbookTBody = loadable(() => import("./passbook-body"))
@@ -61,6 +62,8 @@ const Dashboard = () => {
   const [isTransactionDone, setIsTransactionDone] = useState(false)
 
   const [customActiveTab, setCustomActiveTab] = useState("1")
+  const [customActiveTabs, setCustomActiveTabs] = useState("1")
+  const [mainTab, setMainTab] = useState("1")
   const [passbookStatus, setPassbookStatus] = useState("ActiveDeposit")
 
   const [modal_repay_loan, setmodal_repay_loan] = useState(false)
@@ -71,7 +74,7 @@ const Dashboard = () => {
   const [modal_withdraw_collateral, setmodal_withdraw_collateral] =
     useState(false)
   const [modal_add_active_deposit, setmodal_add_active_deposit] =
-    useState(false)
+    useState(true)
   const [modal_withdraw_active_deposit, setmodal_withdraw_active_deposit] =
     useState(false)
 
@@ -99,26 +102,26 @@ const Dashboard = () => {
   const [inputVal1, setInputVal1] = useState(0)
   const [liquidationIndex, setLiquidationIndex] = useState(0)
 
-  const { connect, disconnect, account } = useContext(Web3ModalContext)
-  const [index, setIndex] = useState('1');
+  const { connect, disconnect, account, chainId } = useContext(Web3ModalContext)
+  const [index, setIndex] = useState("1")
 
-  const [uf, setUf] = useState(null);
+  const [uf, setUf] = useState(null)
   const [tvl, setTvl] = useState(null)
   const [totalUsers, setTotalUsers] = useState(null)
-  const [dominantMarket, setDominantMarket] = useState('')
+  const [dominantMarket, setDominantMarket] = useState("")
 
   function toggle(newIndex: string) {
     if (newIndex === index) {
-      setIndex('1');
+      setIndex("1")
     } else {
-      setIndex(newIndex);
+      setIndex(newIndex)
     }
   }
 
   var utilizationFactor
-  main('totalBorrowedUsd').then(res1 => {
+  main("totalBorrowedUsd").then(res1 => {
     if (res1) {
-      main('totalDepositUsd').then(res2 => {
+      main("totalDepositUsd").then(res2 => {
         //@ts-ignore
         utilizationFactor = res1 / res2
         const uf = utilizationFactor.toFixed(2)
@@ -128,14 +131,14 @@ const Dashboard = () => {
   })
 
   main("totalValueLocked").then(res => {
-    typeof (res)
-    if (typeof (res) === "number") {
+    typeof res
+    if (typeof res === "number") {
       //@ts-ignore
       setTvl(res?.toFixed(2))
     }
   })
 
-  main('totalUsers').then(res => {
+  main("totalUsers").then(res => {
     setTotalUsers(res)
   })
 
@@ -165,7 +168,13 @@ const Dashboard = () => {
             console.log(err)
           }
         )
-  }, [account, passbookStatus, customActiveTab, isTransactionDone, activeLiquidationsData])
+  }, [
+    account,
+    passbookStatus,
+    customActiveTab,
+    isTransactionDone,
+    activeLiquidationsData,
+  ])
 
   useEffect(() => {
     !isTransactionDone &&
@@ -193,13 +202,27 @@ const Dashboard = () => {
     if (customActiveTab == "3") {
       navigateLoansToLiquidate(liquidationIndex)
     }
-  }, [account, passbookStatus, customActiveTab, isTransactionDone, liquidationIndex, activeLiquidationsData])
+  }, [
+    account,
+    passbookStatus,
+    customActiveTab,
+    isTransactionDone,
+    liquidationIndex,
+    activeLiquidationsData,
+  ])
 
   const toggleCustom = tab => {
     if (customActiveTab !== tab) {
       setCustomActiveTab(tab)
     }
   }
+
+  const toggleCustoms = tab => {
+    if (customActiveTabs !== tab) {
+      setCustomActiveTabs(tab)
+    }
+  }
+
   function removeBodyCss() {
     setInputVal1(0)
     document.body.classList.add("no_padding")
@@ -231,10 +254,12 @@ const Dashboard = () => {
   }
   function tog_add_active_deposit() {
     setmodal_add_active_deposit(!modal_add_active_deposit)
+    setmodal_withdraw_active_deposit(false)
     removeBodyCss()
   }
   function tog_withdraw_active_deposit() {
     setmodal_withdraw_active_deposit(!modal_withdraw_active_deposit)
+    setmodal_add_active_deposit(false)
     removeBodyCss()
   }
 
@@ -308,7 +333,7 @@ const Dashboard = () => {
         } else if (cdr >= 0.333 && cdr < 0.5) {
           debtCategory = 3
         }
-      } catch { }
+      } catch {}
       loans.push({
         loanMarket: bytesToString(loansData.loanMarket[index]), // 1 Loan Market
         loanAmount: Number(loansData.loanAmount[index]), // 2 Amount
@@ -376,7 +401,7 @@ const Dashboard = () => {
   }
 
   const increaseLiquidationIndex = async () => {
-    setLiquidationIndex(liquidationIndex + 10);
+    setLiquidationIndex(liquidationIndex + 10)
   }
 
   const handleRepay = async () => {
@@ -401,7 +426,12 @@ const Dashboard = () => {
         ?.getLoanInstance()
         .repayLoan(market, CommitMap[_commit], inputVal1, decimal)
       const tx = await tx1.wait()
-      SuccessCallback(tx.events, "LoanRepaid", "Loan Repaid Successfully", inputVal1)
+      SuccessCallback(
+        tx.events,
+        "LoanRepaid",
+        "Loan Repaid Successfully",
+        inputVal1
+      )
     } catch (err) {
       setIsTransactionDone(false)
       toast.error(`${GetErrorText(err)}`, {
@@ -460,7 +490,6 @@ const Dashboard = () => {
       await approveTransactionHash.wait()
       console.log("Approve Transaction sent: ", approveTransactionHash)
 
-
       const tx1 = await wrapper
         ?.getLoanInstance()
         .addCollateral(
@@ -470,7 +499,12 @@ const Dashboard = () => {
           DecimalsMap[_collateralOption]
         )
       const tx = await tx1.wait()
-      SuccessCallback(tx.events, "AddCollateral", "Collateral amount added", inputVal1)
+      SuccessCallback(
+        tx.events,
+        "AddCollateral",
+        "Collateral amount added",
+        inputVal1
+      )
     } catch (err) {
       setIsTransactionDone(false)
       toast.error(`${GetErrorText(err)}`, {
@@ -554,7 +588,7 @@ const Dashboard = () => {
           SymbolsMap[_swapOption]
         )
       const tx = await tx1.wait()
-      SuccessCallback(tx.events, "MarketSwapped", "Swap Loan successful", '')
+      SuccessCallback(tx.events, "MarketSwapped", "Swap Loan successful", "")
     } catch (err) {
       setIsTransactionDone(false)
       toast.error(`${GetErrorText(err)}`, {
@@ -580,7 +614,7 @@ const Dashboard = () => {
         ?.getLoanInstance()
         .swapToLoan(SymbolsMap[_loanOption], CommitMap[_commit])
       const tx = await tx1.wait()
-      SuccessCallback(tx.events, "MarketSwapped", "Swap to Loan successful", '')
+      SuccessCallback(tx.events, "MarketSwapped", "Swap to Loan successful", "")
     } catch (err) {
       setIsTransactionDone(false)
       toast.error(`${GetErrorText(err)}`, {
@@ -642,7 +676,12 @@ const Dashboard = () => {
         // for first withdrawal we can't throw from contract, hence need handling here
         throw "ERROR: Active timelock"
       }
-      SuccessCallback(tx.events, "DepositWithdrawal", "Deposit Withdrawn", inputVal1)
+      SuccessCallback(
+        tx.events,
+        "DepositWithdrawal",
+        "Deposit Withdrawn",
+        inputVal1
+      )
     } catch (err) {
       setIsTransactionDone(false)
       toast.error(`${GetErrorText(err)}`, {
@@ -662,7 +701,7 @@ const Dashboard = () => {
         ?.getLiquidatorInstance()
         .liquidation(account, market, commitment)
       const tx = await tx1.wait()
-      SuccessCallback(tx.events, "", "", '')
+      SuccessCallback(tx.events, "", "", "")
     } catch (err) {
       setIsTransactionDone(false)
       toast.error(`${GetErrorText(err)}`, {
@@ -746,13 +785,13 @@ const Dashboard = () => {
                                           key={key}
                                           value={
                                             EventMap[
-                                            asset.loanMarket.toUpperCase()
+                                              asset.loanMarket.toUpperCase()
                                             ]
                                           }
                                         >
                                           {
                                             EventMap[
-                                            asset.loanMarket.toUpperCase()
+                                              asset.loanMarket.toUpperCase()
                                             ]
                                           }
                                         </option>
@@ -774,7 +813,7 @@ const Dashboard = () => {
                                       .filter(asset => {
                                         return (
                                           EventMap[
-                                          asset.loanMarket.toUpperCase()
+                                            asset.loanMarket.toUpperCase()
                                           ] === loanOption
                                         )
                                       })
@@ -870,13 +909,13 @@ const Dashboard = () => {
                                           key={key}
                                           value={
                                             EventMap[
-                                            asset.loanMarket.toUpperCase()
+                                              asset.loanMarket.toUpperCase()
                                             ]
                                           }
                                         >
                                           {
                                             EventMap[
-                                            asset.loanMarket.toUpperCase()
+                                              asset.loanMarket.toUpperCase()
                                             ]
                                           }
                                         </option>
@@ -898,7 +937,7 @@ const Dashboard = () => {
                                       .filter(asset => {
                                         return (
                                           EventMap[
-                                          asset.loanMarket.toUpperCase()
+                                            asset.loanMarket.toUpperCase()
                                           ] === loanOption
                                         )
                                       })
@@ -1010,13 +1049,13 @@ const Dashboard = () => {
                                         key={key}
                                         value={
                                           EventMap[
-                                          asset.loanMarket.toUpperCase()
+                                            asset.loanMarket.toUpperCase()
                                           ]
                                         }
                                       >
                                         {
                                           EventMap[
-                                          asset.loanMarket.toUpperCase()
+                                            asset.loanMarket.toUpperCase()
                                           ]
                                         }
                                       </option>
@@ -1038,7 +1077,7 @@ const Dashboard = () => {
                                     .filter(asset => {
                                       return (
                                         EventMap[
-                                        asset.loanMarket.toUpperCase()
+                                          asset.loanMarket.toUpperCase()
                                         ] === loanOption && !asset.isSwapped
                                       )
                                     })
@@ -1137,13 +1176,13 @@ const Dashboard = () => {
                                         key={key}
                                         value={
                                           EventMap[
-                                          asset.loanMarket.toUpperCase()
+                                            asset.loanMarket.toUpperCase()
                                           ]
                                         }
                                       >
                                         {
                                           EventMap[
-                                          asset.loanMarket.toUpperCase()
+                                            asset.loanMarket.toUpperCase()
                                           ]
                                         }
                                       </option>
@@ -1165,7 +1204,7 @@ const Dashboard = () => {
                                     .filter(asset => {
                                       return (
                                         EventMap[
-                                        asset.loanMarket.toUpperCase()
+                                          asset.loanMarket.toUpperCase()
                                         ] === loanOption && asset.isSwapped
                                       )
                                     })
@@ -1257,13 +1296,13 @@ const Dashboard = () => {
                                         key={key}
                                         value={
                                           EventMap[
-                                          asset.loanMarket.toUpperCase()
+                                            asset.loanMarket.toUpperCase()
                                           ]
                                         }
                                       >
                                         {
                                           EventMap[
-                                          asset.loanMarket.toUpperCase()
+                                            asset.loanMarket.toUpperCase()
                                           ]
                                         }
                                       </option>
@@ -1285,7 +1324,7 @@ const Dashboard = () => {
                                     .filter(asset => {
                                       return (
                                         EventMap[
-                                        asset.loanMarket.toUpperCase()
+                                          asset.loanMarket.toUpperCase()
                                         ] === loanOption
                                       )
                                     })
@@ -1324,13 +1363,13 @@ const Dashboard = () => {
                                         key={key}
                                         value={
                                           EventMap[
-                                          asset.loanMarket.toUpperCase()
+                                            asset.loanMarket.toUpperCase()
                                           ]
                                         }
                                       >
                                         {
                                           EventMap[
-                                          asset.loanMarket.toUpperCase()
+                                            asset.loanMarket.toUpperCase()
                                           ]
                                         }
                                       </option>
@@ -1451,7 +1490,7 @@ const Dashboard = () => {
                                       .filter(asset => {
                                         return (
                                           EventMap[
-                                          asset.market.toUpperCase()
+                                            asset.market.toUpperCase()
                                           ] === depositRequestSel
                                         )
                                       })
@@ -1575,7 +1614,7 @@ const Dashboard = () => {
                                       .filter(asset => {
                                         return (
                                           EventMap[
-                                          asset.market.toUpperCase()
+                                            asset.market.toUpperCase()
                                           ] === withdrawDepositSel
                                         )
                                       })
@@ -1691,13 +1730,13 @@ const Dashboard = () => {
                                         key={key}
                                         value={
                                           EventMap[
-                                          asset.loanMarket.toUpperCase()
+                                            asset.loanMarket.toUpperCase()
                                           ]
                                         }
                                       >
                                         {
                                           EventMap[
-                                          asset.loanMarket.toUpperCase()
+                                            asset.loanMarket.toUpperCase()
                                           ]
                                         }
                                       </option>
@@ -1719,7 +1758,7 @@ const Dashboard = () => {
                                     .filter(asset => {
                                       return (
                                         EventMap[
-                                        asset.loanMarket.toUpperCase()
+                                          asset.loanMarket.toUpperCase()
                                         ] === loanOption
                                       )
                                     })
@@ -1785,17 +1824,18 @@ const Dashboard = () => {
               </thead>
               <tbody>
                 {Array.isArray(activeDepositsData) &&
-                  activeDepositsData.length > 0 ? (
+                activeDepositsData.length > 0 ? (
                   activeDepositsData.map((asset, key) => (
                     <tr key={key}>
                       <th scope="row">
                         <div className="d-flex align-items-center">
                           <div className="avatar-xs me-3">
-                            <img src={
-                              CoinClassNames[
-                              EventMap[asset.market.toUpperCase()]
-                              ] || asset.market.toUpperCase()
-                            }
+                            <img
+                              src={
+                                CoinClassNames[
+                                  EventMap[asset.market.toUpperCase()]
+                                ] || asset.market.toUpperCase()
+                              }
                             />
                           </div>
                           <span>{EventMap[asset.market.toUpperCase()]}</span>
@@ -1827,7 +1867,7 @@ const Dashboard = () => {
         )
         break
 
-      case "ActiveLoan":
+      case "ActiveLoan": //
         return (
           <div className="table-responsive">
             <Table className="table table-nowrap align-middle mb-0">
@@ -1889,48 +1929,328 @@ const Dashboard = () => {
         return null
     }
   }
+  //here
+  const getActionTabs = customActiveTab => {
+    switch (customActiveTab) {
+      case "1":
+        return (
+          // Active Deposits
+          <div className="table-responsive">
+            <Row>
+              <Col>
+                <h6>Deposit Market</h6>
+              </Col>
+              <Col>
+                <h6>Commitment</h6>
+              </Col>
+              <Col>
+                <h6>Amount</h6>
+              </Col>
+            </Row>
+            {Array.isArray(activeDepositsData) &&
+            activeDepositsData.length > 0 ? (
+              activeDepositsData.map((asset, key) => (
+                <div key={key}>
+                  <UncontrolledAccordion defaultOpen="0" open="1">
+                    <AccordionItem>
+                      <AccordionHeader targetId="1">
+                        <Col>
+                          <div className="d-flex align-items-center">
+                            <div className="avatar-xs me-3">
+                              <img
+                                src={
+                                  CoinClassNames[
+                                    EventMap[asset.market.toUpperCase()]
+                                  ] || asset.market.toUpperCase()
+                                }
+                              />
+                            </div>
+                            <span>{EventMap[asset.market.toUpperCase()]}</span>
+                          </div>
+                        </Col>
+
+                        <Col>
+                          <div className="text-muted">
+                            {EventMap[asset.commitment]}
+                          </div>
+                        </Col>
+
+                        <Col>
+                          <div className="text-muted">
+                            {BNtoNum(Number(asset.amount))}
+                          </div>
+                        </Col>
+                      </AccordionHeader>
+                      <AccordionBody accordionId="1">
+                        <div style={{ borderWidth: 1 }}>
+                          <CardBody>
+                            <form>
+                              {/* // */}
+                              <div className="mb-4 ">
+                                <Row>
+                                  <Col lg="4 mb-3">
+                                    <div
+                                      className="block-example border border-primary"
+                                      style={{
+                                        padding: "15px",
+                                        borderRadius: "5px",
+                                      }}
+                                    >
+                                      <div className="mb-3">
+                                        {/* <label className="card-radio-label mb-2"> */}
+                                        <Button
+                                          className="btn-block btn-md"
+                                          color="light"
+                                          onClick={() => {
+                                            tog_add_active_deposit()
+                                          }}
+                                        >
+                                          Add to Deposit
+                                        </Button>
+                                        {"   "}
+                                        <Button
+                                          className="btn-block btn-md"
+                                          color="light"
+                                          onClick={() => {
+                                            tog_withdraw_active_deposit()
+                                          }}
+                                        >
+                                          Withdraw Deposit
+                                        </Button>
+                                        {/* </label> */}
+                                      </div>
+                                      {/* <Modal
+                                        // isOpen={modal_add_active_deposit}
+                                        isOpen={true}
+                                        toggle={() => {
+                                          tog_add_active_deposit()
+                                        }}
+                                        centered
+                                      > */}
+                                      {modal_add_active_deposit && (
+                                        <Form>
+                                          <div className="row mb-4">
+                                            <Col sm={12}>
+                                              <Input
+                                                type="text"
+                                                className="form-control"
+                                                id="horizontal-password-Input"
+                                                placeholder={
+                                                  depositRequestSel
+                                                    ? `Minimum amount =  ${MinimumAmount[depositRequestSel]}`
+                                                    : "Amount"
+                                                }
+                                                onChange={event => {
+                                                  setInputVal1(
+                                                    Number(event.target.value)
+                                                  )
+                                                }}
+                                              />
+                                            </Col>
+                                          </div>
+
+                                          <div className="d-grid gap-2">
+                                            <Button
+                                              color="primary"
+                                              className="w-md"
+                                              disabled={
+                                                isTransactionDone ||
+                                                inputVal1 === 0
+                                              }
+                                              onClick={handleDepositRequest}
+                                            >
+                                              {!isTransactionDone ? (
+                                                "Add to Deposit"
+                                              ) : (
+                                                <Spinner>Loading...</Spinner>
+                                              )}
+                                            </Button>
+                                          </div>
+                                        </Form>
+                                      )}
+                                      {modal_withdraw_active_deposit && (
+                                        <Form>
+                                          <div className="row mb-4">
+                                            <Col sm={12}>
+                                              <Input
+                                                type="text"
+                                                className="form-control"
+                                                id="horizontal-password-Input"
+                                                placeholder="Amount"
+                                                onChange={event => {
+                                                  setInputVal1(
+                                                    Number(event.target.value)
+                                                  )
+                                                }}
+                                              />
+                                            </Col>
+                                          </div>
+
+                                          <div className="d-grid gap-2">
+                                            <Button
+                                              color="primary"
+                                              className="w-md"
+                                              disabled={
+                                                isTransactionDone ||
+                                                inputVal1 === 0
+                                              }
+                                              onClick={handleWithdrawDeposit}
+                                            >
+                                              {!isTransactionDone ? (
+                                                "Withdraw Deposit"
+                                              ) : (
+                                                <Spinner>Loading...</Spinner>
+                                              )}
+                                            </Button>
+                                          </div>
+                                        </Form>
+                                      )}
+                                    </div>
+                                  </Col>
+                                  <Col lg="8"></Col>
+                                </Row>
+                              </div>
+                            </form>
+                          </CardBody>
+                        </div>
+                      </AccordionBody>
+                    </AccordionItem>
+                  </UncontrolledAccordion>
+                </div>
+              ))
+            ) : (
+              <div>No records found</div>
+            )}
+          </div>
+        )
+        break
+
+      case "2": //
+        return (
+          <div className="table-responsive">
+            <Table className="table table-nowrap align-middle mb-0">
+              <thead>
+                <tr>
+                  <th scope="col">Borrow Market</th>
+                  <th scope="col">Borrow Amount</th>
+                  <th scope="col">Commitment</th>
+                  <th scope="col">Collateral Market</th>
+                  <th scope="col">Collateral Amount</th>
+                  <th scope="col">Swap Status</th>
+                  <th scope="col">Borrow Market(Current)</th>
+                  <th scope="col">Borrow Amount(Current)</th>
+                  {/* <th scope="col" colSpan={2}>Interest</th> */}
+                </tr>
+              </thead>
+
+              <tbody>
+                <PassbookTBody
+                  isloading={isLoading}
+                  assets={activeLoansData}
+                ></PassbookTBody>
+              </tbody>
+            </Table>
+          </div>
+        )
+        break
+
+      case "3":
+        return (
+          <div className="table-responsive">
+            <Table className="table table-nowrap align-middle mb-0">
+              <thead>
+                <tr>
+                  <th scope="col">Borrow Market</th>
+                  <th scope="col">Borrow Amount</th>
+                  <th scope="col">Commitment</th>
+                  <th scope="col">Collateral Market</th>
+                  <th scope="col">Collateral Amount</th>
+                  <th scope="col">Swap Status</th>
+                  <th scope="col">Borrow Market(Current)</th>
+                  <th scope="col">Borrow Amount(Current)</th>
+                  {/* <th scope="col" colSpan={2}>Interest</th> */}
+                </tr>
+              </thead>
+
+              <tbody>
+                <PassbookTBody
+                  isloading={isLoading}
+                  assets={repaidLoansData}
+                ></PassbookTBody>
+              </tbody>
+            </Table>
+          </div>
+        )
+        break
+
+      default:
+        return null
+    }
+  }
 
   return (
     <React.Fragment>
-      <div className="page-content" style={{ 'marginTop': '0px' }}>
+      <div className="page-content" style={{ marginTop: "0px" }}>
         <MetaTags>
           <title>Hashstack Finance</title>
         </MetaTags>
 
         {/* <Banner /> */}
         <Container fluid>
-          {/* <h5>OPEN PROTOCOL</h5>
-          <br /> */}
-
-
           <Row>
             <Col xl={3}>
-              <Card style={{ borderRadius: "0.8rem", width: "95%", border: "2px solid #32394e" }}>
-                <CardBody >
+              <Card
+                style={{
+                  borderRadius: "0.8rem",
+                  width: "95%",
+                  border: "2px solid #32394e",
+                }}
+              >
+                <CardBody>
                   <div className="mb-3">
-                    <img src="./tvl.svg" width="18%" ></img>  {'   '} {'   '} {'   '} <div className="float: right" style={{ display: "inline-block", fontSize: "15px" }}> &nbsp; &nbsp; Total Value Locked </div>
+                    <img src="./tvl.svg" width="18%"></img> {"   "} {"   "}{" "}
+                    {"   "}{" "}
+                    <div
+                      className="float: right"
+                      style={{ display: "inline-block", fontSize: "15px" }}
+                    >
+                      {" "}
+                      &nbsp; &nbsp; Total Value Locked{" "}
+                    </div>
                   </div>
-                  <CardTitle tag="h5">
-                  </CardTitle>
+                  <CardTitle tag="h5"></CardTitle>
                   <CardSubtitle
                     className="mb-2 text-muted"
                     tag="h2"
                     align="right"
                   >
-                    {tvl ? tvl : '...'}
+                    {tvl ? tvl : "..."}
                   </CardSubtitle>
                 </CardBody>
               </Card>
             </Col>
 
             <Col xl={3}>
-              <Card style={{ borderRadius: "0.8rem", width: "95%", border: "2px solid #32394e" }}>
+              <Card
+                style={{
+                  borderRadius: "0.8rem",
+                  width: "95%",
+                  border: "2px solid #32394e",
+                }}
+              >
                 <CardBody>
                   <div className="mb-3">
-                    <img src="./uf.svg" width="18%" ></img>  {'   '} {'   '} {'   '} <div className="float: right" style={{ display: "inline-block", fontSize: "15px" }}> &nbsp; &nbsp; Utilization Rate </div>
+                    <img src="./uf.svg" width="18%"></img> {"   "} {"   "}{" "}
+                    {"   "}{" "}
+                    <div
+                      className="float: right"
+                      style={{ display: "inline-block", fontSize: "15px" }}
+                    >
+                      {" "}
+                      &nbsp; &nbsp; Utilization Rate{" "}
+                    </div>
                   </div>
-                  <CardTitle tag="h5">
-                  </CardTitle>
+                  <CardTitle tag="h5"></CardTitle>
                   <CardSubtitle
                     className="mb-2 text-muted"
                     tag="h2"
@@ -1944,13 +2264,26 @@ const Dashboard = () => {
             </Col>
 
             <Col xl={3}>
-              <Card style={{ borderRadius: "0.8rem", width: "95%", border: "2px solid #32394e" }}>
-                <CardBody >
+              <Card
+                style={{
+                  borderRadius: "0.8rem",
+                  width: "95%",
+                  border: "2px solid #32394e",
+                }}
+              >
+                <CardBody>
                   <div className="mb-3">
-                    <img src="./dominantMarket.svg" width="18%" ></img>  {'   '} {'   '} {'   '} <div className="float: right" style={{ display: "inline-block", fontSize: "15px" }}> Dominant Market</div>
+                    <img src="./dominantMarket.svg" width="18%"></img> {"   "}{" "}
+                    {"   "} {"   "}{" "}
+                    <div
+                      className="float: right"
+                      style={{ display: "inline-block", fontSize: "15px" }}
+                    >
+                      {" "}
+                      Dominant Market
+                    </div>
                   </div>
-                  <CardTitle tag="h5">
-                  </CardTitle>
+                  <CardTitle tag="h5"></CardTitle>
                   <CardSubtitle
                     className="mb-2 text-muted"
                     tag="h2"
@@ -1962,13 +2295,26 @@ const Dashboard = () => {
               </Card>
             </Col>
             <Col xl={3}>
-              <Card style={{ borderRadius: "0.8rem", width: "99%", border: "2px solid #32394e" }}>
-                <CardBody >
+              <Card
+                style={{
+                  borderRadius: "0.8rem",
+                  width: "99%",
+                  border: "2px solid #32394e",
+                }}
+              >
+                <CardBody>
                   <div className="mb-3">
-                    <img src="./totalUsers.svg" width="20%" ></img>  {'   '} {'   '} {'   '} <div className="float: right" style={{ display: "inline-block", fontSize: "15px" }}> &nbsp; &nbsp; Total Users</div>
+                    <img src="./totalUsers.svg" width="20%"></img> {"   "}{" "}
+                    {"   "} {"   "}{" "}
+                    <div
+                      className="float: right"
+                      style={{ display: "inline-block", fontSize: "15px" }}
+                    >
+                      {" "}
+                      &nbsp; &nbsp; Total Users
+                    </div>
                   </div>
-                  <CardTitle tag="h5">
-                  </CardTitle>
+                  <CardTitle tag="h5"></CardTitle>
                   <CardSubtitle
                     className="mb-2 text-muted"
                     tag="h2"
@@ -1982,69 +2328,145 @@ const Dashboard = () => {
             </Col>
           </Row>
 
-
           <Row>
-            {customActiveTab === "2" ? (
-              <Col xl="4">
-                <Card style={{ height: "29rem" }}>
-                  {/* {customActiveTab === '2' ? */}
-
-                  {getPassbookActionScreen(passbookStatus)}
-                </Card>
-              </Col>
-            ) : null}
-
-            <Col xl={customActiveTab === "2" ? "8" : "12"}>
+            <Col xl={"12"}>
               <Card style={{ height: "29rem" }}>
                 <CardBody>
-                  <Nav tabs className="nav-tabs-custom" style={{ borderBottom: "0px" }}>
-                    <NavItem>
-                      <NavLink
-                        style={{ cursor: "pointer" }}
-                        className={classnames({
-                          active: customActiveTab === "1",
-                        })}
-                        onClick={() => {
-                          toggleCustom("1")
-                        }}
+                  <Row>
+                    <Col>
+                      <Nav
+                        tabs
+                        className="nav-tabs-custom"
+                        style={{ borderBottom: "0px" }}
                       >
-                        <span className="d-none d-sm-block">Dashboard</span>
-                      </NavLink>
-                    </NavItem>
-                    {account ? (
-                      <>
                         <NavItem>
                           <NavLink
                             style={{ cursor: "pointer" }}
                             className={classnames({
-                              active: customActiveTab === "2",
+                              active: customActiveTab === "1",
                             })}
                             onClick={() => {
-                              toggleCustom("2")
+                              toggleCustom("1")
                             }}
                           >
-                            <span className="d-none d-sm-block">Passbook</span>
+                            <span className="d-none d-sm-block">Dashboard</span>
                           </NavLink>
                         </NavItem>
-                        <NavItem>
-                          <NavLink
-                            style={{ cursor: "pointer" }}
-                            className={classnames({
-                              active: customActiveTab === "3",
-                            })}
-                            onClick={() => {
-                              toggleCustom("3")
-                            }}
-                          >
-                            <span className="d-none d-sm-block">
-                              Liquidation
-                            </span>
-                          </NavLink>
-                        </NavItem>
-                      </>
-                    ) : null}
-                  </Nav>
+                        {account ? (
+                          <>
+                            <NavItem>
+                              <NavLink
+                                style={{ cursor: "pointer" }}
+                                className={classnames({
+                                  active: customActiveTab === "2",
+                                })}
+                                onClick={() => {
+                                  toggleCustom("2")
+                                }}
+                              >
+                                <span className="d-none d-sm-block">
+                                  Passbook
+                                </span>
+                              </NavLink>
+                            </NavItem>
+                            <NavItem>
+                              <NavLink
+                                style={{ cursor: "pointer" }}
+                                className={classnames({
+                                  active: customActiveTab === "3",
+                                })}
+                                onClick={() => {
+                                  toggleCustom("3")
+                                }}
+                              >
+                                <span className="d-none d-sm-block">
+                                  Liquidation
+                                </span>
+                              </NavLink>
+                            </NavItem>
+                          </>
+                        ) : null}
+                      </Nav>
+                    </Col>
 
+                    <Col>
+                      {customActiveTab === "2" && (
+                        <Nav tabs className="nav-tabs-custom">
+                          <NavItem>
+                            <NavLink
+                              style={{ cursor: "pointer" }}
+                              className={classnames({
+                                active: customActiveTabs === "0",
+                              })}
+                              onClick={() => {
+                                toggleCustoms("0")
+                              }}
+                            >
+                              <span className="d-none d-sm-block">All</span>
+                            </NavLink>
+                          </NavItem>
+                          {account ? (
+                            <>
+                              <NavItem>
+                                <NavLink
+                                  style={{ cursor: "pointer" }}
+                                  className={classnames({
+                                    active: customActiveTabs === "1",
+                                  })}
+                                  onClick={() => {
+                                    toggleCustoms("1")
+                                  }}
+                                >
+                                  <span className="d-none d-sm-block">
+                                    Active Deposits
+                                  </span>
+                                </NavLink>
+                              </NavItem>
+                              <NavItem>
+                                <NavLink
+                                  style={{ cursor: "pointer" }}
+                                  className={classnames({
+                                    active: customActiveTabs === "2",
+                                  })}
+                                  onClick={() => {
+                                    toggleCustoms("2")
+                                  }}
+                                >
+                                  <span className="d-none d-sm-block">
+                                    Active Loans
+                                  </span>
+                                </NavLink>
+                              </NavItem>
+                              <NavItem>
+                                <NavLink
+                                  style={{ cursor: "pointer" }}
+                                  className={classnames({
+                                    active: customActiveTabs === "3",
+                                  })}
+                                  onClick={() => {
+                                    toggleCustoms("3")
+                                  }}
+                                >
+                                  <span className="d-none d-sm-block">
+                                    Repaid Loans
+                                  </span>
+                                </NavLink>
+                              </NavItem>
+                            </>
+                          ) : null}
+                        </Nav>
+                      )}
+                    </Col>
+                  </Row>
+                  {/* </Col>
+                                </Row> */}
+                  <Row>
+                    <Col lg={12}>
+                      {customActiveTab === "2" &&
+                        getActionTabs(customActiveTabs)}
+                      {/* {getPassbookTable(passbookStatus)} */}
+                    </Col>
+                  </Row>
                   <TabContent activeTab={customActiveTab} className="p-1">
                     {/* ------------------------------------- DASHBOARD ----------------------------- */}
 
@@ -2073,7 +2495,7 @@ const Dashboard = () => {
                                   defaultValue={"NONE"}
                                 >
                                   <option hidden>Commitment</option>
-                                  <option value={"NONE"} >None</option>
+                                  <option value={"NONE"}>None</option>
                                   <option value={"TWOWEEKS"}>Two Weeks</option>
                                   <option value={"ONEMONTH"}>One Month</option>
                                   <option value={"THREEMONTHS"}>
@@ -2088,7 +2510,7 @@ const Dashboard = () => {
                                   defaultValue={"NONE"}
                                 >
                                   <option hidden>Commitment</option>
-                                  <option value={"NONE"} >None</option>
+                                  <option value={"NONE"}>None</option>
                                   <option value={"ONEMONTH"}>One Month</option>
                                 </select>
                               </th>
@@ -2110,44 +2532,10 @@ const Dashboard = () => {
 
                     {/* -------------------------------------- PASSBOOK ----------------------------- */}
 
-                    <TabPane tabId="2">
-                      <div
-                        className="row justify-content-end"
-                        style={{ paddingTop: "12px" }}
-                      >
-                        <Col sm={3}>
-                          <select
-                            className="form-select form-select-sm"
-                            onChange={e => passbookActive(e)}
-                          >
-                            <option value={"ActiveDeposit"}>
-                              Active Deposits
-                            </option>
-                            <option value={"ActiveLoan"}>Active Loans</option>
-                            <option value={"RepaidLoan"}>Repaid Loans</option>
-                            {/* <option value={"InactiveDeposit"}>Inactive deposits</option> */}
-                          </select>
-                        </Col>
-                      </div>
-                      {getPassbookTable(passbookStatus)}
-                    </TabPane>
-
                     {/* -------------------------------------- LIQUIDATION ----------------------------- */}
 
                     <TabPane tabId="3">
                       <div className="table-responsive">
-                        <Button
-                          className="d-flex"
-                          color="light"
-                          outline
-                          align="right"
-                          style={{ marginLeft: "90%" }}
-                          onClick={() => {
-                            increaseLiquidationIndex
-                          }}
-                        >
-                          Show More
-                        </Button>
                         <Table className="table table-nowrap align-middle mb-0">
                           <thead>
                             <tr>
@@ -2161,26 +2549,26 @@ const Dashboard = () => {
                           </thead>
                           <tbody>
                             {Array.isArray(activeLiquidationsData) &&
-                              activeLiquidationsData.length > 0 ? (
+                            activeLiquidationsData.length > 0 ? (
                               activeLiquidationsData.map((asset, key) => (
                                 <tr key={key}>
                                   <th scope="row">
                                     <div className="d-flex align-items-center">
                                       <div className="avatar-xs me-3">
-                                        <img src={
-                                          CoinClassNames[
-                                          EventMap[
-                                          asset.loanMarket.toUpperCase()
-                                          ]
-                                          ] ||
-                                          asset.loanMarket.toUpperCase()
-                                        }
+                                        <img
+                                          src={
+                                            CoinClassNames[
+                                              EventMap[
+                                                asset.loanMarket.toUpperCase()
+                                              ]
+                                            ] || asset.loanMarket.toUpperCase()
+                                          }
                                         />
                                       </div>
                                       <span>
                                         {
                                           EventMap[
-                                          asset.loanMarket.toUpperCase()
+                                            asset.loanMarket.toUpperCase()
                                           ]
                                         }
                                       </span>
@@ -2199,20 +2587,21 @@ const Dashboard = () => {
                                   <th scope="row">
                                     <div className="d-flex align-items-center">
                                       <div className="avatar-xs me-3">
-                                        <img src={
-                                          CoinClassNames[
-                                          EventMap[
-                                          asset.collateralMarket.toUpperCase()
-                                          ]
-                                          ] ||
-                                          asset.collateralMarket.toUpperCase()
-                                        }
+                                        <img
+                                          src={
+                                            CoinClassNames[
+                                              EventMap[
+                                                asset.collateralMarket.toUpperCase()
+                                              ]
+                                            ] ||
+                                            asset.collateralMarket.toUpperCase()
+                                          }
                                         />
                                       </div>
                                       <span>
                                         {
                                           EventMap[
-                                          asset.collateralMarket.toUpperCase()
+                                            asset.collateralMarket.toUpperCase()
                                           ]
                                         }
                                       </span>
@@ -2232,7 +2621,8 @@ const Dashboard = () => {
                                         handleLiquidation(asset)
                                       }}
                                     >
-                                      {(isTransactionDone && asset.isLiquidationDone) ? (
+                                      {isTransactionDone &&
+                                      asset.isLiquidationDone ? (
                                         <Spinner>Loading...</Spinner>
                                       ) : (
                                         "Liquidate"
@@ -2240,8 +2630,8 @@ const Dashboard = () => {
                                     </Button>
                                   </td>
                                   {/* <td>
-                    <div className="text-muted">{Number(asset.acquiredYield).toFixed(3)}</div>
-                  </td>  */}
+                                  <div className="text-muted">{Number(asset.acquiredYield).toFixed(3)}</div>
+                                </td>  */}
                                 </tr>
                               ))
                             ) : (
@@ -2251,6 +2641,16 @@ const Dashboard = () => {
                             )}
                           </tbody>
                         </Table>
+                        {/* <Button
+                                      className="d-flex align-items-center"
+                                      color="light"
+                                      outline
+                                      onClick={() => {
+                                        increaseLiquidationIndex
+                                      }}
+                                    >
+                                      Show More
+                                      </Button> */}
                       </div>
                     </TabPane>
                   </TabContent>
@@ -2259,9 +2659,12 @@ const Dashboard = () => {
             </Col>
           </Row>
         </Container>
+
+        {/* <Analytics></Analytics>
+            {props.children} */}
       </div>
     </React.Fragment>
   )
 }
 
-export default Dashboard;
+export default Dashboard
