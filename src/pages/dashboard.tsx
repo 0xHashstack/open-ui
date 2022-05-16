@@ -73,8 +73,7 @@ const Dashboard = () => {
   const [modal_add_collateral, setmodal_add_collateral] = useState(false)
   const [modal_withdraw_collateral, setmodal_withdraw_collateral] =
     useState(false)
-  const [modal_add_active_deposit, setmodal_add_active_deposit] =
-    useState(true)
+  const [modal_add_active_deposit, setmodal_add_active_deposit] = useState(true)
   const [modal_withdraw_active_deposit, setmodal_withdraw_active_deposit] =
     useState(false)
 
@@ -1931,22 +1930,12 @@ const Dashboard = () => {
   }
   //here
   const getActionTabs = customActiveTab => {
+    console.log("blockchain activedepoist", activeDepositsData)
     switch (customActiveTab) {
       case "1":
         return (
           // Active Deposits
           <div className="table-responsive">
-            <Row>
-              <Col>
-                <h6>Deposit Market</h6>
-              </Col>
-              <Col>
-                <h6>Commitment</h6>
-              </Col>
-              <Col>
-                <h6>Amount</h6>
-              </Col>
-            </Row>
             {Array.isArray(activeDepositsData) &&
             activeDepositsData.length > 0 ? (
               activeDepositsData.map((asset, key) => (
@@ -1954,6 +1943,211 @@ const Dashboard = () => {
                   <UncontrolledAccordion defaultOpen="0" open="1">
                     <AccordionItem>
                       <AccordionHeader targetId="1">
+                        <Row>
+                          <Col>
+                            <Card
+                              style={{
+                                width: "80%",
+                                border: "1px solid #32394e",
+                              }}
+                            >
+                              <CardBody>
+                                <div className="mb-3">
+                                  <img
+                                    src={
+                                      CoinClassNames[
+                                        EventMap[asset.market.toUpperCase()]
+                                      ] || asset.market.toUpperCase()
+                                    }
+                                    width="30%"
+                                  />
+
+                                  <div
+                                    className="mr-6"
+                                    style={{
+                                      display: "inline-block",
+                                      fontSize: "15px",
+                                    }}
+                                    align="right"
+                                  >
+                                    &nbsp; &nbsp; &nbsp; &nbsp;
+                                    {BNtoNum(Number(asset.amount))}
+                                  </div>
+                                </div>
+                                <CardTitle tag="h5"></CardTitle>
+
+                                <CardSubtitle className=" text-muted" tag="h6">
+                                  <span>
+                                    {EventMap[asset.market.toUpperCase()]}
+                                  </span>
+                                  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                                  <img
+                                    src="https://img.icons8.com/cotton/64/000000/synchronize--v3.png"
+                                    width="18%"
+                                  />
+                                </CardSubtitle>
+                              </CardBody>
+                            </Card>
+                          </Col>
+
+                          <Col>
+                            <Card
+                              style={{
+                                width: "80%",
+                                border: "1px solid #32394e",
+                              }}
+                            >
+                              <CardBody>
+                                <div className="mb-6">
+                                  500
+                                  <div
+                                    className="mr-6"
+                                    style={{
+                                      display: "inline-block",
+                                      fontSize: "15px",
+                                    }}
+                                    align="right"
+                                  >
+                                    &nbsp; &nbsp; &nbsp; &nbsp;
+                                    {EventMap[asset.market.toUpperCase()]}
+                                  </div>
+                                </div>
+                                <CardTitle tag="h6"></CardTitle>
+
+                                <CardSubtitle
+                                  className=" text-muted"
+                                  tag="h6"
+                                  float="right"
+                                  style={{
+                                    marginLeft: "30%",
+                                    marginTop: "27%",
+                                    fontSize: "1px",
+                                  }}
+                                >
+                                  <span>1.2% APR</span>
+                                </CardSubtitle>
+                              </CardBody>
+                            </Card>
+                          </Col>
+
+                          <Col>
+                            <Card
+                              style={{
+                                width: "80%",
+                                border: "1px solid #32394e",
+                              }}
+                            >
+                              <CardBody>
+                                <div className="mb-3">
+                                  <img
+                                    src={
+                                      CoinClassNames[
+                                        EventMap[asset.market.toUpperCase()]
+                                      ] || asset.market.toUpperCase()
+                                    }
+                                    width="30%"
+                                  />
+
+                                  <div
+                                    className="mr-6"
+                                    style={{
+                                      display: "inline-block",
+                                      fontSize: "15px",
+                                    }}
+                                    align="right"
+                                  >
+                                    &nbsp; &nbsp; &nbsp; &nbsp;
+                                    {BNtoNum(Number(asset.amount))}
+                                  </div>
+                                </div>
+                                <CardTitle tag="h5"></CardTitle>
+
+                                <CardSubtitle
+                                  className=" text-muted"
+                                  tag="h6"
+                                  align="center"
+                                  style={{
+                                    marginLeft: "30%",
+                                    fontSize: "15px",
+                                  }}
+                                >
+                                  <span>BTC</span>
+                                </CardSubtitle>
+                              </CardBody>
+                            </Card>
+                          </Col>
+                          
+                          <Col>
+                            <Card
+                              style={{
+                                width: "80%",
+                                border: "1px solid #32394e",
+                              }}
+                            >
+                              <CardBody>
+                                <div className="mb-3">
+                                  <img
+                                    src={
+                                      CoinClassNames[
+                                        EventMap[asset.market.toUpperCase()]
+                                      ] || asset.market.toUpperCase()
+                                    }
+                                    width="30%"
+                                  />
+                                  <div
+                                    className="mr-6"
+                                    style={{
+                                      display: "inline-block",
+                                      fontSize: "15px",
+                                    }}
+                                    align="right"
+                                  >
+                                    &nbsp; &nbsp; &nbsp; &nbsp;
+                                    {BNtoNum(Number(asset.amount))}
+                                  </div>
+                                </div>
+                                <CardTitle tag="h5"></CardTitle>
+
+                                <CardSubtitle
+                                  className=" text-muted"
+                                  tag="h6"
+                                  align="center"
+                                  style={{
+                                    marginLeft: "30%",
+                                    fontSize: "15px",
+                                  }}
+                                >
+                                  <span>BTC</span>
+                                </CardSubtitle>
+                              </CardBody>
+                            </Card>
+                          </Col>
+
+                          <Col>
+                            <Card
+                              style={{
+                                width: "90%",
+                                border: "1px solid #32394e",
+                              }}
+                            >
+                              <CardBody>
+                                <div
+                                  className="mb-6"
+                                  style={{ marginBottom: "30%" }}
+                                >
+                                  Commitment
+                                </div>
+                                <CardTitle tag="h5"></CardTitle>
+                                <CardSubtitle className=" text-muted" tag="h6">
+                                  <span>{EventMap[asset.commitment]}</span>
+                                  &nbsp; &nbsp; &nbsp; &nbsp;
+                                </CardSubtitle>
+                              </CardBody>
+                            </Card>
+                          </Col>
+                        </Row>
+                        {/* <Row>
+
                         <Col>
                           <div className="d-flex align-items-center">
                             <div className="avatar-xs me-3">
@@ -1980,6 +2174,7 @@ const Dashboard = () => {
                             {BNtoNum(Number(asset.amount))}
                           </div>
                         </Col>
+                        </Row> */}
                       </AccordionHeader>
                       <AccordionBody accordionId="1">
                         <div style={{ borderWidth: 1 }}>
