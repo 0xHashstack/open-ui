@@ -32,7 +32,7 @@ const Layout = props => {
   const dispatch = useDispatch()
 
   const { connect, disconnect, account } = useContext(Web3ModalContext)
-  const [isWhiteListedAccount, setIsWhiteListedAccount] = useState(false)
+  const [isWhiteListedAccount, setIsWhiteListedAccount] = useState(true)
   const [isWhiteListedAccountRequested, setIsWhiteListedAccountRequested] =
     useState(false)
   const [isResponse, setIsResponse] = useState(false)
@@ -61,7 +61,7 @@ const Layout = props => {
         })
         .catch(err => {
           setIsResponse(true)
-          // setIsWhiteListedAccount(true);
+           setIsWhiteListedAccount(true);
           console.log("Error", err)
         })
     }
