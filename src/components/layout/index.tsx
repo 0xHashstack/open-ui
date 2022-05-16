@@ -50,7 +50,7 @@ const Layout = props => {
           dispatch(changePreloader(true))
 
           dispatch(changePreloader(true))
-          setIsWhiteListedAccountRequested(res.data["whitelist_Requested"])
+          setIsWhiteListedAccountRequested(true)
           setIsWhiteListedAccount(true)
           setCounter(res.data["waitlist_ct"])
           timer = setTimeout(() => {
