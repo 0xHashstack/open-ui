@@ -1,0 +1,70 @@
+//
+// components-rtl.scss
+//
+
+// dropdown
+
+.dropdown-megamenu {
+  &.show {
+    left: 20px !important;
+  }
+}
+
+// icons
+
+.icon-list-demo {
+  i {
+    margin-left: 12px;
+    margin-right: 0;
+  }
+}
+
+// Breadcrumb
+
+.breadcrumb-item + .breadcrumb-item::before {
+  float: right;
+  padding-left: 0.5rem;
+  padding-right: 0;
+}
+
+// icon tabs
+
+.icon-tab li:first-child .nav-link {
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+  border-top-right-radius: 21px !important;
+  border-bottom-right-radius: 21px !important;
+}
+.icon-tab li:last-child .nav-link {
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+  border-top-left-radius: 21px !important;
+  border-bottom-left-radius: 21px !important;
+}
+
+// Invoice
+
+@media print {
+  .content-page,
+  .content,
+  body {
+    margin-right: 0;
+  }
+}
+
+// Demos button
+.demos-show-btn {
+  left: 0;
+  right: auto;
+  border-radius: 0 6px 6px 0;
+}
+
+// form.scss
+.form-select {
+  background-position: left 0.75rem center !important;
+}
+
+// select
+.input-group-lg > .form-select, .input-group-sm > .form-select {
+  padding-left: 1.75rem;
+}
