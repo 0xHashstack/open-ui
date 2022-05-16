@@ -1,0 +1,163 @@
+{
+  "name": "hashstack",
+  "version": "0.1.0",
+  "private": true,
+  "repository": "https://github.com/0xHashstack/open-ui",
+  "dependencies": {
+    "@burner-wallet/burner-connect-provider": "^0.1.1",
+    "@ckeditor/ckeditor5-build-classic": "31.0.0",
+    "@ckeditor/ckeditor5-react": "3.0.3",
+    "@harmony-react/mathwallet-connector": "^1.0.2",
+    "@loadable/component": "^5.15.2",
+    "@portis/web3": "^4.0.6",
+    "@sentry/react": "^6.16.1",
+    "@sentry/tracing": "^6.16.1",
+    "@solana/wallet-adapter-tokenpocket": "^0.2.0",
+    "@testing-library/jest-dom": "^5.15.0",
+    "@testing-library/react": "^12.1.2",
+    "@testing-library/user-event": "^12.8.3",
+    "@toruslabs/torus-embed": "^1.18.4",
+    "@types/babel__core": "^7.1.18",
+    "@walletconnect/web3-provider": "^1.6.6",
+    "authereum": "^0.1.14",
+    "axios": "^0.24.0",
+    "bignumber.js": "^9.0.1",
+    "bitski": "^0.11.0-beta.5",
+    "bootstrap": "^5.1.3",
+    "chai": "^4.3.6",
+    "classnames": "^2.3.1",
+    "dcent-provider": "^0.3.0-beta",
+    "enzyme": "*",
+    "enzyme-adapter-react-16": "*",
+    "enzyme-to-json": "*",
+    "eslint": "7.29.0",
+    "ethers": "^5.5.4",
+    "formik": "2.2.9",
+    "fortmatic": "^2.2.1",
+    "jest": "26.6.0",
+    "leaflet": "1.7.1",
+    "lodash": "4.17.21",
+    "lodash.clonedeep": "4.5.0",
+    "metismenujs": "1.3.0",
+    "mocha": "^9.2.1",
+    "moment": "2.29.1",
+    "prop-types": "15.7.2",
+    "react": "^17.0.2",
+    "react-bootstrap": "^2.0.1",
+    "react-color": "2.19.3",
+    "react-dom": "^17.0.2",
+    "react-meta-tags": "^1.0.1",
+    "react-redux": "^7.2.6",
+    "react-router-dom": "5.2.0",
+    "react-script": "2.0.5",
+    "react-scripts": "^4.0.3",
+    "react-select": "4.3.1",
+    "react-toastify": "^8.1.0",
+    "reactstrap": "^9.0.1",
+    "redux": "^4.1.2",
+    "redux-saga": "1.1.3",
+    "sass": "^1.51.0",
+    "semantic-ui-css": "^2.4.1",
+    "semantic-ui-react": "^2.0.4",
+    "squarelink": "^1.1.4",
+    "ts-jest": "26.5.6",
+    "ts-node": "^10.5.0",
+    "typescript": "^4.5.2",
+    "walletlink": "^2.2.8",
+    "web-vitals": "^1.1.2",
+    "web3": "^1.6.0",
+    "web3-eth-contract": "^1.6.0",
+    "web3-utils": "^1.6.0",
+    "web3modal": "^1.9.4",
+    "yup": "0.32.11"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build -p",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
+    "format": "prettier --write \"**/*.{js,jsx,json,md,html,css,less,scss}\"",
+    "test": "react-scripts test",
+    "test:mocha": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register src/test/**/*.test.ts",
+    "test:jest": "env-cmd -f .env.development jest",
+    "eject": "react-scripts eject",
+    "start:development": "env-cmd -f .env.development yarn start",
+    "start:staging": "env-cmd -f .env.staging yarn start",
+    "build:staging": "env-cmd -f .env.staging yarn build",
+    "build:qa": "env-cmd -f .env.qa yarn build",
+    "build:production": "env-cmd -f .env.production yarn build"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest",
+      "eslint:recommended",
+      "plugin:react/recommended"
+    ],
+    "babelOptions": {
+      "presets": [
+        "@babel/preset-react"
+      ],
+      "caller": {
+        "supportsTopLevelAwait": true
+      }
+    },
+    "parser": "@babel/eslint-parser",
+    "parserOptions": {
+      "requireConfigFile": false,
+      "ecmaVersion": 2020,
+      "sourceType": "module",
+      "ecmaFeatures": {
+        "jsx": true,
+        "experimentalObjectRestSpread": true
+      }
+    },
+    "env": {
+      "browser": true,
+      "es6": true
+    },
+    "globals": {
+      "$": true
+    },
+    "settings": {
+      "react": {
+        "version": "^17.0.1"
+      }
+    },
+    "rules": {
+      "semi": [
+        "error",
+        "never"
+      ]
+    }
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "resolutions": {
+    "moment": "2.29.1",
+    "react-error-overlay": "6.0.9"
+  },
+  "devDependencies": {
+    "@truffle/hdwallet-provider": "^2.0.3",
+    "babel-eslint": "^10.1.0",
+    "eslint-config-standard-react": "^9.2.0",
+    "eslint-plugin-eslint-plugin": "^4.1.0",
+    "eslint-plugin-react": "^7.20.6",
+    "prettier": "^2.1.1"
+  },
+  "main": "index.tsx",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
