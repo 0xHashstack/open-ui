@@ -56,6 +56,7 @@
     "reactstrap": "^9.0.1",
     "redux": "^4.1.2",
     "redux-saga": "1.1.3",
+    "sass": "^1.51.0",
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^2.0.4",
     "squarelink": "^1.1.4",
