@@ -279,26 +279,31 @@ const Dashboard = () => {
   const onDepositData = async depositsData => {
     const deposits = []
     for (let i = 0; i < depositsData.amount.length; i++) {
+      let interest = await wrapper
+        ?.getDepositInstance()
+        .getDepositInterest(account, i + 1)
       deposits.push({
         amount: depositsData.amount[i].toString(),
         account,
         commitment: CommitMapReverse[depositsData.commitment[i]],
         market: bytesToString(depositsData.market[i]),
-        // acquiredYield: new BigNumber(depositsData.savingsInterest[i].toString()).div(new BigNumber(10).pow(new BigNumber(18))).toString()
-        acquiredYield: (
-          await wrapper.getDepositInstance().getDepositInterest(account, i + 1)
-        ).toString(),
+        acquiredYield: Number(interest),
       })
     }
     setActiveDepositsData(deposits)
   }
 
-  const onLoansData = loansData => {
+  const onLoansData = async loansData => {
+    console.log("Data: ", loansData)
     const loans = []
-    loansData.collateralAmount.forEach((collateralAmount, index) => {
-      let debtCategory, cdr
+    for(let index = 0; index < loansData.loanAmount.length; index++) {
+      let debtCategory, cdr, interest
+      if (loansData.state[index] == 0)
+        interest = await wrapper
+          ?.getLoanInstance()
+          .getLoanInterest(account, index + 1)
       try {
-        cdr = BigNumber.from(collateralAmount)
+        cdr = BigNumber.from(loansData.collateralAmount[index])
           .div(BigNumber.from(loansData.loanAmount[index]))
           .toNumber()
         if (cdr >= 1) {
@@ -314,17 +319,18 @@ const Dashboard = () => {
         loanAmount: Number(loansData.loanAmount[index]), // 2 Amount
         commitment: CommitMapReverse[loansData.loanCommitment[index]], // 3  Commitment
         collateralMarket: bytesToString(loansData.collateralMarket[index]), // 4 Collateral Market
-        collateralAmount: Number(collateralAmount), // 5 Collateral Amount
+        collateralAmount: Number(loansData.collateralAmount[index]), // 5 Collateral Amount
+        loanInterest: Number(interest),
         account,
         cdr,
         debtCategory,
         loanId: index + 1,
         isSwapped: loansData.isSwapped[index], // Swap status
-        state: loansData.state[index], // Swap status
+        state: loansData.state[index], // Repay status
         currentLoanMarket: bytesToString(loansData.loanCurrentMarket[index]), // Borrow market(current)
         currentLoanAmount: Number(loansData.loanCurrentAmount[index]), // Borrow amount(current)
       })
-    })
+    }
     // Borrow interest -- #Todo ( To be added after intrest issue resolved )
     setActiveLoansData(
       loans.filter(asset => {
