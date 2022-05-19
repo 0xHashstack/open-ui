@@ -111,7 +111,10 @@ class LoanWrapper {
   }
   getLoans(account: string) {
     return this.loanExt.getLoans(account);
-}
+  }
+  getLoanInterest(account: string, id: number){
+    return this.loan.getLoanInterest(account, id);
+  }
 }
 
 export default LoanWrapper
