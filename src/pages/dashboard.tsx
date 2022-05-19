@@ -148,6 +148,9 @@ const Dashboard = () => {
   const { web3Wrapper: wrapper } = useContext(Web3WrapperContext)
 
   useEffect(() => {
+
+
+
     setTimeout(() => {
       setIsLoading(false)
     }, 100)
@@ -183,6 +186,9 @@ const Dashboard = () => {
         .getDeposits(account)
         .then(
           deposits => {
+
+
+
             onDepositData(deposits)
             setIsLoading(false)
           },
@@ -388,6 +394,7 @@ const Dashboard = () => {
         .liquidableLoans(liquidationIndex)
         .then(
           loans => {
+
             onLiquidationsData(loans)
             setIsLoading(false)
           },
@@ -424,6 +431,8 @@ const Dashboard = () => {
       const tx1 = await wrapper
         ?.getLoanInstance()
         .repayLoan(market, CommitMap[_commit], inputVal1, decimal)
+
+
       const tx = await tx1.wait()
       SuccessCallback(
         tx.events,
@@ -1941,14 +1950,13 @@ const Dashboard = () => {
               activeDepositsData.map((asset, key) => (
                 <div key={key}>
                   <UncontrolledAccordion defaultOpen="0" open="1">
-                    <AccordionItem>
+                    <AccordionItem >
                       <AccordionHeader targetId="1">
                         <Row>
                           <Col>
                             <Card
                               style={{
                                 width: "80%",
-                                border: "1px solid #32394e",
                               }}
                             >
                               <CardBody>
@@ -1994,7 +2002,6 @@ const Dashboard = () => {
                             <Card
                               style={{
                                 width: "80%",
-                                border: "1px solid #32394e",
                               }}
                             >
                               <CardBody>
@@ -2034,7 +2041,6 @@ const Dashboard = () => {
                             <Card
                               style={{
                                 width: "80%",
-                                border: "1px solid #32394e",
                               }}
                             >
                               <CardBody>
@@ -2081,7 +2087,6 @@ const Dashboard = () => {
                             <Card
                               style={{
                                 width: "80%",
-                                border: "1px solid #32394e",
                               }}
                             >
                               <CardBody>
@@ -2127,16 +2132,9 @@ const Dashboard = () => {
                             <Card
                               style={{
                                 width: "90%",
-                                border: "1px solid #32394e",
                               }}
                             >
                               <CardBody>
-                                <div
-                                  className="mb-6"
-                                  style={{ marginBottom: "30%" }}
-                                >
-                                  Commitment
-                                </div>
                                 <CardTitle tag="h5"></CardTitle>
                                 <CardSubtitle className=" text-muted" tag="h6">
                                   <span>{EventMap[asset.commitment]}</span>
@@ -2302,7 +2300,67 @@ const Dashboard = () => {
                                       )}
                                     </div>
                                   </Col>
-                                  <Col lg="8"></Col>
+                                  <Col lg="8">
+                                  <Table >
+  <thead>
+    <tr>
+      <th>
+      Transaction Hash
+      </th>
+      <th>
+      Age
+      </th>
+      <th>
+      Value
+      </th>
+     
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">
+     
+      0xf81454ff....442efb8
+      </th>
+      <td>
+      19 mins ago
+      </td>
+      <td>
+        144.98
+      </td>
+      
+    </tr>
+    <tr>
+      <th scope="row">
+      0xf81454ff......332efb8
+      </th>
+      <td>
+      18 days 2 hrs ago
+      </td>
+      <td>
+        334.45
+      </td>
+     
+    </tr>
+    <tr>
+      <th scope="row">
+      0xf81454ff......232efb8
+      </th>
+      <td>
+      23 Hours
+      </td>
+      <td>
+        23.34
+      </td>
+     
+    </tr>
+  </tbody>
+</Table>
+
+
+
+
+                                  </Col>
                                 </Row>
                               </div>
                             </form>

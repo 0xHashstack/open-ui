@@ -141,7 +141,7 @@ $colors: (
 // scss-docs-end colors-map
 
 // scss-docs-start theme-color-variables
-$primary: $blue;
+$primary: #09081A;
 $secondary: $gray-600;
 $success: $green;
 $info: $cyan;
@@ -1367,7 +1367,7 @@ $card-group-margin: $grid-gutter-width / 2;
 // scss-docs-start accordion-variables
 $accordion-padding-y: 1rem;
 $accordion-padding-x: 1.25rem;
-$accordion-color: $body-color;
+// $accordion-color: #09081A;
 $accordion-bg: transparent;
 $accordion-border-width: $border-width;
 $accordion-border-color: rgba($black, 0.125);
