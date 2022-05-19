@@ -3,6 +3,14 @@
 // accordion.scss
 //
 
+//for setting the height of accordian card in passbook with deposit data
+.accordion-item:last-of-type .accordion-button.collapsed{
+    height: 80px;
+}
+
+.accordion-item:first-of-type .accordion-button {
+    height: 80px;
+}
 .custom-accordion {
     .accordion-list {
         display: flex;
