@@ -15,11 +15,17 @@ class PancakeWrapper {
     )
   }
 
+  // getting collatral balance we need to substaract collateral amount - interest 
+  //since their market would be different we need to use the below function
+  
+  //the return value of this function should be substracted from collateral amount
+
+  //chaing interest to collateral market
   async getAmountsOut(
-    _amountIn: number,
-    _tokenIn: String,
-    _tokenOut: String,
-    decimal: number
+    _amountIn: number, //it will be interest
+    _tokenIn: String, // loan market
+    _tokenOut: String, // collateral market
+    decimal: number // 8
   ) {
     if (_amountIn == 0) {
       return 0

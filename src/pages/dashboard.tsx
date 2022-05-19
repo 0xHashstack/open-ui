@@ -287,7 +287,10 @@ const Dashboard = () => {
         account,
         commitment: CommitMapReverse[depositsData.commitment[i]],
         market: bytesToString(depositsData.market[i]),
-        acquiredYield: Number(interest),
+        acquiredYield: Number(interest),  // deposit interest
+        // interest market is same as deposit market
+        //call getsavingsapr
+        // balance add amount and interest directly for deposit
       })
     }
     setActiveDepositsData(deposits)
@@ -314,13 +317,15 @@ const Dashboard = () => {
           debtCategory = 3
         }
       } catch { }
+      //here all data of loans
       loans.push({
         loanMarket: bytesToString(loansData.loanMarket[index]), // 1 Loan Market
         loanAmount: Number(loansData.loanAmount[index]), // 2 Amount
         commitment: CommitMapReverse[loansData.loanCommitment[index]], // 3  Commitment
         collateralMarket: bytesToString(loansData.collateralMarket[index]), // 4 Collateral Market
         collateralAmount: Number(loansData.collateralAmount[index]), // 5 Collateral Amount
-        loanInterest: Number(interest),
+        loanInterest: Number(interest), //loan interest
+        //interest market will always be same as loan market
         account,
         cdr,
         debtCategory,
@@ -329,6 +334,7 @@ const Dashboard = () => {
         state: loansData.state[index], // Repay status
         currentLoanMarket: bytesToString(loansData.loanCurrentMarket[index]), // Borrow market(current)
         currentLoanAmount: Number(loansData.loanCurrentAmount[index]), // Borrow amount(current)
+        //get apr is for loans apr
       })
     }
     // Borrow interest -- #Todo ( To be added after intrest issue resolved )
