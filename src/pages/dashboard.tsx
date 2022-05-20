@@ -38,11 +38,11 @@ import {
   DecimalsMap,
   CommitMap,
   CommitMapReverse,
-} from "../blockchain/constants";
-import { BNtoNum, GetErrorText, bytesToString } from "../blockchain/utils";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { main } from './data-analytics';
+} from "../blockchain/constants"
+import { BNtoNum, GetErrorText, bytesToString } from "../blockchain/utils"
+import { toast } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
+import { main } from "./data-analytics"
 
 import loadable from "@loadable/component"
 const PassbookTBody = loadable(() => import("./passbook-body"))
@@ -129,12 +129,13 @@ const Dashboard = () => {
     }
   })
 
-  main("totalValueLocked").then(res => {
-    typeof res
-    if (typeof res === "number") {
-      //@ts-ignore
-      setTvl(res?.toFixed(2))
-    }
+  useEffect(() => {
+    main("totalValueLocked").then(res => {
+      if (typeof res === "number") {
+        //@ts-ignore
+        setTvl(res?.toFixed(2))
+      }
+    })
   })
 
   main("totalUsers").then(res => {
@@ -252,12 +253,13 @@ const Dashboard = () => {
     removeBodyCss()
   }
   function tog_add_active_deposit() {
-    setmodal_add_active_deposit(!modal_add_active_deposit)
+    // setmodal_add_active_deposit(!modal_add_active_deposit)
+    setmodal_add_active_deposit(true)
     setmodal_withdraw_active_deposit(false)
     removeBodyCss()
   }
   function tog_withdraw_active_deposit() {
-    setmodal_withdraw_active_deposit(!modal_withdraw_active_deposit)
+    setmodal_withdraw_active_deposit(true)
     setmodal_add_active_deposit(false)
     removeBodyCss()
   }
@@ -311,9 +313,9 @@ const Dashboard = () => {
         account,
         commitment: CommitMapReverse[depositsData.commitment[i]],
         market: bytesToString(depositsData.market[i]),
-        acquiredYield: Number(interest),  // deposit interest
+        acquiredYield: Number(interest), // deposit interest
         // interest market is same as deposit market
-        //call getsavingsapr
+        // call getsavingsapr
         // balance add amount and interest directly for deposit
       })
     }
@@ -323,7 +325,7 @@ const Dashboard = () => {
   const onLoansData = async loansData => {
     console.log("Data: ", loansData)
     const loans = []
-    for(let index = 0; index < loansData.loanAmount.length; index++) {
+    for (let index = 0; index < loansData.loanAmount.length; index++) {
       let debtCategory, cdr, interest
       if (loansData.state[index] == 0)
         interest = await wrapper
@@ -340,7 +342,7 @@ const Dashboard = () => {
         } else if (cdr >= 0.333 && cdr < 0.5) {
           debtCategory = 3
         }
-      } catch { }
+      } catch {}
       //here all data of loans
       loans.push({
         loanMarket: bytesToString(loansData.loanMarket[index]), // 1 Loan Market
@@ -636,11 +638,14 @@ const Dashboard = () => {
     }
   }
 
-  const handleDepositRequest = async () => {
+  const handleDepositRequest = async (
+    depositMarket,
+    depositCommitmentPeriod
+  ) => {
     try {
       setIsTransactionDone(true)
-      const _depositRequestSel: string | undefined = depositRequestSel
-      const _depositRequestVal: string | undefined = depositRequestVal
+      const _depositRequestSel: string | undefined = depositMarket
+      const _depositRequestVal: string | undefined = depositCommitmentPeriod
       const approveTransactionHash = await wrapper
         ?.getMockBep20Instance()
         .approve(
@@ -651,14 +656,12 @@ const Dashboard = () => {
       await approveTransactionHash.wait()
       console.log("Approve Transaction sent: ", approveTransactionHash)
 
-      const tx1 = await wrapper
-        ?.getDepositInstance()
-        .depositRequest(
-          SymbolsMap[_depositRequestSel.toUpperCase()],
-          CommitMap[_depositRequestVal],
-          inputVal1,
-          DecimalsMap[_depositRequestSel.toUpperCase()]
-        )
+      const tx1 = await wrapper?.getDepositInstance().depositRequest(
+        SymbolsMap[_depositRequestSel.toUpperCase()], //market
+        CommitMap[_depositRequestVal.toUpperCase()], //commitment
+        inputVal1, //amount
+        DecimalsMap[_depositRequestSel.toUpperCase()] //decimal map
+      )
       const tx = await tx1.wait()
       SuccessCallback(tx.events, "DepositAdded", "Deposited amount", inputVal1)
     } catch (err) {
@@ -670,19 +673,21 @@ const Dashboard = () => {
     }
   }
 
-  const handleWithdrawDeposit = async () => {
+  const handleWithdrawDeposit = async (
+    depositMarket,
+    depositCommitmentPeriod
+  ) => {
     try {
       setIsTransactionDone(true)
-      const _withdrawDepositSel: string | undefined = withdrawDepositSel
-      const _withdrawDepositVal: string | undefined = withdrawDepositVal
-      const tx1 = await wrapper
-        ?.getDepositInstance()
-        .withdrawDeposit(
-          SymbolsMap[_withdrawDepositSel.toUpperCase()],
-          CommitMap[_withdrawDepositVal],
-          inputVal1,
-          DecimalsMap[_withdrawDepositSel.toUpperCase()]
-        )
+      const _withdrawDepositSel: string | undefined = depositMarket
+      const _withdrawDepositVal: string | undefined = depositCommitmentPeriod
+
+      const tx1 = await wrapper?.getDepositInstance().withdrawDeposit(
+        SymbolsMap[_withdrawDepositSel.toUpperCase()], //market
+        CommitMap[_withdrawDepositVal.toUpperCase()], //commitment
+        inputVal1, //amount
+        DecimalsMap[_withdrawDepositSel.toUpperCase()]
+      )
       const tx = await tx1.wait()
       if (tx.events.length == 0) {
         // for first withdrawal we can't throw from contract, hence need handling here
@@ -797,13 +802,13 @@ const Dashboard = () => {
                                           key={key}
                                           value={
                                             EventMap[
-                                            asset.loanMarket.toUpperCase()
+                                              asset.loanMarket.toUpperCase()
                                             ]
                                           }
                                         >
                                           {
                                             EventMap[
-                                            asset.loanMarket.toUpperCase()
+                                              asset.loanMarket.toUpperCase()
                                             ]
                                           }
                                         </option>
@@ -825,7 +830,7 @@ const Dashboard = () => {
                                       .filter(asset => {
                                         return (
                                           EventMap[
-                                          asset.loanMarket.toUpperCase()
+                                            asset.loanMarket.toUpperCase()
                                           ] === loanOption
                                         )
                                       })
@@ -921,13 +926,13 @@ const Dashboard = () => {
                                           key={key}
                                           value={
                                             EventMap[
-                                            asset.loanMarket.toUpperCase()
+                                              asset.loanMarket.toUpperCase()
                                             ]
                                           }
                                         >
                                           {
                                             EventMap[
-                                            asset.loanMarket.toUpperCase()
+                                              asset.loanMarket.toUpperCase()
                                             ]
                                           }
                                         </option>
@@ -949,7 +954,7 @@ const Dashboard = () => {
                                       .filter(asset => {
                                         return (
                                           EventMap[
-                                          asset.loanMarket.toUpperCase()
+                                            asset.loanMarket.toUpperCase()
                                           ] === loanOption
                                         )
                                       })
@@ -1061,13 +1066,13 @@ const Dashboard = () => {
                                         key={key}
                                         value={
                                           EventMap[
-                                          asset.loanMarket.toUpperCase()
+                                            asset.loanMarket.toUpperCase()
                                           ]
                                         }
                                       >
                                         {
                                           EventMap[
-                                          asset.loanMarket.toUpperCase()
+                                            asset.loanMarket.toUpperCase()
                                           ]
                                         }
                                       </option>
@@ -1089,7 +1094,7 @@ const Dashboard = () => {
                                     .filter(asset => {
                                       return (
                                         EventMap[
-                                        asset.loanMarket.toUpperCase()
+                                          asset.loanMarket.toUpperCase()
                                         ] === loanOption && !asset.isSwapped
                                       )
                                     })
@@ -1188,13 +1193,13 @@ const Dashboard = () => {
                                         key={key}
                                         value={
                                           EventMap[
-                                          asset.loanMarket.toUpperCase()
+                                            asset.loanMarket.toUpperCase()
                                           ]
                                         }
                                       >
                                         {
                                           EventMap[
-                                          asset.loanMarket.toUpperCase()
+                                            asset.loanMarket.toUpperCase()
                                           ]
                                         }
                                       </option>
@@ -1216,7 +1221,7 @@ const Dashboard = () => {
                                     .filter(asset => {
                                       return (
                                         EventMap[
-                                        asset.loanMarket.toUpperCase()
+                                          asset.loanMarket.toUpperCase()
                                         ] === loanOption && asset.isSwapped
                                       )
                                     })
@@ -1308,13 +1313,13 @@ const Dashboard = () => {
                                         key={key}
                                         value={
                                           EventMap[
-                                          asset.loanMarket.toUpperCase()
+                                            asset.loanMarket.toUpperCase()
                                           ]
                                         }
                                       >
                                         {
                                           EventMap[
-                                          asset.loanMarket.toUpperCase()
+                                            asset.loanMarket.toUpperCase()
                                           ]
                                         }
                                       </option>
@@ -1336,7 +1341,7 @@ const Dashboard = () => {
                                     .filter(asset => {
                                       return (
                                         EventMap[
-                                        asset.loanMarket.toUpperCase()
+                                          asset.loanMarket.toUpperCase()
                                         ] === loanOption
                                       )
                                     })
@@ -1375,13 +1380,13 @@ const Dashboard = () => {
                                         key={key}
                                         value={
                                           EventMap[
-                                          asset.loanMarket.toUpperCase()
+                                            asset.loanMarket.toUpperCase()
                                           ]
                                         }
                                       >
                                         {
                                           EventMap[
-                                          asset.loanMarket.toUpperCase()
+                                            asset.loanMarket.toUpperCase()
                                           ]
                                         }
                                       </option>
@@ -1502,7 +1507,7 @@ const Dashboard = () => {
                                       .filter(asset => {
                                         return (
                                           EventMap[
-                                          asset.market.toUpperCase()
+                                            asset.market.toUpperCase()
                                           ] === depositRequestSel
                                         )
                                       })
@@ -1546,7 +1551,7 @@ const Dashboard = () => {
                                   disabled={
                                     isTransactionDone || inputVal1 === 0
                                   }
-                                  onClick={handleDepositRequest}
+                                  // onClick={handleDepositRequest} //}
                                 >
                                   {!isTransactionDone ? (
                                     "Add to Deposit"
@@ -1626,7 +1631,7 @@ const Dashboard = () => {
                                       .filter(asset => {
                                         return (
                                           EventMap[
-                                          asset.market.toUpperCase()
+                                            asset.market.toUpperCase()
                                           ] === withdrawDepositSel
                                         )
                                       })
@@ -1666,7 +1671,7 @@ const Dashboard = () => {
                                   disabled={
                                     isTransactionDone || inputVal1 === 0
                                   }
-                                  onClick={handleWithdrawDeposit}
+                                  // onClick={handleWithdrawDeposit}
                                 >
                                   {!isTransactionDone ? (
                                     "Withdraw Deposit"
@@ -1742,13 +1747,13 @@ const Dashboard = () => {
                                         key={key}
                                         value={
                                           EventMap[
-                                          asset.loanMarket.toUpperCase()
+                                            asset.loanMarket.toUpperCase()
                                           ]
                                         }
                                       >
                                         {
                                           EventMap[
-                                          asset.loanMarket.toUpperCase()
+                                            asset.loanMarket.toUpperCase()
                                           ]
                                         }
                                       </option>
@@ -1770,7 +1775,7 @@ const Dashboard = () => {
                                     .filter(asset => {
                                       return (
                                         EventMap[
-                                        asset.loanMarket.toUpperCase()
+                                          asset.loanMarket.toUpperCase()
                                         ] === loanOption
                                       )
                                     })
@@ -1836,7 +1841,7 @@ const Dashboard = () => {
               </thead>
               <tbody>
                 {Array.isArray(activeDepositsData) &&
-                  activeDepositsData.length > 0 ? (
+                activeDepositsData.length > 0 ? (
                   activeDepositsData.map((asset, key) => (
                     <tr key={key}>
                       <th scope="row">
@@ -1949,269 +1954,233 @@ const Dashboard = () => {
         return (
           // Active Deposits
           <div className="table-responsive">
+            <Table
+              className="table table-nowrap align-middle mb-0 mr-2"
+              style={{ color: "#4B41E5" }}
+            >
+              <thead>
+                <tr>
+                  <th scope="col" colSpan={2}>
+                    Deposit Amount
+                  </th>
+                  <th scope="col" colSpan={2}>
+                    Deposit Interest{" "}
+                  </th>
+                  <th scope="col" colSpan={2}>
+                    Deposit Balance
+                  </th>
+                  <th scope="col" colSpan={2}>
+                    Deposit Commitment
+                  </th>
+                </tr>
+              </thead>
+            </Table>
+
             {Array.isArray(activeDepositsData) &&
             activeDepositsData.length > 0 ? (
-              activeDepositsData.map((asset, key) => (
-                <div key={key}>
-                  <UncontrolledAccordion defaultOpen="0" open="1">
-                  <Row>
-                    <AccordionItem style={{border:'2px'}}>
-                    
-                      <AccordionHeader targetId="1" >
-                      
-                          <Col className="mr-4 ">
-                            <Card className="mb-1"
-                                  style={{ marginTop: "20px",  }}>
-                              <CardBody>
-                                <div
-                                  
-                                >
-                                  <img
-                                    src={
-                                      CoinClassNames[
-                                        EventMap[asset.market.toUpperCase()]
-                                      ] || asset.market.toUpperCase()
-                                    }
-                                    height="18px"
-                                  />
+              activeDepositsData.map((asset, key) => {
+                return (
+                  <div key={key}>
+                    <UncontrolledAccordion defaultOpen="0" open="1">
+                      <Row>
+                        <AccordionItem style={{ border: "2px" }}>
+                          <AccordionHeader targetId="1">
+                            <Col className="mr-4 ">
+                              <Card
+                                className="mb-1"
+                                style={{ marginTop: "20px" }}
+                              >
+                                <CardBody>
+                                  <div>
+                                    <img
+                                      src={
+                                        CoinClassNames[
+                                          EventMap[asset.market.toUpperCase()]
+                                        ] || asset.market.toUpperCase()
+                                      }
+                                      height="18px"
+                                    />
 
-                                  <div
-                                    className="mr-6"
-                                    style={{
-                                      display: "inline-block",
-                                      fontSize: "18px",
-                                    }}
-                                    align="right"
-                                  >
-                                    &nbsp; &nbsp;
-                                    {EventMap[asset.market.toUpperCase()]}
-                                  </div>
-                                </div>
-                                <CardTitle tag="h5"></CardTitle>
-
-                                <CardSubtitle className=" text-muted" tag="h6">
-                                  <span style={{ fontSize: "14px" }}>
-                                    &nbsp; &nbsp;&nbsp;{" "}
-                                    {BNtoNum(Number(asset.amount))}
-                                  </span>
-                                  &nbsp; &nbsp;
-                                  <img
-                                    src="https://img.icons8.com/cotton/64/000000/synchronize--v3.png"
-                                    // width="18%"
-                                    height="12px"
-                                  />
-                                </CardSubtitle>
-                              </CardBody>
-                            </Card>
-                          </Col>
-                         
-                          <Col className="mr-4 ">
-                            <Card className="mb-1"
-                                  style={{ marginTop: "20px",  }}>
-                              <CardBody>
-                                <div
-                                  
-                                >
-                                  <img
-                                    src={
-                                      CoinClassNames[
-                                        EventMap[asset.market.toUpperCase()]
-                                      ] || asset.market.toUpperCase()
-                                    }
-                                    height="18px"
-                                  />
-
-                                  <div
-                                    className="mr-6"
-                                    style={{
-                                      display: "inline-block",
-                                      fontSize: "18px",
-                                    }}
-                                    align="right"
-                                  >
-                                    &nbsp; &nbsp;
-                                    {EventMap[asset.market.toUpperCase()]}
-                                  </div>
-                                </div>
-                                <CardTitle tag="h5"></CardTitle>
-
-                                <CardSubtitle className=" text-muted" tag="h6">
-                                  <span style={{ fontSize: "14px" }}>
-                                    &nbsp; &nbsp;&nbsp;{" "}
-                                    {BNtoNum(Number(asset.amount))}
-                                  </span>
-                                  &nbsp; &nbsp;
-                                  <img
-                                    src="https://img.icons8.com/cotton/64/000000/synchronize--v3.png"
-                                    // width="18%"
-                                    height="12px"
-                                  />
-                                </CardSubtitle>
-                              </CardBody>
-                            </Card>
-                          </Col>
-                          <Col className="mr-4 ">
-                            <Card className="mb-1"
-                                  style={{ marginTop: "20px",  }}>
-                              <CardBody>
-                                <div
-                                  
-                                >
-                                  <img
-                                    src={
-                                      CoinClassNames[
-                                        EventMap[asset.market.toUpperCase()]
-                                      ] || asset.market.toUpperCase()
-                                    }
-                                    height="18px"
-                                  />
-
-                                  <div
-                                    className="mr-6"
-                                    style={{
-                                      display: "inline-block",
-                                      fontSize: "18px",
-                                    }}
-                                    align="right"
-                                  >
-                                    &nbsp; &nbsp;
-                                    {EventMap[asset.market.toUpperCase()]}
-                                  </div>
-                                </div>
-                                <CardTitle tag="h5"></CardTitle>
-
-                                <CardSubtitle className=" text-muted" tag="h6">
-                                  <span style={{ fontSize: "14px" }}>
-                                    &nbsp; &nbsp;&nbsp;{" "}
-                                    {BNtoNum(Number(asset.amount))}
-                                  </span>
-                                  &nbsp; &nbsp;
-                                  <img
-                                    src="https://img.icons8.com/cotton/64/000000/synchronize--v3.png"
-                                    // width="18%"
-                                    height="12px"
-                                  />
-                                </CardSubtitle>
-                              </CardBody>
-                            </Card>
-                          </Col>
-                          <Col className="mr-4 ">
-                            <Card className="mb-1"
-                                  style={{ marginTop: "20px",  }}>
-                              <CardBody>
-                                <div
-                                  
-                                >
-                                  <img
-                                    src={
-                                      CoinClassNames[
-                                        EventMap[asset.market.toUpperCase()]
-                                      ] || asset.market.toUpperCase()
-                                    }
-                                    height="18px"
-                                  />
-
-                                  <div
-                                    className="mr-6"
-                                    style={{
-                                      display: "inline-block",
-                                      fontSize: "18px",
-                                    }}
-                                    align="right"
-                                  >
-                                    &nbsp; &nbsp;
-                                    {EventMap[asset.market.toUpperCase()]}
-                                  </div>
-                                </div>
-                                <CardTitle tag="h5"></CardTitle>
-
-                                <CardSubtitle className=" text-muted" tag="h6">
-                                  <span style={{ fontSize: "14px" }}>
-                                    &nbsp; &nbsp;&nbsp;{" "}
-                                    {BNtoNum(Number(asset.amount))}
-                                  </span>
-                                  &nbsp; &nbsp;
-                                  <img
-                                    src="https://img.icons8.com/cotton/64/000000/synchronize--v3.png"
-                                    // width="18%"
-                                    height="12px"
-                                  />
-                                </CardSubtitle>
-                              </CardBody>
-                            </Card>
-                          </Col>
-
-                          
-                       
-                        {/* <Row>
-
-                        <Col>
-                          <div className="d-flex align-items-center">
-                            <div className="avatar-xs me-3">
-                              <img
-                                src={
-                                  CoinClassNames[
-                                    EventMap[asset.market.toUpperCase()]
-                                  ] || asset.market.toUpperCase()
-                                }
-                              />
-                            </div>
-                            <span>{EventMap[asset.market.toUpperCase()]}</span>
-                          </div>
-                        </Col>
-
-                        <Col>
-                          <div className="text-muted">
-                            {EventMap[asset.commitment]}
-                          </div>
-                        </Col>
-
-                        <Col>
-                          <div className="text-muted">
-                            {BNtoNum(Number(asset.amount))}
-                          </div>
-                        </Col>
-                        </Row> */}
-                      </AccordionHeader>
-                      <AccordionBody accordionId="1">
-                        <div style={{ borderWidth: 1 }}>
-                          <CardBody>
-                            <form>
-                              {/* // */}
-                              <div className="mb-4 ">
-                                <Row>
-                                  <Col lg="4 mb-3">
                                     <div
-                                      className="block-example border border-primary"
+                                      className="mr-6"
                                       style={{
-                                        padding: "15px",
-                                        borderRadius: "5px",
+                                        display: "inline-block",
+                                        fontSize: "18px",
                                       }}
+                                      align="right"
                                     >
-                                      <div className="mb-3">
-                                        {/* <label className="card-radio-label mb-2"> */}
-                                        <Button
-                                          className="btn-block btn-md"
-                                          color="light"
-                                          onClick={() => {
-                                            tog_add_active_deposit()
+                                      &nbsp; &nbsp;
+                                      {EventMap[asset.market.toUpperCase()]}
+                                    </div>
+                                  </div>
+                                  <CardTitle tag="h5"></CardTitle>
+
+                                  <CardSubtitle
+                                    className=" text-muted"
+                                    tag="h6"
+                                  >
+                                    <span style={{ fontSize: "14px" }}>
+                                      &nbsp; &nbsp;&nbsp;{" "}
+                                      {BNtoNum(Number(asset.amount))}
+                                    </span>
+                                    &nbsp; &nbsp;
+                                    <img
+                                      src="https://img.icons8.com/cotton/64/000000/synchronize--v3.png"
+                                      // width="18%"
+                                      height="12px"
+                                    />
+                                  </CardSubtitle>
+                                </CardBody>
+                              </Card>
+                            </Col>
+
+                            <Col className="mr-4 ">
+                              <Card
+                                className="mb-1"
+                                style={{ marginTop: "20px" }}
+                              >
+                                <CardBody>
+                                  <div>
+                                    <div
+                                      className="mr-6"
+                                      style={{
+                                        display: "inline-block",
+                                        fontSize: "18px",
+                                      }}
+                                      align="right"
+                                    >
+                                      {parseFloat(
+                                        BNtoNum(Number(asset.acquiredYield))
+                                      ).toFixed(2)}
+                                      &nbsp;
+                                      {EventMap[asset.market.toUpperCase()]}
+                                    </div>
+                                  </div>
+                                  <CardTitle tag="h5"></CardTitle>
+
+                                  <CardSubtitle
+                                    className=" text-muted"
+                                    tag="h6"
+                                  >
+                                    <span style={{ fontSize: "14px" }}>
+                                      &nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+                                      &nbsp;1.2%APR
+                                    </span>
+                                    &nbsp; &nbsp;
+                                  </CardSubtitle>
+                                </CardBody>
+                              </Card>
+                            </Col>
+                            <Col className="mr-4 ">
+                              <Card
+                                className="mb-1"
+                                style={{ marginTop: "20px" }}
+                              >
+                                <CardBody>
+                                  <div>
+                                    <img
+                                      src={
+                                        CoinClassNames[
+                                          EventMap[asset.market.toUpperCase()]
+                                        ] || asset.market.toUpperCase()
+                                      }
+                                      height="18px"
+                                    />
+
+                                    <div
+                                      className="mr-6"
+                                      style={{
+                                        display: "inline-block",
+                                        fontSize: "18px",
+                                      }}
+                                      align="right"
+                                    >
+                                      &nbsp; &nbsp;
+                                      {EventMap[asset.market.toUpperCase()]}
+                                    </div>
+                                  </div>
+                                  <CardTitle tag="h5"></CardTitle>
+
+                                  <CardSubtitle
+                                    className=" text-muted"
+                                    tag="h6"
+                                  >
+                                    <span style={{ fontSize: "14px" }}>
+                                      &nbsp; &nbsp;&nbsp;{" "}
+                                      {(
+                                        parseFloat(
+                                          BNtoNum(Number(asset.amount))
+                                        ) +
+                                        parseFloat(
+                                          BNtoNum(Number(asset.acquiredYield))
+                                        )
+                                      ).toFixed(2)}
+                                    </span>
+                                    &nbsp; &nbsp;
+                                  </CardSubtitle>
+                                </CardBody>
+                              </Card>
+                            </Col>
+                            <Col className="mr-4 ">
+                              <Card
+                                className="mb-1"
+                                style={{ marginTop: "20px" }}
+                              >
+                                <CardBody>
+                                  <div
+                                    className="mr-6"
+                                    style={{
+                                      display: "inline-block",
+                                      fontSize: "14px",
+                                    }}
+                                    align="right"
+                                  >
+                                    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {EventMap[asset.commitment]}
+                                  </div>
+                                  <CardTitle tag="h5"></CardTitle>
+                                </CardBody>
+                              </Card>
+                            </Col>
+                          </AccordionHeader>
+                          <AccordionBody accordionId="1">
+                            <div style={{ borderWidth: 1 }}>
+                              <CardBody>
+                                <form>
+                                  <div className="mb-4 ">
+                                    <Row>
+                                      <Col lg="4 mb-3">
+                                        <div
+                                          className="block-example border"
+                                          style={{
+                                            padding: "15px",
+                                            borderRadius: "5px",
                                           }}
                                         >
-                                          Add to Deposit
-                                        </Button>
-                                        {"   "}
-                                        <Button
-                                          className="btn-block btn-md"
-                                          color="light"
-                                          onClick={() => {
-                                            tog_withdraw_active_deposit()
-                                          }}
-                                        >
-                                          Withdraw Deposit
-                                        </Button>
-                                        {/* </label> */}
-                                      </div>
-                                      {/* <Modal
+                                          <div className="mb-3">
+                                            {/* <label className="card-radio-label mb-2"> */}
+                                            <Button
+                                              className="btn-block btn-md"
+                                              color="light"
+                                              onClick={() => {
+                                                tog_add_active_deposit()
+                                              }}
+                                            >
+                                              Add to Deposit
+                                            </Button>
+                                            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                                            &nbsp;{" "}
+                                            <Button
+                                              className="btn-block btn-md"
+                                              color="light"
+                                              onClick={() => {
+                                                tog_withdraw_active_deposit()
+                                              }}
+                                            >
+                                              Withdraw Deposit
+                                            </Button>
+                                            {/* </label> */}
+                                          </div>
+                                          {/* <Modal
                                         // isOpen={modal_add_active_deposit}
                                         isOpen={true}
                                         toggle={() => {
@@ -2219,137 +2188,167 @@ const Dashboard = () => {
                                         }}
                                         centered
                                       > */}
-                                      {modal_add_active_deposit && (
-                                        <Form>
-                                          <div className="row mb-4">
-                                            <Col sm={12}>
-                                              <Input
-                                                type="text"
-                                                className="form-control"
-                                                id="horizontal-password-Input"
-                                                placeholder={
-                                                  depositRequestSel
-                                                    ? `Minimum amount =  ${MinimumAmount[depositRequestSel]}`
-                                                    : "Amount"
-                                                }
-                                                onChange={event => {
-                                                  setInputVal1(
-                                                    Number(event.target.value)
-                                                  )
-                                                }}
-                                              />
-                                            </Col>
-                                          </div>
+                                          {modal_add_active_deposit && (
+                                            <Form>
+                                              <div className="row mb-4">
+                                                <Col sm={12}>
+                                                  <Input
+                                                    type="text"
+                                                    className="form-control"
+                                                    id="horizontal-password-Input"
+                                                    placeholder={
+                                                      depositRequestSel
+                                                        ? `Minimum amount =  ${MinimumAmount[depositRequestSel]}`
+                                                        : "Amount"
+                                                    }
+                                                    onChange={event => {
+                                                      setInputVal1(
+                                                        Number(
+                                                          event.target.value
+                                                        )
+                                                      )
+                                                    }}
+                                                  />
+                                                </Col>
+                                              </div>
 
-                                          <div className="d-grid gap-2">
-                                            <Button
-                                              color="primary"
-                                              className="w-md"
-                                              disabled={
-                                                isTransactionDone ||
-                                                inputVal1 === 0
-                                              }
-                                              onClick={handleDepositRequest}
-                                            >
-                                              {!isTransactionDone ? (
-                                                "Add to Deposit"
-                                              ) : (
-                                                <Spinner>Loading...</Spinner>
-                                              )}
-                                            </Button>
-                                          </div>
-                                        </Form>
-                                      )}
-                                      {modal_withdraw_active_deposit && (
-                                        <Form>
-                                          <div className="row mb-4">
-                                            <Col sm={12}>
-                                              <Input
-                                                type="text"
-                                                className="form-control"
-                                                id="horizontal-password-Input"
-                                                placeholder="Amount"
-                                                onChange={event => {
-                                                  setInputVal1(
-                                                    Number(event.target.value)
-                                                  )
-                                                }}
-                                              />
-                                            </Col>
-                                          </div>
+                                              <div className="d-grid gap-2">
+                                                <Button
+                                                  // color="primary"
+                                                  className="w-md"
+                                                  disabled={
+                                                    isTransactionDone ||
+                                                    inputVal1 === 0
+                                                  }
+                                                  onClick={() => {
+                                                    handleDepositRequest(
+                                                      EventMap[
+                                                        asset.market.toUpperCase()
+                                                      ],
+                                                      EventMap[
+                                                        asset.commitment.toUpperCase()
+                                                      ]
+                                                    )
+                                                  }}
+                                                >
+                                                  {!isTransactionDone ? (
+                                                    "Add to Deposit"
+                                                  ) : (
+                                                    <Spinner>
+                                                      Loading...
+                                                    </Spinner>
+                                                  )}
+                                                </Button>
+                                              </div>
+                                            </Form>
+                                          )}
+                                          {modal_withdraw_active_deposit && (
+                                            <Form>
+                                              <div className="row mb-4">
+                                                <Col sm={12}>
+                                                  <Input
+                                                    type="text"
+                                                    className="form-control"
+                                                    id="horizontal-password-Input"
+                                                    placeholder="Amount"
+                                                    onChange={event => {
+                                                      setInputVal1(
+                                                        Number(
+                                                          event.target.value
+                                                        )
+                                                      )
+                                                    }}
+                                                  />
+                                                </Col>
+                                              </div>
 
-                                          <div className="d-grid gap-2">
-                                            <Button
-                                              color="primary"
-                                              className="w-md"
-                                              disabled={
-                                                isTransactionDone ||
-                                                inputVal1 === 0
-                                              }
-                                              onClick={handleWithdrawDeposit}
-                                            >
-                                              {!isTransactionDone ? (
-                                                "Withdraw Deposit"
-                                              ) : (
-                                                <Spinner>Loading...</Spinner>
-                                              )}
-                                            </Button>
-                                          </div>
-                                        </Form>
-                                      )}
-                                    </div>
-                                  </Col>
-                                  <Col lg="8">
-                                    <Table>
-                                      <thead>
-                                        <tr>
-                                          <th>Transaction Hash</th>
-                                          <th>Age</th>
-                                          <th>Value</th>
-                                        </tr>
-                                      </thead>
-                                      <tbody>
-                                        <tr>
-                                          <th scope="row">
-                                            0xf81454ff....442efb8
-                                          </th>
-                                          <td>19 mins ago</td>
-                                          <td>144.98</td>
-                                        </tr>
-                                        <tr>
-                                          <th scope="row">
-                                            0xf81454ff......332efb8
-                                          </th>
-                                          <td>18 days 2 hrs ago</td>
-                                          <td>334.45</td>
-                                        </tr>
-                                        <tr>
-                                          <th scope="row">
-                                            0xf81454ff......232efb8
-                                          </th>
-                                          <td>23 Hours</td>
-                                          <td>23.34</td>
-                                        </tr>
-                                      </tbody>
-                                    </Table>
-                                  </Col>
-                                </Row>
-                              </div>
-                            </form>
-                          </CardBody>
-                        </div>
-                      </AccordionBody>
-                    </AccordionItem>
-                    </Row>
-                  </UncontrolledAccordion>
-                </div>
-              ))
+                                              <div className="d-grid gap-2">
+                                                <Button
+                                                  // color="primary"
+                                                  className="w-md"
+                                                  disabled={
+                                                    isTransactionDone ||
+                                                    inputVal1 === 0
+                                                  }
+                                                  onClick={() => {
+                                                    handleWithdrawDeposit(
+                                                      EventMap[
+                                                        asset.market.toUpperCase()
+                                                      ],
+                                                      EventMap[
+                                                        asset.commitment.toUpperCase()
+                                                      ]
+                                                    )
+                                                  }}
+                                                  style={{
+                                                    color: "#4B41E5",
+                                                  }}
+                                                >
+                                                  {!isTransactionDone ? (
+                                                    "Withdraw Deposit"
+                                                  ) : (
+                                                    <Spinner>
+                                                      Loading...
+                                                    </Spinner>
+                                                  )}
+                                                </Button>
+                                              </div>
+                                            </Form>
+                                          )}
+                                        </div>
+                                      </Col>
+                                      <Col lg="8">
+                                        <Table>
+                                          <thead>
+                                            <tr>
+                                              <th>Transaction Hash</th>
+                                              <th>Age</th>
+                                              <th>Value</th>
+                                            </tr>
+                                          </thead>
+                                          <tbody>
+                                            <tr>
+                                              <th scope="row">
+                                                0xf81454ff....442efb8
+                                              </th>
+                                              <td>19 mins ago</td>
+                                              <td>144.98</td>
+                                            </tr>
+                                            <tr>
+                                              <th scope="row">
+                                                0xf81454ff......332efb8
+                                              </th>
+                                              <td>18 days 2 hrs ago</td>
+                                              <td>334.45</td>
+                                            </tr>
+                                            <tr>
+                                              <th scope="row">
+                                                0xf81454ff......232efb8
+                                              </th>
+                                              <td>23 Hours</td>
+                                              <td>23.34</td>
+                                            </tr>
+                                          </tbody>
+                                        </Table>
+                                      </Col>
+                                    </Row>
+                                  </div>
+                                </form>
+                              </CardBody>
+                            </div>
+                          </AccordionBody>
+                        </AccordionItem>
+                      </Row>
+                    </UncontrolledAccordion>
+                  </div>
+                )
+              })
             ) : (
               <div>No records found</div>
             )}
           </div>
         )
-        break
+        break;
 
       case "2": //
         return (
@@ -2378,7 +2377,7 @@ const Dashboard = () => {
             </Table>
           </div>
         )
-        break
+        break;
 
       case "3":
         return (
@@ -2407,7 +2406,7 @@ const Dashboard = () => {
             </Table>
           </div>
         )
-        break
+        break;
 
       default:
         return null
@@ -2721,7 +2720,7 @@ const Dashboard = () => {
                                   defaultValue={"NONE"}
                                 >
                                   <option hidden>Commitment</option>
-                                  <option value={"NONE"} >None</option>
+                                  <option value={"NONE"}>None</option>
                                   <option value={"TWOWEEKS"}>Two Weeks</option>
                                   <option value={"ONEMONTH"}>One Month</option>
                                   <option value={"THREEMONTHS"}>
@@ -2736,7 +2735,7 @@ const Dashboard = () => {
                                   defaultValue={"NONE"}
                                 >
                                   <option hidden>Commitment</option>
-                                  <option value={"NONE"} >None</option>
+                                  <option value={"NONE"}>None</option>
                                   <option value={"ONEMONTH"}>One Month</option>
                                 </select>
                               </th>
@@ -2775,7 +2774,7 @@ const Dashboard = () => {
                           </thead>
                           <tbody>
                             {Array.isArray(activeLiquidationsData) &&
-                              activeLiquidationsData.length > 0 ? (
+                            activeLiquidationsData.length > 0 ? (
                               activeLiquidationsData.map((asset, key) => (
                                 <tr key={key}>
                                   <th scope="row">
@@ -2794,7 +2793,7 @@ const Dashboard = () => {
                                       <span>
                                         {
                                           EventMap[
-                                          asset.loanMarket.toUpperCase()
+                                            asset.loanMarket.toUpperCase()
                                           ]
                                         }
                                       </span>
@@ -2827,7 +2826,7 @@ const Dashboard = () => {
                                       <span>
                                         {
                                           EventMap[
-                                          asset.collateralMarket.toUpperCase()
+                                            asset.collateralMarket.toUpperCase()
                                           ]
                                         }
                                       </span>
