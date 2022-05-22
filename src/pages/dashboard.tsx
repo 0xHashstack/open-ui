@@ -115,33 +115,34 @@ const Dashboard = () => {
     }
   }
 
-  var utilizationFactor
-  main('totalBorrowedUsd').then(res1 => {
-    if (res1) {
-      main('totalDepositUsd').then(res2 => {
+  var utilizationFactor;
+  useEffect(() => {
+    main("totalValueLocked").then(res => {
+      if (typeof res === "number") {
         //@ts-ignore
-        utilizationFactor = res1 / res2
-        const uf = utilizationFactor.toFixed(2)
-        setUf(uf)
-      })
-    }
-  })
+        setTvl(res?.toFixed(2))
+      }
+    })
 
-  main("totalValueLocked").then(res => {
-    typeof (res)
-    if (typeof (res) === "number") {
-      //@ts-ignore
-      setTvl(res?.toFixed(2))
-    }
-  })
+    main("totalBorrowedUsd").then(res1 => {
+      if (res1) {
+        main("totalDepositUsd").then(res2 => {
+          //@ts-ignore
+          utilizationFactor = res1 / res2
+          const uf = utilizationFactor.toFixed(2)
+          setUf(uf)
+        })
+      }
+    })
 
-  main('totalUsers').then(res => {
-    setTotalUsers(res)
-  })
-
-  main("dominantMarket").then(res => {
-    setDominantMarket(res[0])
-  })
+    main("totalUsers").then(res => {
+      setTotalUsers(res)
+    })
+  
+    main("dominantMarket").then(res => {
+      setDominantMarket(res[0])
+    })
+  },[]);
 
   const { web3Wrapper: wrapper } = useContext(Web3WrapperContext)
 
