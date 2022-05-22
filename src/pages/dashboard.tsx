@@ -372,12 +372,16 @@ const Dashboard = () => {
       let interest = await wrapper
         ?.getDepositInstance()
         .getDepositInterest(account, i + 1)
+      let interestAPR = await wrapper
+        ?.getComptrollerInstance()
+        .getsavingsAPR(depositsData.market[i], depositsData.commitment[i])
       deposits.push({
         amount: depositsData.amount[i].toString(),
         account,
         commitment: CommitMapReverse[depositsData.commitment[i]],
         market: bytesToString(depositsData.market[i]),
-        acquiredYield: Number(interest), // deposit interest
+        acquiredYield: Number(interest),  // deposit interest
+        interestRate: interestAPR
         // interest market is same as deposit market
         // call getsavingsapr
         // balance add amount and interest directly for deposit
@@ -389,12 +393,15 @@ const Dashboard = () => {
   const onLoansData = async loansData => {
     console.log("Data: ", loansData)
     const loans = []
-    for (let index = 0; index < loansData.loanAmount.length; index++) {
-      let debtCategory, cdr, interest
+    for(let index = 0; index < loansData.loanAmount.length; index++) {
+      let debtCategory, cdr, interest, interestAPR
       if (loansData.state[index] == 0)
         interest = await wrapper
           ?.getLoanInstance()
           .getLoanInterest(account, index + 1)
+        interestAPR = await wrapper
+          ?.getComptrollerInstance()
+          .getAPR(loansData.loanMarket[index], loansData.loanCommitment[index]);
       try {
         cdr = BigNumber.from(loansData.collateralAmount[index])
           .div(BigNumber.from(loansData.loanAmount[index]))
@@ -415,6 +422,7 @@ const Dashboard = () => {
         collateralMarket: bytesToString(loansData.collateralMarket[index]), // 4 Collateral Market
         collateralAmount: Number(loansData.collateralAmount[index]), // 5 Collateral Amount
         loanInterest: Number(interest), //loan interest
+        interestRate: interestAPR,
         //interest market will always be same as loan market
         account,
         cdr,
