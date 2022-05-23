@@ -124,7 +124,7 @@ const Dashboard = () => {
     }
   }
 
-  var utilizationFactor
+  var utilizationFactor;
   useEffect(() => {
     main("totalValueLocked").then(res => {
       if (typeof res === "number") {
