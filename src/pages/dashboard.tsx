@@ -193,7 +193,7 @@ const Dashboard = () => {
     if (customActiveTab == "3") {
       navigateLoansToLiquidate(liquidationIndex)
     }
-  }, [account, passbookStatus, customActiveTab, isTransactionDone, liquidationIndex, activeLiquidationsData])
+  }, [account, passbookStatus, customActiveTab, isTransactionDone, liquidationIndex])
 
   const toggleCustom = tab => {
     if (customActiveTab !== tab) {
