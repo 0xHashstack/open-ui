@@ -2016,16 +2016,16 @@ const Dashboard = () => {
     }
   }
   //here
-  
+
   const getActionTabs = customActiveTab => {
     console.log("blockchain activedepoist", activeDepositsData)
     switch (customActiveTab) {
       case "1":
         return (
           // Active Deposits
-          <div className="table-responsive ">
+          <div className="table-responsive mt-3">
             <Table className="table table-nowrap align-middle mb-0 mr-2">
-              <thead>
+              <thead className="mb-3">
                 <tr>
                   <th scope="row" colSpan={2}>
                     &nbsp; &nbsp; &nbsp; Deposit Amount
@@ -2049,7 +2049,7 @@ const Dashboard = () => {
               activeDepositsData.map((asset, key) => {
                 return (
                   <div key={key}>
-                    <UncontrolledAccordion defaultOpen="0" open="false" >
+                    <UncontrolledAccordion defaultOpen="0" open="false">
                       <Row>
                         <AccordionItem style={{ border: "2px" }}>
                           <AccordionHeader targetId="1">
@@ -2366,7 +2366,12 @@ const Dashboard = () => {
                                         </div>
                                       </Col>
                                       <Col lg="8">
-                                        {<TxHistoryTable asset={asset} />}
+                                        {
+                                          <TxHistoryTable
+                                            asset={asset}
+                                            type="deposits"
+                                          />
+                                        }
                                       </Col>
                                     </Row>
                                   </div>
@@ -2389,7 +2394,7 @@ const Dashboard = () => {
 
       case "2": //
         return (
-          <div className="table-responsive">
+          <div className="table-responsive  mt-3">
             <Table className="table table-nowrap align-middle mb-0">
               <thead>
                 <tr>
@@ -2640,7 +2645,7 @@ const Dashboard = () => {
                                             borderRadius: "5px",
                                           }}
                                         >
-                                          <Row>
+                                          <Row className="mb-3">
                                             <Col>
                                               {customActiveTabs === "2" && (
                                                 <Nav
@@ -2650,11 +2655,16 @@ const Dashboard = () => {
                                                   <NavItem>
                                                     <NavLink
                                                       style={{
+                                                        background:
+                                                          loanActionTab === "0"
+                                                            ? "#2a3042"
+                                                            : "none",
+                                                        borderColor:
+                                                          loanActionTab === "0"
+                                                            ? "#3a425a #3a425a #2a3042"
+                                                            : "none",
                                                         cursor: "pointer",
                                                       }}
-                                                      // className={classnames({
-                                                      //   active: customActiveTabs === "0",
-                                                      // })}
                                                       onClick={() => {
                                                         // toggleCustoms("0")
                                                         toggleLoanAction("0")
@@ -2670,6 +2680,16 @@ const Dashboard = () => {
                                                       <NavItem>
                                                         <NavLink
                                                           style={{
+                                                            background:
+                                                              loanActionTab ===
+                                                              "1"
+                                                                ? "#2a3042"
+                                                                : "none",
+                                                            borderColor:
+                                                              loanActionTab ===
+                                                              "1"
+                                                                ? "#3a425a #3a425a #2a3042"
+                                                                : "none",
                                                             cursor: "pointer",
                                                           }}
                                                           // className={classnames({
@@ -2997,6 +3017,14 @@ const Dashboard = () => {
                                             )}
                                         </div>
                                       </Col>
+                                      <Col lg="8">
+                                        {
+                                          <TxHistoryTable
+                                            asset={asset}
+                                            type="loans"
+                                          />
+                                        }
+                                      </Col>
                                     </Row>
                                   </div>
                                 </form>
@@ -3018,7 +3046,7 @@ const Dashboard = () => {
 
       case "3":
         return (
-          <div className="table-responsive">
+          <div className="table-responsive  mt-3">
             <Table className="table table-nowrap align-middle mb-0">
               <thead>
                 <tr>
@@ -3270,15 +3298,12 @@ const Dashboard = () => {
                                             borderRadius: "5px",
                                           }}
                                         >
-                                          {loanActionTab === "0" && (
+                                          {loanActionTab === "0" && ( //here
                                             <Form>
                                               <div className="d-grid gap-2">
                                                 <Button
                                                   className="w-md"
-                                                  disabled={
-                                                    isTransactionDone ||
-                                                    inputVal1 === 0
-                                                  }
+                                                  disabled={isTransactionDone}
                                                   onClick={() => {
                                                     handleRepay(
                                                       asset.loanMarket,
@@ -3304,6 +3329,14 @@ const Dashboard = () => {
                                       </Col>
 
                                       <Col lg="8">
+                                        {
+                                          <TxHistoryTable
+                                            asset={asset}
+                                            type="loans"
+                                          />
+                                        }
+                                      </Col>
+                                      {/* <Col lg="8">
                                         <Table>
                                           <thead>
                                             <tr>
@@ -3336,7 +3369,7 @@ const Dashboard = () => {
                                             </tr>
                                           </tbody>
                                         </Table>
-                                      </Col>
+                                      </Col> */}
                                     </Row>
                                   </div>
                                 </form>
@@ -3508,7 +3541,7 @@ const Dashboard = () => {
             </Col>
           </Row>
 
-          <Row >
+          <Row>
             <Col xl={"12"}>
               <Card style={{ height: "29rem" }}>
                 <CardBody>
@@ -3640,13 +3673,13 @@ const Dashboard = () => {
                   </Row>
                   {/* </Col>
                                 </Row> */}
-                  <Row  >
-                    <div >
-                    <Col lg={12} >
-                      {customActiveTab === "2" &&
-                        getActionTabs(customActiveTabs)}
-                      {/* {getPassbookTable(passbookStatus)} */}
-                    </Col>
+                  <Row>
+                    <div>
+                      <Col lg={12}>
+                        {customActiveTab === "2" &&
+                          getActionTabs(customActiveTabs)}
+                        {/* {getPassbookTable(passbookStatus)} */}
+                      </Col>
                     </div>
                   </Row>
                   <TabContent activeTab={customActiveTab} className="p-1">

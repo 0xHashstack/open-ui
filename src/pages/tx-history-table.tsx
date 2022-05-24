@@ -6,19 +6,16 @@ import { txHistory } from "./passbook-history"
 
 const TxHistoryTable = props => {
   const { account, market, commitment } = props.asset
+  const { type } = props
   const [txHistoryData, setTxHistoryData] = useState(null)
 
   useEffect(() => {
-    const test = txHistory(
-      "deposits",
-      account,
-      market,
-      `comit_${commitment}`
-    ).then(res => {
-      setTxHistoryData(res)
-      console.log(res, "txtests")
-    })
-    console.log("txhistory", test)
+    const test = txHistory(type, account, market, `comit_${commitment}`).then(
+      res => {
+        setTxHistoryData(res)
+        console.log(res, "txData")
+      }
+    )
   }, [])
 
   const renderTableData = () => {
