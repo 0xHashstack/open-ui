@@ -383,7 +383,7 @@ const Dashboard = () => {
         commitment: CommitMapReverse[depositsData.commitment[i]],
         market: bytesToString(depositsData.market[i]),
         acquiredYield: Number(interest), // deposit interest
-        interestRate: interestAPR,
+        interestRate: interestAPR.toNumber()/100,
         // interest market is same as deposit market
         // call getsavingsapr
         // balance add amount and interest directly for deposit
@@ -424,7 +424,7 @@ const Dashboard = () => {
         collateralMarket: bytesToString(loansData.collateralMarket[index]), // 4 Collateral Market
         collateralAmount: Number(loansData.collateralAmount[index]), // 5 Collateral Amount
         loanInterest: Number(interest), //loan interest
-        interestRate: interestAPR,
+        interestRate: interestAPR.toNumber() / 100,
         //interest market will always be same as loan market
         account,
         cdr,
@@ -2049,10 +2049,7 @@ const Dashboard = () => {
             {Array.isArray(activeDepositsData) &&
             activeDepositsData.length > 0 ? (
               activeDepositsData.map((asset, key) => {
-                console.log(
-                  parseInt(asset.interestRate._hex.toString(), 16),
-                  "blocktest"
-                )
+                
                 return (
                   <div key={key}>
                     <UncontrolledAccordion defaultOpen="0" open="false">
@@ -3355,7 +3352,7 @@ const Dashboard = () => {
                                                   style={{
                                                     color: "#4B41E5",
                                                   }}
-                                                >test
+                                                >
                                                   {!isTransactionDone ? (
                                                     "Withdraw Collateral"
                                                   ) : (
