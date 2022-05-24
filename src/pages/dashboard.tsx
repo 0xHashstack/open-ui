@@ -2031,14 +2031,16 @@ const Dashboard = () => {
                     &nbsp; &nbsp; &nbsp; Deposit Amount
                   </th>
                   <th scope="row" colSpan={2}>
-                    &nbsp; &nbsp; &nbsp;Deposit Interest{" "}
+                    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;
+                    &nbsp;Deposit Interest
                   </th>
                   <th scope="row" colSpan={2}>
-                    &nbsp; &nbsp; &nbsp; &nbsp;Deposit Balance
+                    &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;
+                    &nbsp;Deposit Balance&nbsp;&nbsp; &nbsp;
                   </th>
                   <th scope="row" colSpan={2}>
-                    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; Deposit
-                    Commitment
+                    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp;
+                    Deposit Commitment
                   </th>
                 </tr>
               </thead>
@@ -2047,6 +2049,10 @@ const Dashboard = () => {
             {Array.isArray(activeDepositsData) &&
             activeDepositsData.length > 0 ? (
               activeDepositsData.map((asset, key) => {
+                console.log(
+                  parseInt(asset.interestRate._hex.toString(), 16),
+                  "blocktest"
+                )
                 return (
                   <div key={key}>
                     <UncontrolledAccordion defaultOpen="0" open="false">
@@ -2229,7 +2235,12 @@ const Dashboard = () => {
                                             {/* <label className="card-radio-label mb-2"> */}
                                             <Button
                                               className="btn-block btn-md"
-                                              color="light"
+                                              color={
+                                                modal_add_active_deposit ===
+                                                true
+                                                  ? "light"
+                                                  : "outline-light"
+                                              }
                                               onClick={() => {
                                                 tog_add_active_deposit()
                                               }}
@@ -2239,7 +2250,12 @@ const Dashboard = () => {
                                             &nbsp; &nbsp;
                                             <Button
                                               className="btn-block btn-md"
-                                              color="light"
+                                              color={
+                                                modal_withdraw_active_deposit ===
+                                                true
+                                                  ? "light"
+                                                  : "outline-light"
+                                              }
                                               onClick={() => {
                                                 tog_withdraw_active_deposit()
                                               }}
@@ -2398,11 +2414,11 @@ const Dashboard = () => {
             <Table className="table table-nowrap align-middle mb-0">
               <thead>
                 <tr>
-                  <th scope="col">Borrow Market</th>
-                  <th scope="col">Interest</th>
-                  <th scope="col">Collateral</th>
-                  <th scope="col">Current Balance</th>
-                  <th scope="col">Commitment</th>
+                  <th scope="col"> &nbsp; &nbsp; &nbsp; Borrow Market</th>
+                  <th scope="col"> &nbsp; &nbsp; &nbsp;Interest</th>
+                  <th scope="col"> &nbsp; &nbsp; &nbsp;Collateral</th>
+                  <th scope="col"> &nbsp; &nbsp; &nbsp;Current Balance</th>
+                  <th scope="col"> &nbsp; &nbsp; &nbsp;Commitment</th>
                   {/* <th scope="col" colSpan={2}>Interest</th> */}
                 </tr>
               </thead>
@@ -2452,7 +2468,9 @@ const Dashboard = () => {
                                   >
                                     <span style={{ fontSize: "14px" }}>
                                       &nbsp; &nbsp;&nbsp;{" "}
-                                      {BNtoNum(Number(asset.currentLoanAmount))}
+                                      {parseFloat(
+                                        BNtoNum(Number(asset.currentLoanAmount))
+                                      ).toFixed(2)}
                                     </span>
                                     &nbsp; &nbsp;
                                     {!asset.isSwapped && (
@@ -2659,11 +2677,13 @@ const Dashboard = () => {
                                                           loanActionTab === "0"
                                                             ? "#2a3042"
                                                             : "none",
+
+                                                        cursor: "pointer",
+                                                        color: "white",
                                                         borderColor:
                                                           loanActionTab === "0"
                                                             ? "#3a425a #3a425a #2a3042"
                                                             : "none",
-                                                        cursor: "pointer",
                                                       }}
                                                       onClick={() => {
                                                         // toggleCustoms("0")
@@ -2691,6 +2711,7 @@ const Dashboard = () => {
                                                                 ? "#3a425a #3a425a #2a3042"
                                                                 : "none",
                                                             cursor: "pointer",
+                                                            color: "white",
                                                           }}
                                                           // className={classnames({
                                                           //   active: customActiveTabs === "1",
@@ -2716,10 +2737,15 @@ const Dashboard = () => {
                                           {loanActionTab === "0" && (
                                             <div className="mb-3">
                                               <Button
-                                                color="light"
                                                 onClick={() => {
                                                   tog_collateral_active_loan()
                                                 }}
+                                                color={
+                                                  collateral_active_loan ===
+                                                  true
+                                                    ? "light"
+                                                    : "outline-light"
+                                                }
                                                 // className={`btn-block btn-md ${classnames(
                                                 //   {
                                                 //     active:
@@ -2732,8 +2758,12 @@ const Dashboard = () => {
                                               </Button>
                                               &nbsp; &nbsp;
                                               <Button
+                                                color={
+                                                  repay_active_loan === true
+                                                    ? "light"
+                                                    : "outline-light"
+                                                }
                                                 className="btn-block btn-md"
-                                                color="light"
                                                 onClick={() => {
                                                   tog_repay_active_loan()
                                                 }}
@@ -2742,8 +2772,12 @@ const Dashboard = () => {
                                               </Button>
                                               &nbsp; &nbsp;
                                               <Button
+                                                color={
+                                                  withdraw_active_loan === true
+                                                    ? "light"
+                                                    : "outline-light"
+                                                }
                                                 className="btn-block btn-md"
-                                                color="light"
                                                 onClick={() => {
                                                   tog_withdraw_active_loan()
                                                 }}
@@ -2757,7 +2791,11 @@ const Dashboard = () => {
                                             <div className="mb-3">
                                               <Button
                                                 className="btn-block btn-md"
-                                                color="light"
+                                                color={
+                                                  swap_active_loan === true
+                                                    ? "light"
+                                                    : "outline-light"
+                                                }
                                                 onClick={() => {
                                                   tog_swap_active_loan()
                                                 }}
@@ -2768,7 +2806,11 @@ const Dashboard = () => {
                                               {"  "}
                                               <Button
                                                 className="btn-block btn-md"
-                                                color="light"
+                                                color={
+                                                  swap_to_active_loan === true
+                                                    ? "light"
+                                                    : "outline-light"
+                                                }
                                                 onClick={() => {
                                                   tog_swap_to_active_loan()
                                                 }}
@@ -3298,7 +3340,7 @@ const Dashboard = () => {
                                             borderRadius: "5px",
                                           }}
                                         >
-                                          {loanActionTab === "0" && ( //here
+                                          {customActiveTabs==="3" && ( //here repaid
                                             <Form>
                                               <div className="d-grid gap-2">
                                                 <Button
@@ -3313,7 +3355,7 @@ const Dashboard = () => {
                                                   style={{
                                                     color: "#4B41E5",
                                                   }}
-                                                >
+                                                >test
                                                   {!isTransactionDone ? (
                                                     "Withdraw Collateral"
                                                   ) : (
@@ -3554,10 +3596,10 @@ const Dashboard = () => {
                       >
                         <NavItem>
                           <NavLink
-                            style={{ cursor: "pointer" }}
-                            // className={classnames({
-                            //   active: customActiveTab === "1",
-                            // })}
+                            style={{ cursor: "pointer", color: "white" }}
+                            className={classnames({
+                              active: customActiveTab === "1",
+                            })}
                             onClick={() => {
                               toggleCustom("1")
                             }}
@@ -3569,7 +3611,7 @@ const Dashboard = () => {
                           <>
                             <NavItem>
                               <NavLink
-                                style={{ cursor: "pointer" }}
+                                style={{ cursor: "pointer", color: "white" }}
                                 className={classnames({
                                   active: customActiveTab === "2",
                                 })}
@@ -3584,7 +3626,7 @@ const Dashboard = () => {
                             </NavItem>
                             <NavItem>
                               <NavLink
-                                style={{ cursor: "pointer" }}
+                                style={{ cursor: "pointer", color: "white" }}
                                 className={classnames({
                                   active: customActiveTab === "3",
                                 })}
@@ -3622,7 +3664,7 @@ const Dashboard = () => {
                             <>
                               <NavItem>
                                 <NavLink
-                                  style={{ cursor: "pointer" }}
+                                  style={{ cursor: "pointer", color: "white" }}
                                   className={classnames({
                                     active: customActiveTabs === "1",
                                   })}
@@ -3637,7 +3679,7 @@ const Dashboard = () => {
                               </NavItem>
                               <NavItem>
                                 <NavLink
-                                  style={{ cursor: "pointer" }}
+                                  style={{ cursor: "pointer", color: "white" }}
                                   className={classnames({
                                     active: customActiveTabs === "2",
                                   })}
@@ -3652,7 +3694,7 @@ const Dashboard = () => {
                               </NavItem>
                               <NavItem>
                                 <NavLink
-                                  style={{ cursor: "pointer" }}
+                                  style={{ cursor: "pointer", color: "white" }}
                                   className={classnames({
                                     active: customActiveTabs === "3",
                                   })}
@@ -3729,9 +3771,6 @@ const Dashboard = () => {
                                   <option value={"ONEMONTH"}>One Month</option>
                                 </select>
                               </th>
-                              <th scope="col"></th>
-                              <th scope="col"></th>
-                              <th scope="col"></th>
                             </tr>
                           </thead>
                           <tbody>
