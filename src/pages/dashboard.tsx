@@ -2134,7 +2134,7 @@ const Dashboard = () => {
                                     tag="h6"
                                   >
                                     <span style={{ fontSize: "14px" }}>
-                                      1.2%APR
+                                      {asset.interestRate}%APR
                                     </span>
                                     &nbsp; &nbsp;
                                   </CardSubtitle>
@@ -2512,7 +2512,7 @@ const Dashboard = () => {
                                   >
                                     <span style={{ fontSize: "14px" }}>
                                       &nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
-                                      &nbsp;1.2%APR
+                                      &nbsp;{asset.interestRate}%APR
                                     </span>
                                     &nbsp; &nbsp;
                                   </CardSubtitle>
@@ -3189,7 +3189,7 @@ const Dashboard = () => {
                                   >
                                     <span style={{ fontSize: "14px" }}>
                                       &nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
-                                      &nbsp;1.2%APR
+                                      &nbsp;{asset.interestRate}%APR
                                     </span>
                                     &nbsp; &nbsp;
                                   </CardSubtitle>
