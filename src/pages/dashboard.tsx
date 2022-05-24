@@ -3355,7 +3355,7 @@ const Dashboard = () => {
                                                   style={{
                                                     color: "#4B41E5",
                                                   }}
-                                                >test
+                                                >
                                                   {!isTransactionDone ? (
                                                     "Withdraw Collateral"
                                                   ) : (
