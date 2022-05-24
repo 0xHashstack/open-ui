@@ -98,8 +98,8 @@ export const main = async (type: string) => {
         totalTransactions++;
         totalFailedTransaction += parseInt(d.isError);
       }
-      console.log("Total txs: ", totalTransactions);
-      console.log("Total Failed Txs: ", totalFailedTransaction);
+      // console.log("Total txs: ", totalTransactions);
+      // console.log("Total Failed Txs: ", totalFailedTransaction);
     })
     .catch((error) => {
       console.log(error);
@@ -260,18 +260,18 @@ export const main = async (type: string) => {
     totalUsers += data.data.data.users.length;
     flag += 1000;
   }
-  console.log(
-    "Total USD Deposit: ",
-    totalDepositBtcUsd +
-    totalDepositUsdtUsd +
-    totalDepositUsdcUsd +
-    totalDepositBnbUsd
-  );
-  // console.log("Deposit:");
-  console.log("BTC equivalnent USD: ", totalDepositBtcUsd);
-  console.log("BNB equivalent USD: ", totalDepositBnbUsd);
-  console.log("USDC equivalent USD: ", totalDepositUsdcUsd);
-  console.log("USDT equivalent USD: ", totalDepositUsdtUsd);
+  // console.log(
+  //   "Total USD Deposit: ",
+  //   totalDepositBtcUsd +
+  //   totalDepositUsdtUsd +
+  //   totalDepositUsdcUsd +
+  //   totalDepositBnbUsd
+  // );
+  // // console.log("Deposit:");
+  // console.log("BTC equivalnent USD: ", totalDepositBtcUsd);
+  // console.log("BNB equivalent USD: ", totalDepositBnbUsd);
+  // console.log("USDC equivalent USD: ", totalDepositUsdcUsd);
+  // console.log("USDT equivalent USD: ", totalDepositUsdtUsd);
 
   // console.log("BTC Count: ", totalDepositBtcCount);
   // console.log("USDC Count: ", totalDepositUsdcCount);
@@ -370,13 +370,13 @@ export const main = async (type: string) => {
     )
       return ["BNB", totalDepositBnbUsd + totalBorrowedBnbUsd];
   } else if (type == "totalDepositUsd") {
-    console.log(
-      "Total USD Deposit: ",
-      totalDepositBtcUsd +
-      totalDepositUsdtUsd +
-      totalDepositUsdcUsd +
-      totalDepositBnbUsd
-    );
+    // console.log(
+    //   "Total USD Deposit: ",
+    //   totalDepositBtcUsd +
+    //   totalDepositUsdtUsd +
+    //   totalDepositUsdcUsd +
+    //   totalDepositBnbUsd
+    // );
     return (
       totalDepositBtcUsd +
       totalDepositUsdtUsd +
@@ -386,21 +386,21 @@ export const main = async (type: string) => {
   }
   // USD equivalent values
   else if (type == "totalDepositBtcUsd") {
-    console.log("BTC equivalnent USD: ", totalDepositBtcUsd);
+    // console.log("BTC equivalnent USD: ", totalDepositBtcUsd);
     return totalDepositBtcUsd;
   } else if (type == "totalDepositBnbUsd") {
-    console.log("BNB equivalent USD", totalDepositBnbUsd);
+    // console.log("BNB equivalent USD", totalDepositBnbUsd);
     return totalDepositBnbUsd;
   } else if (type == "totalDepositUsdcUsd") {
-    console.log("USDC equivalent USD", totalDepositUsdcUsd);
+    // console.log("USDC equivalent USD", totalDepositUsdcUsd);
     return totalDepositUsdcUsd;
   } else if (type == "totalDepositUsdtUsd") {
-    console.log("USDT equivalent USD", totalDepositUsdtUsd);
+    // console.log("USDT equivalent USD", totalDepositUsdtUsd);
     return totalDepositUsdtUsd;
   }
   // counts by market
   else if (type == "totalDepositBtcCount") {
-    console.log("BTC Count", totalDepositBtcCount);
+    // console.log("BTC Count", totalDepositBtcCount);
     return totalDepositBtcCount;
   } else if (type == "totalDepositBnbCount") return totalDepositBnbCount;
   else if (type == "totalDepositUsdcCount") return totalDepositUsdcCount;
