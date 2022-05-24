@@ -19,7 +19,6 @@ import {
   TabPane,
   Label,
   Spinner,
-  Accordion,
   AccordionItem,
   AccordionHeader,
   AccordionBody,
@@ -43,10 +42,12 @@ import { BNtoNum, GetErrorText, bytesToString } from "../blockchain/utils"
 import { toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { main } from "./data-analytics"
+import { txHistory } from "./passbook-history"
 
 import loadable from "@loadable/component"
 const PassbookTBody = loadable(() => import("./passbook-body"))
 const DashboardTBody = loadable(() => import("./dashboard-body"))
+const TxHistoryTable = loadable(() => import("./tx-history-table"))
 import { BigNumber } from "ethers"
 
 toast.configure({
@@ -107,6 +108,7 @@ const Dashboard = () => {
 
   const [uf, setUf] = useState(null)
   const [tvl, setTvl] = useState(null)
+  const [txHistoryData, setTxHistoryData] = useState(null)
   const [totalUsers, setTotalUsers] = useState(null)
   const [dominantMarket, setDominantMarket] = useState("")
 
@@ -124,7 +126,7 @@ const Dashboard = () => {
     }
   }
 
-  var utilizationFactor;
+  let utilizationFactor
   useEffect(() => {
     main("totalValueLocked").then(res => {
       if (typeof res === "number") {
@@ -636,12 +638,14 @@ const Dashboard = () => {
         )
       await approveTransactionHash.wait()
 
-      const tx1 = await wrapper?.getLoanInstance().addCollateral(
-        SymbolsMap[_loanOption],
-        CommitMap[_commit],
-        inputVal1,
-        DecimalsMap[_collateralOption]
-      )
+      const tx1 = await wrapper
+        ?.getLoanInstance()
+        .addCollateral(
+          SymbolsMap[_loanOption],
+          CommitMap[_commit],
+          inputVal1,
+          DecimalsMap[_collateralOption]
+        )
       const tx = await tx1.wait()
       SuccessCallback(
         tx.events,
@@ -750,10 +754,9 @@ const Dashboard = () => {
   const handleSwapToLoan = async (loanMarket, commitment) => {
     try {
       setIsTransactionDone(true)
-     
+
       const _loanOption: string | undefined = loanMarket
       const _commit: string | undefined = commitment
-
 
       const tx1 = await wrapper
         ?.getLoanInstance()
@@ -2013,30 +2016,29 @@ const Dashboard = () => {
     }
   }
   //here
+  
   const getActionTabs = customActiveTab => {
     console.log("blockchain activedepoist", activeDepositsData)
     switch (customActiveTab) {
       case "1":
         return (
           // Active Deposits
-          <div className="table-responsive mt-2">
-            <Table
-              className="table table-nowrap align-middle mb-0 mr-2"
-            
-            >
+          <div className="table-responsive ">
+            <Table className="table table-nowrap align-middle mb-0 mr-2">
               <thead>
                 <tr>
                   <th scope="row" colSpan={2}>
-                  &nbsp; &nbsp; &nbsp; Deposit Amount
+                    &nbsp; &nbsp; &nbsp; Deposit Amount
                   </th>
                   <th scope="row" colSpan={2}>
-                  &nbsp; &nbsp; &nbsp;Deposit Interest{" "}
+                    &nbsp; &nbsp; &nbsp;Deposit Interest{" "}
                   </th>
                   <th scope="row" colSpan={2}>
-                  &nbsp; &nbsp; &nbsp; &nbsp;Deposit Balance
+                    &nbsp; &nbsp; &nbsp; &nbsp;Deposit Balance
                   </th>
                   <th scope="row" colSpan={2}>
-                  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; Deposit Commitment
+                    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; Deposit
+                    Commitment
                   </th>
                 </tr>
               </thead>
@@ -2047,7 +2049,7 @@ const Dashboard = () => {
               activeDepositsData.map((asset, key) => {
                 return (
                   <div key={key}>
-                    <UncontrolledAccordion defaultOpen="0" open="1">
+                    <UncontrolledAccordion defaultOpen="0" open="false" >
                       <Row>
                         <AccordionItem style={{ border: "2px" }}>
                           <AccordionHeader targetId="1">
@@ -2128,7 +2130,7 @@ const Dashboard = () => {
                                     className=" text-muted"
                                     tag="h6"
                                   >
-                                    <span style={{ fontSize: "14px", }}>
+                                    <span style={{ fontSize: "14px" }}>
                                       1.2%APR
                                     </span>
                                     &nbsp; &nbsp;
@@ -2364,38 +2366,7 @@ const Dashboard = () => {
                                         </div>
                                       </Col>
                                       <Col lg="8">
-                                        <Table>
-                                          <thead>
-                                            <tr>
-                                              <th>Transaction Hash</th>
-                                              <th>Age</th>
-                                              <th>Value</th>
-                                            </tr>
-                                          </thead>
-                                          <tbody>
-                                            <tr>
-                                              <th scope="row">
-                                                0xf81454ff....442efb8
-                                              </th>
-                                              <td>19 mins ago</td>
-                                              <td>144.98</td>
-                                            </tr>
-                                            <tr>
-                                              <th scope="row">
-                                                0xf81454ff......332efb8
-                                              </th>
-                                              <td>18 days 2 hrs ago</td>
-                                              <td>334.45</td>
-                                            </tr>
-                                            <tr>
-                                              <th scope="row">
-                                                0xf81454ff......232efb8
-                                              </th>
-                                              <td>23 Hours</td>
-                                              <td>23.34</td>
-                                            </tr>
-                                          </tbody>
-                                        </Table>
+                                        {<TxHistoryTable asset={asset} />}
                                       </Col>
                                     </Row>
                                   </div>
@@ -2945,9 +2916,10 @@ const Dashboard = () => {
                                               <Form>
                                                 <div className="d-grid ">
                                                   <Row>
-
-                                                    <Col md="12" className="mb-3" > 
-
+                                                    <Col
+                                                      md="12"
+                                                      className="mb-3"
+                                                    >
                                                       <select
                                                         className="form-select"
                                                         onChange={
@@ -2970,12 +2942,11 @@ const Dashboard = () => {
                                                   <Button
                                                     // color="primary"
                                                     className="w-md"
-                                                    disabled={
-                                                      isTransactionDone 
-                                                    }
+                                                    disabled={isTransactionDone}
                                                     onClick={() => {
                                                       handleSwap(
-                                                        asset.loanMarket, asset.commitment
+                                                        asset.loanMarket,
+                                                        asset.commitment
                                                       )
                                                     }}
                                                     style={{
@@ -2998,17 +2969,16 @@ const Dashboard = () => {
                                             loanActionTab === "1" && (
                                               <Form>
                                                 <div className="d-grid gap-2">
-                                                 
-
                                                   <Button
                                                     // color="primary"
 
                                                     className="w-md mr-2"
-                                                    disabled={
-                                                      isTransactionDone
-                                                    }
-                                                    onClick={ () => {
-                                                      handleSwapToLoan(asset.loanMarket, asset.commitment)
+                                                    disabled={isTransactionDone}
+                                                    onClick={() => {
+                                                      handleSwapToLoan(
+                                                        asset.loanMarket,
+                                                        asset.commitment
+                                                      )
                                                     }}
                                                     style={{
                                                       color: "#4B41E5",
@@ -3026,41 +2996,6 @@ const Dashboard = () => {
                                               </Form>
                                             )}
                                         </div>
-                                      </Col>
-
-                                      <Col lg="8">
-                                        <Table>
-                                          <thead>
-                                            <tr>
-                                              <th>Transaction Hash</th>
-                                              <th>Age</th>
-                                              <th>Value</th>
-                                            </tr>
-                                          </thead>
-                                          <tbody>
-                                            <tr>
-                                              <th scope="row">
-                                                0xf81454ff....442efb8
-                                              </th>
-                                              <td>19 mins ago</td>
-                                              <td>144.98</td>
-                                            </tr>
-                                            <tr>
-                                              <th scope="row">
-                                                0xf81454ff......332efb8
-                                              </th>
-                                              <td>18 days 2 hrs ago</td>
-                                              <td>334.45</td>
-                                            </tr>
-                                            <tr>
-                                              <th scope="row">
-                                                0xf81454ff......232efb8
-                                              </th>
-                                              <td>23 Hours</td>
-                                              <td>23.34</td>
-                                            </tr>
-                                          </tbody>
-                                        </Table>
                                       </Col>
                                     </Row>
                                   </div>
@@ -3335,38 +3270,36 @@ const Dashboard = () => {
                                             borderRadius: "5px",
                                           }}
                                         >
-                                          {
-                                            loanActionTab === "0" && (
-                                              <Form>
-
-                                                <div className="d-grid gap-2">
-                                                  <Button
-                                                    className="w-md"
-                                                    disabled={
-                                                      isTransactionDone ||
-                                                      inputVal1 === 0
-                                                    }
-                                                    onClick={() => {
-                                                      handleRepay(
-                                                        asset.loanMarket,
-                                                        asset.commitment
-                                                      )
-                                                    }}
-                                                    style={{
-                                                      color: "#4B41E5",
-                                                    }}
-                                                  >
-                                                    {!isTransactionDone ? (
-                                                      "Withdraw Collateral"
-                                                    ) : (
-                                                      <Spinner>
-                                                        Loading...
-                                                      </Spinner>
-                                                    )}
-                                                  </Button>
-                                                </div>
-                                              </Form>
-                                            )}
+                                          {loanActionTab === "0" && (
+                                            <Form>
+                                              <div className="d-grid gap-2">
+                                                <Button
+                                                  className="w-md"
+                                                  disabled={
+                                                    isTransactionDone ||
+                                                    inputVal1 === 0
+                                                  }
+                                                  onClick={() => {
+                                                    handleRepay(
+                                                      asset.loanMarket,
+                                                      asset.commitment
+                                                    )
+                                                  }}
+                                                  style={{
+                                                    color: "#4B41E5",
+                                                  }}
+                                                >
+                                                  {!isTransactionDone ? (
+                                                    "Withdraw Collateral"
+                                                  ) : (
+                                                    <Spinner>
+                                                      Loading...
+                                                    </Spinner>
+                                                  )}
+                                                </Button>
+                                              </div>
+                                            </Form>
+                                          )}
                                         </div>
                                       </Col>
 
@@ -3419,7 +3352,7 @@ const Dashboard = () => {
             ) : (
               <div>No records found</div>
             )}
-              {/* <tbody>
+            {/* <tbody>
                 <PassbookTBody
                   isloading={isLoading}
                   assets={repaidLoansData}
@@ -3575,7 +3508,7 @@ const Dashboard = () => {
             </Col>
           </Row>
 
-          <Row>
+          <Row >
             <Col xl={"12"}>
               <Card style={{ height: "29rem" }}>
                 <CardBody>
@@ -3589,9 +3522,9 @@ const Dashboard = () => {
                         <NavItem>
                           <NavLink
                             style={{ cursor: "pointer" }}
-                            className={classnames({
-                              active: customActiveTab === "1",
-                            })}
+                            // className={classnames({
+                            //   active: customActiveTab === "1",
+                            // })}
                             onClick={() => {
                               toggleCustom("1")
                             }}
@@ -3707,12 +3640,14 @@ const Dashboard = () => {
                   </Row>
                   {/* </Col>
                                 </Row> */}
-                  <Row>
+                  <Row  >
+                    <div >
                     <Col lg={12} >
                       {customActiveTab === "2" &&
                         getActionTabs(customActiveTabs)}
                       {/* {getPassbookTable(passbookStatus)} */}
                     </Col>
+                    </div>
                   </Row>
                   <TabContent activeTab={customActiveTab} className="p-1">
                     {/* ------------------------------------- DASHBOARD ----------------------------- */}
@@ -3876,9 +3811,6 @@ const Dashboard = () => {
                                       )}
                                     </Button>
                                   </td>
-                                  {/* <td>
-                                  <div className="text-muted">{Number(asset.acquiredYield).toFixed(3)}</div>
-                                </td>  */}
                                 </tr>
                               ))
                             ) : (
@@ -3914,4 +3846,4 @@ const Dashboard = () => {
   )
 }
 
-export default Dashboard;
+export default Dashboard
