@@ -2383,6 +2383,7 @@ const Dashboard = () => {
                                           <TxHistoryTable
                                             asset={asset}
                                             type="deposits"
+                                            market={asset.market}
                                           />
                                         }
                                       </Col>
@@ -2466,7 +2467,7 @@ const Dashboard = () => {
                                     <span style={{ fontSize: "14px" }}>
                                       &nbsp; &nbsp;&nbsp;{" "}
                                       {parseFloat(
-                                        BNtoNum(Number(asset.currentLoanAmount))
+                                        BNtoNum(Number(asset.loanAmount))
                                       ).toFixed(2)}
                                     </span>
                                     &nbsp; &nbsp;
@@ -3061,6 +3062,7 @@ const Dashboard = () => {
                                           <TxHistoryTable
                                             asset={asset}
                                             type="loans"
+                                            market={asset.loanMarket}
                                           />
                                         }
                                       </Col>
@@ -3090,9 +3092,7 @@ const Dashboard = () => {
               <thead>
                 <tr>
                   <th scope="col">Borrow Market</th>
-                  <th scope="col">Interest</th>
-                  <th scope="col">Collateral</th>
-                  <th scope="col">Current Balance</th>
+                  <th scope="col">Collateral Balance</th>
                   <th scope="col">Commitment</th>
                   {/* <th scope="col" colSpan={2}>Interest</th> */}
                 </tr>
@@ -3142,7 +3142,7 @@ const Dashboard = () => {
                                     className=" text-muted"
                                     tag="h6"
                                   >
-                                    <span style={{ fontSize: "14px" }}>
+                                    {/* <span style={{ fontSize: "14px" }}>
                                       &nbsp; &nbsp;&nbsp;{" "}
                                       {BNtoNum(Number(asset.currentLoanAmount))}
                                     </span>
@@ -3153,12 +3153,12 @@ const Dashboard = () => {
                                         // width="18%"
                                         height="12px"
                                       />
-                                    )}
+                                    )} */}
                                   </CardSubtitle>
                                 </CardBody>
                               </Card>
                             </Col>
-
+{/* 
                             <Col className="mr-4 ">
                               <Card
                                 className="mb-1"
@@ -3195,8 +3195,8 @@ const Dashboard = () => {
                                   </CardSubtitle>
                                 </CardBody>
                               </Card>
-                            </Col>
-                            <Col className="mr-4 ">
+                            </Col> */}
+                            {/* <Col className="mr-4 ">
                               <Card
                                 className="mb-1"
                                 style={{ marginTop: "20px" }}
@@ -3246,7 +3246,7 @@ const Dashboard = () => {
                                   </CardSubtitle>
                                 </CardBody>
                               </Card>
-                            </Col>
+                            </Col> */}
 
                             <Col className="mr-4 ">
                               <Card
@@ -3292,7 +3292,7 @@ const Dashboard = () => {
                                     <span style={{ fontSize: "14px" }}>
                                       &nbsp; &nbsp;&nbsp;{" "}
                                       {parseFloat(
-                                        BNtoNum(Number(asset.currentLoanAmount))
+                                        BNtoNum(Number(asset.collateralAmount))
                                       ).toFixed(2)}
                                     </span>
                                     &nbsp; &nbsp;
@@ -3372,6 +3372,7 @@ const Dashboard = () => {
                                           <TxHistoryTable
                                             asset={asset}
                                             type="loans"
+                                            market={asset.loanMarket}
                                           />
                                         }
                                       </Col>

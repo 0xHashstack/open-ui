@@ -5,24 +5,20 @@ import "react-toastify/dist/ReactToastify.css"
 import { txHistory } from "./passbook-history"
 
 const TxHistoryTable = props => {
-  const { account, market, commitment } = props.asset
-  const { type } = props
+  const { account, commitment } = props.asset
+  const { type, market } = props
   const [txHistoryData, setTxHistoryData] = useState(null)
-
   useEffect(() => {
-    const test = txHistory(type, account, market, `comit_${commitment}`).then(
-      res => {
-        setTxHistoryData(res)
-        console.log(res, "txData")
-      }
-    )
-  }, [])
+    txHistory(type, account, market, `comit_${commitment}`).then(res => {
+      setTxHistoryData(res)
+    })
+  }, [type,account,market])
 
   const renderTableData = () => {
     return (
       txHistoryData &&
       txHistoryData.map((row, index) => {
-        const { id, timestamp, amount } = row
+        const { id, timestamp, amount, action } = row
         return (
           <tr
             key={index}
@@ -34,10 +30,11 @@ const TxHistoryTable = props => {
                 "..............." +
                 id.substring(id.length - 11)}
             </td>
+            <td>{action}</td>
             <td>
               {((Date.now() / 1000 - timestamp) / 3600).toFixed(2)} hrs ago{" "}
             </td>
-            <td>{BNtoNum(Number(amount))}</td>
+            <td>{parseFloat(BNtoNum(Number(amount))).toFixed(2)}</td>
           </tr>
         )
       })
@@ -50,6 +47,7 @@ const TxHistoryTable = props => {
         <thead>
           <tr>
             <th>Transaction Hash</th>
+            <th>Action Type</th>
             <th>Age</th>
             <th>Value</th>
           </tr>
