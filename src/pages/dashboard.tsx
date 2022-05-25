@@ -2023,7 +2023,7 @@ const Dashboard = () => {
       case "1":
         return (
           // Active Deposits
-          <div className="table-responsive mt-3">
+          <div className="table-responsive mt-3" style={{overflow:"hidden"}}>
             <Table className="table table-nowrap align-middle mb-0 mr-2">
               <thead className="mb-3">
                 <tr>
@@ -3582,7 +3582,7 @@ const Dashboard = () => {
 
           <Row>
             <Col xl={"12"}>
-              <Card style={{ height: "29rem" }}>
+              <Card style={{ height: "29rem", overflow:"scroll"}}>
                 <CardBody>
                   <Row>
                     <Col xl="7">
