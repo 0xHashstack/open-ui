@@ -555,7 +555,7 @@ const Dashboard = () => {
     try {
       setIsTransactionDone(true)
       const _depositRequestSel: string | undefined = depositMarket
-      const _depositRequestVal: string | undefined = depositCommitmentPeriod
+      const _depositRequestVal: string | undefined = depositCommitmentPeriod.replace(/\s/g, "")
       const approveTransactionHash = await wrapper
         ?.getMockBep20Instance()
         .approve(
@@ -590,7 +590,7 @@ const Dashboard = () => {
     try {
       setIsTransactionDone(true)
       const _withdrawDepositSel: string | undefined = depositMarket
-      const _withdrawDepositVal: string | undefined = depositCommitmentPeriod
+      const _withdrawDepositVal: string | undefined = depositCommitmentPeriod.replace(/\s/g, "")
 
       const tx1 = await wrapper?.getDepositInstance().withdrawDeposit(
         SymbolsMap[_withdrawDepositSel.toUpperCase()], //market
@@ -627,7 +627,7 @@ const Dashboard = () => {
       setIsTransactionDone(true)
       const _loanOption: string | undefined = loanMarket
       const _collateralOption: string | undefined = collateralMarket
-      const _commit: string | undefined = loanCommitmentPeriod
+      const _commit: string | undefined = loanCommitmentPeriod.replace(/\s/g, "")
 
       const approveTransactionHash = await wrapper
         ?.getMockBep20Instance()
@@ -668,7 +668,7 @@ const Dashboard = () => {
       const _loanOption: string | undefined = loanOption
       const market = SymbolsMap[loanMarket]
       const decimal = DecimalsMap[loanMarket]
-      const _commit: string | undefined = commitment
+      const _commit: string | undefined = commitment.replace(/\s/g, "")
 
       const approveTransactionHash = await wrapper
         ?.getMockBep20Instance()
@@ -698,7 +698,7 @@ const Dashboard = () => {
     try {
       setIsTransactionDone(true)
       const _loanOption: string | undefined = loanMarket
-      const _commit: string | undefined = commitment
+      const _commit: string | undefined = commitment.replace(/\s/g, "")
 
       const tx1 = await wrapper
         ?.getLoanInstance()
@@ -732,7 +732,7 @@ const Dashboard = () => {
       })
       const _loanOption: string | undefined = loanMarket
       const _swapOption: string | undefined = swapOption
-      const _commit: string | undefined = commitment
+      const _commit: string | undefined = commitment.replace(/\s/g, "")
       const tx1 = await wrapper
         ?.getLoanInstance()
         .swapLoan(
@@ -756,7 +756,7 @@ const Dashboard = () => {
       setIsTransactionDone(true)
 
       const _loanOption: string | undefined = loanMarket
-      const _commit: string | undefined = commitment
+      const _commit: string | undefined = commitment.replace(/\s/g, "")
 
       const tx1 = await wrapper
         ?.getLoanInstance()
@@ -2299,7 +2299,7 @@ const Dashboard = () => {
                                                   className="w-md"
                                                   disabled={
                                                     isTransactionDone ||
-                                                    inputVal1 === 0
+                                                    inputVal1 <=0// different for different coins
                                                   }
                                                   onClick={() => {
                                                     handleDepositRequest(
@@ -2349,7 +2349,7 @@ const Dashboard = () => {
                                                   className="w-md"
                                                   disabled={
                                                     isTransactionDone ||
-                                                    inputVal1 === 0
+                                                    inputVal1 <= 0 //
                                                   }
                                                   onClick={() => {
                                                     handleWithdrawDeposit(
@@ -2848,7 +2848,7 @@ const Dashboard = () => {
                                                     className="w-md"
                                                     disabled={
                                                       isTransactionDone ||
-                                                      inputVal1 === 0
+                                                      inputVal1 <= 0
                                                     }
                                                     onClick={() => {
                                                       handleCollateral(
@@ -2895,8 +2895,8 @@ const Dashboard = () => {
                                                   <Button
                                                     className="w-md"
                                                     disabled={
-                                                      isTransactionDone ||
-                                                      inputVal1 === 0
+                                                      isTransactionDone||
+                                                      inputVal1 < 0
                                                     }
                                                     onClick={() => {
                                                       handleRepay(
@@ -2947,7 +2947,7 @@ const Dashboard = () => {
                                                     className="w-md"
                                                     disabled={
                                                       isTransactionDone ||
-                                                      inputVal1 === 0
+                                                      inputVal1 <= 0
                                                     }
                                                     onClick={() => {
                                                       handleWithdrawLoan(
@@ -3259,10 +3259,10 @@ const Dashboard = () => {
                                       src={
                                         CoinClassNames[
                                           EventMap[
-                                            asset.currentLoanMarket.toUpperCase()
+                                            asset.collateralMarket.toUpperCase()
                                           ]
                                         ] ||
-                                        asset.currentLoanMarket.toUpperCase()
+                                        asset.collateralMarket.toUpperCase()
                                       }
                                       height="18px"
                                     />
@@ -3278,7 +3278,7 @@ const Dashboard = () => {
                                       &nbsp; &nbsp;
                                       {
                                         EventMap[
-                                          asset.currentLoanMarket.toUpperCase()
+                                          asset.collateralMarket.toUpperCase()
                                         ]
                                       }
                                     </div>
