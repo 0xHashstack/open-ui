@@ -2021,7 +2021,7 @@ const Dashboard = () => {
     console.log("blockchain activedepoist", activeDepositsData)
     switch (customActiveTab) {
       case "1":
-        return (
+        return ( 
           // Active Deposits
           <div className="table-responsive mt-3" style={{overflow:"hidden"}}>
             <Table className="table table-nowrap align-middle mb-0 mr-2">
@@ -2049,7 +2049,7 @@ const Dashboard = () => {
             {Array.isArray(activeDepositsData) &&
             activeDepositsData.length > 0 ? (
               activeDepositsData.map((asset, key) => {
-                
+
                 return (
                   <div key={key}>
                     <UncontrolledAccordion defaultOpen="0" open="false">
@@ -2122,7 +2122,7 @@ const Dashboard = () => {
                                     >
                                       {parseFloat(
                                         BNtoNum(Number(asset.acquiredYield))
-                                      ).toFixed(2)}
+                                      ).toFixed(6)}
                                       &nbsp;
                                       {EventMap[asset.market.toUpperCase()]}
                                     </div>
@@ -2184,7 +2184,7 @@ const Dashboard = () => {
                                         parseFloat(
                                           BNtoNum(Number(asset.acquiredYield))
                                         )
-                                      ).toFixed(2)}
+                                      ).toFixed(6)}
                                     </span>
                                     &nbsp; &nbsp;
                                   </CardSubtitle>
@@ -2384,6 +2384,7 @@ const Dashboard = () => {
                                             asset={asset}
                                             type="deposits"
                                             market={asset.market}
+                                            isTrasactionDone={isTransactionDone}
                                           />
                                         }
                                       </Col>
@@ -2468,7 +2469,7 @@ const Dashboard = () => {
                                       &nbsp; &nbsp;&nbsp;{" "}
                                       {parseFloat(
                                         BNtoNum(Number(asset.loanAmount))
-                                      ).toFixed(2)}
+                                      ).toFixed(6)}
                                     </span>
                                     &nbsp; &nbsp;
                                     {!asset.isSwapped && (
@@ -2500,7 +2501,7 @@ const Dashboard = () => {
                                     >
                                       {parseFloat(
                                         BNtoNum(Number(asset.loanInterest))
-                                      ).toFixed(2)}
+                                      ).toFixed(6)}
                                       &nbsp;
                                       {EventMap[asset.loanMarket.toUpperCase()]}
                                     </div>
@@ -2564,7 +2565,7 @@ const Dashboard = () => {
                                       &nbsp; &nbsp;&nbsp;{" "}
                                       {parseFloat(
                                         BNtoNum(Number(asset.collateralAmount))
-                                      ).toFixed(2)}
+                                      ).toFixed(6)}
                                     </span>
                                     &nbsp; &nbsp;
                                   </CardSubtitle>
@@ -2617,7 +2618,7 @@ const Dashboard = () => {
                                       &nbsp; &nbsp;&nbsp;{" "}
                                       {parseFloat(
                                         BNtoNum(Number(asset.currentLoanAmount))
-                                      ).toFixed(2)}
+                                      ).toFixed(6)}
                                     </span>
                                     &nbsp; &nbsp;
                                   </CardSubtitle>
@@ -3002,7 +3003,7 @@ const Dashboard = () => {
                                                   <Button
                                                     // color="primary"
                                                     className="w-md"
-                                                    disabled={isTransactionDone}
+                                                    disabled={asset.isSwapped || isTransactionDone}
                                                     onClick={() => {
                                                       handleSwap(
                                                         asset.loanMarket,
@@ -3033,7 +3034,7 @@ const Dashboard = () => {
                                                     // color="primary"
 
                                                     className="w-md mr-2"
-                                                    disabled={isTransactionDone}
+                                                    disabled={ !asset.isSwapped || isTransactionDone}
                                                     onClick={() => {
                                                       handleSwapToLoan(
                                                         asset.loanMarket,
@@ -3063,6 +3064,7 @@ const Dashboard = () => {
                                             asset={asset}
                                             type="loans"
                                             market={asset.loanMarket}
+                                            isTrasactionDone={isTransactionDone}
                                           />
                                         }
                                       </Col>
@@ -3176,7 +3178,7 @@ const Dashboard = () => {
                                     >
                                       {parseFloat(
                                         BNtoNum(Number(asset.loanInterest))
-                                      ).toFixed(2)}
+                                      ).toFixed(6)}
                                       &nbsp;
                                       {EventMap[asset.loanMarket.toUpperCase()]}
                                     </div>
@@ -3240,7 +3242,7 @@ const Dashboard = () => {
                                       &nbsp; &nbsp;&nbsp;{" "}
                                       {parseFloat(
                                         BNtoNum(Number(asset.collateralAmount))
-                                      ).toFixed(2)}
+                                      ).toFixed(6)}
                                     </span>
                                     &nbsp; &nbsp;
                                   </CardSubtitle>
@@ -3293,7 +3295,7 @@ const Dashboard = () => {
                                       &nbsp; &nbsp;&nbsp;{" "}
                                       {parseFloat(
                                         BNtoNum(Number(asset.collateralAmount))
-                                      ).toFixed(2)}
+                                      ).toFixed(6)}
                                     </span>
                                     &nbsp; &nbsp;
                                   </CardSubtitle>
@@ -3373,6 +3375,7 @@ const Dashboard = () => {
                                             asset={asset}
                                             type="loans"
                                             market={asset.loanMarket}
+                                            isTrasactionDone={isTransactionDone}
                                           />
                                         }
                                       </Col>

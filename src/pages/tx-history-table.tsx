@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react"
+import React, { useState, useEffect } from "react"
 import { Table } from "reactstrap"
 import { BNtoNum } from "../blockchain/utils"
 import "react-toastify/dist/ReactToastify.css"
@@ -12,7 +12,7 @@ const TxHistoryTable = props => {
     txHistory(type, account, market, `comit_${commitment}`).then(res => {
       setTxHistoryData(res)
     })
-  }, [type,account,market])
+  }, [type, account, market])
 
   const renderTableData = () => {
     return (
@@ -32,9 +32,9 @@ const TxHistoryTable = props => {
             </td>
             <td>{action}</td>
             <td>
-              {((Date.now() / 1000 - timestamp) / 3600).toFixed(2)} hrs ago{" "}
+              {((Date.now() / 1000 - timestamp) / 3600).toFixed(6)} hrs ago{" "}
             </td>
-            <td>{parseFloat(BNtoNum(Number(amount))).toFixed(2)}</td>
+            <td>{parseFloat(BNtoNum(Number(amount))).toFixed(6)}</td>
           </tr>
         )
       })
@@ -58,4 +58,4 @@ const TxHistoryTable = props => {
   )
 }
 
-export default TxHistoryTable;
+export default TxHistoryTable
