@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react"
 import MetaTags from "react-meta-tags"
-// import axios from "axios";
+import axios from "axios";
 import {
   Container,
   Row,
@@ -192,9 +192,19 @@ const Dashboard = () => {
       setIsLoading(false)
     }, 100)
     if (customActiveTab == "3") {
-      navigateLoansToLiquidate(liquidationIndex)
+      // TODO: Add the URL in the .env, hardcoded it here as a hotfix
+      !isTransactionDone &&
+      account && axios.get("https://testgql.hashstack.finance/liquidable_loan").then(loanData => {
+          onLiquidationsData(loanData.data)
+          setIsLoading(false)
+        },
+        err => {
+          setIsLoading(false)
+          setActiveLiquidationsData([])
+          console.log(err)
+      })
     }
-  }, [account, passbookStatus, customActiveTab, isTransactionDone, liquidationIndex, activeLiquidationsData])
+  }, [account, customActiveTab])
 
   const toggleCustom = tab => {
     if (customActiveTab !== tab) {
@@ -341,18 +351,16 @@ const Dashboard = () => {
 
   const onLiquidationsData = async liquidationsData => {
     const liquidations = []
-    for (let i = 0; i < liquidationsData.loanAmount.length; i++) {
-      if (bytesToString(liquidationsData.loanMarket[i]) != "") {
-        liquidations.push({
-          loanOwner: liquidationsData.loanOwner[i].toString(),
-          loanMarket: bytesToString(liquidationsData.loanMarket[i]),
-          commitment: CommitMapReverse[liquidationsData.loanCommitment[i]],
-          loanAmount: liquidationsData.loanAmount[i].toString(),
-          collateralMarket: bytesToString(liquidationsData.collateralMarket[i]),
-          collateralAmount: liquidationsData.collateralAmount[i].toString(),
-          isLiquidationDone: false,
-        })
-      }
+    for (let i = 0; i < liquidationsData.length; i++) {
+      liquidations.push({
+        loanOwner: liquidationsData[i].owner_address.toString(),
+        loanMarket: bytesToString(liquidationsData[i].loan_market),
+        commitment: CommitMapReverse[liquidationsData[i].commitment],
+        loanAmount: liquidationsData[i].loan_amount.toString(),
+        collateralMarket: bytesToString(liquidationsData[i].collateral_market),
+        collateralAmount: liquidationsData[i].collateral_amount.toString(),
+        isLiquidationDone: false,
+      })
     }
     setActiveLiquidationsData(liquidations)
   }
