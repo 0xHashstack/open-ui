@@ -866,13 +866,13 @@ const Dashboard = () => {
                                           key={key}
                                           value={
                                             EventMap[
-                                              asset.loanMarket.toUpperCase()
+                                            asset.loanMarket.toUpperCase()
                                             ]
                                           }
                                         >
                                           {
                                             EventMap[
-                                              asset.loanMarket.toUpperCase()
+                                            asset.loanMarket.toUpperCase()
                                             ]
                                           }
                                         </option>
@@ -894,7 +894,7 @@ const Dashboard = () => {
                                       .filter(asset => {
                                         return (
                                           EventMap[
-                                            asset.loanMarket.toUpperCase()
+                                          asset.loanMarket.toUpperCase()
                                           ] === loanOption
                                         )
                                       })
@@ -990,13 +990,13 @@ const Dashboard = () => {
                                           key={key}
                                           value={
                                             EventMap[
-                                              asset.loanMarket.toUpperCase()
+                                            asset.loanMarket.toUpperCase()
                                             ]
                                           }
                                         >
                                           {
                                             EventMap[
-                                              asset.loanMarket.toUpperCase()
+                                            asset.loanMarket.toUpperCase()
                                             ]
                                           }
                                         </option>
@@ -1018,7 +1018,7 @@ const Dashboard = () => {
                                       .filter(asset => {
                                         return (
                                           EventMap[
-                                            asset.loanMarket.toUpperCase()
+                                          asset.loanMarket.toUpperCase()
                                           ] === loanOption
                                         )
                                       })
@@ -1132,13 +1132,13 @@ const Dashboard = () => {
                                         key={key}
                                         value={
                                           EventMap[
-                                            asset.loanMarket.toUpperCase()
+                                          asset.loanMarket.toUpperCase()
                                           ]
                                         }
                                       >
                                         {
                                           EventMap[
-                                            asset.loanMarket.toUpperCase()
+                                          asset.loanMarket.toUpperCase()
                                           ]
                                         }
                                       </option>
@@ -1160,7 +1160,7 @@ const Dashboard = () => {
                                     .filter(asset => {
                                       return (
                                         EventMap[
-                                          asset.loanMarket.toUpperCase()
+                                        asset.loanMarket.toUpperCase()
                                         ] === loanOption && !asset.isSwapped
                                       )
                                     })
@@ -1260,13 +1260,13 @@ const Dashboard = () => {
                                         key={key}
                                         value={
                                           EventMap[
-                                            asset.loanMarket.toUpperCase()
+                                          asset.loanMarket.toUpperCase()
                                           ]
                                         }
                                       >
                                         {
                                           EventMap[
-                                            asset.loanMarket.toUpperCase()
+                                          asset.loanMarket.toUpperCase()
                                           ]
                                         }
                                       </option>
@@ -1288,7 +1288,7 @@ const Dashboard = () => {
                                     .filter(asset => {
                                       return (
                                         EventMap[
-                                          asset.loanMarket.toUpperCase()
+                                        asset.loanMarket.toUpperCase()
                                         ] === loanOption && asset.isSwapped
                                       )
                                     })
@@ -1382,13 +1382,13 @@ const Dashboard = () => {
                                         key={key}
                                         value={
                                           EventMap[
-                                            asset.loanMarket.toUpperCase()
+                                          asset.loanMarket.toUpperCase()
                                           ]
                                         }
                                       >
                                         {
                                           EventMap[
-                                            asset.loanMarket.toUpperCase()
+                                          asset.loanMarket.toUpperCase()
                                           ]
                                         }
                                       </option>
@@ -1410,7 +1410,7 @@ const Dashboard = () => {
                                     .filter(asset => {
                                       return (
                                         EventMap[
-                                          asset.loanMarket.toUpperCase()
+                                        asset.loanMarket.toUpperCase()
                                         ] === loanOption
                                       )
                                     })
@@ -1449,13 +1449,13 @@ const Dashboard = () => {
                                         key={key}
                                         value={
                                           EventMap[
-                                            asset.loanMarket.toUpperCase()
+                                          asset.loanMarket.toUpperCase()
                                           ]
                                         }
                                       >
                                         {
                                           EventMap[
-                                            asset.loanMarket.toUpperCase()
+                                          asset.loanMarket.toUpperCase()
                                           ]
                                         }
                                       </option>
@@ -1576,7 +1576,7 @@ const Dashboard = () => {
                                       .filter(asset => {
                                         return (
                                           EventMap[
-                                            asset.market.toUpperCase()
+                                          asset.market.toUpperCase()
                                           ] === depositRequestSel
                                         )
                                       })
@@ -1700,7 +1700,7 @@ const Dashboard = () => {
                                       .filter(asset => {
                                         return (
                                           EventMap[
-                                            asset.market.toUpperCase()
+                                          asset.market.toUpperCase()
                                           ] === withdrawDepositSel
                                         )
                                       })
@@ -1816,13 +1816,13 @@ const Dashboard = () => {
                                         key={key}
                                         value={
                                           EventMap[
-                                            asset.loanMarket.toUpperCase()
+                                          asset.loanMarket.toUpperCase()
                                           ]
                                         }
                                       >
                                         {
                                           EventMap[
-                                            asset.loanMarket.toUpperCase()
+                                          asset.loanMarket.toUpperCase()
                                           ]
                                         }
                                       </option>
@@ -1844,7 +1844,7 @@ const Dashboard = () => {
                                     .filter(asset => {
                                       return (
                                         EventMap[
-                                          asset.loanMarket.toUpperCase()
+                                        asset.loanMarket.toUpperCase()
                                         ] === loanOption
                                       )
                                     })
@@ -1910,7 +1910,7 @@ const Dashboard = () => {
               </thead>
               <tbody>
                 {Array.isArray(activeDepositsData) &&
-                activeDepositsData.length > 0 ? (
+                  activeDepositsData.length > 0 ? (
                   activeDepositsData.map((asset, key) => (
                     <tr key={key}>
                       <th scope="row">
@@ -3753,7 +3753,7 @@ const Dashboard = () => {
                                   defaultValue={"NONE"}
                                 >
                                   <option hidden>Commitment</option>
-                                  <option value={"NONE"}>None</option>
+                                  <option value={"NONE"} >None</option>
                                   <option value={"TWOWEEKS"}>Two Weeks</option>
                                   <option value={"ONEMONTH"}>One Month</option>
                                   <option value={"THREEMONTHS"}>
@@ -3768,7 +3768,7 @@ const Dashboard = () => {
                                   defaultValue={"NONE"}
                                 >
                                   <option hidden>Commitment</option>
-                                  <option value={"NONE"}>None</option>
+                                  <option value={"NONE"} >None</option>
                                   <option value={"ONEMONTH"}>One Month</option>
                                 </select>
                               </th>
@@ -3804,7 +3804,7 @@ const Dashboard = () => {
                           </thead>
                           <tbody>
                             {Array.isArray(activeLiquidationsData) &&
-                            activeLiquidationsData.length > 0 ? (
+                              activeLiquidationsData.length > 0 ? (
                               activeLiquidationsData.map((asset, key) => (
                                 <tr key={key}>
                                   <th scope="row">
@@ -3823,7 +3823,7 @@ const Dashboard = () => {
                                       <span>
                                         {
                                           EventMap[
-                                            asset.loanMarket.toUpperCase()
+                                          asset.loanMarket.toUpperCase()
                                           ]
                                         }
                                       </span>
@@ -3856,7 +3856,7 @@ const Dashboard = () => {
                                       <span>
                                         {
                                           EventMap[
-                                            asset.collateralMarket.toUpperCase()
+                                          asset.collateralMarket.toUpperCase()
                                           ]
                                         }
                                       </span>
@@ -3919,4 +3919,4 @@ const Dashboard = () => {
   )
 }
 
-export default Dashboard
+export default Dashboard;
