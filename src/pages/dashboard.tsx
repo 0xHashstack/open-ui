@@ -3756,7 +3756,7 @@ const Dashboard = () => {
                                   defaultValue={"NONE"}
                                 >
                                   <option hidden>Commitment</option>
-                                  <option value={"NONE"}>None</option>
+                                  <option value={"NONE"} >None</option>
                                   <option value={"TWOWEEKS"}>Two Weeks</option>
                                   <option value={"ONEMONTH"}>One Month</option>
                                   <option value={"THREEMONTHS"}>
@@ -3771,7 +3771,7 @@ const Dashboard = () => {
                                   defaultValue={"NONE"}
                                 >
                                   <option hidden>Commitment</option>
-                                  <option value={"NONE"}>None</option>
+                                  <option value={"NONE"} >None</option>
                                   <option value={"ONEMONTH"}>One Month</option>
                                 </select>
                               </th>
@@ -3922,4 +3922,4 @@ const Dashboard = () => {
   )
 }
 
-export default Dashboard
+export default Dashboard;
