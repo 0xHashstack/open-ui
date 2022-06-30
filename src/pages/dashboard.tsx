@@ -212,13 +212,8 @@ const Dashboard = () => {
       navigateLoansToLiquidate(liquidationIndex)
     }
   }, [
-    account,
-    passbookStatus,
-    customActiveTab,
-    isTransactionDone,
-    liquidationIndex,
-    activeLiquidationsData,
-  ])
+    customActiveTab
+  ]) //only call this when custom active tab changes
 
   const toggleCustom = tab => {
     if (customActiveTab !== tab) {
@@ -383,7 +378,7 @@ const Dashboard = () => {
         commitment: CommitMapReverse[depositsData.commitment[i]],
         market: bytesToString(depositsData.market[i]),
         acquiredYield: Number(interest), // deposit interest
-        interestRate: interestAPR.toNumber()/100,
+        interestRate: interestAPR.toNumber() / 100,
         // interest market is same as deposit market
         // call getsavingsapr
         // balance add amount and interest directly for deposit
@@ -415,7 +410,7 @@ const Dashboard = () => {
         } else if (cdr >= 0.333 && cdr < 0.5) {
           debtCategory = 3
         }
-      } catch {}
+      } catch { }
       //here all data of loans
       loans.push({
         loanMarket: bytesToString(loansData.loanMarket[index]), // 1 Loan Market
@@ -465,7 +460,15 @@ const Dashboard = () => {
         })
       }
     }
-    setActiveLiquidationsData(liquidations)
+
+    // getting the unique liquidable loans by filtering laonMarket and Commitment
+    const uniqueLiquidableLoans = liquidations.filter((loan, index, self) =>
+      index === self.findIndex((t) => (
+        t.loanMarket === loan.loanMarket && t.commitment === loan.commitment
+      ))
+    )
+
+    setActiveLiquidationsData(uniqueLiquidableLoans)
   }
 
   const navigateLoansToLiquidate = async liquidationIndex => {
@@ -866,13 +869,13 @@ const Dashboard = () => {
                                           key={key}
                                           value={
                                             EventMap[
-                                              asset.loanMarket.toUpperCase()
+                                            asset.loanMarket.toUpperCase()
                                             ]
                                           }
                                         >
                                           {
                                             EventMap[
-                                              asset.loanMarket.toUpperCase()
+                                            asset.loanMarket.toUpperCase()
                                             ]
                                           }
                                         </option>
@@ -894,7 +897,7 @@ const Dashboard = () => {
                                       .filter(asset => {
                                         return (
                                           EventMap[
-                                            asset.loanMarket.toUpperCase()
+                                          asset.loanMarket.toUpperCase()
                                           ] === loanOption
                                         )
                                       })
@@ -932,7 +935,7 @@ const Dashboard = () => {
                                   color="primary"
                                   className="w-md"
                                   disabled={isTransactionDone}
-                                  // onClick={handleRepay}
+                                // onClick={handleRepay}
                                 >
                                   {!isTransactionDone ? (
                                     "Repay"
@@ -990,13 +993,13 @@ const Dashboard = () => {
                                           key={key}
                                           value={
                                             EventMap[
-                                              asset.loanMarket.toUpperCase()
+                                            asset.loanMarket.toUpperCase()
                                             ]
                                           }
                                         >
                                           {
                                             EventMap[
-                                              asset.loanMarket.toUpperCase()
+                                            asset.loanMarket.toUpperCase()
                                             ]
                                           }
                                         </option>
@@ -1018,7 +1021,7 @@ const Dashboard = () => {
                                       .filter(asset => {
                                         return (
                                           EventMap[
-                                            asset.loanMarket.toUpperCase()
+                                          asset.loanMarket.toUpperCase()
                                           ] === loanOption
                                         )
                                       })
@@ -1058,9 +1061,9 @@ const Dashboard = () => {
                                   disabled={
                                     isTransactionDone || inputVal1 === 0
                                   }
-                                  // onClick={ ()=>{
-                                  //   handleWithdrawLoan(asset.loanMarket, loanCommitment)
-                                  // }
+                                // onClick={ ()=>{
+                                //   handleWithdrawLoan(asset.loanMarket, loanCommitment)
+                                // }
                                 >
                                   {!isTransactionDone ? (
                                     "Withdraw Loan"
@@ -1132,13 +1135,13 @@ const Dashboard = () => {
                                         key={key}
                                         value={
                                           EventMap[
-                                            asset.loanMarket.toUpperCase()
+                                          asset.loanMarket.toUpperCase()
                                           ]
                                         }
                                       >
                                         {
                                           EventMap[
-                                            asset.loanMarket.toUpperCase()
+                                          asset.loanMarket.toUpperCase()
                                           ]
                                         }
                                       </option>
@@ -1160,7 +1163,7 @@ const Dashboard = () => {
                                     .filter(asset => {
                                       return (
                                         EventMap[
-                                          asset.loanMarket.toUpperCase()
+                                        asset.loanMarket.toUpperCase()
                                         ] === loanOption && !asset.isSwapped
                                       )
                                     })
@@ -1196,9 +1199,9 @@ const Dashboard = () => {
                               <Button
                                 color="primary"
                                 disabled={isTransactionDone}
-                                // onClick={()=>{
-                                //   // handleSwap()
-                                // }}
+                              // onClick={()=>{
+                              //   // handleSwap()
+                              // }}
                               >
                                 {!isTransactionDone ? (
                                   "Swap Loan"
@@ -1260,13 +1263,13 @@ const Dashboard = () => {
                                         key={key}
                                         value={
                                           EventMap[
-                                            asset.loanMarket.toUpperCase()
+                                          asset.loanMarket.toUpperCase()
                                           ]
                                         }
                                       >
                                         {
                                           EventMap[
-                                            asset.loanMarket.toUpperCase()
+                                          asset.loanMarket.toUpperCase()
                                           ]
                                         }
                                       </option>
@@ -1288,7 +1291,7 @@ const Dashboard = () => {
                                     .filter(asset => {
                                       return (
                                         EventMap[
-                                          asset.loanMarket.toUpperCase()
+                                        asset.loanMarket.toUpperCase()
                                         ] === loanOption && asset.isSwapped
                                       )
                                     })
@@ -1313,9 +1316,9 @@ const Dashboard = () => {
                                 color="primary"
                                 className="w-md"
                                 disabled={isTransactionDone}
-                                // onClick={ () => {
-                                //   handleSwapToLoan()
-                                // }}
+                              // onClick={ () => {
+                              //   handleSwapToLoan()
+                              // }}
                               >
                                 {!isTransactionDone ? (
                                   "Swap to Loan"
@@ -1382,13 +1385,13 @@ const Dashboard = () => {
                                         key={key}
                                         value={
                                           EventMap[
-                                            asset.loanMarket.toUpperCase()
+                                          asset.loanMarket.toUpperCase()
                                           ]
                                         }
                                       >
                                         {
                                           EventMap[
-                                            asset.loanMarket.toUpperCase()
+                                          asset.loanMarket.toUpperCase()
                                           ]
                                         }
                                       </option>
@@ -1410,7 +1413,7 @@ const Dashboard = () => {
                                     .filter(asset => {
                                       return (
                                         EventMap[
-                                          asset.loanMarket.toUpperCase()
+                                        asset.loanMarket.toUpperCase()
                                         ] === loanOption
                                       )
                                     })
@@ -1449,13 +1452,13 @@ const Dashboard = () => {
                                         key={key}
                                         value={
                                           EventMap[
-                                            asset.loanMarket.toUpperCase()
+                                          asset.loanMarket.toUpperCase()
                                           ]
                                         }
                                       >
                                         {
                                           EventMap[
-                                            asset.loanMarket.toUpperCase()
+                                          asset.loanMarket.toUpperCase()
                                           ]
                                         }
                                       </option>
@@ -1483,7 +1486,7 @@ const Dashboard = () => {
                                 color="primary"
                                 className="w-md"
                                 disabled={isTransactionDone || inputVal1 === 0}
-                                //onClick={handleCollateral}
+                              //onClick={handleCollateral}
                               >
                                 {!isTransactionDone ? (
                                   "Add Collateral"
@@ -1576,7 +1579,7 @@ const Dashboard = () => {
                                       .filter(asset => {
                                         return (
                                           EventMap[
-                                            asset.market.toUpperCase()
+                                          asset.market.toUpperCase()
                                           ] === depositRequestSel
                                         )
                                       })
@@ -1620,7 +1623,7 @@ const Dashboard = () => {
                                   disabled={
                                     isTransactionDone || inputVal1 === 0
                                   }
-                                  // onClick={handleDepositRequest} //}
+                                // onClick={handleDepositRequest} //}
                                 >
                                   {!isTransactionDone ? (
                                     "Add to Deposit"
@@ -1700,7 +1703,7 @@ const Dashboard = () => {
                                       .filter(asset => {
                                         return (
                                           EventMap[
-                                            asset.market.toUpperCase()
+                                          asset.market.toUpperCase()
                                           ] === withdrawDepositSel
                                         )
                                       })
@@ -1740,7 +1743,7 @@ const Dashboard = () => {
                                   disabled={
                                     isTransactionDone || inputVal1 === 0
                                   }
-                                  // onClick={handleWithdrawDeposit}
+                                // onClick={handleWithdrawDeposit}
                                 >
                                   {!isTransactionDone ? (
                                     "Withdraw Deposit"
@@ -1816,13 +1819,13 @@ const Dashboard = () => {
                                         key={key}
                                         value={
                                           EventMap[
-                                            asset.loanMarket.toUpperCase()
+                                          asset.loanMarket.toUpperCase()
                                           ]
                                         }
                                       >
                                         {
                                           EventMap[
-                                            asset.loanMarket.toUpperCase()
+                                          asset.loanMarket.toUpperCase()
                                           ]
                                         }
                                       </option>
@@ -1844,7 +1847,7 @@ const Dashboard = () => {
                                     .filter(asset => {
                                       return (
                                         EventMap[
-                                          asset.loanMarket.toUpperCase()
+                                        asset.loanMarket.toUpperCase()
                                         ] === loanOption
                                       )
                                     })
@@ -1910,7 +1913,7 @@ const Dashboard = () => {
               </thead>
               <tbody>
                 {Array.isArray(activeDepositsData) &&
-                activeDepositsData.length > 0 ? (
+                  activeDepositsData.length > 0 ? (
                   activeDepositsData.map((asset, key) => (
                     <tr key={key}>
                       <th scope="row">
@@ -1919,7 +1922,7 @@ const Dashboard = () => {
                             <img
                               src={
                                 CoinClassNames[
-                                  EventMap[asset.market.toUpperCase()]
+                                EventMap[asset.market.toUpperCase()]
                                 ] || asset.market.toUpperCase()
                               }
                             />
@@ -2021,9 +2024,9 @@ const Dashboard = () => {
     console.log("blockchain activedepoist", activeDepositsData)
     switch (customActiveTab) {
       case "1":
-        return ( 
+        return (
           // Active Deposits
-          <div className="table-responsive mt-3" style={{overflow:"hidden"}}>
+          <div className="table-responsive mt-3" style={{ overflow: "hidden" }}>
             <Table className="table table-nowrap align-middle mb-0 mr-2">
               <thead className="mb-3">
                 <tr>
@@ -2047,7 +2050,7 @@ const Dashboard = () => {
             </Table>
 
             {Array.isArray(activeDepositsData) &&
-            activeDepositsData.length > 0 ? (
+              activeDepositsData.length > 0 ? (
               activeDepositsData.map((asset, key) => {
 
                 return (
@@ -2066,7 +2069,7 @@ const Dashboard = () => {
                                     <img
                                       src={
                                         CoinClassNames[
-                                          EventMap[asset.market.toUpperCase()]
+                                        EventMap[asset.market.toUpperCase()]
                                         ] || asset.market.toUpperCase()
                                       }
                                       height="18px"
@@ -2151,7 +2154,7 @@ const Dashboard = () => {
                                     <img
                                       src={
                                         CoinClassNames[
-                                          EventMap[asset.market.toUpperCase()]
+                                        EventMap[asset.market.toUpperCase()]
                                         ] || asset.market.toUpperCase()
                                       }
                                       height="18px"
@@ -2234,7 +2237,7 @@ const Dashboard = () => {
                                               className="btn-block btn-md"
                                               color={
                                                 modal_add_active_deposit ===
-                                                true
+                                                  true
                                                   ? "light"
                                                   : "outline-light"
                                               }
@@ -2249,7 +2252,7 @@ const Dashboard = () => {
                                               className="btn-block btn-md"
                                               color={
                                                 modal_withdraw_active_deposit ===
-                                                true
+                                                  true
                                                   ? "light"
                                                   : "outline-light"
                                               }
@@ -2299,15 +2302,15 @@ const Dashboard = () => {
                                                   className="w-md"
                                                   disabled={
                                                     isTransactionDone ||
-                                                    inputVal1 <=0// different for different coins
+                                                    inputVal1 <= 0// different for different coins
                                                   }
                                                   onClick={() => {
                                                     handleDepositRequest(
                                                       EventMap[
-                                                        asset.market.toUpperCase()
+                                                      asset.market.toUpperCase()
                                                       ],
                                                       EventMap[
-                                                        asset.commitment.toUpperCase()
+                                                      asset.commitment.toUpperCase()
                                                       ]
                                                     )
                                                   }}
@@ -2354,10 +2357,10 @@ const Dashboard = () => {
                                                   onClick={() => {
                                                     handleWithdrawDeposit(
                                                       EventMap[
-                                                        asset.market.toUpperCase()
+                                                      asset.market.toUpperCase()
                                                       ],
                                                       EventMap[
-                                                        asset.commitment.toUpperCase()
+                                                      asset.commitment.toUpperCase()
                                                       ]
                                                     )
                                                   }}
@@ -2440,9 +2443,9 @@ const Dashboard = () => {
                                     <img
                                       src={
                                         CoinClassNames[
-                                          EventMap[
-                                            asset.loanMarket.toUpperCase()
-                                          ]
+                                        EventMap[
+                                        asset.loanMarket.toUpperCase()
+                                        ]
                                         ] || asset.loanMarket.toUpperCase()
                                       }
                                       height="18px"
@@ -2531,9 +2534,9 @@ const Dashboard = () => {
                                     <img
                                       src={
                                         CoinClassNames[
-                                          EventMap[
-                                            asset.collateralMarket.toUpperCase()
-                                          ]
+                                        EventMap[
+                                        asset.collateralMarket.toUpperCase()
+                                        ]
                                         ] ||
                                         asset.collateralMarket.toUpperCase()
                                       }
@@ -2551,7 +2554,7 @@ const Dashboard = () => {
                                       &nbsp; &nbsp;
                                       {
                                         EventMap[
-                                          asset.collateralMarket.toUpperCase()
+                                        asset.collateralMarket.toUpperCase()
                                         ]
                                       }
                                     </div>
@@ -2583,9 +2586,9 @@ const Dashboard = () => {
                                     <img
                                       src={
                                         CoinClassNames[
-                                          EventMap[
-                                            asset.currentLoanMarket.toUpperCase()
-                                          ]
+                                        EventMap[
+                                        asset.currentLoanMarket.toUpperCase()
+                                        ]
                                         ] ||
                                         asset.currentLoanMarket.toUpperCase()
                                       }
@@ -2603,7 +2606,7 @@ const Dashboard = () => {
                                       &nbsp; &nbsp;
                                       {
                                         EventMap[
-                                          asset.currentLoanMarket.toUpperCase()
+                                        asset.currentLoanMarket.toUpperCase()
                                         ]
                                       }
                                     </div>
@@ -2701,12 +2704,12 @@ const Dashboard = () => {
                                                           style={{
                                                             background:
                                                               loanActionTab ===
-                                                              "1"
+                                                                "1"
                                                                 ? "#2a3042"
                                                                 : "none",
                                                             borderColor:
                                                               loanActionTab ===
-                                                              "1"
+                                                                "1"
                                                                 ? "#3a425a #3a425a #2a3042"
                                                                 : "none",
                                                             cursor: "pointer",
@@ -2741,17 +2744,17 @@ const Dashboard = () => {
                                                 }}
                                                 color={
                                                   collateral_active_loan ===
-                                                  true
+                                                    true
                                                     ? "light"
                                                     : "outline-light"
                                                 }
-                                                // className={`btn-block btn-md ${classnames(
-                                                //   {
-                                                //     active:
-                                                //       modal_add_collateral ===
-                                                //       true,
-                                                //   }
-                                                // )}`}
+                                              // className={`btn-block btn-md ${classnames(
+                                              //   {
+                                              //     active:
+                                              //       modal_add_collateral ===
+                                              //       true,
+                                              //   }
+                                              // )}`}
                                               >
                                                 Add Collateral
                                               </Button>
@@ -2896,7 +2899,7 @@ const Dashboard = () => {
                                                   <Button
                                                     className="w-md"
                                                     disabled={
-                                                      isTransactionDone||
+                                                      isTransactionDone ||
                                                       inputVal1 < 0
                                                     }
                                                     onClick={() => {
@@ -3034,7 +3037,7 @@ const Dashboard = () => {
                                                     // color="primary"
 
                                                     className="w-md mr-2"
-                                                    disabled={ !asset.isSwapped || isTransactionDone}
+                                                    disabled={!asset.isSwapped || isTransactionDone}
                                                     onClick={() => {
                                                       handleSwapToLoan(
                                                         asset.loanMarket,
@@ -3119,9 +3122,9 @@ const Dashboard = () => {
                                     <img
                                       src={
                                         CoinClassNames[
-                                          EventMap[
-                                            asset.loanMarket.toUpperCase()
-                                          ]
+                                        EventMap[
+                                        asset.loanMarket.toUpperCase()
+                                        ]
                                         ] || asset.loanMarket.toUpperCase()
                                       }
                                       height="18px"
@@ -3160,7 +3163,7 @@ const Dashboard = () => {
                                 </CardBody>
                               </Card>
                             </Col>
-{/* 
+                            {/* 
                             <Col className="mr-4 ">
                               <Card
                                 className="mb-1"
@@ -3260,9 +3263,9 @@ const Dashboard = () => {
                                     <img
                                       src={
                                         CoinClassNames[
-                                          EventMap[
-                                            asset.collateralMarket.toUpperCase()
-                                          ]
+                                        EventMap[
+                                        asset.collateralMarket.toUpperCase()
+                                        ]
                                         ] ||
                                         asset.collateralMarket.toUpperCase()
                                       }
@@ -3280,7 +3283,7 @@ const Dashboard = () => {
                                       &nbsp; &nbsp;
                                       {
                                         EventMap[
-                                          asset.collateralMarket.toUpperCase()
+                                        asset.collateralMarket.toUpperCase()
                                         ]
                                       }
                                     </div>
@@ -3339,7 +3342,7 @@ const Dashboard = () => {
                                             borderRadius: "5px",
                                           }}
                                         >
-                                          {customActiveTabs==="3" && ( //here repaid
+                                          {customActiveTabs === "3" && ( //here repaid
                                             <Form>
                                               <div className="d-grid gap-2">
                                                 <Button
@@ -3586,7 +3589,7 @@ const Dashboard = () => {
 
           <Row>
             <Col xl={"12"}>
-              <Card style={{ height: "29rem", overflow:"scroll"}}>
+              <Card style={{ height: "29rem", overflow: "scroll" }}>
                 <CardBody>
                   <Row>
                     <Col xl="7">
@@ -3804,7 +3807,7 @@ const Dashboard = () => {
                           </thead>
                           <tbody>
                             {Array.isArray(activeLiquidationsData) &&
-                            activeLiquidationsData.length > 0 ? (
+                              activeLiquidationsData.length > 0 ? (
                               activeLiquidationsData.map((asset, key) => (
                                 <tr key={key}>
                                   <th scope="row">
@@ -3813,9 +3816,9 @@ const Dashboard = () => {
                                         <img
                                           src={
                                             CoinClassNames[
-                                              EventMap[
-                                                asset.loanMarket.toUpperCase()
-                                              ]
+                                            EventMap[
+                                            asset.loanMarket.toUpperCase()
+                                            ]
                                             ] || asset.loanMarket.toUpperCase()
                                           }
                                         />
@@ -3823,7 +3826,7 @@ const Dashboard = () => {
                                       <span>
                                         {
                                           EventMap[
-                                            asset.loanMarket.toUpperCase()
+                                          asset.loanMarket.toUpperCase()
                                           ]
                                         }
                                       </span>
@@ -3845,9 +3848,9 @@ const Dashboard = () => {
                                         <img
                                           src={
                                             CoinClassNames[
-                                              EventMap[
-                                                asset.collateralMarket.toUpperCase()
-                                              ]
+                                            EventMap[
+                                            asset.collateralMarket.toUpperCase()
+                                            ]
                                             ] ||
                                             asset.collateralMarket.toUpperCase()
                                           }
@@ -3856,7 +3859,7 @@ const Dashboard = () => {
                                       <span>
                                         {
                                           EventMap[
-                                            asset.collateralMarket.toUpperCase()
+                                          asset.collateralMarket.toUpperCase()
                                           ]
                                         }
                                       </span>
@@ -3877,7 +3880,7 @@ const Dashboard = () => {
                                       }}
                                     >
                                       {isTransactionDone &&
-                                      asset.isLiquidationDone ? (
+                                        asset.isLiquidationDone ? (
                                         <Spinner>Loading...</Spinner>
                                       ) : (
                                         "Liquidate"
@@ -3893,16 +3896,16 @@ const Dashboard = () => {
                             )}
                           </tbody>
                         </Table>
-                        {/* <Button
-                                      className="d-flex align-items-center"
-                                      color="light"
-                                      outline
-                                      onClick={() => {
-                                        increaseLiquidationIndex
-                                      }}
-                                    >
-                                      Show More
-                                      </Button> */}
+                        <Button
+                          className="d-flex align-items-center"
+                          color="light"
+                          outline
+                          onClick={() => {
+                            increaseLiquidationIndex
+                          }}
+                        >
+                          Show More
+                        </Button>
                       </div>
                     </TabPane>
                   </TabContent>
