@@ -3506,7 +3506,7 @@ const Dashboard = () => {
                       style={{ display: "inline-block", fontSize: "15px" }}
                     >
                       {" "}
-                      &nbsp; &nbsp; Utilization Rate{" "}
+                      &nbsp; &nbsp; Utilisation Rate{" "}
                     </div>
                   </div>
                   <CardTitle tag="h5"></CardTitle>
