@@ -62,6 +62,15 @@ const Dashboard = () => {
   const [activeLiquidationsData, setActiveLiquidationsData] = useState([])
   const [isTransactionDone, setIsTransactionDone] = useState(false)
 
+  const [handleWithdrawCollateralTransactionDone,setHandleWithdrawCollateralTransactionDone ] = useState(false)
+  const [handleDepositTransactionDone,setHandleDepositTransactionDone ] = useState(false)
+  const [withdrawDepositTransactionDone,setWithdrawDepositTransactionDone ] = useState(false)
+  const [handleCollateralTransactionDone,setHandleCollateralTransactionDone ] = useState(false)
+  const [handleRepayTransactionDone,setHandleRepayTransactionDone ] = useState(false)
+  const [handleWithdrawLoanTransactionDone,setHandleWithdrawLoanTransactionDone ] = useState(false)
+  const [handleSwapTransactionDone,setHandleSwapTransactionDone ] = useState(false)
+  const [handleSwapToLoanTransactionDone,setHandleSwapToLoanTransactionDone ] = useState(false)
+
   const [customActiveTab, setCustomActiveTab] = useState("1")
   const [customActiveTabs, setCustomActiveTabs] = useState("1")
   const [loanActionTab, setLoanActionTab] = useState("0")
@@ -384,7 +393,12 @@ const Dashboard = () => {
         // balance add amount and interest directly for deposit
       })
     }
-    setActiveDepositsData(deposits)
+    let nonZeroDeposits = deposits.filter(function (el) {
+      console.log(el.amount, "deposits123")
+      return el.amount !== "0"
+    }
+    );
+    setActiveDepositsData(nonZeroDeposits)
   }
 
   const onLoansData = async loansData => {
@@ -440,6 +454,7 @@ const Dashboard = () => {
     )
     setRepaidLoansData(
       loans.filter(asset => {
+        console.log(asset,"testasset")
         return asset.state === 1
       })
     )
@@ -497,6 +512,7 @@ const Dashboard = () => {
   const handleWithdrawCollateral = async () => {
     try {
       setIsTransactionDone(true)
+      setHandleWithdrawCollateralTransactionDone(true)
       const commit = activeLoansData.filter(asset => {
         return EventMap[asset.loanMarket.toUpperCase()] === loanOption
       })
@@ -514,6 +530,7 @@ const Dashboard = () => {
       )
     } catch (err) {
       setIsTransactionDone(false)
+      setHandleWithdrawCollateralTransactionDone(false)
       toast.error(`${GetErrorText(err)}`, {
         position: toast.POSITION.BOTTOM_RIGHT,
         closeOnClick: true,
@@ -523,7 +540,8 @@ const Dashboard = () => {
 
   const handleLiquidation = async asset => {
     try {
-      setIsTransactionDone(true)
+      setIsTransactionDone(true) 
+      //
       asset.isLiquidationDone = true
       let _account = asset.loanOwner
       let market = asset.loanMarket
@@ -551,12 +569,13 @@ const Dashboard = () => {
     }
   }
 
-  const handleDepositRequest = async (
+  const handleDepositRequest = async ( //here1
     depositMarket,
     depositCommitmentPeriod
   ) => {
     try {
       setIsTransactionDone(true)
+      setHandleDepositTransactionDone(true)
       const _depositRequestSel: string | undefined = depositMarket
       const _depositRequestVal: string | undefined = depositCommitmentPeriod.replace(/\s/g, "")
       const approveTransactionHash = await wrapper
@@ -579,6 +598,7 @@ const Dashboard = () => {
       SuccessCallback(tx.events, "DepositAdded", "Deposited amount", inputVal1)
     } catch (err) {
       setIsTransactionDone(false)
+      setHandleDepositTransactionDone(false)
       toast.error(`${GetErrorText(err)}`, {
         position: toast.POSITION.BOTTOM_RIGHT,
         closeOnClick: true,
@@ -592,6 +612,7 @@ const Dashboard = () => {
   ) => {
     try {
       setIsTransactionDone(true)
+      setWithdrawDepositTransactionDone(true)
       const _withdrawDepositSel: string | undefined = depositMarket
       const _withdrawDepositVal: string | undefined = depositCommitmentPeriod.replace(/\s/g, "")
 
@@ -614,6 +635,7 @@ const Dashboard = () => {
       )
     } catch (err) {
       setIsTransactionDone(false)
+      setWithdrawDepositTransactionDone(false)
       toast.error(`${GetErrorText(err)}`, {
         position: toast.POSITION.BOTTOM_RIGHT,
         closeOnClick: true,
@@ -628,6 +650,7 @@ const Dashboard = () => {
   ) => {
     try {
       setIsTransactionDone(true)
+      setHandleCollateralTransactionDone(true)
       const _loanOption: string | undefined = loanMarket
       const _collateralOption: string | undefined = collateralMarket
       const _commit: string | undefined = loanCommitmentPeriod.replace(/\s/g, "")
@@ -658,6 +681,7 @@ const Dashboard = () => {
       )
     } catch (err) {
       setIsTransactionDone(false)
+      setHandleCollateralTransactionDone(false)
       toast.error(`${GetErrorText(err)}`, {
         position: toast.POSITION.BOTTOM_RIGHT,
         closeOnClick: true,
@@ -668,6 +692,7 @@ const Dashboard = () => {
   const handleRepay = async (loanMarket, commitment) => {
     try {
       setIsTransactionDone(true)
+      setHandleRepayTransactionDone(true)
       const _loanOption: string | undefined = loanOption
       const market = SymbolsMap[loanMarket]
       const decimal = DecimalsMap[loanMarket]
@@ -690,6 +715,7 @@ const Dashboard = () => {
       )
     } catch (err) {
       setIsTransactionDone(false)
+      setHandleRepayTransactionDone(false)
       toast.error(`${GetErrorText(err)}`, {
         position: toast.POSITION.BOTTOM_RIGHT,
         closeOnClick: true,
@@ -700,6 +726,7 @@ const Dashboard = () => {
   const handleWithdrawLoan = async (loanMarket, commitment) => {
     try {
       setIsTransactionDone(true)
+      setHandleWithdrawLoanTransactionDone(true)
       const _loanOption: string | undefined = loanMarket
       const _commit: string | undefined = commitment.replace(/\s/g, "")
 
@@ -720,6 +747,7 @@ const Dashboard = () => {
       )
     } catch (err) {
       setIsTransactionDone(false)
+      setHandleWithdrawLoanTransactionDone(false)
       toast.error(`${GetErrorText(err)}`, {
         position: toast.POSITION.BOTTOM_RIGHT,
         closeOnClick: true,
@@ -730,6 +758,7 @@ const Dashboard = () => {
   const handleSwap = async (loanMarket, commitment) => {
     try {
       setIsTransactionDone(true)
+      setHandleSwapTransactionDone(true)
       const commit = activeLoansData.filter(asset => {
         return EventMap[asset.loanMarket.toUpperCase()] === loanOption
       })
@@ -747,6 +776,7 @@ const Dashboard = () => {
       SuccessCallback(tx.events, "MarketSwapped", "Swap Loan successful", "")
     } catch (err) {
       setIsTransactionDone(false)
+      setHandleSwapTransactionDone(false)
       toast.error(`${GetErrorText(err)}`, {
         position: toast.POSITION.BOTTOM_RIGHT,
         closeOnClick: true,
@@ -757,7 +787,7 @@ const Dashboard = () => {
   const handleSwapToLoan = async (loanMarket, commitment) => {
     try {
       setIsTransactionDone(true)
-
+      setHandleSwapToLoanTransactionDone(true)
       const _loanOption: string | undefined = loanMarket
       const _commit: string | undefined = commitment.replace(/\s/g, "")
 
@@ -768,6 +798,7 @@ const Dashboard = () => {
       SuccessCallback(tx.events, "MarketSwapped", "Swap to Loan successful", "")
     } catch (err) {
       setIsTransactionDone(false)
+      setHandleSwapToLoanTransactionDone(false)
       toast.error(`${GetErrorText(err)}`, {
         position: toast.POSITION.BOTTOM_RIGHT,
         closeOnClick: true,
@@ -808,6 +839,7 @@ const Dashboard = () => {
       closeOnClick: true,
     })
     setIsTransactionDone(false)
+    //check here
   }
 
   const passbookActive = e => {
@@ -934,10 +966,10 @@ const Dashboard = () => {
                                 <Button
                                   color="primary"
                                   className="w-md"
-                                  disabled={isTransactionDone}
+                                  disabled={handleRepayTransactionDone}
                                 // onClick={handleRepay}
                                 >
-                                  {!isTransactionDone ? (
+                                  {!handleRepayTransactionDone ? (
                                     "Repay"
                                   ) : (
                                     <Spinner>Loading...</Spinner>
@@ -1059,13 +1091,13 @@ const Dashboard = () => {
                                   color="primary"
                                   className="w-md"
                                   disabled={
-                                    isTransactionDone || inputVal1 === 0
+                                    handleWithdrawLoanTransactionDone || inputVal1 === 0
                                   }
                                 // onClick={ ()=>{
                                 //   handleWithdrawLoan(asset.loanMarket, loanCommitment)
                                 // }
                                 >
-                                  {!isTransactionDone ? (
+                                  {!handleWithdrawLoanTransactionDone ? (
                                     "Withdraw Loan"
                                   ) : (
                                     <Spinner>Loading...</Spinner>
@@ -1198,12 +1230,12 @@ const Dashboard = () => {
                             <div className="d-grid gap-2">
                               <Button
                                 color="primary"
-                                disabled={isTransactionDone}
+                                disabled={handleSwapTransactionDone}
                               // onClick={()=>{
                               //   // handleSwap()
                               // }}
                               >
-                                {!isTransactionDone ? (
+                                {!handleSwapTransactionDone ? (
                                   "Swap Loan"
                                 ) : (
                                   <Spinner>Loading...</Spinner>
@@ -1315,12 +1347,12 @@ const Dashboard = () => {
                               <Button
                                 color="primary"
                                 className="w-md"
-                                disabled={isTransactionDone}
+                                disabled={handleSwapToLoanTransactionDone}
                               // onClick={ () => {
                               //   handleSwapToLoan()
                               // }}
                               >
-                                {!isTransactionDone ? (
+                                {!handleSwapToLoanTransactionDone ? (
                                   "Swap to Loan"
                                 ) : (
                                   <Spinner>Loading...</Spinner>
@@ -1485,10 +1517,10 @@ const Dashboard = () => {
                               <Button
                                 color="primary"
                                 className="w-md"
-                                disabled={isTransactionDone || inputVal1 === 0}
+                                disabled={handleCollateralTransactionDone || inputVal1 === 0}
                               //onClick={handleCollateral}
                               >
-                                {!isTransactionDone ? (
+                                {!handleCollateralTransactionDone ? (
                                   "Add Collateral"
                                 ) : (
                                   <Spinner>Loading...</Spinner>
@@ -1870,10 +1902,10 @@ const Dashboard = () => {
                               <Button
                                 color="primary"
                                 className="w-md"
-                                disabled={isTransactionDone}
+                                disabled={handleWithdrawCollateralTransactionDone}
                                 onClick={handleWithdrawCollateral}
                               >
-                                {!isTransactionDone ? (
+                                {!handleWithdrawCollateralTransactionDone ? (
                                   "Withdraw Collateral"
                                 ) : (
                                   <Spinner>Loading...</Spinner>
@@ -2055,216 +2087,210 @@ const Dashboard = () => {
 
                 return (
                   <div key={key}>
-                    <UncontrolledAccordion defaultOpen="0" open="false">
-                      <Row>
-                        <AccordionItem style={{ border: "2px" }}>
-                          <AccordionHeader targetId="1">
-                            <Col className="mr-4 ">
-                              <Card
-                                className="mb-1"
-                                style={{ marginTop: "20px" }}
-                              >
-                                <CardBody>
-                                  <div>
-                                    <img
-                                      src={
-                                        CoinClassNames[
-                                        EventMap[asset.market.toUpperCase()]
-                                        ] || asset.market.toUpperCase()
-                                      }
-                                      height="18px"
-                                    />
+                      <UncontrolledAccordion defaultOpen="0" open="false">
+                        <Row>
+                          <AccordionItem style={{ border: "2px" }}>
+                            <AccordionHeader targetId="1">
+                              <Col className="mr-4 ">
+                               <Card
+                                  className="mb-1"
+                                  style={{ marginTop: "20px" }}
+                                >
+                                  <CardBody>
+                                    <div>
+                                      <img
+                                        src={
+                                          CoinClassNames[
+                                          EventMap[asset.market.toUpperCase()]
+                                          ] || asset.market.toUpperCase()
+                                        }
+                                        height="18px"
+                                      />
 
-                                    <div
-                                      className="mr-6"
-                                      style={{
-                                        display: "inline-block",
-                                        fontSize: "18px",
-                                      }}
-                                      align="right"
-                                    >
-                                      &nbsp; &nbsp;
-                                      {EventMap[asset.market.toUpperCase()]}
+                                      <div
+                                        className="mr-6"
+                                        style={{
+                                          display: "inline-block",
+                                          fontSize: "18px",
+                                        }}
+                                        align="right"
+                                      >
+                                        &nbsp; &nbsp;
+                                        {EventMap[asset.market.toUpperCase()]}
+                                      </div>
                                     </div>
-                                  </div>
-                                  <CardTitle tag="h5"></CardTitle>
+                                    <CardTitle tag="h5"></CardTitle>
 
-                                  <CardSubtitle
-                                    className=" text-muted"
-                                    tag="h6"
-                                  >
-                                    <span style={{ fontSize: "14px" }}>
-                                      &nbsp; &nbsp;&nbsp;{" "}
-                                      {BNtoNum(Number(asset.amount))}
-                                    </span>
-                                    &nbsp; &nbsp;
-                                    <img
-                                      src="https://img.icons8.com/cotton/64/000000/synchronize--v3.png"
-                                      // width="18%"
-                                      height="12px"
-                                    />
-                                  </CardSubtitle>
-                                </CardBody>
-                              </Card>
-                            </Col>
-
-                            <Col className="mr-4 ">
-                              <Card
-                                className="mb-1"
-                                style={{ marginTop: "20px" }}
-                              >
-                                <CardBody>
-                                  <div>
-                                    <div
-                                      className="mr-6"
-                                      style={{
-                                        display: "inline-block",
-                                        fontSize: "18px",
-                                      }}
-                                      align="right"
+                                    <CardSubtitle
+                                      className=" text-muted"
+                                      tag="h6"
                                     >
-                                      {parseFloat(
-                                        BNtoNum(Number(asset.acquiredYield))
-                                      ).toFixed(6)}
-                                      &nbsp;
-                                      {EventMap[asset.market.toUpperCase()]}
-                                    </div>
-                                  </div>
-                                  <CardTitle tag="h5"></CardTitle>
+                                      <span style={{ fontSize: "14px" }}>
+                                        &nbsp; &nbsp;&nbsp;{" "}
+                                        {BNtoNum(Number(asset.amount))}
+                                      </span>
+                                    </CardSubtitle>
+                                  </CardBody>
+                                </Card>
+                              </Col>
 
-                                  <CardSubtitle
-                                    className=" text-muted"
-                                    tag="h6"
-                                  >
-                                    <span style={{ fontSize: "14px" }}>
-                                      {asset.interestRate}%APR
-                                    </span>
-                                    &nbsp; &nbsp;
-                                  </CardSubtitle>
-                                </CardBody>
-                              </Card>
-                            </Col>
-                            <Col className="mr-4 ">
-                              <Card
-                                className="mb-1"
-                                style={{ marginTop: "20px" }}
-                              >
-                                <CardBody>
-                                  <div>
-                                    <img
-                                      src={
-                                        CoinClassNames[
-                                        EventMap[asset.market.toUpperCase()]
-                                        ] || asset.market.toUpperCase()
-                                      }
-                                      height="18px"
-                                    />
-
-                                    <div
-                                      className="mr-6"
-                                      style={{
-                                        display: "inline-block",
-                                        fontSize: "18px",
-                                      }}
-                                      align="right"
-                                    >
-                                      &nbsp; &nbsp;
-                                      {EventMap[asset.market.toUpperCase()]}
-                                    </div>
-                                  </div>
-                                  <CardTitle tag="h5"></CardTitle>
-
-                                  <CardSubtitle
-                                    className=" text-muted"
-                                    tag="h6"
-                                  >
-                                    <span style={{ fontSize: "14px" }}>
-                                      &nbsp; &nbsp;&nbsp;{" "}
-                                      {(
-                                        parseFloat(
-                                          BNtoNum(Number(asset.amount))
-                                        ) +
-                                        parseFloat(
+                              <Col className="mr-4 ">
+                                <Card
+                                  className="mb-1"
+                                  style={{ marginTop: "20px" }}
+                                >
+                                  <CardBody>
+                                    <div>
+                                      <div
+                                        className="mr-6"
+                                        style={{
+                                          display: "inline-block",
+                                          fontSize: "18px",
+                                        }}
+                                        align="right"
+                                      >
+                                        {parseFloat(
                                           BNtoNum(Number(asset.acquiredYield))
-                                        )
-                                      ).toFixed(6)}
-                                    </span>
-                                    &nbsp; &nbsp;
-                                  </CardSubtitle>
-                                </CardBody>
-                              </Card>
-                            </Col>
-                            <Col className="mr-4 ">
-                              <Card
-                                className="mb-1"
-                                style={{ marginTop: "20px" }}
-                              >
+                                        ).toFixed(6)}
+                                        &nbsp;
+                                        {EventMap[asset.market.toUpperCase()]}
+                                      </div>
+                                    </div>
+                                    <CardTitle tag="h5"></CardTitle>
+
+                                    <CardSubtitle
+                                      className=" text-muted"
+                                      tag="h6"
+                                    >
+                                      <span style={{ fontSize: "14px" }}>
+                                        {asset.interestRate}%APR
+                                      </span>
+                                      &nbsp; &nbsp;
+                                    </CardSubtitle>
+                                  </CardBody>
+                                </Card>
+                              </Col>
+                              <Col className="mr-4 ">
+                                <Card
+                                  className="mb-1"
+                                  style={{ marginTop: "20px" }}
+                                >
+                                  <CardBody>
+                                    <div>
+                                      <img
+                                        src={
+                                          CoinClassNames[
+                                          EventMap[asset.market.toUpperCase()]
+                                          ] || asset.market.toUpperCase()
+                                        }
+                                        height="18px"
+                                      />
+
+                                      <div
+                                        className="mr-6"
+                                        style={{
+                                          display: "inline-block",
+                                          fontSize: "18px",
+                                        }}
+                                        align="right"
+                                      >
+                                        &nbsp; &nbsp;
+                                        {EventMap[asset.market.toUpperCase()]}
+                                      </div>
+                                    </div>
+                                    <CardTitle tag="h5"></CardTitle>
+
+                                    <CardSubtitle
+                                      className=" text-muted"
+                                      tag="h6"
+                                    >
+                                      <span style={{ fontSize: "14px" }}>
+                                        &nbsp; &nbsp;&nbsp;{" "}
+                                        {(
+                                          parseFloat(
+                                            BNtoNum(Number(asset.amount))
+                                          ) +
+                                          parseFloat(
+                                            BNtoNum(Number(asset.acquiredYield))
+                                          )
+                                        ).toFixed(6)}
+                                      </span>
+                                      &nbsp; &nbsp;
+                                    </CardSubtitle>
+                                  </CardBody>
+                                </Card>
+                              </Col>
+                              <Col className="mr-4 ">
+                                <Card
+                                  className="mb-1"
+                                  style={{ marginTop: "20px" }}
+                                >
+                                  <CardBody>
+                                    <div
+                                      className="mr-6"
+                                      style={{
+                                        display: "inline-block",
+                                        fontSize: "14px",
+                                      }}
+                                      align="right"
+                                    >
+                                      &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                                      &nbsp;&nbsp;
+                                      {EventMap[asset.commitment]}
+                                    </div>
+                                    <CardTitle tag="h5"></CardTitle>
+                                  </CardBody>
+                                </Card>
+                              </Col>
+                            </AccordionHeader>
+                            <AccordionBody accordionId="1">
+                              <div style={{ borderWidth: 1 }}>
                                 <CardBody>
-                                  <div
-                                    className="mr-6"
-                                    style={{
-                                      display: "inline-block",
-                                      fontSize: "14px",
-                                    }}
-                                    align="right"
-                                  >
-                                    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                                    &nbsp;&nbsp;
-                                    {EventMap[asset.commitment]}
-                                  </div>
-                                  <CardTitle tag="h5"></CardTitle>
-                                </CardBody>
-                              </Card>
-                            </Col>
-                          </AccordionHeader>
-                          <AccordionBody accordionId="1">
-                            <div style={{ borderWidth: 1 }}>
-                              <CardBody>
-                                <form>
-                                  <div className="mb-4 ">
-                                    <Row>
-                                      <Col lg="4 mb-3">
-                                        <div
-                                          className="block-example border"
-                                          style={{
-                                            padding: "15px",
-                                            borderRadius: "5px",
-                                          }}
-                                        >
-                                          <div className="mb-3">
-                                            {/* <label className="card-radio-label mb-2"> */}
-                                            <Button
-                                              className="btn-block btn-md"
-                                              color={
-                                                modal_add_active_deposit ===
-                                                  true
-                                                  ? "light"
-                                                  : "outline-light"
-                                              }
-                                              onClick={() => {
-                                                tog_add_active_deposit()
-                                              }}
-                                            >
-                                              Add to Deposit
-                                            </Button>
-                                            &nbsp; &nbsp;
-                                            <Button
-                                              className="btn-block btn-md"
-                                              color={
-                                                modal_withdraw_active_deposit ===
-                                                  true
-                                                  ? "light"
-                                                  : "outline-light"
-                                              }
-                                              onClick={() => {
-                                                tog_withdraw_active_deposit()
-                                              }}
-                                            >
-                                              Withdraw Deposit
-                                            </Button>
-                                            {/* </label> */}
-                                          </div>
-                                          {/* <Modal
+                                  <form>
+                                    <div className="mb-4 ">
+                                      <Row>
+                                        <Col lg="4 mb-3">
+                                          <div
+                                            className="block-example border"
+                                            style={{
+                                              padding: "15px",
+                                              borderRadius: "5px",
+                                            }}
+                                          >
+                                            <div className="mb-3">
+                                              {/* <label className="card-radio-label mb-2"> */}
+                                              <Button
+                                                className="btn-block btn-md"
+                                                color={
+                                                  modal_add_active_deposit ===
+                                                    true
+                                                    ? "light"
+                                                    : "outline-light"
+                                                }
+                                                onClick={() => {
+                                                  tog_add_active_deposit()
+                                                }}
+                                              >
+                                                Add to Deposit
+                                              </Button>
+                                              &nbsp; &nbsp;
+                                              <Button
+                                                className="btn-block btn-md"
+                                                color={
+                                                  modal_withdraw_active_deposit ===
+                                                    true
+                                                    ? "light"
+                                                    : "outline-light"
+                                                }
+                                                onClick={() => {
+                                                  tog_withdraw_active_deposit()
+                                                }}
+                                              >
+                                                Withdraw Deposit //
+                                              </Button>
+                                              {/* </label> */}
+                                            </div>
+                                            {/* <Modal
                                         // isOpen={modal_add_active_deposit}
                                         isOpen={true}
                                         toggle={() => {
@@ -2272,142 +2298,142 @@ const Dashboard = () => {
                                         }}
                                         centered
                                       > */}
-                                          {modal_add_active_deposit && (
-                                            <Form>
-                                              <div className="row mb-4">
-                                                <Col sm={12}>
-                                                  <Input
-                                                    type="text"
-                                                    className="form-control"
-                                                    id="horizontal-password-Input"
-                                                    placeholder={
-                                                      depositRequestSel
-                                                        ? `Minimum amount =  ${MinimumAmount[depositRequestSel]}`
-                                                        : "Amount"
+                                            {modal_add_active_deposit && (
+                                              <Form>
+                                                <div className="row mb-4">
+                                                  <Col sm={12}>
+                                                    <Input
+                                                      type="text"
+                                                      className="form-control"
+                                                      id="horizontal-password-Input"
+                                                      placeholder={
+                                                        depositRequestSel
+                                                          ? `Minimum amount =  ${MinimumAmount[depositRequestSel]}`
+                                                          : "Amount"
+                                                      }
+                                                      onChange={event => {
+                                                        setInputVal1(
+                                                          Number(
+                                                            event.target.value
+                                                          )
+                                                        )
+                                                      }}
+                                                    />
+                                                  </Col>
+                                                </div>
+
+                                                <div className="d-grid gap-2">
+                                                  <Button
+                                                    // color="primary"
+                                                    className="w-md"
+                                                    disabled={
+                                                      handleDepositTransactionDone ||
+                                                      inputVal1 <= 0// different for different coins
                                                     }
-                                                    onChange={event => {
-                                                      setInputVal1(
-                                                        Number(
-                                                          event.target.value
-                                                        )
+                                                    onClick={() => {
+                                                      handleDepositRequest(
+                                                        EventMap[
+                                                        asset.market.toUpperCase()
+                                                        ],
+                                                        EventMap[
+                                                        asset.commitment.toUpperCase()
+                                                        ]
                                                       )
                                                     }}
-                                                  />
-                                                </Col>
-                                              </div>
-
-                                              <div className="d-grid gap-2">
-                                                <Button
-                                                  // color="primary"
-                                                  className="w-md"
-                                                  disabled={
-                                                    isTransactionDone ||
-                                                    inputVal1 <= 0// different for different coins
-                                                  }
-                                                  onClick={() => {
-                                                    handleDepositRequest(
-                                                      EventMap[
-                                                      asset.market.toUpperCase()
-                                                      ],
-                                                      EventMap[
-                                                      asset.commitment.toUpperCase()
-                                                      ]
-                                                    )
-                                                  }}
-                                                >
-                                                  {!isTransactionDone ? (
-                                                    "Add to Deposit"
-                                                  ) : (
-                                                    <Spinner>
-                                                      Loading...
-                                                    </Spinner>
-                                                  )}
-                                                </Button>
-                                              </div>
-                                            </Form>
-                                          )}
-                                          {modal_withdraw_active_deposit && (
-                                            <Form>
-                                              <div className="row mb-4">
-                                                <Col sm={12}>
-                                                  <Input
-                                                    type="text"
-                                                    className="form-control"
-                                                    id="horizontal-password-Input"
-                                                    placeholder="Amount"
-                                                    onChange={event => {
-                                                      setInputVal1(
-                                                        Number(
-                                                          event.target.value
+                                                  >
+                                                    {!handleDepositTransactionDone ? (
+                                                      "Add to Deposit"
+                                                    ) : (
+                                                      <Spinner>
+                                                        Loading...
+                                                      </Spinner>
+                                                    )}
+                                                  </Button>
+                                                </div>
+                                              </Form>
+                                            )}
+                                            {modal_withdraw_active_deposit && (
+                                              <Form>
+                                                <div className="row mb-4">
+                                                  <Col sm={12}>
+                                                    <Input
+                                                      type="text"
+                                                      className="form-control"
+                                                      id="horizontal-password-Input"
+                                                      placeholder="Amount"
+                                                      onChange={event => {
+                                                        setInputVal1(
+                                                          Number(
+                                                            event.target.value
+                                                          )
                                                         )
+                                                      }}
+                                                    />
+                                                  </Col>
+                                                </div>
+
+                                                <div className="d-grid gap-2">
+                                                  <Button
+                                                    // color="primary"
+                                                    className="w-md"
+                                                    disabled={
+                                                      withdrawDepositTransactionDone ||
+                                                      inputVal1 <= 0 //
+                                                    }
+                                                    onClick={() => {
+                                                      handleWithdrawDeposit(
+                                                        EventMap[
+                                                        asset.market.toUpperCase()
+                                                        ],
+                                                        EventMap[
+                                                        asset.commitment.toUpperCase()
+                                                        ]
                                                       )
                                                     }}
-                                                  />
-                                                </Col>
-                                              </div>
-
-                                              <div className="d-grid gap-2">
-                                                <Button
-                                                  // color="primary"
-                                                  className="w-md"
-                                                  disabled={
-                                                    isTransactionDone ||
-                                                    inputVal1 <= 0 //
-                                                  }
-                                                  onClick={() => {
-                                                    handleWithdrawDeposit(
-                                                      EventMap[
-                                                      asset.market.toUpperCase()
-                                                      ],
-                                                      EventMap[
-                                                      asset.commitment.toUpperCase()
-                                                      ]
-                                                    )
-                                                  }}
-                                                  style={{
-                                                    color: "#4B41E5",
-                                                  }}
-                                                >
-                                                  {!isTransactionDone ? (
-                                                    "Withdraw Deposit"
-                                                  ) : (
-                                                    <Spinner>
-                                                      Loading...
-                                                    </Spinner>
-                                                  )}
-                                                </Button>
-                                              </div>
-                                            </Form>
-                                          )}
-                                        </div>
-                                      </Col>
-                                      <Col lg="8">
-                                        {
-                                          <TxHistoryTable
-                                            asset={asset}
-                                            type="deposits"
-                                            market={asset.market}
-                                            isTrasactionDone={isTransactionDone}
-                                          />
-                                        }
-                                      </Col>
-                                    </Row>
-                                  </div>
-                                </form>
-                              </CardBody>
-                            </div>
-                          </AccordionBody>
-                        </AccordionItem>
-                      </Row>
-                    </UncontrolledAccordion>
-                  </div>
-                )
-              })
-            ) : (
-              <div>No records found</div>
-            )}
-          </div>
-        )
+                                                    style={{
+                                                      color: "#4B41E5",
+                                                    }}
+                                                  >
+                                                    {!withdrawDepositTransactionDone ? (
+                                                      "Withdraw Deposit"
+                                                    ) : (
+                                                      <Spinner>
+                                                        Loading...
+                                                      </Spinner>
+                                                    )}
+                                                  </Button>
+                                                </div>
+                                              </Form>
+                                            )}
+                                          </div>
+                                        </Col>
+                                        <Col lg="8">
+                                          {
+                                            <TxHistoryTable
+                                              asset={asset}
+                                              type="deposits"
+                                              market={asset.market}
+                                              isTrasactionDone={isTransactionDone}
+                                            />
+                                          }
+                                        </Col>
+                                      </Row>
+                                    </div>
+                                  </form>
+                                </CardBody>
+                              </div>
+                            </AccordionBody>
+                          </AccordionItem>
+                        </Row>
+                      </UncontrolledAccordion>
+                    </div>
+                  )
+                })
+              ) : (
+                <div>No records found</div>
+              )}
+            </div>
+          )
         break
 
       case "2": //
@@ -2899,7 +2925,7 @@ const Dashboard = () => {
                                                   <Button
                                                     className="w-md"
                                                     disabled={
-                                                      isTransactionDone ||
+                                                      handleRepayTransactionDone ||
                                                       inputVal1 < 0
                                                     }
                                                     onClick={() => {
@@ -2912,7 +2938,7 @@ const Dashboard = () => {
                                                       color: "#4B41E5",
                                                     }}
                                                   >
-                                                    {!isTransactionDone ? (
+                                                    {!handleRepayTransactionDone ? (
                                                       "Repay Loan"
                                                     ) : (
                                                       <Spinner>
@@ -2950,7 +2976,7 @@ const Dashboard = () => {
                                                     // color="primary"
                                                     className="w-md"
                                                     disabled={
-                                                      isTransactionDone ||
+                                                      handleWithdrawLoanTransactionDone ||
                                                       inputVal1 <= 0
                                                     }
                                                     onClick={() => {
@@ -2963,7 +2989,7 @@ const Dashboard = () => {
                                                       color: "#4B41E5",
                                                     }}
                                                   >
-                                                    {!isTransactionDone ? (
+                                                    {!handleWithdrawLoanTransactionDone? (
                                                       "Withdraw Loan"
                                                     ) : (
                                                       <Spinner>
@@ -3006,7 +3032,7 @@ const Dashboard = () => {
                                                   <Button
                                                     // color="primary"
                                                     className="w-md"
-                                                    disabled={asset.isSwapped || isTransactionDone}
+                                                    disabled={asset.isSwapped || handleSwapTransactionDone}
                                                     onClick={() => {
                                                       handleSwap(
                                                         asset.loanMarket,
@@ -3017,7 +3043,7 @@ const Dashboard = () => {
                                                       color: "#4B41E5",
                                                     }}
                                                   >
-                                                    {!isTransactionDone ? (
+                                                    {!handleSwapTransactionDone ? (
                                                       "Swap Loan"
                                                     ) : (
                                                       <Spinner>
@@ -3037,7 +3063,7 @@ const Dashboard = () => {
                                                     // color="primary"
 
                                                     className="w-md mr-2"
-                                                    disabled={!asset.isSwapped || isTransactionDone}
+                                                    disabled={!asset.isSwapped || handleSwapToLoanTransactionDone}
                                                     onClick={() => {
                                                       handleSwapToLoan(
                                                         asset.loanMarket,
@@ -3048,7 +3074,7 @@ const Dashboard = () => {
                                                       color: "#4B41E5",
                                                     }}
                                                   >
-                                                    {!isTransactionDone ? (
+                                                    {!handleSwapToLoanTransactionDone? (
                                                       "Swap To Loan"
                                                     ) : (
                                                       <Spinner>
@@ -3347,7 +3373,7 @@ const Dashboard = () => {
                                               <div className="d-grid gap-2">
                                                 <Button
                                                   className="w-md"
-                                                  disabled={isTransactionDone}
+                                                  disabled={handleWithdrawCollateralTransactionDone}
                                                   onClick={() => {
                                                     handleRepay(
                                                       asset.loanMarket,
@@ -3358,7 +3384,7 @@ const Dashboard = () => {
                                                     color: "#4B41E5",
                                                   }}
                                                 >
-                                                  {!isTransactionDone ? (
+                                                  {!handleWithdrawCollateralTransactionDone ? (
                                                     "Withdraw Collateral"
                                                   ) : (
                                                     <Spinner>
