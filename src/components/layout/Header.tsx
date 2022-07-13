@@ -84,7 +84,7 @@ const Header = () => {
               </Link>
 
               <Link to="" className="logo logo-light">
-                <img src="./main_logo.png" style={{ width: '30px', height: '30px', marginRight: '0.5rem',  marginBottom:'0.5rem' }}></img>
+                <img src="./main_logo.png" style={{ width: '30px', height: '30px', marginRight: '0.5rem', marginBottom:'0.5rem' }}></img>
                 <span className="logo-sm">
                   <strong style={{ color: 'white', fontSize: '22px', fontWeight: '600' }}>Hashstack</strong>
                 </span>

@@ -1,0 +1,43 @@
+{
+  "files": {
+    "main.css": "/static/css/main.6e0031a2.chunk.css",
+    "main.js": "/static/js/main.70af74a0.chunk.js",
+    "main.js.map": "/static/js/main.70af74a0.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.74986f1e.js",
+    "runtime-main.js.map": "/static/js/runtime-main.74986f1e.js.map",
+    "static/css/2.f4c56af9.chunk.css": "/static/css/2.f4c56af9.chunk.css",
+    "static/js/2.1f856a8a.chunk.js": "/static/js/2.1f856a8a.chunk.js",
+    "static/js/2.1f856a8a.chunk.js.map": "/static/js/2.1f856a8a.chunk.js.map",
+    "static/css/3.6a44bab8.chunk.css": "/static/css/3.6a44bab8.chunk.css",
+    "static/js/3.dbace942.chunk.js": "/static/js/3.dbace942.chunk.js",
+    "static/js/3.dbace942.chunk.js.map": "/static/js/3.dbace942.chunk.js.map",
+    "static/css/4.270ca89f.chunk.css": "/static/css/4.270ca89f.chunk.css",
+    "static/js/4.56b35612.chunk.js": "/static/js/4.56b35612.chunk.js",
+    "static/js/4.56b35612.chunk.js.map": "/static/js/4.56b35612.chunk.js.map",
+    "static/js/5.f05145e4.chunk.js": "/static/js/5.f05145e4.chunk.js",
+    "static/js/5.f05145e4.chunk.js.map": "/static/js/5.f05145e4.chunk.js.map",
+    "static/js/6.f17a26d6.chunk.js": "/static/js/6.f17a26d6.chunk.js",
+    "static/js/6.f17a26d6.chunk.js.map": "/static/js/6.f17a26d6.chunk.js.map",
+    "static/js/7.cbccdcda.chunk.js": "/static/js/7.cbccdcda.chunk.js",
+    "static/js/7.cbccdcda.chunk.js.map": "/static/js/7.cbccdcda.chunk.js.map",
+    "static/js/8.bba57c06.chunk.js": "/static/js/8.bba57c06.chunk.js",
+    "static/js/8.bba57c06.chunk.js.map": "/static/js/8.bba57c06.chunk.js.map",
+    "static/js/9.8d9cd3c2.chunk.js": "/static/js/9.8d9cd3c2.chunk.js",
+    "static/js/9.8d9cd3c2.chunk.js.map": "/static/js/9.8d9cd3c2.chunk.js.map",
+    "index.html": "/index.html",
+    "static/css/2.f4c56af9.chunk.css.map": "/static/css/2.f4c56af9.chunk.css.map",
+    "static/css/3.6a44bab8.chunk.css.map": "/static/css/3.6a44bab8.chunk.css.map",
+    "static/css/4.270ca89f.chunk.css.map": "/static/css/4.270ca89f.chunk.css.map",
+    "static/css/main.6e0031a2.chunk.css.map": "/static/css/main.6e0031a2.chunk.css.map",
+    "static/js/2.1f856a8a.chunk.js.LICENSE.txt": "/static/js/2.1f856a8a.chunk.js.LICENSE.txt",
+    "static/media/AvenirNextLTPro-Regular.94f2f163.otf": "/static/media/AvenirNextLTPro-Regular.94f2f163.otf",
+    "static/media/theme.scss": "/static/media/materialdesignicons-webfont.d06df622.woff"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.74986f1e.js",
+    "static/css/2.f4c56af9.chunk.css",
+    "static/js/2.1f856a8a.chunk.js",
+    "static/css/main.6e0031a2.chunk.css",
+    "static/js/main.70af74a0.chunk.js"
+  ]
+}
