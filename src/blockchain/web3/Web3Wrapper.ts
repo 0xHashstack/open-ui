@@ -29,7 +29,6 @@ export default class Web3Wrapper {
       this.depositInstance = new DepositWrapper(this.signer);
     }
     return this.depositInstance;
-
   }
 
   getLoanInstance() {
