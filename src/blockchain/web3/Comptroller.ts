@@ -72,6 +72,7 @@ class ComptrollerWeb3Wrapper {
   }
 
   //getter methods
+  //getting loans apr
   getAPR( market: string, commitment: string,) {
     return this.comptroller.getAPR(market, commitment)
   }
@@ -80,7 +81,8 @@ class ComptrollerWeb3Wrapper {
     return this.comptroller.getAPRInd(commitment, String(index))
   }
 
-  getsavingsAPR(commitment: string, market: string) {
+  // for getting the apr in deposit
+  getsavingsAPR(market: string, commitment: string) {
     return this.comptroller.getsavingsAPR(market,commitment)
   }
 

@@ -26,7 +26,7 @@ $sidebar-dark-menu-item-active-color: #ffffff;
 
 // Topbar - Deafult Light
 $header-height: 70px;
-$header-bg: #262b3c;
+$header-bg: #09081A;
 $header-item-color: #a6b0cf;
 
 // Topbar - Dark
@@ -38,7 +38,7 @@ $topbar-search-bg: #2a3042;
 
 // Footer
 $footer-height: 60px;
-$footer-bg: #262b3c;
+$footer-bg: #141125;
 $footer-color: #a6b0cf;
 
 // Horizontal nav
@@ -140,7 +140,7 @@ $colors: (
 // scss-docs-end colors-map
 
 // scss-docs-start theme-color-variables
-$primary: $blue;
+$primary: #09081A;
 $secondary: $gray-600;
 $success: $green;
 $info: $cyan;
@@ -483,7 +483,7 @@ $position-values: (
 //
 // Settings for the `<body>` element.
 
-$body-bg: #222736;
+$body-bg: #09081A;
 $body-color: $gray-400;
 $body-text-align: null;
 
@@ -1362,8 +1362,8 @@ $card-cap-padding-x: $card-spacer-x;
 $card-cap-bg: rgba($black, 0.03);
 $card-cap-color: null;
 $card-height: null;
-$card-color: null;
-$card-bg: #2a3042;
+$card-color: #ffffff; // to change the colour of text of card like passbook usdt etc texts
+$card-bg: #09081A; //to change the bg of card like tvl data passbook data
 $card-img-overlay-padding: $spacer;
 
 $card-title-desc: $gray-400;
