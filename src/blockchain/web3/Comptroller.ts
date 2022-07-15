@@ -1,6 +1,7 @@
 import { ethers } from "ethers"
 import abi from "../abis/Comptroller.json"
 import { NumToBN } from "../utils"
+import index from "../../components/banner/index"
 
 class ComptrollerWeb3Wrapper {
   // Contract
@@ -14,117 +15,148 @@ class ComptrollerWeb3Wrapper {
     )
   }
 
-  //send transaction methods
-  setCommitment(commitment: string) {
-    return this.comptroller.setCommitment(commitment)
+  setDepositCommitment(commitment: string, days: number) {
+    return this.comptroller.setDepositCommitment(commitment, days)
   }
 
-  updateAPY(commitment: string, apy: number) {
-    return this.comptroller.updateAPY(commitment, String(apy))
+  setBorrowCommitment(commitment: string, days: number) {
+    return this.comptroller.setBorrowCommitment(commitment, days)
   }
 
-  updateAPR(commitment: string, apr: number) {
-    return this.comptroller.updateAPR(commitment, String(apr))
+  setTimelockValidityDeposit(time: number) {
+    return this.comptroller.setTimelockValidityDeposit(time)
   }
 
-  updateLoanIssuanceFees(fees: number, decimal: number) {
-    return this.comptroller.updateLoanIssuanceFees(NumToBN(fees, decimal))
+  getTimelockValidityDeposit() {
+    return this.comptroller.getTimelockValidityDeposit()
   }
 
-  updateLoanClosureFees(fees: number, decimal: number) {
-    return this.comptroller.updateLoanClosureFees(NumToBN(fees, decimal))
+  updateAPR(market: string, commitment: string, apr: number) {
+    return this.comptroller.updateAPR(market, commitment, String(apr))
   }
 
-  updateLoanPreClosureFees(fees: number, decimal: number) {
-    return this.comptroller.updateLoanPreClosureFees(NumToBN(fees, decimal))
+  updatesavingsAPR(market: string, commitment: string, savingApr: number) {
+    return this.comptroller.updatesavingsAPR(market, commitment, savingApr)
   }
 
-  updateDepositPreclosureFees(fees: number, decimal: number) {
-    return this.comptroller.updateDepositPreclosureFees(NumToBN(fees, decimal))
+  updateLoanIssuanceFees(fees: number) {
+    return this.comptroller.updateLoanIssuanceFees(String(fees))
   }
 
-  updateWithdrawalFees(fees: number, decimal: number) {
-    return this.comptroller.updateWithdrawalFees(NumToBN(fees, decimal))
+  loanClosureFees() {
+    return this.comptroller.loanClosureFees()
   }
 
-  updateCollateralReleaseFees(fees: number, decimal: number) {
-    return this.comptroller.updateCollateralReleaseFees(NumToBN(fees, decimal))
+  updateLoanClosureFees(fees: number) {
+    return this.comptroller.updateLoanClosureFees(String(fees))
   }
 
-  updateYieldConversion(fees: number, decimal: number) {
-    return this.comptroller.updateYieldConversion(NumToBN(fees, decimal))
+  loanIssuanceFees() {
+    return this.comptroller.loanIssuanceFees()
   }
 
-  updateMarketSwapFees(fees: number, decimal: number) {
-    return this.comptroller.updateMarketSwapFees(NumToBN(fees, decimal))
+  updateLoanPreClosureFees(fees: number) {
+    return this.comptroller.updateLoanPreClosureFees(String(fees))
+  }
+
+  updateCollateralPreclosureFees(fees: number) {
+    return this.comptroller.updateCollateralPreclosureFees(String(fees))
+  }
+
+  collateralPreClosureFees() {
+    return this.comptroller.collateralPreClosureFees()
+  }
+
+  updateDepositPreclosureFees(fees: number) {
+    return this.comptroller.updateDepositPreclosureFees(String(fees))
+  }
+
+  updateWithdrawalFees(fees: number) {
+    return this.comptroller.updateWithdrawalFees(String(fees))
+  }
+
+  updateCollateralReleaseFees(fees: number) {
+    return this.comptroller.updateCollateralReleaseFees(String(fees))
+  }
+
+  updateYieldConversion(fees: number) {
+    return this.comptroller.updateYieldConversion(String(fees))
+  }
+
+  updateMarketSwapFees(fees: number) {
+    return this.comptroller.updateMarketSwapFees(String(fees))
   }
 
   updateReserveFactor(reserveFactor: number) {
     return this.comptroller.updateReserveFactor(String(reserveFactor))
   }
 
-  updateMaxWithdrawal(factor: number, blockLimit: number) {
-    return this.comptroller.updateMaxWithdrawal(String(factor), String(blockLimit))
+  updateCollateralFactor(collateralFactor: number) {
+    return this.comptroller.updateCollateralFactor(String(collateralFactor))
   }
 
-  liquidationTrigger(loanId: number) {
-    return this.comptroller.liquidationTrigger(String(loanId))
+  updateMaxWithdrawal(factor: number, blockLimit: number) {
+    return this.comptroller.updateMaxWithdrawal(
+      String(factor),
+      String(blockLimit)
+    )
+  }
+
+  updateReservesDeposit(market: string, amount: number) {
+    return this.comptroller.updateReservesDeposit(market, String(amount))
   }
 
   //getter methods
-  //getting loans apr
-  getAPR( market: string, commitment: string,) {
+  getAPR(market: string, commitment: string) {
     return this.comptroller.getAPR(market, commitment)
   }
 
-  getAPRInd(commitment: string, index: number) {
-    return this.comptroller.getAPRInd(commitment, String(index))
+  getAPRInd(market: string, commitment: string, index: number) {
+    return this.comptroller.getAPRInd(market, commitment, String(index))
   }
 
-  // for getting the apr in deposit
   getsavingsAPR(market: string, commitment: string) {
-    return this.comptroller.getsavingsAPR(market,commitment)
+    return this.comptroller.getsavingsAPR(market, commitment)
   }
 
-  getAPYInd(commitment: string, index: number) {
-    return this.comptroller.getAPYInd(commitment, String(index))
+  getsavingsAPRInd(market: string, commitment: string, index: number) {
+    return this.comptroller.getsavingsAPRInd(market, commitment, String(index))
   }
 
-  getApytime(commitment: string, index: number) {
-    return this.comptroller.getApytime(commitment, String(index))
+  getsavingsAprtime(market: string, commitment: string, index: number) {
+    return this.comptroller.getsavingsAprtime(market, commitment, String(index))
   }
 
-  getAprtime(commitment: string, index: number) {
-    return this.comptroller.getAprtime(commitment, String(index))
+  getAprtime(market: string, commitment: string, index: number) {
+    return this.comptroller.getAprtime(market, commitment, String(index))
   }
 
-  getApyLastTime(commitment: string) {
-    return this.comptroller.getApyLastTime(commitment)
+  getsavingsAprLastTime(market: string, commitment: string) {
+    return this.comptroller.getsavingsAprLastTime(market, commitment)
   }
 
-  getAprLastTime(commitment: string) {
-    return this.comptroller.getAprLastTime(commitment)
+  getsavingsAprTimeLength(market: string, commitment: string) {
+    return this.comptroller.getsavingsAprTimeLength(market, commitment)
   }
 
-  getApyTimeLength(commitment: string) {
-    return this.comptroller.getApyTimeLength(commitment)
+  getAprLastTime(market: string, commitment: string) {
+    return this.comptroller.getAprLastTime(market, commitment)
   }
 
-  getAprTimeLength(commitment: string) {
-    return this.comptroller.getAprTimeLength(commitment)
+  getAprTimeLength(market: string, commitment: string) {
+    return this.comptroller.getAprTimeLength(market, commitment)
   }
 
-  getCommitment(index: number) {
-    return this.comptroller.getCommitment(index)
+  getCommitment(index: number, depositOrBorrow: number) {
+    return this.comptroller.getCommitment(
+      String(index),
+      String(depositOrBorrow)
+    )
   }
 
-  // calcAPR(commitment: string, oldLengthAccruedInterest: number, oldTime: number, aggregateInterest: number) {
-  //     return this.comptroller.calcAPR", commitment, String(oldLengthAccruedInterest), String(oldTime), String(aggregateInterest));
-  // }
-
-  // calcAPY(commitment: string, oldLengthAccruedYield: number, oldTime: number, aggregateYield: number) {
-  //     return this.comptroller.calcAPY", commitment, String(oldLengthAccruedYield), String(oldTime), String(aggregateYield));
-  // }
+  marketSwapFees() {
+    return this.comptroller.marketSwapFees()
+  }
 
   getReserveFactor() {
     return this.comptroller.getReserveFactor()

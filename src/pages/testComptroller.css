@@ -1,0 +1,42 @@
+.comp-container {
+  padding: 100px 0;
+  height: auto;
+  background-color: teal;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.func-container {
+  background-color: rgb(19, 63, 63);
+  display: flex;
+
+  margin: 5px;
+  justify-content: center;
+  align-items: center;
+  width: 90%;
+  padding: 40px;
+  border-radius: 20px;
+  margin-left: 80px;
+}
+
+.bytes {
+  background-color: teal;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.bytes-div {
+  margin: 50px;
+  padding: 30px;
+}
+.update-div {
+  margin-right: auto;
+}
+
+.one-x {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
