@@ -19,6 +19,9 @@ const TxHistoryTable = props => {
       txHistoryData &&
       txHistoryData.map((row, index) => {
         const { id, timestamp, amount, action } = row
+        let myDate = new Date( timestamp *1000);
+        var formattedDate = myDate.toLocaleString()
+
         return (
           <tr
             key={index}
@@ -32,7 +35,7 @@ const TxHistoryTable = props => {
             </td>
             <td>{action}</td>
             <td>
-              {((Date.now() / 1000 - timestamp) / 3600).toFixed(6)} hrs ago{" "}
+              {formattedDate}
             </td>
             <td>{parseFloat(BNtoNum(Number(amount))).toFixed(6)}</td>
           </tr>
@@ -48,7 +51,7 @@ const TxHistoryTable = props => {
           <tr>
             <th>Transaction Hash</th>
             <th>Action Type</th>
-            <th>Age</th>
+            <th>Date</th>
             <th>Value</th>
           </tr>
         </thead>
