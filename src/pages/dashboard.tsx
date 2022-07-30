@@ -2286,7 +2286,7 @@ const Dashboard = () => {
                                                   tog_withdraw_active_deposit()
                                                 }}
                                               >
-                                                Withdraw Deposit //
+                                                Withdraw Deposit
                                               </Button>
                                               {/* </label> */}
                                             </div>
